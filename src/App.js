@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, Image, Text } from "react-native";
+import { StyleSheet, View, Dimensions, Image, Text, Button, Alert, TouchableOpacity } from "react-native";
 import './App.css';
 
 var styles = StyleSheet.create({
@@ -14,15 +14,22 @@ var styles = StyleSheet.create({
 		flexDirection: 'row',
 	},
 	info: {
-		flex: 0.25,
+		flex: 0.3,
 		flexDirection: 'row',
 	},
 
 	image: {
 		flex: 1,
-		width: '100%',
-		height: '100%',
 		resizeMode: 'contain'
+	},
+	qr_image: {
+		width: (Dimensions.get('window').width / 5),
+		height: (Dimensions.get('window').height / 5),
+		align: 'center'
+	},
+	
+	button: {
+		flex: 1
 	},
 
 	title_text: {
@@ -30,13 +37,19 @@ var styles = StyleSheet.create({
 		fontSize: (Dimensions.get('window').height / 15 + Dimensions.get('window').width / 40),
 		color: 'white',
 		textAlign: 'center',
-		textAlignVertical: 'center'
+		textAlignVertical: 'center',
+		textShadowColor: 'rgba(0, 0,0, 1)',
+		textShadowOffset: {width: -1, height: 1},
+		textShadowRadius: 10
 	},
 	desc_text: {
 		fontSize: (Dimensions.get('window').height / 30 + Dimensions.get('window').width / 80),
 		color: 'white',
 		textAlign: 'center',
-		textAlignVertical: 'center'
+		textAlignVertical: 'center',
+		textShadowColor: 'rgba(0, 0,0, 1)',
+		textShadowOffset: {width: -1, height: 1},
+		textShadowRadius: 8
 	}
 });
 
@@ -45,7 +58,6 @@ class App extends Component {
   componentDidMount(){
     document.title = "NCAR Sounding Climate"
   }
-
 
   render() {
     return (
@@ -66,24 +78,30 @@ class App extends Component {
 
 		{/* Row for start buttons */}
 		<View style={styles.start_buttons}>
-			<View style={{flex: 0.1}}></View>
-			<View style={{flex: 0.3}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png"/>
+			<View style={{flex: 0.05}}></View>
+			<TouchableOpacity style={{flex: 0.4}}>
+			<View style={{flex: 1}}>
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" onClick={this.myfunction} />
 			</View>
-			<View style={{flex: 0.2}}></View>
-			<View style={{flex: 0.3}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_basicBkg.png"/>
-			</View>
+			</TouchableOpacity>
 			<View style={{flex: 0.1}}></View>
+			<TouchableOpacity style={{flex: 0.4}}>
+				<View style={{flex: 1}}>
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_basicBkg.png"/>
+				</View>
+			</TouchableOpacity>
+			<View style={{flex: 0.05}}></View>
 		</View>
 
 		{/* Row for QR code */}
 		<View style={styles.info}>
-			<View style={{flex: 0.4}}></View>
-			<View style={{flex: 0.2}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/articleqr.png"/>
-			</View>
-			<View style={{flex: 0.4}}></View>
+			<View style={{flex: 0.35}}></View>
+			<TouchableOpacity style={{flex: 0.3}}>
+				<View style={{flex: 1}}>
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/articleqr.png"/>
+				</View>
+			</TouchableOpacity>
+			<View style={{flex: 0.35}}></View>
 		</View>
 	</View>
       </div>
