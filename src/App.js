@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, Image, Text, Button, Alert, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
 import './App.css';
 
 var styles = StyleSheet.create({
 	container: {
-		padding: 10,
 		width: Dimensions.get('window').width,
 		height: Dimensions.get('window').height
 	},
@@ -21,11 +20,6 @@ var styles = StyleSheet.create({
 	image: {
 		flex: 1,
 		resizeMode: 'contain'
-	},
-	qr_image: {
-		width: (Dimensions.get('window').width / 5),
-		height: (Dimensions.get('window').height / 5),
-		align: 'center'
 	},
 	
 	button: {
