@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
+import logo from './logo.svg';
 import './App.css';
+import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 
 var styles = StyleSheet.create({
 	container: {
@@ -47,17 +50,27 @@ var styles = StyleSheet.create({
 	}
 });
 
-
-class App extends Component {
-  componentDidMount(){
-    document.title = "NCAR Sounding Climate"
-  }
-
-  onClick(){
+function onClick(){
 	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
-  }
+};
 
-  render() {
+function AllTogether( { navigation }) {
+    return (
+    	<View style={styles.container}>
+    		<h1> All Together Page </h1>
+    	</View>
+    );
+}
+
+function EachAlone( { navigation }) {
+    return (
+    	<View style={styles.container}>
+    		<h1> Each On Its Own Page </h1>
+    	</View>
+    );
+}
+
+function HomeScreen({ navigation }) {
     return (
 
       <div style={{ backgroundImage: 'url("https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg")' }} className="App">
@@ -77,13 +90,13 @@ class App extends Component {
 		{/* Row for start buttons */}
 		<View style={styles.start_buttons}>
 			<View style={{flex: 0.05}}></View>
-			<TouchableOpacity style={{flex: 0.4}}>
+			<TouchableOpacity onPress={() => navigation.navigate('EachAlone')} style={{flex: 0.4}}>
 			<View style={{flex: 1}}>
-					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" onClick={this.myfunction} />
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" />
 			</View>
 			</TouchableOpacity>
 			<View style={{flex: 0.1}}></View>
-			<TouchableOpacity style={{flex: 0.4}}>
+			<TouchableOpacity onPress={() => navigation.navigate('AllTogether')} style={{flex: 0.4}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_basicBkg.png"/>
 				</View>
@@ -94,7 +107,7 @@ class App extends Component {
 		{/* Row for QR code */}
 		<View style={styles.info}>
 			<View style={{flex: 0.35}}></View>
-			<TouchableOpacity onPress={this.onClick} style={{flex: 0.3}}>
+			<TouchableOpacity onPress={onClick} style={{flex: 0.3}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/articleqr.png"/>
 				</View>
@@ -104,7 +117,21 @@ class App extends Component {
 	</View>
       </div>
     );
-  }
+
+}
+
+const Stack = createStackNavigator();
+
+function App() {
+  return (
+  <NavigationContainer>
+  	<Stack.Navigator screenOptions={{headerShown: false}}  initialRouteName="Home">
+  		<Stack.Screen name="Home" component={HomeScreen} />
+  		<Stack.Screen name="AllTogether" component={AllTogether} />
+  		<Stack.Screen name="EachAlone" component={EachAlone} />
+  	</Stack.Navigator> 
+  </NavigationContainer>
+  );
 }
 
 export default App;
