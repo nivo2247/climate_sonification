@@ -53,6 +53,10 @@ class App extends Component {
     document.title = "NCAR Sounding Climate"
   }
 
+  onClick(){
+	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
+  }
+
   render() {
     return (
 
@@ -90,7 +94,7 @@ class App extends Component {
 		{/* Row for QR code */}
 		<View style={styles.info}>
 			<View style={{flex: 0.35}}></View>
-			<TouchableOpacity style={{flex: 0.3}}>
+			<TouchableOpacity onPress={this.onClick} style={{flex: 0.3}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/articleqr.png"/>
 				</View>
