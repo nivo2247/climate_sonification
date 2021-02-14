@@ -135,6 +135,34 @@ function AllTogether( { navigation }) {
     );
 }
 
+var modelsrc="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
+
+var modelstate = 0;
+
+function renderImage() {
+	if (modelstate==0){
+		var suffix = "/precip/precip_ens0.jpg";
+		var newurl = modelsrc.concat(suffix);
+		return(
+		<Image style={styles.image} source={newurl} />
+		);
+	}
+	else if (modelstate==1){
+		var suffix = "/temp/temp_ens0.jpg";
+		var newurl = modelsrc.concat(suffix);
+		return(
+		<Image style={styles.image} source={newurl} />
+		);
+	}
+	else if (modelstate==2){
+		var suffix = "/seaIce/ice_ens0.jpg";
+		var newurl = modelsrc.concat(suffix);
+		return(
+		<Image style={styles.image} source={newurl} />
+		);
+	}
+}
+
 function EachAlone( { navigation }) {
     return (
     	<View style={styles.rcontainer}>
@@ -151,17 +179,23 @@ function EachAlone( { navigation }) {
 			</View>
 			
 			<View style={{flex:0.07, flexDirection:'row'}}>
-				<View style={{flex:0.33}}>
+				<TouchableOpacity style={{flex:0.33}}>
+				<View style={{flex:1}}>
 				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.png"/>
 				</View>
+				</TouchableOpacity>
 				
-				<View style={{flex:0.33}}>
+				<TouchableOpacity style={{flex:0.33}}>
+				<View style={{flex:1}}>
 				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_inactive.png"/>
 				</View>
+				</TouchableOpacity>
 				
-				<View style={{flex:0.33}}>
+				<TouchableOpacity style={{flex:0.33}}>
+				<View style={{flex:1}}>
 				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_inactive.png"/>
 				</View>
+				</TouchableOpacity>
 			</View>
 			
 			<View style={{flex:0.2}}>
@@ -208,7 +242,7 @@ function EachAlone( { navigation }) {
 		
 		<View style={{flex:0.75}}>
 			<View style={{flex:0.7}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/combined/combined_ens0.jpg" />
+				{renderImage()}
 			</View>
 			<View style={{flex: 0.1, flexDirection: 'row'}}>
 				<View style={{flex:0.33}}>
