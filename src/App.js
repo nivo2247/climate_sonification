@@ -61,15 +61,74 @@ function onClick(){
 function AllTogether( { navigation }) {
     return (
     	<View style={styles.rcontainer}>
-    		<View style={{flex:0.3}}>
+    		<View style={{flex:0.2}}>
     			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"/>
 				</View>
 			</TouchableOpacity>
+			
 			<View style={{flex:0.2}}>
 				<Text style={{fontWeight: 'bold', fontSize: 14}}>Instructions</Text>
 				<Text style={{fontSize: 12}}>1. Touch the map to select a location{"\n"}2. Touch the timeline to select a starting year.{"\n"}3. Press the play button.</Text>
+			</View>
+			
+			<View style={{flex:0.13}}>
+				<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 1}}>
+					<View style={{flex: 1}}>
+						<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png"/>
+					</View>
+				</TouchableOpacity>
+			</View>
+			
+			<View style={{flex:0.07}}>
+				<Text style={{fontSize: 12}}>4. Select a tempo</Text>
+			</View>
+			
+			<View style={{flex:0.1}}>
+				<Text style={{fontSize: 12}}>TODO: Tempo Select</Text>
+			</View>
+			
+			<View style={{flex:0.1}}>
+				<Text style={{fontSize: 12}}>TODO: Location Display</Text>
+			</View>
+			
+			<View style={{flex:0.1}}>
+				<Text style={{fontSize: 12}}>TODO: Year/C02 Display</Text>
+			</View>
+			
+			<View style={{flex:0.2}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png" /> 
+			</View>
+		</View>
+		
+		<View style={{flex:0.05}}>
+			<View style={{flex:0.35}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png" /> 
+			</View>
+			<View style={{flex:0.35}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png" /> 
+			</View>
+		</View>
+		
+		<View style={{flex:0.75}}>
+			<View style={{flex:0.7}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/combined/combined_ens0.jpg" />
+			</View>
+			<View style={{flex: 0.1, flexDirection: 'row'}}>
+				<View style={{flex:0.33}}>
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/precipLegend1.png" /> 
+				</View>
+				<View style={{flex:0.33}}>
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tempLegend2.png" /> 
+				</View>
+				<View style={{flex:0.33}}>
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/seaiceLegend.png" /> 
+				</View>
+			</View>
+			
+			<View style={{flex:0.2}}>
+				<Text style={styles.title_text}>Todo: Graph</Text>
 			</View>
 		</View>
     	</View>
@@ -79,19 +138,90 @@ function AllTogether( { navigation }) {
 function EachAlone( { navigation }) {
     return (
     	<View style={styles.rcontainer}>
-    		<View style={{flex:0.3}}>
+    		<View style={{flex:0.2}}>
     			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"/>
 				</View>
 			</TouchableOpacity>
-			<View style={{flex:0.2}}>
+			
+			<View style={{flex:0.07}}>
 				<Text style={{fontWeight: 'bold', fontSize: 14}}>Instructions</Text>
-				<Text style={{fontSize: 12}}>1. Touch the map to select a location{"\n"}2. Touch the timeline to select a starting year.{"\n"}3. Press the play button.</Text>
+				<Text style={{fontSize: 12}}>1.Select a variable below</Text>
+			</View>
+			
+			<View style={{flex:0.07, flexDirection:'row'}}>
+				<View style={{flex:0.33}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.png"/>
+				</View>
+				
+				<View style={{flex:0.33}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_inactive.png"/>
+				</View>
+				
+				<View style={{flex:0.33}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_inactive.png"/>
+				</View>
+			</View>
+			
+			<View style={{flex:0.2}}>
+				<Text style={{fontSize: 12}}>2. Touch the map to select a location{"\n"}3. Touch the timeline to select a starting year.{"\n"}4. Press the play button.</Text>
+			</View>
+			
+			<View style={{flex:0.13}}>
+				<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 1}}>
+					<View style={{flex: 1}}>
+						<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png"/>
+					</View>
+				</TouchableOpacity>
+			</View>
+			
+			<View style={{flex:0.05}}>
+				<Text style={{fontSize: 12}}>4. Select a tempo</Text>
+			</View>
+			
+			<View style={{flex:0.1}}>
+				<Text style={{fontSize: 12}}>TODO: Tempo Select</Text>
+			</View>
+			
+			<View style={{flex:0.1}}>
+				<Text style={{fontSize: 12}}>TODO: Location Display</Text>
+			</View>
+			
+			<View style={{flex:0.1}}>
+				<Text style={{fontSize: 12}}>TODO: Year/C02 Display</Text>
+			</View>
+			
+			<View style={{flex:0.2}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png" /> 
 			</View>
 		</View>
-    	</View>
-    );
+		
+		<View style={{flex:0.05}}>
+			<View style={{flex:0.35}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png" /> 
+			</View>
+			<View style={{flex:0.35}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png" /> 
+			</View>
+		</View>
+		
+		<View style={{flex:0.75}}>
+			<View style={{flex:0.7}}>
+				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/combined/combined_ens0.jpg" />
+			</View>
+			<View style={{flex: 0.1, flexDirection: 'row'}}>
+				<View style={{flex:0.33}}>
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/precipLegend1.png" /> 
+				</View>
+			</View>
+			
+			<View style={{flex:0.2}}>
+				<Text style={styles.title_text}>Todo: Graph</Text>
+			</View>
+		</View>
+    	</View>   
+     );
 }
 
 function HomeScreen({ navigation }) {
