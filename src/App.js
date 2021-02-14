@@ -163,7 +163,55 @@ function renderImage() {
 	}
 }
 
-function EachAlone( { navigation }) {
+const urlPre = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
+const precipActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.png";
+const precipInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_inactive.png";
+const tempActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_active.png";
+const tempInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_inactive.png";
+const iceActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_active.png";
+const iceInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_inactive.png";
+const precipKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/precipLegend1.png";
+const tempKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tempLegend2.png";
+const iceKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/seaiceLegend.png";
+
+
+
+function EachAlone( { route, navigation }) {
+    const { modelType, index } = route.params;
+    
+    var modelStr;
+    var precipSrc;
+    var tempSrc;
+    var iceSrc;
+    var keySrc;
+    
+    if (modelType == 0) {
+    	modelStr="/precip/precip_ens";
+    	precipSrc = precipActive;
+    	tempSrc = tempInactive;
+    	iceSrc = iceInactive;
+    	keySrc = precipKey;
+    }
+    else if (modelType == 1){
+    	modelStr="/temp/temp_ens";
+    	precipSrc = precipInactive;
+    	tempSrc = tempActive;
+    	iceSrc = iceInactive;
+    	keySrc = tempKey;
+    }
+    else{
+    	modelStr="/seaIce/ice_ens";
+    	precipSrc = precipInactive;
+    	tempSrc = tempInactive;
+    	iceSrc = iceActive;
+    	keySrc = iceKey;
+    }
+    
+    var urlAdd = urlPre.concat(modelStr);
+    var ind = index.toString();
+    var suffix = ind.concat(".jpg");
+    var fullUrl = urlAdd.concat(suffix);
+    
     return (
     	<View style={styles.rcontainer}>
     		<View style={{flex:0.2}}>
@@ -179,21 +227,21 @@ function EachAlone( { navigation }) {
 			</View>
 			
 			<View style={{flex:0.07, flexDirection:'row'}}>
-				<TouchableOpacity style={{flex:0.33}}>
+				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 0, index: 0 }); }}  style={{flex:0.33}}>
 				<View style={{flex:1}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.png"/>
+				<Image style={styles.image} source={precipSrc}/>
 				</View>
 				</TouchableOpacity>
 				
-				<TouchableOpacity style={{flex:0.33}}>
+				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 1, index: 0 }); }} style={{flex:0.33}}>
 				<View style={{flex:1}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_inactive.png"/>
+				<Image style={styles.image} source={tempSrc}/>
 				</View>
 				</TouchableOpacity>
 				
-				<TouchableOpacity style={{flex:0.33}}>
+				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 2, index: 0 }); }} style={{flex:0.33}}>
 				<View style={{flex:1}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_inactive.png"/>
+				<Image style={styles.image} source={iceSrc}/>
 				</View>
 				</TouchableOpacity>
 			</View>
@@ -242,11 +290,11 @@ function EachAlone( { navigation }) {
 		
 		<View style={{flex:0.75}}>
 			<View style={{flex:0.7}}>
-				{renderImage()}
+				<Image style={styles.image} source={fullUrl} />
 			</View>
 			<View style={{flex: 0.1, flexDirection: 'row'}}>
 				<View style={{flex:0.33}}>
-					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/precipLegend1.png" /> 
+					<Image style={styles.image} source={keySrc} /> 
 				</View>
 			</View>
 			
@@ -278,7 +326,7 @@ function HomeScreen({ navigation }) {
 		{/* Row for start buttons */}
 		<View style={styles.start_buttons}>
 			<View style={{flex: 0.05}}></View>
-			<TouchableOpacity onPress={() => navigation.navigate('EachAlone')} style={{flex: 0.4}}>
+			<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 0, index: 0 }); }} style={{flex: 0.4}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" />
 				</View>
