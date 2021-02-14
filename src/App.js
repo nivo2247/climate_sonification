@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
@@ -9,6 +8,11 @@ var styles = StyleSheet.create({
 	container: {
 		width: Dimensions.get('window').width,
 		height: Dimensions.get('window').height
+	},
+	rcontainer: {
+		width: Dimensions.get('window').width,
+		height: Dimensions.get('window').height,
+		flexDirection: 'row'
 	},
 
 	start_buttons: {
@@ -56,16 +60,36 @@ function onClick(){
 
 function AllTogether( { navigation }) {
     return (
-    	<View style={styles.container}>
-    		<h1> All Together Page </h1>
+    	<View style={styles.rcontainer}>
+    		<View style={{flex:0.3}}>
+    			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
+				<View style={{flex: 1}}>
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"/>
+				</View>
+			</TouchableOpacity>
+			<View style={{flex:0.2}}>
+				<Text style={{fontWeight: 'bold', fontSize: 14}}>Instructions</Text>
+				<Text style={{fontSize: 12}}>1. Touch the map to select a location{"\n"}2. Touch the timeline to select a starting year.{"\n"}3. Press the play button.</Text>
+			</View>
+		</View>
     	</View>
     );
 }
 
 function EachAlone( { navigation }) {
     return (
-    	<View style={styles.container}>
-    		<h1> Each On Its Own Page </h1>
+    	<View style={styles.rcontainer}>
+    		<View style={{flex:0.3}}>
+    			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
+				<View style={{flex: 1}}>
+					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"/>
+				</View>
+			</TouchableOpacity>
+			<View style={{flex:0.2}}>
+				<Text style={{fontWeight: 'bold', fontSize: 14}}>Instructions</Text>
+				<Text style={{fontSize: 12}}>1. Touch the map to select a location{"\n"}2. Touch the timeline to select a starting year.{"\n"}3. Press the play button.</Text>
+			</View>
+		</View>
     	</View>
     );
 }
@@ -91,11 +115,13 @@ function HomeScreen({ navigation }) {
 		<View style={styles.start_buttons}>
 			<View style={{flex: 0.05}}></View>
 			<TouchableOpacity onPress={() => navigation.navigate('EachAlone')} style={{flex: 0.4}}>
-			<View style={{flex: 1}}>
+				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" />
-			</View>
+				</View>
 			</TouchableOpacity>
+			
 			<View style={{flex: 0.1}}></View>
+			
 			<TouchableOpacity onPress={() => navigation.navigate('AllTogether')} style={{flex: 0.4}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_basicBkg.png"/>
