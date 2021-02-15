@@ -1,6 +1,6 @@
 import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
 import * as React from 'react';
-import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const styles = StyleSheet.create({
@@ -57,7 +57,12 @@ function onClick(){
 	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
 };
 
-export default function HomeScreen({ navigation }) {
+class HomeScreen extends React.Component {
+    render(){
+    
+    const { navigation } = this.props;
+ 
+
     return (
 
       <div style={{ backgroundImage: 'url("https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg")' }} className="App">
@@ -106,5 +111,13 @@ export default function HomeScreen({ navigation }) {
 	</View>
       </div>
     );
+    }
 }
 
+
+
+export default function(props){
+    const navigation = useNavigation();
+
+    return <HomeScreen {...props} navigation={navigation} />;
+}
