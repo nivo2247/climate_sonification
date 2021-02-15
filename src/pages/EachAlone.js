@@ -1,6 +1,6 @@
 import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
 import * as React from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
@@ -70,27 +70,59 @@ var styles = StyleSheet.create({
 	}
 });
 
-class EachAlone extends React.Component {
-
-    render(){
-    
-    const { navigation } = this.props;
+export default function EachAlone( { route, navigation }) {
+    const { modelType, index, state } = route.params;
     
     /* Attempt to load next image, code runs away, do not use
     if (state == 1){
     	setTimeout(() => { navigation.navigate('EachAlone', { modelType: modelType, index: index+1, state: state }); }, 2000);
     }*/
 
-    var modelStr = "/precip/precip_ens";
-    var precipSrc = precipActive;
-    var tempSrc = tempInactive;
-    var iceSrc = iceInactive;
-    var keySrc = precipKey;
-    var playButton = playUrl;  
-    var year = 1920;
-    var co2val = 390; 
+    var modelStr;
+    var precipSrc;
+    var tempSrc;
+    var iceSrc;
+    var keySrc;
+    var playButton;
+    
+    var nextState = (state + 1) % 2;
+    
+    var year = 1920 + index;
+    var yearStr = year.toString();
+    
+    var co2val = 390;
+    
+    if (state == 0){
+    	playButton = playUrl;
+    }
+    else{
+    	playButton = pauseUrl;
+    }
+    
+    if (modelType == 0) {
+    	modelStr="/precip/precip_ens";
+    	precipSrc = precipActive;
+    	tempSrc = tempInactive;
+    	iceSrc = iceInactive;
+    	keySrc = precipKey;
+    }
+    else if (modelType == 1){
+    	modelStr="/temp/temp_ens";
+    	precipSrc = precipInactive;
+    	tempSrc = tempActive;
+    	iceSrc = iceInactive;
+    	keySrc = tempKey;
+    }
+    else{
+    	modelStr="/seaIce/ice_ens";
+    	precipSrc = precipInactive;
+    	tempSrc = tempInactive;
+    	iceSrc = iceActive;
+    	keySrc = iceKey;
+    }
+    
     var urlAdd = urlPre.concat(modelStr);
-    var ind = '0';
+    var ind = index.toString();
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
     
@@ -109,19 +141,19 @@ class EachAlone extends React.Component {
 			</View>
 			
 			<View style={{flex:0.07, flexDirection:'row'}}>
-				<TouchableOpacity style={{flex:0.33}}>
+				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 0, index: 0, state: 0 }); }}  style={{flex:0.33}}>
 				<View style={{flex:1}}>
 				<Image style={styles.image} source={precipSrc}/>
 				</View>
 				</TouchableOpacity>
 				
-				<TouchableOpacity style={{flex:0.33}}>
+				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 1, index: 0, state: 0 }); }} style={{flex:0.33}}>
 				<View style={{flex:1}}>
 				<Image style={styles.image} source={tempSrc}/>
 				</View>
 				</TouchableOpacity>
 				
-				<TouchableOpacity style={{flex:0.33}}>
+				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 2, index: 0, state: 0 }); }} style={{flex:0.33}}>
 				<View style={{flex:1}}>
 				<Image style={styles.image} source={iceSrc}/>
 				</View>
@@ -133,7 +165,7 @@ class EachAlone extends React.Component {
 			</View>
 			
 			<View style={{flex:0.13}}>
-				<TouchableOpacity style={{flex: 1}}>
+				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: modelType, index: index, state: nextState });}} style={{flex: 1}}>
 					<View style={{flex: 1}}>
 						<Image style={styles.image} source={playButton}/>
 					</View>
@@ -154,7 +186,7 @@ class EachAlone extends React.Component {
 			
 			<View style={{flex:0.1, flexDirection: 'row'}}>
 				<View style={{flex:0.5}}>
-				<Text style={{fontSize: 12}}>Year{"\n"}{year}</Text>
+				<Text style={{fontSize: 12}}>Year{"\n"}{yearStr}</Text>
 				</View>
 				
 				<View style={{flex:0.5}}>
@@ -192,13 +224,5 @@ class EachAlone extends React.Component {
 		</View>
     	</View>   
      );
-     }
 }
 
-
-
-export default function(props){
-    const navigation = useNavigation();
-
-    return <EachAlone {...props} navigation={navigation} />;
-}

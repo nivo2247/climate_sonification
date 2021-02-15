@@ -1,6 +1,6 @@
 import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
 import * as React from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const styles = StyleSheet.create({
@@ -53,15 +53,11 @@ const styles = StyleSheet.create({
 	}
 });
 
-class AllTogether extends React.Component {    
-    render(){
-    
-    const { navigation } = this.props;
-    
+export default function AllTogether( { navigation } ) {
     return (
     	<View style={styles.rcontainer}>
     		<View style={{flex:0.2}}>
-    			<TouchableOpacity onPress={ () => navigation.navigate('Home') } style={{flex: 0.1}}>
+    			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"/>
 				</View>
@@ -73,7 +69,7 @@ class AllTogether extends React.Component {
 			</View>
 			
 			<View style={{flex:0.13}}>
-				<TouchableOpacity onPress={ () => navigation.navigate('Home')} style={{flex: 1}}>
+				<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 1}}>
 					<View style={{flex: 1}}>
 						<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png"/>
 					</View>
@@ -132,12 +128,5 @@ class AllTogether extends React.Component {
 		</View>
     	</View>
     );
-    }
 }
 
-
-export default function(props){
-    const navigation = useNavigation();
-
-    return <AllTogether {...props} navigation={navigation} />;
-}
