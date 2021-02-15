@@ -2,7 +2,7 @@ import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "rea
 import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import Axios from 'axios';
 
 
 const modelsrc="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
@@ -81,6 +81,9 @@ class EachAlone extends React.Component {
     		keySrc: precipKey,
     		index: 0,
     		co2val: 0,
+    		play: 0,
+    		playButton: playUrl,
+    		co2data : [0],
     	}
     }
     
@@ -110,12 +113,38 @@ class EachAlone extends React.Component {
     	this.state.keySrc = iceKey;
     	this.forceUpdate();
     }
+    
+    handleClick = () => {
+    	this.state.play = (this.state.play + 1) % 2;
+    	if(this.state.play == 0){
+    		this.state.playButton = playUrl;
+    		this.forceUpdate();
+    	}
+    	else if(this.state.play == 1){
+    		this.state.playButton = pauseUrl;
+    		this.state.index += 1;
+    		this.forceUpdate();
+    	}
+    }
+    
+    
+    componentDidMount = () => {
+    	Axios.get('http://localhost:4040/co2/all')
+    	.then(res => {
+    		const all_co2_data = res.data.data;
+    		this.setState({ co2data: [...all_co2_data] });
+    	})
+    }
+    
 
     render(){
     
-    const { navigation } = this.props;
-
-    var playButton = playUrl;  
+    const { navigation } = this.props;  
+    
+    this.state.co2val = this.state.co2data[this.state.index].co2_val;
+    
+    console.log(this.state.co2data);
+    console.log("^^");
     
     var urlAdd = urlPre.concat(this.state.modelStr);
     var ind = this.state.index.toString();
@@ -161,9 +190,9 @@ class EachAlone extends React.Component {
 			</View>
 			
 			<View style={{flex:0.13}}>
-				<TouchableOpacity style={{flex: 1}}>
+				<TouchableOpacity onPress={() => this.handleClick()} style={{flex: 1}}>
 					<View style={{flex: 1}}>
-						<Image style={styles.image} source={playButton}/>
+						<Image style={styles.image} source={this.state.playButton}/>
 					</View>
 				</TouchableOpacity>
 			</View>
