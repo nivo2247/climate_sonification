@@ -1,6 +1,6 @@
 import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
 import * as React from 'react';
-import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const styles = StyleSheet.create({
@@ -53,11 +53,18 @@ const styles = StyleSheet.create({
 	}
 });
 
-export default function AllTogether( { navigation } ) {
+class AllTogether extends React.Component {    
+    render(){
+    
+    var year = 1920;
+    var co2val = 390;
+    
+    const { navigation } = this.props;
+    
     return (
     	<View style={styles.rcontainer}>
     		<View style={{flex:0.2}}>
-    			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
+    			<TouchableOpacity onPress={ () => navigation.navigate('Home') } style={{flex: 0.1}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"/>
 				</View>
@@ -69,7 +76,7 @@ export default function AllTogether( { navigation } ) {
 			</View>
 			
 			<View style={{flex:0.13}}>
-				<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 1}}>
+				<TouchableOpacity style={{flex: 1}}>
 					<View style={{flex: 1}}>
 						<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png"/>
 					</View>
@@ -88,8 +95,14 @@ export default function AllTogether( { navigation } ) {
 				<Text style={{fontSize: 12}}>TODO: Location Display</Text>
 			</View>
 			
-			<View style={{flex:0.1}}>
-				<Text style={{fontSize: 12}}>TODO: Year/C02 Display</Text>
+			<View style={{flex:0.1, flexDirection: 'row'}}>
+				<View style={{flex:0.5}}>
+				<Text style={{fontSize: 12}}>Year{"\n"}{year}</Text>
+				</View>
+				
+				<View style={{flex:0.5}}>
+				<Text style={{fontSize: 12}}>CO2{"\n"}{co2val}</Text>
+				</View>
 			</View>
 			
 			<View style={{flex:0.2}}>
@@ -128,5 +141,12 @@ export default function AllTogether( { navigation } ) {
 		</View>
     	</View>
     );
+    }
 }
 
+
+export default function(props){
+    const navigation = useNavigation();
+
+    return <AllTogether {...props} navigation={navigation} />;
+}

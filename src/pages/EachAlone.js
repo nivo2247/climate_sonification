@@ -1,6 +1,6 @@
 import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
 import * as React from 'react';
-import { NavigationContainer, useFocusEffect } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
@@ -70,59 +70,55 @@ var styles = StyleSheet.create({
 	}
 });
 
-export default function EachAlone( { route, navigation }) {
-    const { modelType, index, state } = route.params;
+class EachAlone extends React.Component {
+    constructor(props){
+    super(props)
+        this.state = {
+    		modelStr: "/precip/precip_ens",
+    		precipSrc: precipActive,
+    		tempSrc: tempInactive,
+    		iceSrc: iceInactive,
+    		keySrc: precipKey,
+    		index: 0,
+    		co2val: 0,
+    	}
+    }
     
-    /* Attempt to load next image, code runs away, do not use
-    if (state == 1){
-    	setTimeout(() => { navigation.navigate('EachAlone', { modelType: modelType, index: index+1, state: state }); }, 2000);
-    }*/
+    setPrecip = () => {
+    	this.state.modelStr = "/precip/precip_ens";
+    	this.state.precipSrc = precipActive;
+    	this.state.tempSrc = tempInactive;
+    	this.state.iceSrc = iceInactive;
+    	this.state.keySrc = precipKey;
+    	this.forceUpdate();
+    }
+    
+    setTemp = () => {
+    	this.state.modelStr = "/temp/temp_ens";
+    	this.state.precipSrc = precipInactive;
+    	this.state.tempSrc = tempActive;
+    	this.state.iceSrc = iceInactive;
+    	this.state.keySrc = tempKey;
+    	this.forceUpdate();
+    }
+    
+    setIce = () => {
+    	this.state.modelStr = "/seaIce/ice_ens";
+    	this.state.precipSrc = precipInactive;
+        this.state.tempSrc = tempInactive;
+    	this.state.iceSrc = iceActive;
+    	this.state.keySrc = iceKey;
+    	this.forceUpdate();
+    }
 
-    var modelStr;
-    var precipSrc;
-    var tempSrc;
-    var iceSrc;
-    var keySrc;
-    var playButton;
+    render(){
     
-    var nextState = (state + 1) % 2;
+    const { navigation } = this.props;
+
+    var playButton = playUrl;  
     
-    var year = 1920 + index;
-    var yearStr = year.toString();
-    
-    var co2val = 390;
-    
-    if (state == 0){
-    	playButton = playUrl;
-    }
-    else{
-    	playButton = pauseUrl;
-    }
-    
-    if (modelType == 0) {
-    	modelStr="/precip/precip_ens";
-    	precipSrc = precipActive;
-    	tempSrc = tempInactive;
-    	iceSrc = iceInactive;
-    	keySrc = precipKey;
-    }
-    else if (modelType == 1){
-    	modelStr="/temp/temp_ens";
-    	precipSrc = precipInactive;
-    	tempSrc = tempActive;
-    	iceSrc = iceInactive;
-    	keySrc = tempKey;
-    }
-    else{
-    	modelStr="/seaIce/ice_ens";
-    	precipSrc = precipInactive;
-    	tempSrc = tempInactive;
-    	iceSrc = iceActive;
-    	keySrc = iceKey;
-    }
-    
-    var urlAdd = urlPre.concat(modelStr);
-    var ind = index.toString();
+    var urlAdd = urlPre.concat(this.state.modelStr);
+    var ind = this.state.index.toString();
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
     
@@ -141,21 +137,21 @@ export default function EachAlone( { route, navigation }) {
 			</View>
 			
 			<View style={{flex:0.07, flexDirection:'row'}}>
-				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 0, index: 0, state: 0 }); }}  style={{flex:0.33}}>
+				<TouchableOpacity onPress={() => this.setPrecip()} style={{flex:0.33}}>
 				<View style={{flex:1}}>
-				<Image style={styles.image} source={precipSrc}/>
+				<Image style={styles.image} source={this.state.precipSrc}/>
 				</View>
 				</TouchableOpacity>
 				
-				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 1, index: 0, state: 0 }); }} style={{flex:0.33}}>
+				<TouchableOpacity onPress={() => this.setTemp()} style={{flex:0.33}}>
 				<View style={{flex:1}}>
-				<Image style={styles.image} source={tempSrc}/>
+				<Image style={styles.image} source={this.state.tempSrc}/>
 				</View>
 				</TouchableOpacity>
 				
-				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 2, index: 0, state: 0 }); }} style={{flex:0.33}}>
+				<TouchableOpacity onPress={() => this.setIce()} style={{flex:0.33}}>
 				<View style={{flex:1}}>
-				<Image style={styles.image} source={iceSrc}/>
+				<Image style={styles.image} source={this.state.iceSrc}/>
 				</View>
 				</TouchableOpacity>
 			</View>
@@ -165,7 +161,7 @@ export default function EachAlone( { route, navigation }) {
 			</View>
 			
 			<View style={{flex:0.13}}>
-				<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: modelType, index: index, state: nextState });}} style={{flex: 1}}>
+				<TouchableOpacity style={{flex: 1}}>
 					<View style={{flex: 1}}>
 						<Image style={styles.image} source={playButton}/>
 					</View>
@@ -186,11 +182,11 @@ export default function EachAlone( { route, navigation }) {
 			
 			<View style={{flex:0.1, flexDirection: 'row'}}>
 				<View style={{flex:0.5}}>
-				<Text style={{fontSize: 12}}>Year{"\n"}{yearStr}</Text>
+				<Text style={{fontSize: 12}}>Year{"\n"}{this.state.index + 1920}</Text>
 				</View>
 				
 				<View style={{flex:0.5}}>
-				<Text style={{fontSize: 12}}>CO2{"\n"}{co2val}</Text>
+				<Text style={{fontSize: 12}}>CO2{"\n"}{this.state.co2val}</Text>
 				</View>
 			</View>
 			
@@ -214,7 +210,7 @@ export default function EachAlone( { route, navigation }) {
 			</View>
 			<View style={{flex: 0.1, flexDirection: 'row'}}>
 				<View style={{flex:0.33}}>
-					<Image style={styles.image} source={keySrc} /> 
+					<Image style={styles.image} source={this.state.keySrc} /> 
 				</View>
 			</View>
 			
@@ -224,5 +220,13 @@ export default function EachAlone( { route, navigation }) {
 		</View>
     	</View>   
      );
+     }
 }
 
+
+
+export default function(props){
+    const navigation = useNavigation();
+
+    return <EachAlone {...props} navigation={navigation} />;
+}
