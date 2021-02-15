@@ -59,6 +59,16 @@ const styles = StyleSheet.create({
 const Stack = createStackNavigator();
 
 export default function App() {
+	/*
+	Axios({
+			method: "GET",
+			url: "http://localhost:4040/co2/getbyyear",
+			headers: {
+			"Content-Type": "application/json"
+		}
+	}).then(res => {
+		console.log(res.data.message);
+	});*/
   return (
   <NavigationContainer>
   	<Stack.Navigator screenOptions={{headerShown: false}}  initialRouteName="Home">
