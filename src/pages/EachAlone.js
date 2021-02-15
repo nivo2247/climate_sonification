@@ -129,7 +129,7 @@ class EachAlone extends React.Component {
     
     
     componentDidMount = () => {
-    	Axios.get('http://localhost:4040/co2/all')
+    	Axios.get('http://ec2-3-133-100-140.us-east-2.compute.amazonaws.com:4040/co2/all')
     	.then(res => {
     		const all_co2_data = res.data.data;
     		this.setState({ co2data: [...all_co2_data] });
