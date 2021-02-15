@@ -6,6 +6,9 @@ import AllTogether from './pages/AllTogether.js';
 import EachAlone from './pages/EachAlone.js';
 import HomeScreen from './pages/HomeScreen.js';
 
+import Axios from "axios";
+const co2dburl = "http://localhost:4040/co2/getbyyear";
+
 const styles = StyleSheet.create({
 	container: {
 		width: Dimensions.get('window').width,
@@ -59,7 +62,6 @@ const styles = StyleSheet.create({
 const Stack = createStackNavigator();
 
 export default function App() {
-	/*
 	Axios({
 			method: "GET",
 			url: "http://localhost:4040/co2/getbyyear",
@@ -67,8 +69,8 @@ export default function App() {
 			"Content-Type": "application/json"
 		}
 	}).then(res => {
-		console.log(res.data.message);
-	});*/
+		console.log(res.data.data);
+	});
   return (
   <NavigationContainer>
   	<Stack.Navigator screenOptions={{headerShown: false}}  initialRouteName="Home">
