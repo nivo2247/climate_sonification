@@ -80,50 +80,54 @@ class EachAlone extends React.Component {
     		iceSrc: iceInactive,
     		keySrc: precipKey,
     		index: 0,
-    		co2val: 0,
     		play: 0,
     		playButton: playUrl,
-    		co2data : [0],
+    		co2data : [0]
     	}
     }
     
     setPrecip = () => {
-    	this.state.modelStr = "/precip/precip_ens";
-    	this.state.precipSrc = precipActive;
-    	this.state.tempSrc = tempInactive;
-    	this.state.iceSrc = iceInactive;
-    	this.state.keySrc = precipKey;
-    	this.forceUpdate();
+    this.setState({ 
+    	modelStr: "/precip/precip_ens",
+        precipSrc: precipActive,
+    	tempSrc: tempInactive,
+    	iceSrc: iceInactive,
+    	keySrc: precipKey
+    });
     }
     
     setTemp = () => {
-    	this.state.modelStr = "/temp/temp_ens";
-    	this.state.precipSrc = precipInactive;
-    	this.state.tempSrc = tempActive;
-    	this.state.iceSrc = iceInactive;
-    	this.state.keySrc = tempKey;
-    	this.forceUpdate();
+    this.setState({
+    	modelStr: "/temp/temp_ens",
+    	precipSrc: precipInactive,
+    	tempSrc: tempActive,
+        iceSrc: iceInactive,
+    	keySrc: tempKey
+    });
     }
     
     setIce = () => {
-    	this.state.modelStr = "/seaIce/ice_ens";
-    	this.state.precipSrc = precipInactive;
-        this.state.tempSrc = tempInactive;
-    	this.state.iceSrc = iceActive;
-    	this.state.keySrc = iceKey;
-    	this.forceUpdate();
+    this.setState({
+    	modelStr: "/seaIce/ice_ens",
+    	precipSrc: precipInactive,
+        tempSrc: tempInactive,
+    	iceSrc: iceActive,
+    	keySrc: iceKey
+    });
     }
     
     handleClick = () => {
     	this.state.play = (this.state.play + 1) % 2;
     	if(this.state.play == 0){
-    		this.state.playButton = playUrl;
-    		this.forceUpdate();
+    		this.setState({
+    		playButton: playUrl
+    		});
     	}
     	else if(this.state.play == 1){
-    		this.state.playButton = pauseUrl;
-    		this.state.index += 1;
-    		this.forceUpdate();
+    		this.setState({
+    		playButton: pauseUrl,
+    		index: this.state.index+1,
+    		});
     	}
     }
     
@@ -132,7 +136,7 @@ class EachAlone extends React.Component {
     	Axios.get('http://ec2-3-133-100-140.us-east-2.compute.amazonaws.com:4040/co2/all')
     	.then(res => {
     		const all_co2_data = res.data.data;
-    		this.setState({ co2data: [...all_co2_data] });
+    		this.setState({ co2data: [...all_co2_data]});
     	})
     }
     
@@ -141,10 +145,7 @@ class EachAlone extends React.Component {
     
     const { navigation } = this.props;  
     
-    this.state.co2val = this.state.co2data[this.state.index].co2_val;
-    
-    console.log(this.state.co2data);
-    console.log("^^");
+    var co2val = this.state.co2data[this.state.index].co2_val;
     
     var urlAdd = urlPre.concat(this.state.modelStr);
     var ind = this.state.index.toString();
@@ -215,7 +216,7 @@ class EachAlone extends React.Component {
 				</View>
 				
 				<View style={{flex:0.5}}>
-				<Text style={{fontSize: 12}}>CO2{"\n"}{this.state.co2val}</Text>
+				<Text style={{fontSize: 12}}>CO2{"\n"}{co2val}</Text>
 				</View>
 			</View>
 			
