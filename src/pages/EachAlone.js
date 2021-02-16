@@ -4,7 +4,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Axios from 'axios';
 import PubSub from 'pubsub-js';
-
+import { precipImgs, tempImgs, iceImgs } from './../const/url.js';
 
 const modelsrc="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
 const urlPre = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
@@ -99,6 +99,7 @@ var gameHandler = async function(msg, data) {
 	
 };
 
+
 class EachAlone extends React.Component {
     constructor(props){
     super(props)
@@ -110,10 +111,12 @@ class EachAlone extends React.Component {
     		keySrc: precipKey,
     		index: 0,
     		play: 0,
-    		timerLen: 1000,
+    		timerLen: 100,
     		playButton: playUrl,
     		co2data : [0],
-    		token: ""
+    		token: "",
+    		tempBool: 1, //Disabled because cache was getting to big. Need to figure that out.
+    		iceBool: 1  //^^
     	};
     }
     
@@ -128,22 +131,34 @@ class EachAlone extends React.Component {
     }
     
     setTemp = () => {
+    if(this.state.tempBool == 0){
+    	tempImgs.forEach((picture) => {
+    		Image.prefetch(picture);
+    	});
+    }
     this.setState({
     	modelStr: "/temp/temp_ens",
     	precipSrc: precipInactive,
     	tempSrc: tempActive,
         iceSrc: iceInactive,
-    	keySrc: tempKey
+    	keySrc: tempKey,
+    	tempBool: 1
     });
     }
     
     setIce = () => {
+    if(this.state.iceBool == 0){
+    	iceImgs.forEach((picture) => {
+    		Image.prefetch(picture);
+    	});
+    }
     this.setState({
     	modelStr: "/seaIce/ice_ens",
     	precipSrc: precipInactive,
         tempSrc: tempInactive,
     	iceSrc: iceActive,
-    	keySrc: iceKey
+    	keySrc: iceKey,
+    	iceBool: 1
     });
     }
     
@@ -157,6 +172,11 @@ class EachAlone extends React.Component {
     	.then(res => {
     		const all_co2_data = res.data.data;
     		this.setState({ co2data: [...all_co2_data]});
+    	});
+    	
+    	/* Simple Image Preload */
+    	precipImgs.forEach((picture) => {
+    		Image.prefetch(picture);
     	});
     	
 	this.setState({token: PubSub.subscribe('TOPIC', gameHandler)});
