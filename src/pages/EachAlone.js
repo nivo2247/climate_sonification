@@ -3,6 +3,7 @@ import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Axios from 'axios';
+import PubSub from 'pubsub-js';
 
 
 const modelsrc="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
@@ -70,6 +71,34 @@ var styles = StyleSheet.create({
 	}
 });
 
+var state = 0;
+
+const timer = ms => new Promise(res => setTimeout(res, ms));
+
+var gameHandler = async function(msg, data) {
+	console.log(data.state.play);
+	if (data.state.play == 1){
+		while(data.state.index < 180){
+			if(data.state.play == 1){
+    				data.setState({
+    					index: data.state.index+1, 
+    					playButton: pauseUrl
+   				});
+   				await timer(data.state.timerLen);
+   			}else{
+   					return;
+   			}
+   		}
+		console.log("try");
+	}
+	else if(data.state.play == 0){
+    		data.setState({
+    			playButton: playUrl
+    		});
+    	}
+	
+};
+
 class EachAlone extends React.Component {
     constructor(props){
     super(props)
@@ -81,9 +110,11 @@ class EachAlone extends React.Component {
     		keySrc: precipKey,
     		index: 0,
     		play: 0,
+    		timerLen: 1000,
     		playButton: playUrl,
-    		co2data : [0]
-    	}
+    		co2data : [0],
+    		token: ""
+    	};
     }
     
     setPrecip = () => {
@@ -117,29 +148,24 @@ class EachAlone extends React.Component {
     }
     
     handleClick = () => {
-    	this.state.play = (this.state.play + 1) % 2;
-    	if(this.state.play == 0){
-    		this.setState({
-    		playButton: playUrl
-    		});
-    	}
-    	else if(this.state.play == 1){
-    		this.setState({
-    		playButton: pauseUrl,
-    		index: this.state.index+1,
-    		});
-    	}
+    	this.setState({play: ((this.state.play + 1) % 2) });
+    	PubSub.publish('TOPIC', this);
     }
-    
     
     componentDidMount = () => {
     	Axios.get('http://ec2-3-133-100-140.us-east-2.compute.amazonaws.com:4040/co2/all')
     	.then(res => {
     		const all_co2_data = res.data.data;
     		this.setState({ co2data: [...all_co2_data]});
-    	})
-    }
+    	});
+    	
+	this.setState({token: PubSub.subscribe('TOPIC', gameHandler)});
+
+    }    
     
+    componentWillUnmount = () => {
+    	PubSub.unsubscribe(this.state.token);
+    }
 
     render(){
     
