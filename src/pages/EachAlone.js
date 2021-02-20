@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity, Button, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity, TouchableHighlight } from "react-native";
 import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -6,6 +6,8 @@ import Axios from 'axios';
 import PubSub from 'pubsub-js';
 import { precipImgs, tempImgs, iceImgs } from './../const/url.js';
 
+
+/*** Links to AWS S3 media ***/
 const modelsrc="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
 const urlPre = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
 const precipActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.png";
@@ -20,34 +22,17 @@ const iceKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/
 const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
 const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
 
-
+/*** EachAlone specific stylesheet ***/
 var styles = StyleSheet.create({
 	container: {
-		width: Dimensions.get('window').width,
-		height: Dimensions.get('window').height
-	},
-	rcontainer: {
 		width: Dimensions.get('window').width,
 		height: Dimensions.get('window').height,
 		flexDirection: 'row'
 	},
 
-	start_buttons: {
-		flex: 0.35,
-		flexDirection: 'row',
-	},
-	info: {
-		flex: 0.3,
-		flexDirection: 'row',
-	},
-
 	image: {
 		flex: 1,
 		resizeMode: 'contain'
-	},
-	
-	button: {
-		flex: 1
 	},
 	
 	tempoButton: {
@@ -75,19 +60,13 @@ var styles = StyleSheet.create({
 		textShadowColor: 'rgba(0, 0,0, 1)',
 		textShadowOffset: {width: -1, height: 1},
 		textShadowRadius: 10
-	},
-	desc_text: {
-		fontSize: (Dimensions.get('window').height / 30 + Dimensions.get('window').width / 80),
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		textShadowColor: 'rgba(0, 0,0, 1)',
-		textShadowOffset: {width: -1, height: 1},
-		textShadowRadius: 8
 	}
 });
 
-var state = 0;
+
+/*** Game Handler Block (recieves page state):  
+***  if play=1, increment index with delay in loop
+***  else interrupt loop			 ***/
 
 const timer = ms => new Promise(res => setTimeout(res, ms));
 
@@ -107,7 +86,7 @@ var gameHandler = async function(msg, data) {
    		}
 		console.log("try");
 	}
-	else if(data.state.play == 0){
+	else {
     		data.setState({
     			playButton: playUrl
     		});
@@ -115,7 +94,7 @@ var gameHandler = async function(msg, data) {
 	
 };
 
-
+/*** Page class ***/
 class EachAlone extends React.Component {
     constructor(props){
     super(props)
@@ -131,6 +110,7 @@ class EachAlone extends React.Component {
     		playButton: playUrl,
     		co2data : [0],
     		token: "",
+    		precipBool: 1,
     		tempBool: 1, //Disabled because cache was getting to big. Need to figure that out.
     		iceBool: 1,  //^^
     		adagioStyle: styles.tempoButton,
@@ -139,7 +119,8 @@ class EachAlone extends React.Component {
     		prestoStyle: styles.tempoButton
     	};
     }
-    
+
+    /*** onPress for 'Precipitation' ***/    
     setPrecip = () => {
     this.setState({ 
     	modelStr: "/precip/precip_ens",
@@ -149,7 +130,8 @@ class EachAlone extends React.Component {
     	keySrc: precipKey
     });
     }
-    
+   
+    /*** onPress for 'Temperature' ***/   
     setTemp = () => {
     if(this.state.tempBool == 0){
     	tempImgs.forEach((picture) => {
@@ -165,7 +147,8 @@ class EachAlone extends React.Component {
     	tempBool: 1
     });
     }
-    
+
+    /*** onPress for 'Sea Ice' ***/       
     setIce = () => {
     if(this.state.iceBool == 0){
     	iceImgs.forEach((picture) => {
@@ -181,7 +164,8 @@ class EachAlone extends React.Component {
     	iceBool: 1
     });
     }
-    
+
+    /*** onPress for 'adagio' ***/       
     setAdagio = () => {
     	this.setState({
     		timerLen: 1200,
@@ -192,6 +176,7 @@ class EachAlone extends React.Component {
     		});
     }
     
+    /*** onPress for 'moderato' ***/   
     setModerato = () => {
     	this.setState({
     		timerLen: 800,
@@ -202,6 +187,7 @@ class EachAlone extends React.Component {
 		});
     }
     
+    /*** onPress for 'allegro' ***/   
     setAllegro = () => {
     	this.setState({
     		timerLen: 400,
@@ -212,6 +198,7 @@ class EachAlone extends React.Component {
     		});
     }
     
+    /*** onPress for 'presto' ***/   
     setPresto = () => {
     	this.setState({
     		timerLen: 200,
@@ -222,11 +209,17 @@ class EachAlone extends React.Component {
 		});
     }
     
+    /*** onPress for 'Play/Pause' 
+    *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
     	this.setState({play: ((this.state.play + 1) % 2) });
     	PubSub.publish('TOPIC', this);
     }
     
+    /*** runs on initial render
+    *** get CO2 values from DB
+    *** preload images
+    *** setup gameHandler as subscriber ***/
     componentDidMount = () => {
     	Axios.get('http://ec2-3-133-100-140.us-east-2.compute.amazonaws.com:4040/co2/all')
     	.then(res => {
@@ -234,7 +227,6 @@ class EachAlone extends React.Component {
     		this.setState({ co2data: [...all_co2_data]});
     	});
     	
-    	/* Simple Image Preload */
     	precipImgs.forEach((picture) => {
     		Image.prefetch(picture);
     	});
@@ -243,23 +235,28 @@ class EachAlone extends React.Component {
 
     }    
     
+    /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
     }
 
+    /*** runs on state update ***/   
     render(){
     
+    /*** store page stack info ***/
     const { navigation } = this.props;  
     
     var co2val = this.state.co2data[this.state.index].co2_val;
     
+    /*** setup model URL ***/
     var urlAdd = urlPre.concat(this.state.modelStr);
     var ind = this.state.index.toString();
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
     
+    /*** Return the page ***/
     return (
-    	<View style={styles.rcontainer}>
+    	<View style={styles.container}>
     		<View style={{flex:0.2}}>
     			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
 				<View style={{flex: 1}}>
@@ -379,7 +376,7 @@ class EachAlone extends React.Component {
 }
 
 
-
+/*** class wrapper for naviagion functionality ***/
 export default function(props){
     const navigation = useNavigation();
 
