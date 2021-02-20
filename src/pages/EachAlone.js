@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity, Button, TouchableHighlight } from "react-native";
 import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -48,6 +48,22 @@ var styles = StyleSheet.create({
 	
 	button: {
 		flex: 1
+	},
+	
+	tempoButton: {
+		alignItems: 'center',
+		backgroundColor: '#DDDDDD'
+	},
+	
+	activeTempoButton: {
+		alignItems: 'center',
+		backgroundColor: '#88DD88'
+	},
+	
+	tempoButtonContainer: {
+		flex: 0.25,
+		paddingHorizontal: 5,
+		justifyContent: 'center'
 	},
 
 	title_text: {
@@ -111,12 +127,16 @@ class EachAlone extends React.Component {
     		keySrc: precipKey,
     		index: 0,
     		play: 0,
-    		timerLen: 100,
+    		timerLen: 800,
     		playButton: playUrl,
     		co2data : [0],
     		token: "",
     		tempBool: 1, //Disabled because cache was getting to big. Need to figure that out.
-    		iceBool: 1  //^^
+    		iceBool: 1,  //^^
+    		adagioStyle: styles.tempoButton,
+    		moderatoStyle: styles.activeTempoButton,
+    		allegroStyle: styles.tempoButton,
+    		prestoStyle: styles.tempoButton
     	};
     }
     
@@ -160,6 +180,46 @@ class EachAlone extends React.Component {
     	keySrc: iceKey,
     	iceBool: 1
     });
+    }
+    
+    setAdagio = () => {
+    	this.setState({
+    		timerLen: 1200,
+    		adagioStyle: styles.activeTempoButton,
+    		moderatoStyle: styles.tempoButton,
+		allegroStyle: styles.tempoButton,
+		prestoStyle: styles.tempoButton
+    		});
+    }
+    
+    setModerato = () => {
+    	this.setState({
+    		timerLen: 800,
+    		adagioStyle: styles.tempoButton,
+    		moderatoStyle: styles.activeTempoButton,
+		allegroStyle: styles.tempoButton,
+		prestoStyle: styles.tempoButton
+		});
+    }
+    
+    setAllegro = () => {
+    	this.setState({
+    		timerLen: 400,
+    		adagioStyle: styles.tempoButton,
+    		moderatoStyle: styles.tempoButton,
+		allegroStyle: styles.activeTempoButton,
+		prestoStyle: styles.tempoButton
+    		});
+    }
+    
+    setPresto = () => {
+    	this.setState({
+    		timerLen: 200,
+    	    	adagioStyle: styles.tempoButton,
+    		moderatoStyle: styles.tempoButton,
+		allegroStyle: styles.tempoButton,
+		prestoStyle: styles.activeTempoButton
+		});
     }
     
     handleClick = () => {
@@ -248,8 +308,27 @@ class EachAlone extends React.Component {
 				<Text style={{fontSize: 12}}>4. Select a tempo</Text>
 			</View>
 			
-			<View style={{flex:0.1}}>
-				<Text style={{fontSize: 12}}>TODO: Tempo Select</Text>
+			<View style={{flex:0.1, flexDirection:'row'}}>
+				<View  style={styles.tempoButtonContainer}>
+					<TouchableHighlight style={this.state.adagioStyle} onPress={this.setAdagio}>
+						<Text style={{fontSize:12}}>adagio</Text>
+					</TouchableHighlight>
+				</View>
+				<View  style={styles.tempoButtonContainer}>
+					<TouchableHighlight style={this.state.moderatoStyle} onPress={this.setModerato}>
+						<Text style={{fontSize:12}}>moderato</Text>
+					</TouchableHighlight>
+				</View>
+				<View  style={styles.tempoButtonContainer}>
+					<TouchableHighlight style={this.state.allegroStyle} onPress={this.setAllegro}>
+						<Text style={{fontSize:12}}>allegro</Text>
+					</TouchableHighlight>
+				</View>
+				<View  style={styles.tempoButtonContainer}>
+					<TouchableHighlight style={this.state.prestoStyle} onPress={this.setPresto}>
+						<Text style={{fontSize:12}}>presto</Text>
+					</TouchableHighlight>
+				</View>
 			</View>
 			
 			<View style={{flex:0.1}}>
