@@ -29,6 +29,11 @@ var styles = StyleSheet.create({
 		height: Dimensions.get('window').height,
 		flexDirection: 'row'
 	},
+	
+	model: {
+		width: 700,
+		height: 500
+	},
 
 	image: {
 		flex: 1,
@@ -99,6 +104,7 @@ class EachAlone extends React.Component {
     constructor(props){
     super(props)
         this.state = {
+        	state: 0,
     		modelStr: "/precip/precip_ens",
     		precipSrc: precipActive,
     		tempSrc: tempInactive,
@@ -116,13 +122,21 @@ class EachAlone extends React.Component {
     		adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.activeTempoButton,
     		allegroStyle: styles.tempoButton,
-    		prestoStyle: styles.tempoButton
+    		prestoStyle: styles.tempoButton,
+    		latitude: 0,
+    		longitude: 0,
+    		modelWidth: Math.floor(Dimensions.get('window').width * 3/4),
+		modelHeight: Math.floor(Dimensions.get('window').height * 3/4),
+		modelLeft: Math.floor(Dimensions.get('window').width * 1/4),
+		modelDiv: Math.floor(Dimensions.get('window').width * 1/4),
+		modelSplit: Math.floor(Dimensions.get('window').height * 3/8)
     	};
     }
 
     /*** onPress for 'Precipitation' ***/    
     setPrecip = () => {
     this.setState({ 
+        state: 0,
     	modelStr: "/precip/precip_ens",
         precipSrc: precipActive,
     	tempSrc: tempInactive,
@@ -139,6 +153,7 @@ class EachAlone extends React.Component {
     	});
     }
     this.setState({
+        state: 1,
     	modelStr: "/temp/temp_ens",
     	precipSrc: precipInactive,
     	tempSrc: tempActive,
@@ -156,6 +171,7 @@ class EachAlone extends React.Component {
     	});
     }
     this.setState({
+        state: 2,
     	modelStr: "/seaIce/ice_ens",
     	precipSrc: precipInactive,
         tempSrc: tempInactive,
@@ -216,6 +232,56 @@ class EachAlone extends React.Component {
     	PubSub.publish('TOPIC', this);
     }
     
+    
+    onMouseDown = (e) => {
+    	var x = e.clientX - this.state.modelLeft;
+    	var y = e.clientY;
+    	var latSave = 0;
+    	var lonSave = 0;
+    	var centerX = 0;
+    	var centerY = 0;
+    	var dbX = 1;
+    	var dbY = 1;
+    	if (this.state.state == 0 || this.state.state == 1) {
+    		if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
+	    		centerX = this.state.modelDiv / 2;
+	    		centerY = this.state.modelSplit / 2;
+	    	}
+	    	else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit){
+			centerX = this.state.modelDiv + this.state.modelDiv / 2;
+	    		centerY = this.state.modelSplit / 2;	
+	    	}
+	    	else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit){
+			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
+	    		centerY = this.state.modelSplit / 2;
+	    	}
+	    	else if (x <= this.state.modelDiv && y <= this.state.modelSplit * 2){
+			centerX = this.state.modelDiv / 2;
+	    		centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+	    	}
+	    	else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit * 2){
+			centerX = this.state.modelDiv + this.state.modelDiv / 2;
+	    		centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+	    	}
+	    	else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit * 2){
+			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
+	    		centerY = this.state.modelSplit + this.state.modelSplit / 2;    	
+	    	}
+    	
+	    	lonSave = (x - centerX) * 360 / this.state.modelDiv;
+	    	latSave = (centerY - y) * 180 / this.state.modelSplit;
+	    	dbX = Math.floor((90 - latSave) * 320 / 180);
+	    	dbY= Math.floor((lonSave + 180) * 240 / 360);
+	    	console.log("dbX: ", dbX);
+	    	console.log("dbY: ", dbY);
+	}
+    	this.setState({
+    		longitude: Math.floor(lonSave),
+    		latitude: Math.floor(latSave)
+    		});
+    }
+    
+    
     /*** runs on initial render
     *** get CO2 values from DB
     *** preload images
@@ -253,6 +319,11 @@ class EachAlone extends React.Component {
     var ind = this.state.index.toString();
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
+    
+    const modelStyle = {
+	width: this.state.modelWidth,
+	height: this.state.modelHeight 
+    };
     
     /*** Return the page ***/
     return (
@@ -328,8 +399,13 @@ class EachAlone extends React.Component {
 				</View>
 			</View>
 			
-			<View style={{flex:0.1}}>
-				<Text style={{fontSize: 12}}>TODO: Location Display</Text>
+			<View style={{flex:0.1, flexDirection:'row'}}>
+				<View style={{flex:0.5}}>
+					<Text style={{fontSize: 12}}>Lat: {this.state.latitude}</Text>
+				</View>
+				<View style={{flex:0.5}}>
+					<Text style={{fontSize: 12}}>Lon: {this.state.longitude}</Text>
+				</View>
 			</View>
 			
 			<View style={{flex:0.1, flexDirection: 'row'}}>
@@ -357,9 +433,10 @@ class EachAlone extends React.Component {
 		</View>
 		
 		<View style={{flex:0.75}}>
-			<View style={{flex:0.7}}>
-				<Image style={styles.image} source={fullUrl} />
-			</View>
+			<div style={modelStyle} onMouseDown={this.onMouseDown}>
+				<img src={fullUrl} style={modelStyle}/>
+			</div>
+			
 			<View style={{flex: 0.1, flexDirection: 'row'}}>
 				<View style={{flex:0.33}}>
 					<Image style={styles.image} source={this.state.keySrc} /> 
