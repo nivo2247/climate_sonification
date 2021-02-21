@@ -340,6 +340,8 @@ class EachAlone extends React.Component {
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
     
+    var coord_val = 0;
+    
     /*** style for model images and div ***/
     const modelStyle = {
 	width: this.state.modelWidth,
@@ -454,13 +456,18 @@ class EachAlone extends React.Component {
 		</View>
 		
 		<View style={{flex:0.75}}>
-			<div style={modelStyle} onMouseDown={this.onMouseDown} onMouseMove={this.onMouseDown}>
+			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown}>
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
 			
-			<View style={{flex: 0.3, flexDirection: 'row'}}>
+			<View style={{flex: 0.2, flexDirection: 'row'}}>
 				<View style={{flex:0.33}}>
 					<Image style={styles.image} source={this.state.keySrc} /> 
+				</View>
+			</View>
+			<View style={{flex: 0.1, flexDirection: 'row'}}>
+				<View style={{flex:0.33}}>
+					<Text style={{textAlign: 'center', fontSize: 10}}>Value: {coord_val}</Text> 
 				</View>
 			</View>
 			
