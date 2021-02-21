@@ -76,7 +76,6 @@ var styles = StyleSheet.create({
 const timer = ms => new Promise(res => setTimeout(res, ms));
 
 var gameHandler = async function(msg, data) {
-	console.log(data.state.play);
 	if (data.state.play == 1){
 		while(data.state.index < 180){
 			if(data.state.play == 1){
@@ -89,7 +88,6 @@ var gameHandler = async function(msg, data) {
    					return;
    			}
    		}
-		console.log("try");
 	}
 	else {
     		data.setState({
@@ -116,9 +114,9 @@ class EachAlone extends React.Component {
     		playButton: playUrl,
     		co2data : [0],
     		token: "",
-    		precipBool: 1,
-    		tempBool: 1, //Disabled because cache was getting to big. Need to figure that out.
-    		iceBool: 1,  //^^
+    		precipBool: 0,
+    		tempBool: 0,
+    		iceBool: 1,  //Disabled because cache was getting to big. Need to figure that out.
     		adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.activeTempoButton,
     		allegroStyle: styles.tempoButton,
@@ -135,13 +133,19 @@ class EachAlone extends React.Component {
 
     /*** onPress for 'Precipitation' ***/    
     setPrecip = () => {
+    if(this.state.precipBool == 0){
+    	precipImgs.forEach((picture) => {
+    		Image.prefetch(picture);
+    	});
+    }
     this.setState({ 
         state: 0,
     	modelStr: "/precip/precip_ens",
         precipSrc: precipActive,
     	tempSrc: tempInactive,
     	iceSrc: iceInactive,
-    	keySrc: precipKey
+    	keySrc: precipKey,
+    	precipBool: 1
     });
     }
    
@@ -229,10 +233,17 @@ class EachAlone extends React.Component {
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
     	this.setState({play: ((this.state.play + 1) % 2) });
+    	if(this.state.precipBool == 0){
+    		precipImgs.forEach((picture) => {
+    			Image.prefetch(picture);
+    		});
+    		this.setState({precipBool: 1})
+    	}
     	PubSub.publish('TOPIC', this);
     }
     
     
+    /*** Used to calculate coords for onMouseMove and onMouseDown ***/
     onMouseDown = (e) => {
     	var x = e.clientX - this.state.modelLeft;
     	var y = e.clientY;
@@ -242,45 +253,46 @@ class EachAlone extends React.Component {
     	var centerY = 0;
     	var dbX = 1;
     	var dbY = 1;
-    	if (this.state.state == 0 || this.state.state == 1) {
-    		if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
-	    		centerX = this.state.modelDiv / 2;
-	    		centerY = this.state.modelSplit / 2;
-	    	}
-	    	else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit){
-			centerX = this.state.modelDiv + this.state.modelDiv / 2;
-	    		centerY = this.state.modelSplit / 2;	
-	    	}
-	    	else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit){
-			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
-	    		centerY = this.state.modelSplit / 2;
-	    	}
-	    	else if (x <= this.state.modelDiv && y <= this.state.modelSplit * 2){
-			centerX = this.state.modelDiv / 2;
-	    		centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
-	    	}
-	    	else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit * 2){
-			centerX = this.state.modelDiv + this.state.modelDiv / 2;
-	    		centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
-	    	}
-	    	else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit * 2){
-			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
-	    		centerY = this.state.modelSplit + this.state.modelSplit / 2;    	
-	    	}
+    	if (e.buttons == 1) {
+    		if (this.state.state == 0 || this.state.state == 1) {
+    			if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
+	    			centerX = this.state.modelDiv / 2;
+	    			centerY = this.state.modelSplit / 2;
+	    		}
+	    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit){
+				centerX = this.state.modelDiv + this.state.modelDiv / 2;
+	    			centerY = this.state.modelSplit / 2;	
+	    		}
+	    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit){
+				centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
+	    			centerY = this.state.modelSplit / 2;
+	    		}
+	    		else if (x <= this.state.modelDiv && y <= this.state.modelSplit * 2){
+				centerX = this.state.modelDiv / 2;
+	    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+	    		}
+	    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit * 2){
+				centerX = this.state.modelDiv + this.state.modelDiv / 2;
+	    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+	    		}
+	    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit * 2){
+				centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
+	    			centerY = this.state.modelSplit + this.state.modelSplit / 2;    	
+	    		}
     	
-	    	lonSave = (x - centerX) * 360 / this.state.modelDiv;
-	    	latSave = (centerY - y) * 180 / this.state.modelSplit;
-	    	dbX = Math.floor((90 - latSave) * 320 / 180);
-	    	dbY= Math.floor((lonSave + 180) * 240 / 360);
-	    	console.log("dbX: ", dbX);
-	    	console.log("dbY: ", dbY);
-	}
-    	this.setState({
-    		longitude: Math.floor(lonSave),
-    		latitude: Math.floor(latSave)
-    		});
-    }
-    
+		    	lonSave = (x - centerX) * 360 / this.state.modelDiv;
+		    	latSave = (centerY - y) * 180 / this.state.modelSplit;
+	    		dbX = Math.floor((90 - latSave) * 320 / 180);
+	    		dbY= Math.floor((lonSave + 180) * 240 / 360);
+	    		console.log("dbX: ", dbX);
+	    		console.log("dbY: ", dbY);
+		}
+    		this.setState({
+    			longitude: Math.floor(lonSave),
+    			latitude: Math.floor(latSave)
+    			});
+		}
+        }
     
     /*** runs on initial render
     *** get CO2 values from DB
@@ -293,10 +305,6 @@ class EachAlone extends React.Component {
     		this.setState({ co2data: [...all_co2_data]});
     	});
     	
-    	precipImgs.forEach((picture) => {
-    		Image.prefetch(picture);
-    	});
-    	
 	this.setState({token: PubSub.subscribe('TOPIC', gameHandler)});
 
     }    
@@ -305,9 +313,26 @@ class EachAlone extends React.Component {
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
     }
+    
+    /*
+    getCache = (input, needed) => {
+    	needed.forEach((url) => {
+    		if(!(url in input)){
+    			Image.prefetch(url);
+    			console.log("prefetch: ", url);
+    		}
+    	});
+    }
+    */
 
     /*** runs on state update ***/   
     render(){
+    
+    /*** This partially works for precip, but it call prefetch too many times ***/
+    /*
+    var checkUrls = precipImgs.slice(this.state.index, this.state.index+10);
+    Image.queryCache(checkUrls)
+    .then((data) => this.getCache(data, checkUrls)); */
     
     /*** store page stack info ***/
     const { navigation } = this.props;  
@@ -320,9 +345,10 @@ class EachAlone extends React.Component {
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
     
+    /*** style for model images and div ***/
     const modelStyle = {
 	width: this.state.modelWidth,
-	height: this.state.modelHeight 
+	height: this.state.modelHeight
     };
     
     /*** Return the page ***/
@@ -433,11 +459,11 @@ class EachAlone extends React.Component {
 		</View>
 		
 		<View style={{flex:0.75}}>
-			<div style={modelStyle} onMouseDown={this.onMouseDown}>
-				<img src={fullUrl} style={modelStyle}/>
+			<div style={modelStyle} onMouseDown={this.onMouseDown} onMouseMove={this.onMouseDown}>
+				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
 			
-			<View style={{flex: 0.1, flexDirection: 'row'}}>
+			<View style={{flex: 0.3, flexDirection: 'row'}}>
 				<View style={{flex:0.33}}>
 					<Image style={styles.image} source={this.state.keySrc} /> 
 				</View>
