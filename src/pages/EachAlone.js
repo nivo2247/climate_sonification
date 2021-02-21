@@ -111,7 +111,7 @@ class EachAlone extends React.Component {
     		token: "",
     		precipBool: 0,
     		tempBool: 0,
-    		iceBool: 1,  //Disabled because cache was getting to big. Need to figure that out.
+    		iceBool: 0,  //Disabled because cache was getting to big. Need to figure that out.
     		adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.activeTempoButton,
     		allegroStyle: styles.tempoButton,
@@ -249,39 +249,62 @@ class EachAlone extends React.Component {
     	var dbX = 1;
     	var dbY = 1;
     	if(this.state.play == 0 && e.buttons == 1) {
-		if (this.state.state == 0 || this.state.state == 1) {
-			if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
-	    			centerX = this.state.modelDiv / 2;
-	    			centerY = this.state.modelSplit / 2;
-	    		}
-	    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit){
-				centerX = this.state.modelDiv + this.state.modelDiv / 2;
-	    			centerY = this.state.modelSplit / 2;	
-	    		}
-	    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit){
-				centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
-	    			centerY = this.state.modelSplit / 2;
-	    		}
-	    		else if (x <= this.state.modelDiv && y <= this.state.modelSplit * 2){
-				centerX = this.state.modelDiv / 2;
-	    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
-	    		}
-	    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit * 2){
-				centerX = this.state.modelDiv + this.state.modelDiv / 2;
-	    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
-	    		}
-	    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit * 2){
-				centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
-	    			centerY = this.state.modelSplit + this.state.modelSplit / 2;    	
-	    		}
-    	
+		if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
+	    		centerX = this.state.modelDiv / 2;
+	    		centerY = this.state.modelSplit / 2;
+		}
+    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit){
+			centerX = this.state.modelDiv + this.state.modelDiv / 2;
+    			centerY = this.state.modelSplit / 2;	
+    		}
+    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit){
+			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
+    			centerY = this.state.modelSplit / 2;
+    		}
+    		else if (x <= this.state.modelDiv && y <= this.state.modelSplit * 2){
+			centerX = this.state.modelDiv / 2;
+    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+    		}
+    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit * 2){
+			centerX = this.state.modelDiv + this.state.modelDiv / 2;
+    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+    		}
+    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit * 2){
+			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
+    			centerY = this.state.modelSplit + this.state.modelSplit / 2;    	
+    		}
+    		
+    		if (this.state.state == 0 || this.state.state == 1) {
 		    	lonSave = (x - centerX) * 360 / this.state.modelDiv;
 		    	latSave = (centerY - y) * 180 / this.state.modelSplit;
-	    		dbX = Math.floor((90 - latSave) * 320 / 180);
-	    		dbY= Math.floor((lonSave + 180) * 240 / 360);
-	    		console.log("dbX: ", dbX);
-	    		console.log("dbY: ", dbY);
 		}
+		else if (this.state.state == 2) {
+			var dx = x - centerX;
+			var dy = centerY - y;
+			var r = Math.sqrt(dx ** 2 + dy ** 2);
+			var theta = Math.atan(dy / dx);
+			var projy = r / 2;
+			var projx = centerX;
+			if (dx <= 0) {
+				projx -= r * Math.cos((theta + Math.PI / 2) / 2);
+			}
+			else {
+				projx += r * Math.cos((theta - Math.PI / 2) / 2);
+			}
+			lonSave = (projx - centerX) * 360 / this.state.modelDiv;
+		    	latSave = (centerY - projy) * 180 / this.state.modelSplit;
+			/*
+			console.log("cx: ", centerX, "   x: ", x, "    dx: ", dx);
+			console.log("cy: ", centerY, "   y: ", y, "    dy: ", dy); */
+			console.log("r: ", r, "   theta: ", theta);
+			console.log("px: ", projx, "py: ", projy);
+		}
+		
+	    	dbX = Math.floor((90 - latSave) * 320 / 180);
+	    	dbY= Math.floor((lonSave + 180) * 240 / 360);
+	    	console.log("dbX: ", dbX);
+	    	console.log("dbY: ", dbY);
+	    		
 		this.setState({
 	    		longitude: Math.floor(lonSave),
 	    		latitude: Math.floor(latSave)
