@@ -324,8 +324,17 @@ class EachAlone extends React.Component {
     	});
     	
 	this.setState({token: PubSub.subscribe('TOPIC', gameHandler)});
+	
+	//this.updateModels();
 
-    }    
+    }   
+      
+    /*  
+    updateModels() {
+    	const ctx = this.refs.models.getContext('2d');
+    	ctx.fillRect(0, 0, 10, 10);
+    } 
+    */
     
     /*** runs on page close ***/
     componentWillUnmount = () => {
@@ -490,13 +499,18 @@ class EachAlone extends React.Component {
 			</View>
 			<View style={{flex: 0.1, flexDirection: 'row'}}>
 				<View style={{flex:0.33}}>
-					<Text style={{textAlign: 'center', fontSize: 10}}>Value: {coord_val}</Text> 
+					<Text style={{textAlign: 'center', fontSize: 10}}>Avg Value: {coord_val}</Text> 
 				</View>
 			</View>
+			
+			{/*
+			<canvas ref="models" height={100} width={100} />
+			*/}
 			
 			<View style={{flex:0.2}}>
 				<Text style={styles.title_text}>Todo: Graph</Text>
 			</View>
+			
 		</View>
     	</View>   
      );
