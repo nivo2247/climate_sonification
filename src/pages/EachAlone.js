@@ -29,11 +29,6 @@ var styles = StyleSheet.create({
 		height: Dimensions.get('window').height,
 		flexDirection: 'row'
 	},
-	
-	model: {
-		width: 700,
-		height: 500
-	},
 
 	image: {
 		flex: 1,
@@ -243,7 +238,7 @@ class EachAlone extends React.Component {
     }
     
     
-    /*** Used to calculate coords for onMouseMove and onMouseDown ***/
+    /*** Used to calculate coords for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
     	var x = e.clientX - this.state.modelLeft;
     	var y = e.clientY;
@@ -253,9 +248,9 @@ class EachAlone extends React.Component {
     	var centerY = 0;
     	var dbX = 1;
     	var dbY = 1;
-    	if (e.buttons == 1) {
-    		if (this.state.state == 0 || this.state.state == 1) {
-    			if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
+    	if(this.state.play == 0 && e.buttons == 1) {
+		if (this.state.state == 0 || this.state.state == 1) {
+			if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
 	    			centerX = this.state.modelDiv / 2;
 	    			centerY = this.state.modelSplit / 2;
 	    		}
@@ -287,12 +282,12 @@ class EachAlone extends React.Component {
 	    		console.log("dbX: ", dbX);
 	    		console.log("dbY: ", dbY);
 		}
-    		this.setState({
-    			longitude: Math.floor(lonSave),
-    			latitude: Math.floor(latSave)
-    			});
-		}
-        }
+		this.setState({
+	    		longitude: Math.floor(lonSave),
+	    		latitude: Math.floor(latSave)
+	    		});
+	        }
+        }    
     
     /*** runs on initial render
     *** get CO2 values from DB
