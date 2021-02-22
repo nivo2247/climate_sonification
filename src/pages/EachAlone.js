@@ -8,7 +8,6 @@ import { precipImgs, tempImgs, iceImgs } from './../const/url.js';
 
 
 /*** Links to AWS S3 media ***/
-const modelsrc="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
 const urlPre = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
 const precipActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.png";
 const precipInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_inactive.png";
@@ -21,6 +20,22 @@ const tempKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images
 const iceKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/seaiceLegend.png";
 const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
 const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
+
+const artifactImgs = [
+	urlPre,
+	precipActive,
+	precipInactive,
+	tempActive,
+	tempInactive,
+	iceActive,
+	iceInactive,
+	precipKey,
+	tempKey,
+	iceKey,
+	playUrl,
+	pauseUrl
+];
+
 
 /*** EachAlone specific stylesheet ***/
 var styles = StyleSheet.create({
@@ -83,13 +98,17 @@ var gameHandler = async function(msg, data) {
    					return;
    			}
    		}
+   		data.setState({
+    			playButton: playUrl,
+    			play: 0
+    			
+    		});
 	}
 	else {
     		data.setState({
     			playButton: playUrl
     		});
     	}
-	
 };
 
 /*** Page class ***/
@@ -324,6 +343,10 @@ class EachAlone extends React.Component {
     	});
     	
 	this.setState({token: PubSub.subscribe('TOPIC', gameHandler)});
+	
+	artifactImgs.forEach((picture) => {
+    		Image.prefetch(picture);
+    	});
 	
 	this.updateModels();
 

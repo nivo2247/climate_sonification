@@ -548,3 +548,4 @@ export const iceImgs = [
 	"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/seaIce/ice_ens179.jpg",
 	"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/seaIce/ice_ens180.jpg"
 ];
+

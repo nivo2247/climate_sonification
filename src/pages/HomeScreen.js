@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity, ImageBackground } from "react-native";
 import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -26,6 +26,12 @@ const styles = StyleSheet.create({
 	image: {
 		flex: 1,
 		resizeMode: 'contain'
+	},
+	
+	backgroundImage: {
+		flex: 1,
+		resizeMode: 'cover',
+		justifyContent: 'center'
 	},
 	
 	button: {
@@ -61,13 +67,14 @@ class HomeScreen extends React.Component {
     render(){
     
     const { navigation } = this.props;
+    
+    const image = { uri : "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg" };
  
 
     return (
 
-      <div style={{ backgroundImage: 'url("https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg")' }} className="App">
-	{/* View sized to entire screen */}
-	<View style={styles.container}>
+    <View style={styles.container}>
+	<ImageBackground source={image} style={styles.backgroundImage}>
 
 		{/* Row for title text */}
 		<View style={{flex: 0.2, padding: 10}}>
@@ -108,8 +115,9 @@ class HomeScreen extends React.Component {
 			</TouchableOpacity>
 			<View style={{flex: 0.35}}></View>
 		</View>
-	</View>
-      </div>
+	</ImageBackground>
+    </View>
+      
     );
     }
 }
