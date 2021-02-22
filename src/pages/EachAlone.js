@@ -325,16 +325,20 @@ class EachAlone extends React.Component {
     	
 	this.setState({token: PubSub.subscribe('TOPIC', gameHandler)});
 	
-	//this.updateModels();
+	this.updateModels();
 
     }   
-      
-    /*  
+       
     updateModels() {
     	const ctx = this.refs.models.getContext('2d');
-    	ctx.fillRect(0, 0, 10, 10);
+    	ctx.beginPath();
+    	ctx.moveTo(20, 20);
+    	ctx.lineTo(20, 100);
+    	ctx.lineTo(70, 100);
+    	ctx.strokeStyle = "red";
+    	ctx.stroke();
+    	//ctx.fillRect(0, 0, this.state.modelWidth, this.state.modelSplit / 2);
     } 
-    */
     
     /*** runs on page close ***/
     componentWillUnmount = () => {
@@ -390,12 +394,12 @@ class EachAlone extends React.Component {
 				</View>
 			</TouchableOpacity>
 			
-			<View style={{flex:0.07}}>
+			<View style={{flex:0.05}}>
 				<Text style={{fontWeight: 'bold', fontSize: 14}}>Instructions</Text>
 				<Text style={{fontSize: 12}}>1.Select a variable below</Text>
 			</View>
 			
-			<View style={{flex:0.07, flexDirection:'row'}}>
+			<View style={{flex:0.05, flexDirection:'row'}}>
 				<TouchableOpacity onPress={() => this.setPrecip()} style={{flex:0.33}}>
 				<View style={{flex:1}}>
 				<Image style={styles.image} source={this.state.precipSrc}/>
@@ -415,11 +419,11 @@ class EachAlone extends React.Component {
 				</TouchableOpacity>
 			</View>
 			
-			<View style={{flex:0.2}}>
+			<View style={{flex:0.1}}>
 				<Text style={{fontSize: 12}}>2. Touch the map to select a location{"\n"}3. Touch the timeline to select a starting year.{"\n"}4. Press the play button.</Text>
 			</View>
 			
-			<View style={{flex:0.13}}>
+			<View style={{flex:0.1}}>
 				<TouchableOpacity onPress={() => this.handleClick()} style={{flex: 1}}>
 					<View style={{flex: 1}}>
 						<Image style={styles.image} source={this.state.playButton}/>
@@ -431,7 +435,7 @@ class EachAlone extends React.Component {
 				<Text style={{fontSize: 12}}>4. Select a tempo</Text>
 			</View>
 			
-			<View style={{flex:0.1, flexDirection:'row'}}>
+			<View style={{flex:0.05, flexDirection:'row'}}>
 				<View  style={styles.tempoButtonContainer}>
 					<TouchableHighlight style={this.state.adagioStyle} onPress={this.setAdagio}>
 						<Text style={{fontSize:12}}>adagio</Text>
@@ -454,7 +458,7 @@ class EachAlone extends React.Component {
 				</View>
 			</View>
 			
-			<View style={{flex:0.1, flexDirection:'row'}}>
+			<View style={{flex:0.05, flexDirection:'row'}}>
 				<View style={{flex:0.5}}>
 					<Text style={{fontSize: 12}}>Lat: {this.state.latitude}</Text>
 				</View>
@@ -473,6 +477,18 @@ class EachAlone extends React.Component {
 				</View>
 			</View>
 			
+			<View style={{flex: 0.05, flexDirection: 'row'}}>
+				<View style={{flex:1}}>
+					<Text style={{textAlign: 'center', fontSize: 12}}>Avg Value: {coord_val}</Text> 
+				</View>
+			</View>
+			
+			<View style={{flex: 0.1, flexDirection: 'row'}}>
+				<View style={{flex:1}}>
+					<Image style={styles.image} source={this.state.keySrc} /> 
+				</View>
+			</View>
+			
 			<View style={{flex:0.2}}>
 				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png" /> 
 			</View>
@@ -487,28 +503,13 @@ class EachAlone extends React.Component {
 			</View>
 		</View>
 		
-		<View style={{flex:0.75}}>
+		<View style={{flex:.75}}>
 			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown}>
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
 			
-			<View style={{flex: 0.2, flexDirection: 'row'}}>
-				<View style={{flex:0.33}}>
-					<Image style={styles.image} source={this.state.keySrc} /> 
-				</View>
-			</View>
-			<View style={{flex: 0.1, flexDirection: 'row'}}>
-				<View style={{flex:0.33}}>
-					<Text style={{textAlign: 'center', fontSize: 10}}>Avg Value: {coord_val}</Text> 
-				</View>
-			</View>
-			
-			{/*
-			<canvas ref="models" height={100} width={100} />
-			*/}
-			
 			<View style={{flex:0.2}}>
-				<Text style={styles.title_text}>Todo: Graph</Text>
+				<canvas ref="models" height={this.state.modelSplit / 2} width={this.state.modelWidth} />
 			</View>
 			
 		</View>
