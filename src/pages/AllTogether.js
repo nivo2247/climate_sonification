@@ -113,6 +113,9 @@ class EachAlone extends React.Component {
     		timerLen: 800,
     		playButton: playUrl,
     		co2data : [0],
+    		precipAvg: [0],
+    		tempAvg: [0],
+    		iceAvg: [0],
     		token: "",
     		adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.activeTempoButton,
@@ -238,7 +241,7 @@ class EachAlone extends React.Component {
 			else {
 				projx += r * Math.cos((theta - Math.PI / 2) / 2);
 			}
-			lonSave = (projx - centerX) * 360 / this.state.modelDiv;
+			lonSave = (projx - centerX) * 180 / this.state.modelDiv;
 		    	latSave = 90 - projy * 180 / this.state.modelSplit;
 			
 			console.log("lats: ", latSave, "   lons: ", lonSave);
@@ -319,13 +322,41 @@ class EachAlone extends React.Component {
     doCoordHits(lat, lon){
     	var dbX = 1;
     	var dbY = 1;
-    	dbX = Math.floor((90 - lat) * 320 / 180);
-	dbY= Math.floor((lon + 180) * 240 / 360);
+    	dbX = Math.floor(((90 - lat) * 320 / 180) + 1);
+	dbY= Math.abs(Math.floor(((lon) * 240 / 360) + 1));
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon)
 	});
 	/* Filter and do db hit here */
+	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
+		var request = dbUrl.concat("/table/precipavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		Axios.get(request)
+    		.then(res => {
+    		const precip_coord_data = res.data.data;
+    		this.setState({ precipAvg: [...precip_coord_data]});
+    		console.log(precip_coord_data);
+    	});
+	}
+	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
+		var request = dbUrl.concat("/table/tempavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		Axios.get(request)
+    		.then(res => {
+    		const temp_coord_data = res.data.data;
+    		this.setState({ tempAvg: [...temp_coord_data]});
+    		console.log(temp_coord_data);
+    	});
+	}
+	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
+		var request = dbUrl.concat("/table/seaiceavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		Axios.get(request)
+    		.then(res => {
+    		const seaice_coord_data = res.data.data;
+    		this.setState({ iceAvg: [...seaice_coord_data]});
+    		console.log(seaice_coord_data);
+    	});
+	}
+	
     	console.log("dbX: ", dbX, "dbY: ", dbY);
     };
     
@@ -368,8 +399,18 @@ class EachAlone extends React.Component {
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
     
-    /*** Avg db value ***/
-    var coord_val = 0;
+    /*** Set avg db values ***/
+    var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
+    var usePrecipAvgKey = precipAvgKeys[this.state.index+1];
+    var precip_val = this.state.precipAvg[0][usePrecipAvgKey];
+    
+    var tempAvgKeys = Object.keys(this.state.tempAvg[0]);
+    var useTempAvgKey = tempAvgKeys[this.state.index+1];
+    var temp_val = this.state.tempAvg[0][useTempAvgKey];
+    
+    var iceAvgKeys = Object.keys(this.state.iceAvg[0]);
+    var useIceAvgKey = iceAvgKeys[this.state.index+1];
+    var ice_val = this.state.iceAvg[0][useIceAvgKey];
     
     /*** style for model images and div ***/
     const modelStyle = {
@@ -457,13 +498,13 @@ class EachAlone extends React.Component {
 			
 			<View style={{flex: 0.05, flexDirection: 'row'}}>
 				<View style={{flex:0.33}}>
-					<Text style={{textAlign: 'center', fontSize: 12}}>Precip: {"\n"}{coord_val}</Text> 
+					<Text style={{textAlign: 'center', fontSize: 12}}>Precip: {"\n"}{precip_val}</Text> 
 				</View>
 				<View style={{flex:0.33}}>
-					<Text style={{textAlign: 'center', fontSize: 12}}>Temp: {"\n"}{coord_val}</Text> 
+					<Text style={{textAlign: 'center', fontSize: 12}}>Temp: {"\n"}{temp_val}</Text> 
 				</View>
 				<View style={{flex:0.33}}>
-					<Text style={{textAlign: 'center', fontSize: 12}}>Sea Ice: {"\n"}{coord_val}</Text> 
+					<Text style={{textAlign: 'center', fontSize: 12}}>Sea Ice: {"\n"}{ice_val}</Text> 
 				</View>
 			</View>
 			
