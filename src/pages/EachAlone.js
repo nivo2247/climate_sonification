@@ -161,6 +161,7 @@ class EachAlone extends React.Component {
     	keySrc: precipKey,
     	precipBool: 1
     });
+    this.setupGraph();
     }
    
     /*** onPress for 'Temperature' ***/   
@@ -179,6 +180,7 @@ class EachAlone extends React.Component {
     	keySrc: tempKey,
     	tempBool: 1
     });
+    this.setupGraph();
     }
 
     /*** onPress for 'Sea Ice' ***/       
@@ -197,6 +199,7 @@ class EachAlone extends React.Component {
     	keySrc: iceKey,
     	iceBool: 1
     });
+    this.setupGraph();
     }
 
     /*** onPress for 'adagio' ***/       
@@ -348,20 +351,52 @@ class EachAlone extends React.Component {
     		Image.prefetch(picture);
     	});
 	
-	this.updateModels();
+	this.setupGraph();
 
     }   
        
-    updateModels() {
+    setupGraph() {
     	const ctx = this.refs.models.getContext('2d');
+    	var bottom = this.state.modelSplit / 2 - 1;
+    	var right = this.state.modelWidth - 1;
+    	
+    	ctx.clearRect(0, 0, right, bottom);
+    	
     	ctx.beginPath();
-    	ctx.moveTo(0, 0);
-    	ctx.lineTo(0, (this.state.modelSplit / 2 - 1));
-    	ctx.lineTo(this.state.modelWidth, (this.state.modelSplit / 2) - 1);
-    	ctx.strokeStyle = "red";
+    	ctx.moveTo(1, 1);
+    	ctx.lineTo(1, bottom);
+    	ctx.lineTo(right, bottom);
+    	ctx.lineTo(right, 1);
+    	ctx.lineTo(1, 1);
+    	ctx.strokeStyle = "black";
     	ctx.stroke();
-    	//ctx.fillRect(0, 0, this.state.modelWidth, this.state.modelSplit / 2);
     } 
+    
+    updateGraph() {
+    	if (this.state.index > 0){
+	    	const ctx = this.refs.models.getContext('2d');
+    		var bottom = this.state.modelSplit / 2 - 1;
+    		var right = this.state.modelWidth - 1;
+    		var step = right / 180;
+    		var avg = bottom / 2;
+    	
+    		var prev_val = 0;
+    		var coord_val = 0;
+    		var median = 0;
+    	
+    		ctx.beginPath();
+    		ctx.moveTo(1 + step * (this.state.index - 1), avg + (prev_val - median));
+    		ctx.lineTo(1 + step * this.state.index, avg + (coord_val - median));
+    		if(this.state.state == 0){
+    			ctx.strokeStyle = "green";
+    		} else if(this.state.state == 1){
+    			ctx.strokeStyle = "red";
+    		} else if(this.state.state == 2){
+    			ctx.strokeStyle = "blue";
+    		}
+    		ctx.stroke();
+    }
+    }
     
     handleYear = (event) => {
     	this.setState({index: parseInt(event.target.value)});
@@ -371,26 +406,9 @@ class EachAlone extends React.Component {
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
     }
-    
-    /*
-    getCache = (input, needed) => {
-    	needed.forEach((url) => {
-    		if(!(url in input)){
-    			Image.prefetch(url);
-    			console.log("prefetch: ", url);
-    		}
-    	});
-    }
-    */
 
     /*** runs on state update ***/   
     render(){
-    
-    /*** This partially works for precip, but it call prefetch too many times ***/
-    /*
-    var checkUrls = precipImgs.slice(this.state.index, this.state.index+10);
-    Image.queryCache(checkUrls)
-    .then((data) => this.getCache(data, checkUrls)); */
     
     /*** store page stack info ***/
     const { navigation } = this.props;  
@@ -413,6 +431,8 @@ class EachAlone extends React.Component {
 	width: this.state.modelWidth,
 	height: this.state.modelHeight
     };
+    
+    this.updateGraph();
     
     /*** Return the page ***/
     return (
@@ -540,11 +560,11 @@ class EachAlone extends React.Component {
 			</div>
 			</View>
 			
-			<View style={{flex:0.2}}>
+			<View style={{flex:0.19}}>
 				<canvas ref="models" height={this.state.modelSplit / 2} width={this.state.modelWidth} />
 			</View>
 			
-			<View style={{flex:0.05}}>
+			<View style={{flex:0.06}}>
 				<input type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
 			</View>
 			
