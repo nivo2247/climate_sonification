@@ -16,7 +16,6 @@ const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images
 const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
 
 const artifactImgs = [
-	urlPre,
 	precipKey,
 	tempKey,
 	iceKey,
@@ -238,10 +237,12 @@ class EachAlone extends React.Component {
 				projx += r * Math.cos((theta - Math.PI / 2) / 2);
 			}
 			lonSave = (projx - centerX) * 360 / this.state.modelDiv;
-		    	latSave = (centerY - projy) * 180 / this.state.modelSplit;
-			/*
-			console.log("cx: ", centerX, "   x: ", x, "    dx: ", dx);
-			console.log("cy: ", centerY, "   y: ", y, "    dy: ", dy); */
+		    	latSave = 90 - projy * 180 / this.state.modelSplit;
+			
+			console.log("lats: ", latSave, "   lons: ", lonSave);
+			
+			//console.log("cx: ", centerX, "   x: ", x, "    dx: ", dx);
+			//console.log("cy: ", centerY, "   y: ", y, "    dy: ", dy); 
 			console.log("r: ", r, "   theta: ", theta);
 			console.log("px: ", projx, "py: ", projy);
 		}
