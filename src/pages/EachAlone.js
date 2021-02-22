@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity, TouchableHighlight, TextInput } from "react-native";
 import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -109,6 +109,10 @@ var gameHandler = async function(msg, data) {
     		});
     	}
 };
+
+function isNumeric(value) {
+	return /^-?\d+$/.test(value);
+}
 
 /*** Page class ***/
 class EachAlone extends React.Component {
@@ -267,8 +271,6 @@ class EachAlone extends React.Component {
     	var lonSave = 0;
     	var centerX = 0;
     	var centerY = 0;
-    	var dbX = 1;
-    	var dbY = 1;
     	if(this.state.play == 0 && e.buttons == 1) {
 		if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
 	    		centerX = this.state.modelDiv / 2;
@@ -321,16 +323,7 @@ class EachAlone extends React.Component {
 			console.log("r: ", r, "   theta: ", theta);
 			console.log("px: ", projx, "py: ", projy);
 		}
-		
-	    	dbX = Math.floor((90 - latSave) * 320 / 180);
-	    	dbY= Math.floor((lonSave + 180) * 240 / 360);
-	    	console.log("dbX: ", dbX);
-	    	console.log("dbY: ", dbY);
-	    		
-		this.setState({
-	    		longitude: Math.floor(lonSave),
-	    		latitude: Math.floor(latSave)
-	    		});
+	    	this.doCoordHits(latSave, lonSave);
 	        }
         }    
     
@@ -352,6 +345,7 @@ class EachAlone extends React.Component {
     	});
 	
 	this.setupGraph();
+	this.doCoordHits(0, 0);
 
     }   
        
@@ -398,6 +392,19 @@ class EachAlone extends React.Component {
     }
     }
     
+    doCoordHits(lat, lon){
+    	var dbX = 1;
+    	var dbY = 1;
+    	dbX = Math.floor((90 - lat) * 320 / 180);
+	dbY= Math.floor((lon + 180) * 240 / 360);
+	this.setState({
+		latitude: Math.floor(lat),
+		longitude: Math.floor(lon)
+	});
+	/* Filter and do db hit here */
+    	console.log("dbX: ", dbX, "dbY: ", dbY);
+    };
+    
     handleYear = (event) => {
     	this.setState({index: parseInt(event.target.value)});
     }
@@ -405,6 +412,22 @@ class EachAlone extends React.Component {
     /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
+    }
+    
+    onChangeLat = (text) => {
+    	if(isNumeric(text) == true){
+    		this.doCoordHits(parseInt(text), this.state.longitude);
+    	}else{
+    		this.doCoordHits(0, this.state.longitude);
+    	}
+    }
+    
+    onChangeLon = (text) => {
+    	if(isNumeric(text) == true){
+    		this.doCoordHits(this.state.latitude, parseInt(text));
+    	}else{
+    		this.doCoordHits(this.state.latitude, 0);
+    	}
     }
 
     /*** runs on state update ***/   
@@ -507,11 +530,17 @@ class EachAlone extends React.Component {
 			</View>
 			
 			<View style={{flex:0.05, flexDirection:'row'}}>
-				<View style={{flex:0.5}}>
-					<Text style={{fontSize: 12}}>Lat: {this.state.latitude}</Text>
+				<View style={{flex:0.25}}>
+					<Text style={{fontSize: 12}}>Lat:</Text>
 				</View>
-				<View style={{flex:0.5}}>
-					<Text style={{fontSize: 12}}>Lon: {this.state.longitude}</Text>
+				<View style={{flex:0.25}}>
+					<TextInput value={this.state.latitude} style={{flex:1, borderColor:'gray', borderWidth: 1}} onChangeText={(text) => this.onChangeLat(text)} />
+				</View>
+				<View style={{flex:0.25}}>
+					<Text style={{fontSize: 12}}>Lon:</Text>
+				</View>
+				<View style={{flex:0.25}}>
+					<TextInput value={this.state.longitude} style={{flex:1, borderColor:'gray', borderWidth: 1}} onChangeText={(text) => this.onChangeLon(text)} />
 				</View>
 			</View>
 			
