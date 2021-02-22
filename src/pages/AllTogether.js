@@ -104,7 +104,6 @@ class EachAlone extends React.Component {
     constructor(props){
     super(props)
         this.state = {
-        	state: 0,
     		modelStr: "/combined/combined_ens",
     		index: 0,
     		play: 0,
@@ -112,9 +111,6 @@ class EachAlone extends React.Component {
     		playButton: playUrl,
     		co2data : [0],
     		token: "",
-    		precipBool: 0,
-    		tempBool: 0,
-    		iceBool: 0,  //Disabled because cache was getting to big. Need to figure that out.
     		adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.activeTempoButton,
     		allegroStyle: styles.tempoButton,
@@ -191,37 +187,44 @@ class EachAlone extends React.Component {
     	var centerY = 0;
     	var dbX = 1;
     	var dbY = 1;
+    	var boxType = 0;
     	if(this.state.play == 0 && e.buttons == 1) {
 		if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
 	    		centerX = this.state.modelDiv / 2;
 	    		centerY = this.state.modelSplit / 2;
+	    		boxType = 1;
 		}
     		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit){
 			centerX = this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit / 2;	
+    			centerY = this.state.modelSplit / 2;
+    			boxType = 1;	
     		}
     		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit){
 			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
     			centerY = this.state.modelSplit / 2;
+    			boxType = 2;
     		}
     		else if (x <= this.state.modelDiv && y <= this.state.modelSplit * 2){
 			centerX = this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+    			centerY = this.state.modelSplit + this.state.modelSplit / 2; 
+    			boxType = 1;  	
     		}
     		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit * 2){
 			centerX = this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+    			centerY = this.state.modelSplit + this.state.modelSplit / 2; 
+    			boxType = 1;  	
     		}
     		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit * 2){
 			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit + this.state.modelSplit / 2;    	
+    			centerY = this.state.modelSplit + this.state.modelSplit / 2; 
+    			boxType = 2;   	
     		}
     		
-    		if (this.state.state == 0 || this.state.state == 1) {
+    		if (boxType == 1) {
 		    	lonSave = (x - centerX) * 360 / this.state.modelDiv;
 		    	latSave = (centerY - y) * 180 / this.state.modelSplit;
 		}
-		else if (this.state.state == 2) {
+		else if (boxType == 2) {
 			var dx = x - centerX;
 			var dy = centerY - y;
 			var r = Math.sqrt(dx ** 2 + dy ** 2);
@@ -312,13 +315,7 @@ class EachAlone extends React.Component {
     		ctx.beginPath();
     		ctx.moveTo(1 + step * (this.state.index - 1), avg + (prev_val - median));
     		ctx.lineTo(1 + step * this.state.index, avg + (coord_val - median));
-    		if(this.state.state == 0){
-    			ctx.strokeStyle = "green";
-    		} else if(this.state.state == 1){
-    			ctx.strokeStyle = "red";
-    		} else if(this.state.state == 2){
-    			ctx.strokeStyle = "blue";
-    		}
+    		ctx.strokeStyle = "green";
     		ctx.stroke();
     }
     }
