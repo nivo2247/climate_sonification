@@ -332,13 +332,17 @@ class EachAlone extends React.Component {
     updateModels() {
     	const ctx = this.refs.models.getContext('2d');
     	ctx.beginPath();
-    	ctx.moveTo(20, 20);
-    	ctx.lineTo(20, 100);
-    	ctx.lineTo(70, 100);
+    	ctx.moveTo(0, 0);
+    	ctx.lineTo(0, (this.state.modelSplit / 2 - 1));
+    	ctx.lineTo(this.state.modelWidth, (this.state.modelSplit / 2) - 1);
     	ctx.strokeStyle = "red";
     	ctx.stroke();
     	//ctx.fillRect(0, 0, this.state.modelWidth, this.state.modelSplit / 2);
     } 
+    
+    handleYear = (event) => {
+    	this.setState({index: parseInt(event.target.value)});
+    }
     
     /*** runs on page close ***/
     componentWillUnmount = () => {
@@ -368,6 +372,8 @@ class EachAlone extends React.Component {
     /*** store page stack info ***/
     const { navigation } = this.props;  
     
+    console.log("ind ", this.state.index);
+    
     var co2val = this.state.co2data[this.state.index].co2_val;
     
     /*** setup model URL ***/
@@ -376,6 +382,7 @@ class EachAlone extends React.Component {
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
     
+    /*** Avg db value ***/
     var coord_val = 0;
     
     /*** style for model images and div ***/
@@ -504,12 +511,18 @@ class EachAlone extends React.Component {
 		</View>
 		
 		<View style={{flex:.75}}>
+			<View style={{flex:0.75}}>
 			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown}>
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
+			</View>
 			
 			<View style={{flex:0.2}}>
 				<canvas ref="models" height={this.state.modelSplit / 2} width={this.state.modelWidth} />
+			</View>
+			
+			<View style={{flex:0.05}}>
+				<input type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
 			</View>
 			
 		</View>
