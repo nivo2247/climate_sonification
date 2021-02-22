@@ -4,7 +4,7 @@ import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Axios from 'axios';
 import PubSub from 'pubsub-js';
-import { precipImgs, tempImgs, iceImgs } from './../const/url.js';
+import { precipImgs, tempImgs, iceImgs, dbUrl } from './../const/url.js';
 
 
 /*** Links to AWS S3 media ***/
@@ -332,7 +332,8 @@ class EachAlone extends React.Component {
     *** preload images
     *** setup gameHandler as subscriber ***/
     componentDidMount = () => {
-    	Axios.get('http://ec2-3-133-100-140.us-east-2.compute.amazonaws.com:4040/co2/all')
+    	var request = dbUrl.concat("/co2/all");
+    	Axios.get(request)
     	.then(res => {
     		const all_co2_data = res.data.data;
     		this.setState({ co2data: [...all_co2_data]});

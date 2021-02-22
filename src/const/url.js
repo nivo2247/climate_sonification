@@ -733,3 +733,5 @@ export const combinedImgs = [
 	"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/combined/combined_ens179.jpg",
 	"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/combined/combined_ens180.jpg"
 ];
+
+export const dbUrl = "http://ec2-3-15-37-239.us-east-2.compute.amazonaws.com:4040";
