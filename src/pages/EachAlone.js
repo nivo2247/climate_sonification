@@ -413,8 +413,6 @@ class EachAlone extends React.Component {
     /*** store page stack info ***/
     const { navigation } = this.props;  
     
-    console.log("ind ", this.state.index);
-    
     var co2val = this.state.co2data[this.state.index].co2_val;
     
     /*** setup model URL ***/
