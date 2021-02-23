@@ -427,11 +427,11 @@ class EachAlone extends React.Component {
     		ctx.beginPath();
     		for(var tempInd = 1; tempInd < this.state.index; tempInd++){
     		    	var tempAvgKeys = Object.keys(this.state.coordData[0]);
-    			var useTempAvgKey = tempAvgKeys[tempInd - 1];
+    			var useTempAvgKey = tempAvgKeys[tempInd];
     			var prev_val = this.state.coordData[0][useTempAvgKey];
     			
     			var tempAvgKeys1 = Object.keys(this.state.coordData[0]);
-    			var useTempAvgKey1 = tempAvgKeys1[tempInd];
+    			var useTempAvgKey1 = tempAvgKeys1[tempInd + 1];
     			var coord_val = this.state.coordData[0][useTempAvgKey1];
     			
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
@@ -450,11 +450,11 @@ class EachAlone extends React.Component {
     		ctx.beginPath();
     		for(var iceInd = 1; iceInd < this.state.index; iceInd++){
     		    	var iceAvgKeys = Object.keys(this.state.coordData[0]);
-    			var useIceAvgKey = iceAvgKeys[iceInd - 1];
+    			var useIceAvgKey = iceAvgKeys[iceInd];
     			var prev_val = this.state.coordData[0][useIceAvgKey];
     			
     			var iceAvgKeys1 = Object.keys(this.state.coordData[0]);
-    			var useIceAvgKey1 = iceAvgKeys1[iceInd];
+    			var useIceAvgKey1 = iceAvgKeys1[iceInd + 1];
     			var coord_val = this.state.coordData[0][useIceAvgKey1];
     			
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
@@ -575,7 +575,7 @@ class EachAlone extends React.Component {
     var coord_val = 0;
     if(this.state.play == 1){
     	var avgKeys = Object.keys(this.state.coordData[0]);
-    	var useAvgKey = avgKeys[this.state.index+1];
+    	var useAvgKey = avgKeys[this.state.index+2];
     	coord_val = this.state.coordData[0][useAvgKey];
     }else if(this.state.play == 0){
         var coord_index = (dbY - 1) * 240 + dbX;

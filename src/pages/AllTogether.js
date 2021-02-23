@@ -512,32 +512,32 @@ class EachAlone extends React.Component {
     /*** Set avg db values ***/
     if(this.state.play == 1){
     	var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
-    	var usePrecipAvgKey = precipAvgKeys[this.state.index+1];
+    	var usePrecipAvgKey = precipAvgKeys[this.state.index+2];
     	precip_val = this.state.precipAvg[0][usePrecipAvgKey];
     
     	var tempAvgKeys = Object.keys(this.state.tempAvg[0]);
-    	var useTempAvgKey = tempAvgKeys[this.state.index+1];
+    	var useTempAvgKey = tempAvgKeys[this.state.index+2];
     	temp_val = this.state.tempAvg[0][useTempAvgKey];
     
     	var iceAvgKeys = Object.keys(this.state.iceAvg[0]);
-    	var useIceAvgKey = iceAvgKeys[this.state.index+1];
+    	var useIceAvgKey = iceAvgKeys[this.state.index+2];
     	ice_val = this.state.iceAvg[0][useIceAvgKey];
     }
     else if(this.state.play == 0){
     	var coord_index = (dbY - 1) * 240 + dbX;
     	if(this.state.precipAvgAllCoords.length > coord_index){
     		var avgKeys0 = Object.keys(this.state.precipAvgAllCoords[coord_index]);
-    		var useAvgKey0 = avgKeys0[1];
+    		var useAvgKey0 = avgKeys0[this.state.index + 2];
     		precip_val = this.state.precipAvgAllCoords[coord_index][useAvgKey0];
     	}
     	if(this.state.tempAvgAllCoords.length > coord_index){
     		var avgKeys1 = Object.keys(this.state.tempAvgAllCoords[coord_index]);
-    		var useAvgKey1 = avgKeys1[1];
+    		var useAvgKey1 = avgKeys1[this.state.index + 2];
     		temp_val = this.state.tempAvgAllCoords[coord_index][useAvgKey1];
     	}
     	if(this.state.iceAvgAllCoords.length > coord_index){
     		var avgKeys2 = Object.keys(this.state.iceAvgAllCoords[coord_index]);
-    		var useAvgKey2 = avgKeys2[1];
+    		var useAvgKey2 = avgKeys2[this.state.index + 2];
     		ice_val = this.state.iceAvgAllCoords[coord_index][useAvgKey2];
     	}
     }
