@@ -241,8 +241,8 @@ class EachAlone extends React.Component {
 			else {
 				projx += r * Math.cos((theta - Math.PI / 2) / 2);
 			}
-			lonSave = (projx - centerX) * 180 / this.state.modelDiv;
-		    	latSave = 90 - projy * 180 / this.state.modelSplit;
+			lonSave = (projx - centerX) * 540 / this.state.modelDiv;
+		    	latSave = 90 - projy * 90 / this.state.modelSplit;
 			
 			console.log("lats: ", latSave, "   lons: ", lonSave);
 			
@@ -322,8 +322,8 @@ class EachAlone extends React.Component {
     doCoordHits(lat, lon){
     	var dbX = 1;
     	var dbY = 1;
-    	dbX = Math.floor(((90 - lat) * 320 / 180) + 1);
-	dbY= Math.abs(Math.floor(((lon) * 240 / 360) + 1));
+    	dbY = Math.floor((91 - lat) * (240 / 180));
+	dbX = Math.floor((181 + lon) * 320 / 360);
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon)
