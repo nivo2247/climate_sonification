@@ -181,13 +181,13 @@ class EachAlone extends React.Component {
     /*** onPress for 'Play/Pause' 
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
-    	this.setupGraph();
     	var newState = (this.state.play + 1) % 2;
     	this.setState({play: newState });
     	
     	if(newState == 0){
     		this.doYearHits(this.state.index + 1920);
     	}else if(newState == 1){
+    		this.setupGraph();
     		this.doCoordHits(this.state.latitude, this.state.longitude);
     	}
     	
@@ -436,6 +436,7 @@ class EachAlone extends React.Component {
     		.then(res => {
     		const precip_coord_data = res.data.data;
     		this.setState({ precipAvg: [...precip_coord_data]});
+    		this.setupGraph();
     		console.log(precip_coord_data);
     	});
 	}
@@ -445,6 +446,7 @@ class EachAlone extends React.Component {
     		.then(res => {
     		const temp_coord_data = res.data.data;
     		this.setState({ tempAvg: [...temp_coord_data]});
+    		this.setupGraph();
     		console.log(temp_coord_data);
     	});
 	}
@@ -454,6 +456,7 @@ class EachAlone extends React.Component {
     		.then(res => {
     		const seaice_coord_data = res.data.data;
     		this.setState({ iceAvg: [...seaice_coord_data]});
+    		this.setupGraph();
     		console.log(seaice_coord_data);
     	});
 	}
@@ -524,20 +527,20 @@ class EachAlone extends React.Component {
     	ice_val = this.state.iceAvg[0][useIceAvgKey];
     }
     else if(this.state.play == 0){
-    	var coord_index = (dbY - 1) * 240 + dbX;
+    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.precipAvgAllCoords.length > coord_index){
     		var avgKeys0 = Object.keys(this.state.precipAvgAllCoords[coord_index]);
-    		var useAvgKey0 = avgKeys0[this.state.index + 2];
+    		var useAvgKey0 = avgKeys0[1];
     		precip_val = this.state.precipAvgAllCoords[coord_index][useAvgKey0];
     	}
     	if(this.state.tempAvgAllCoords.length > coord_index){
     		var avgKeys1 = Object.keys(this.state.tempAvgAllCoords[coord_index]);
-    		var useAvgKey1 = avgKeys1[this.state.index + 2];
+    		var useAvgKey1 = avgKeys1[1];
     		temp_val = this.state.tempAvgAllCoords[coord_index][useAvgKey1];
     	}
     	if(this.state.iceAvgAllCoords.length > coord_index){
     		var avgKeys2 = Object.keys(this.state.iceAvgAllCoords[coord_index]);
-    		var useAvgKey2 = avgKeys2[this.state.index + 2];
+    		var useAvgKey2 = avgKeys2[1];
     		ice_val = this.state.iceAvgAllCoords[coord_index][useAvgKey2];
     	}
     }

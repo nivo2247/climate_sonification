@@ -263,13 +263,13 @@ class EachAlone extends React.Component {
     /*** onPress for 'Play/Pause' 
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
-    	this.setupGraph();
     	var newState = (this.state.play + 1) % 2;
     	this.setState({play: newState });
     	
     	if(newState == 0){
     		this.doYearHits(this.state.state, this.state.index + 1920);
     	}else if(newState == 1){
+    		this.setupGraph();
     		this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
     	}
     	
@@ -578,7 +578,7 @@ class EachAlone extends React.Component {
     	var useAvgKey = avgKeys[this.state.index+2];
     	coord_val = this.state.coordData[0][useAvgKey];
     }else if(this.state.play == 0){
-        var coord_index = (dbY - 1) * 240 + dbX;
+        var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.yearData.length > coord_index){
     		var avgKeys = Object.keys(this.state.yearData[coord_index]);
     		var useAvgKey = avgKeys[1];
