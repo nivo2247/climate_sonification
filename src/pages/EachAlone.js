@@ -133,7 +133,9 @@ class EachAlone extends React.Component {
     		token: "",
     		precipBool: 0,
     		tempBool: 0,
-    		iceBool: 0,  //Disabled because cache was getting to big. Need to figure that out.
+    		iceBool: 0,
+    		yearData: [0],
+    		coordData: [0],
     		adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.activeTempoButton,
     		allegroStyle: styles.tempoButton,
@@ -165,15 +167,12 @@ class EachAlone extends React.Component {
     	precipBool: 1
     });
     this.setupGraph();
+    this.doYearHits(0, this.state.index + 1920);
+    this.doCoordHits(0, this.state.latitude, this.state.longitude);
     }
    
     /*** onPress for 'Temperature' ***/   
     setTemp = () => {
-    if(this.state.tempBool == 0){
-    	tempImgs.forEach((picture) => {
-    		Image.prefetch(picture);
-    	});
-    }
     this.setState({
         state: 1,
     	modelStr: "/temp/temp_ens",
@@ -183,16 +182,18 @@ class EachAlone extends React.Component {
     	keySrc: tempKey,
     	tempBool: 1
     });
+    if(this.state.tempBool == 0){
+    	tempImgs.forEach((picture) => {
+    		Image.prefetch(picture);
+    	});
+    }
     this.setupGraph();
+    this.doYearHits(1, this.state.index + 1920);
+    this.doCoordHits(1, this.state.latitude, this.state.longitude);
     }
 
     /*** onPress for 'Sea Ice' ***/       
     setIce = () => {
-    if(this.state.iceBool == 0){
-    	iceImgs.forEach((picture) => {
-    		Image.prefetch(picture);
-    	});
-    }
     this.setState({
         state: 2,
     	modelStr: "/seaIce/ice_ens",
@@ -202,7 +203,14 @@ class EachAlone extends React.Component {
     	keySrc: iceKey,
     	iceBool: 1
     });
+    if(this.state.iceBool == 0){
+    	iceImgs.forEach((picture) => {
+    		Image.prefetch(picture);
+    	});
+    }
     this.setupGraph();
+    this.doYearHits(2, this.state.index + 1920);
+    this.doCoordHits(2, this.state.latitude, this.state.longitude);
     }
 
     /*** onPress for 'adagio' ***/       
@@ -252,7 +260,15 @@ class EachAlone extends React.Component {
     /*** onPress for 'Play/Pause' 
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
-    	this.setState({play: ((this.state.play + 1) % 2) });
+    	var newState = (this.state.play + 1) % 2;
+    	this.setState({play: newState });
+    	
+    	if(newState == 0){
+    		this.doYearHits(this.state.state, this.state.index + 1920);
+    	}else if(newState == 1){
+    		this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
+    	}
+    	
     	if(this.state.precipBool == 0){
     		precipImgs.forEach((picture) => {
     			Image.prefetch(picture);
@@ -314,8 +330,8 @@ class EachAlone extends React.Component {
 			else {
 				projx += r * Math.cos((theta - Math.PI / 2) / 2);
 			}
-			lonSave = (projx - centerX) * 360 / this.state.modelDiv;
-		    	latSave = 90 - projy * 180 / this.state.modelSplit;
+			lonSave = (projx - centerX) * 540 / this.state.modelDiv;
+		    	latSave = 90 - projy * 90 / this.state.modelSplit;
 		    	
 			/*
 			console.log("cx: ", centerX, "   x: ", x, "    dx: ", dx);
@@ -323,7 +339,7 @@ class EachAlone extends React.Component {
 			console.log("r: ", r, "   theta: ", theta);
 			console.log("px: ", projx, "py: ", projy);
 		}
-	    	this.doCoordHits(latSave, lonSave);
+	    	this.setState({latitude: Math.floor(latSave), longitude: Math.floor(lonSave)});
 	        }
         }    
     
@@ -346,7 +362,8 @@ class EachAlone extends React.Component {
     	});
 	
 	this.setupGraph();
-	this.doCoordHits(0, 0);
+	this.doCoordHits(0, 0, 0);
+	this.doYearHits(0, this.state.index + 1920);
 
     }   
        
@@ -393,17 +410,64 @@ class EachAlone extends React.Component {
     }
     }
     
-    doCoordHits(lat, lon){
+    doCoordHits(state, lat, lon){
     	var dbX = 1;
     	var dbY = 1;
-    	dbX = Math.floor((90 - lat) * 320 / 180);
-	dbY= Math.floor((lon + 180) * 240 / 360);
+    	dbY = Math.floor((91 - lat) * (240 / 180));
+	dbX = Math.floor((181 + lon) * 320 / 360);
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon)
 	});
 	/* Filter and do db hit here */
+	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
+		var table = dbUrl.concat("/table/")
+		var intermediate = "";
+		if(state == 0){
+			intermediate = table.concat("precipavg/coord/(");
+		}
+		else if(state == 1){
+			intermediate = table.concat("tempavg/coord/(");
+		}
+		else if(state == 2){
+			intermediate = table.concat("seaiceavg/coord/(");
+		}
+		var request = intermediate.concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		console.log(request);
+		Axios.get(request)
+			.then(res => {
+    			const coord_data = res.data.data;
+    			this.setState({ coordData: [...coord_data]});
+    			console.log(coord_data);
+    		});
+	}
+	/* Filter and do db hit here */
     	console.log("dbX: ", dbX, "dbY: ", dbY);
+    };
+    
+    doYearHits(state, year){
+	/* Filter and do db hit here */
+	if(year >= 1920 && year <= 2100){
+		var table = dbUrl.concat("/table/")
+		var intermediate = "";
+		if(state == 0){
+			intermediate = table.concat("precipavg/year/");
+		}
+		else if(state == 1){
+			intermediate = table.concat("tempavg/year/");
+		}
+		else if(state == 2){
+			intermediate = table.concat("seaiceavg/year/");
+		}
+		var request = intermediate.concat(year.toString(10));
+		console.log(request);
+		Axios.get(request)
+			.then(res => {
+    			const year_data = res.data.data;
+    			this.setState({ yearData: [...year_data]});
+    			console.log(year_data);
+    		});
+	}
     };
     
     handleYear = (event) => {
@@ -417,22 +481,27 @@ class EachAlone extends React.Component {
     
     onChangeLat = (text) => {
     	if(isNumeric(text) == true){
-    		this.doCoordHits(parseInt(text), this.state.longitude);
+    		this.doCoordHits(this.state.state, parseInt(text), this.state.longitude);
     	}else{
-    		this.doCoordHits(0, this.state.longitude);
+    		this.doCoordHits(this.state.state, 0, this.state.longitude);
     	}
     }
     
     onChangeLon = (text) => {
     	if(isNumeric(text) == true){
-    		this.doCoordHits(this.state.latitude, parseInt(text));
+    		this.doCoordHits(this.state.state, this.state.latitude, parseInt(text));
     	}else{
-    		this.doCoordHits(this.state.latitude, 0);
+    		this.doCoordHits(this.state.state, this.state.latitude, 0);
     	}
     }
 
     /*** runs on state update ***/   
     render(){
+    
+    var dbX = 1;
+    var dbY = 1;
+    dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
+    dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
     
     /*** store page stack info ***/
     const { navigation } = this.props;  
@@ -447,6 +516,21 @@ class EachAlone extends React.Component {
     
     /*** Avg db value ***/
     var coord_val = 0;
+    if(this.state.play == 1){
+    	var avgKeys = Object.keys(this.state.coordData[0]);
+    	var useAvgKey = avgKeys[this.state.index+1];
+    	coord_val = this.state.coordData[0][useAvgKey];
+    }else if(this.state.play == 0){
+        var coord_index = (dbY - 1) * 240 + dbX;
+    	if(this.state.yearData.length > coord_index){
+    		var avgKeys = Object.keys(this.state.yearData[coord_index]);
+    		var useAvgKey = avgKeys[1];
+    		coord_val = this.state.yearData[coord_index][useAvgKey];
+    	}
+    	else{
+    		console.log("dbx: ", dbX, " dbY: ", dbY);
+    	}
+    }
     
     /*** style for model images and div ***/
     const modelStyle = {
