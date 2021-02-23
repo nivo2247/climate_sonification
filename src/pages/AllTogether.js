@@ -323,7 +323,7 @@ class EachAlone extends React.Component {
     		var avg = bottom / 2;
     	
     		var precip_median = 100;
-    		var precip_max = 500;
+    		var precip_max = 120;
     		
     		ctx.beginPath();
     		for(var precipInd = 1; precipInd < this.state.index; precipInd++){
