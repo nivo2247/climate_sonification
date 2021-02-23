@@ -328,11 +328,11 @@ class EachAlone extends React.Component {
     		ctx.beginPath();
     		for(var precipInd = 1; precipInd < this.state.index; precipInd++){
     		    	var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
-    			var usePrecipAvgKey = precipAvgKeys[precipInd - 1];
+    			var usePrecipAvgKey = precipAvgKeys[precipInd];
     			var prev_val = this.state.precipAvg[0][usePrecipAvgKey];
     			
     			var precipAvgKeys1 = Object.keys(this.state.precipAvg[0]);
-    			var usePrecipAvgKey1 = precipAvgKeys1[precipInd];
+    			var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 1];
     			var coord_val = this.state.precipAvg[0][usePrecipAvgKey1];
     			
     			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
@@ -348,11 +348,11 @@ class EachAlone extends React.Component {
     		ctx.beginPath();
     		for(var tempInd = 1; tempInd < this.state.index; tempInd++){
     		    	var tempAvgKeys = Object.keys(this.state.tempAvg[0]);
-    			var useTempAvgKey = tempAvgKeys[tempInd - 1];
+    			var useTempAvgKey = tempAvgKeys[tempInd];
     			var prev_val = this.state.tempAvg[0][useTempAvgKey];
     			
     			var tempAvgKeys1 = Object.keys(this.state.tempAvg[0]);
-    			var useTempAvgKey1 = tempAvgKeys1[tempInd];
+    			var useTempAvgKey1 = tempAvgKeys1[tempInd + 1];
     			var coord_val = this.state.tempAvg[0][useTempAvgKey1];
     			
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
@@ -368,11 +368,11 @@ class EachAlone extends React.Component {
     		ctx.beginPath();
     		for(var iceInd = 1; iceInd < this.state.index; iceInd++){
     		    	var iceAvgKeys = Object.keys(this.state.iceAvg[0]);
-    			var useIceAvgKey = iceAvgKeys[iceInd - 1];
+    			var useIceAvgKey = iceAvgKeys[iceInd];
     			var prev_val = this.state.iceAvg[0][useIceAvgKey];
     			
     			var iceAvgKeys1 = Object.keys(this.state.iceAvg[0]);
-    			var useIceAvgKey1 = iceAvgKeys1[iceInd];
+    			var useIceAvgKey1 = iceAvgKeys1[iceInd + 1];
     			var coord_val = this.state.iceAvg[0][useIceAvgKey1];
     			
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));

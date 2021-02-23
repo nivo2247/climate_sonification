@@ -405,11 +405,11 @@ class EachAlone extends React.Component {
     			ctx.beginPath();
     			for(var precipInd = 1; precipInd < this.state.index; precipInd++){
     			    	var precipAvgKeys = Object.keys(this.state.coordData[0]);
-    				var usePrecipAvgKey = precipAvgKeys[precipInd - 1];
+    				var usePrecipAvgKey = precipAvgKeys[precipInd];
     				var prev_val = this.state.coordData[0][usePrecipAvgKey];
     				
     				var precipAvgKeys1 = Object.keys(this.state.coordData[0]);
-    				var usePrecipAvgKey1 = precipAvgKeys1[precipInd];
+    				var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 1];
     				var coord_val = this.state.coordData[0][usePrecipAvgKey1];
     			
     				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
