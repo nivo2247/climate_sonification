@@ -152,6 +152,7 @@ class EachAlone extends React.Component {
 
     /*** onPress for 'Precipitation' ***/    
     setPrecip = () => {
+    this.setupGraph();
     if(this.state.precipBool == 0){
     	precipImgs.forEach((picture) => {
     		Image.prefetch(picture);
@@ -173,6 +174,7 @@ class EachAlone extends React.Component {
    
     /*** onPress for 'Temperature' ***/   
     setTemp = () => {
+    this.setupGraph();
     this.setState({
         state: 1,
     	modelStr: "/temp/temp_ens",
@@ -194,6 +196,7 @@ class EachAlone extends React.Component {
 
     /*** onPress for 'Sea Ice' ***/       
     setIce = () => {
+    this.setupGraph();
     this.setState({
         state: 2,
     	modelStr: "/seaIce/ice_ens",
@@ -260,6 +263,7 @@ class EachAlone extends React.Component {
     /*** onPress for 'Play/Pause' 
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
+    	this.setupGraph();
     	var newState = (this.state.play + 1) % 2;
     	this.setState({play: newState });
     	
@@ -385,29 +389,81 @@ class EachAlone extends React.Component {
     } 
     
     updateGraph() {
-    	if (this.state.index > 0){
+	if (this.state.index > 0){
 	    	const ctx = this.refs.models.getContext('2d');
+	    	
     		var bottom = this.state.modelSplit / 2 - 1;
     		var right = this.state.modelWidth - 1;
+    		
     		var step = right / 180;
     		var avg = bottom / 2;
-    	
-    		var prev_val = 0;
-    		var coord_val = 0;
-    		var median = 0;
-    	
-    		ctx.beginPath();
-    		ctx.moveTo(1 + step * (this.state.index - 1), avg + (prev_val - median));
-    		ctx.lineTo(1 + step * this.state.index, avg + (coord_val - median));
+    		
     		if(this.state.state == 0){
-    			ctx.strokeStyle = "green";
-    		} else if(this.state.state == 1){
+    			var precip_median = 100;
+    			var precip_max = 500;
+    		
+    			ctx.beginPath();
+    			for(var precipInd = 1; precipInd < this.state.index; precipInd++){
+    			    	var precipAvgKeys = Object.keys(this.state.coordData[0]);
+    				var usePrecipAvgKey = precipAvgKeys[precipInd - 1];
+    				var prev_val = this.state.coordData[0][usePrecipAvgKey];
+    				
+    				var precipAvgKeys1 = Object.keys(this.state.coordData[0]);
+    				var usePrecipAvgKey1 = precipAvgKeys1[precipInd];
+    				var coord_val = this.state.coordData[0][usePrecipAvgKey1];
+    			
+    				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
+    				ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_max));
+    				ctx.strokeStyle = "green";
+    			}
+    			ctx.stroke();
+    		}
+    		
+    		if(this.state.state == 1){
+    		var temp_median = 0;
+    		var temp_max = 20;
+    		var temp_avg = Math.floor(avg * 1.5);
+    		
+    		ctx.beginPath();
+    		for(var tempInd = 1; tempInd < this.state.index; tempInd++){
+    		    	var tempAvgKeys = Object.keys(this.state.coordData[0]);
+    			var useTempAvgKey = tempAvgKeys[tempInd - 1];
+    			var prev_val = this.state.coordData[0][useTempAvgKey];
+    			
+    			var tempAvgKeys1 = Object.keys(this.state.coordData[0]);
+    			var useTempAvgKey1 = tempAvgKeys1[tempInd];
+    			var coord_val = this.state.coordData[0][useTempAvgKey1];
+    			
+    			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
+    			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_max));
     			ctx.strokeStyle = "red";
-    		} else if(this.state.state == 2){
-    			ctx.strokeStyle = "blue";
     		}
     		ctx.stroke();
-    }
+    		}
+    		
+    		
+    		if(this.state.state == 2) {
+    		var ice_median = 0;
+    		var ice_max = 1;
+    		var ice_avg = Math.floor(avg * 0.5);
+    		
+    		ctx.beginPath();
+    		for(var iceInd = 1; iceInd < this.state.index; iceInd++){
+    		    	var iceAvgKeys = Object.keys(this.state.coordData[0]);
+    			var useIceAvgKey = iceAvgKeys[iceInd - 1];
+    			var prev_val = this.state.coordData[0][useIceAvgKey];
+    			
+    			var iceAvgKeys1 = Object.keys(this.state.coordData[0]);
+    			var useIceAvgKey1 = iceAvgKeys1[iceInd];
+    			var coord_val = this.state.coordData[0][useIceAvgKey1];
+    			
+    			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
+    			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
+    			ctx.strokeStyle = "blue";
+    		}
+    		ctx.stroke(); 
+    		}
+    	}
     }
     
     doCoordHits(state, lat, lon){
@@ -438,6 +494,7 @@ class EachAlone extends React.Component {
 			.then(res => {
     			const coord_data = res.data.data;
     			this.setState({ coordData: [...coord_data]});
+    			this.setupGraph();
     			console.log(coord_data);
     		});
 	}

@@ -394,6 +394,7 @@ class EachAlone extends React.Component {
 			.then(res => {
     			const precip_data = res.data.data;
     			this.setState({ precipAvgAllCoords: [...precip_data]});
+    			this.setupGraph();
     			console.log(precip_data);
     		});
     		var intermediate1 = table.concat("tempavg/year/");
@@ -403,6 +404,7 @@ class EachAlone extends React.Component {
 			.then(res => {
     			const temp_data = res.data.data;
     			this.setState({ tempAvgAllCoords: [...temp_data]});
+    			this.setupGraph();
     			console.log(temp_data);
     		});
     		var intermediate2 = table.concat("seaiceavg/year/");
@@ -412,6 +414,7 @@ class EachAlone extends React.Component {
 			.then(res => {
     			const ice_data = res.data.data;
     			this.setState({ iceAvgAllCoords: [...ice_data]});
+    			this.setupGraph();
     			console.log(ice_data);
     		});
 	}
