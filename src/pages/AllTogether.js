@@ -116,6 +116,9 @@ class EachAlone extends React.Component {
     		precipAvg: [0],
     		tempAvg: [0],
     		iceAvg: [0],
+    		precipAvgAllCoords: [0],
+    		tempAvgAllCoords: [0],
+    		iceAvgAllCoords: [0],
     		token: "",
     		adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.activeTempoButton,
@@ -178,7 +181,15 @@ class EachAlone extends React.Component {
     /*** onPress for 'Play/Pause' 
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
-    	this.setState({play: ((this.state.play + 1) % 2) });
+    	var newState = (this.state.play + 1) % 2;
+    	this.setState({play: newState });
+    	
+    	if(newState == 0){
+    		this.doYearHits(this.state.index + 1920);
+    	}else if(newState == 1){
+    		this.doCoordHits(this.state.latitude, this.state.longitude);
+    	}
+    	
     	PubSub.publish('TOPIC', this);
     }
     
@@ -251,7 +262,7 @@ class EachAlone extends React.Component {
 			console.log("r: ", r, "   theta: ", theta);
 			console.log("px: ", projx, "py: ", projy);
 		}
-	    	this.doCoordHits(latSave, lonSave);	
+	    	this.setState({latitude: Math.floor(latSave), longitude: Math.floor(lonSave)});	
 	        }
         }    
     
@@ -279,6 +290,7 @@ class EachAlone extends React.Component {
 	
 	this.setupGraph();
 	this.doCoordHits(0, 0);
+	this.doYearHits(this.state.index + 1920);
 
     }   
        
@@ -318,6 +330,40 @@ class EachAlone extends React.Component {
     		ctx.stroke();
     	}
     }
+    
+    doYearHits(year){
+	/* Filter and do db hit here */
+	if(year >= 1920 && year <= 2100){
+		var table = dbUrl.concat("/table/")
+		var intermediate0 = table.concat("precipavg/year/");
+		var request0 = intermediate0.concat(year.toString(10));
+		console.log(request0);
+		Axios.get(request0)
+			.then(res => {
+    			const precip_data = res.data.data;
+    			this.setState({ precipAvgAllCoords: [...precip_data]});
+    			console.log(precip_data);
+    		});
+    		var intermediate1 = table.concat("tempavg/year/");
+		var request1 = intermediate1.concat(year.toString(10));
+		console.log(request1);
+		Axios.get(request1)
+			.then(res => {
+    			const temp_data = res.data.data;
+    			this.setState({ tempAvgAllCoords: [...temp_data]});
+    			console.log(temp_data);
+    		});
+    		var intermediate2 = table.concat("seaiceavg/year/");
+		var request2 = intermediate2.concat(year.toString(10));
+		console.log(request2);
+		Axios.get(request2)
+			.then(res => {
+    			const ice_data = res.data.data;
+    			this.setState({ iceAvgAllCoords: [...ice_data]});
+    			console.log(ice_data);
+    		});
+	}
+    };
     
     doCoordHits(lat, lon){
     	var dbX = 1;
@@ -388,6 +434,11 @@ class EachAlone extends React.Component {
     /*** runs on state update ***/   
     render(){
     
+    var dbX = 1;
+    var dbY = 1;
+    dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
+    dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
+    
     /*** store page stack info ***/
     const { navigation } = this.props;  
     
@@ -399,18 +450,42 @@ class EachAlone extends React.Component {
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
     
+    var precip_val = 0;
+    var temp_val = 0;
+    var ice_val = 0;
+    
     /*** Set avg db values ***/
-    var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
-    var usePrecipAvgKey = precipAvgKeys[this.state.index+1];
-    var precip_val = this.state.precipAvg[0][usePrecipAvgKey];
+    if(this.state.play == 1){
+    	var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
+    	var usePrecipAvgKey = precipAvgKeys[this.state.index+1];
+    	precip_val = this.state.precipAvg[0][usePrecipAvgKey];
     
-    var tempAvgKeys = Object.keys(this.state.tempAvg[0]);
-    var useTempAvgKey = tempAvgKeys[this.state.index+1];
-    var temp_val = this.state.tempAvg[0][useTempAvgKey];
+    	var tempAvgKeys = Object.keys(this.state.tempAvg[0]);
+    	var useTempAvgKey = tempAvgKeys[this.state.index+1];
+    	temp_val = this.state.tempAvg[0][useTempAvgKey];
     
-    var iceAvgKeys = Object.keys(this.state.iceAvg[0]);
-    var useIceAvgKey = iceAvgKeys[this.state.index+1];
-    var ice_val = this.state.iceAvg[0][useIceAvgKey];
+    	var iceAvgKeys = Object.keys(this.state.iceAvg[0]);
+    	var useIceAvgKey = iceAvgKeys[this.state.index+1];
+    	ice_val = this.state.iceAvg[0][useIceAvgKey];
+    }
+    else if(this.state.play == 0){
+    	var coord_index = (dbY - 1) * 240 + dbX;
+    	if(this.state.precipAvgAllCoords.length > coord_index){
+    		var avgKeys0 = Object.keys(this.state.precipAvgAllCoords[coord_index]);
+    		var useAvgKey0 = avgKeys0[1];
+    		precip_val = this.state.precipAvgAllCoords[coord_index][useAvgKey0];
+    	}
+    	if(this.state.tempAvgAllCoords.length > coord_index){
+    		var avgKeys1 = Object.keys(this.state.tempAvgAllCoords[coord_index]);
+    		var useAvgKey1 = avgKeys1[1];
+    		temp_val = this.state.tempAvgAllCoords[coord_index][useAvgKey1];
+    	}
+    	if(this.state.iceAvgAllCoords.length > coord_index){
+    		var avgKeys2 = Object.keys(this.state.iceAvgAllCoords[coord_index]);
+    		var useAvgKey2 = avgKeys2[1];
+    		ice_val = this.state.iceAvgAllCoords[coord_index][useAvgKey2];
+    	}
+    }
     
     /*** style for model images and div ***/
     const modelStyle = {
