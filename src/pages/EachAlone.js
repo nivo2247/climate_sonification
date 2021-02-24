@@ -286,7 +286,7 @@ class EachAlone extends React.Component {
     	var modelHeight = Math.floor(this.state.pageBottom * MAPVERTDIV);
     	var modelLeft = Math.floor(this.state.pageRight * (1 - MAPDIV));
     	var modelDiv = Math.floor(this.state.pageRight * MAPDIV / 3);
-    	var x = e.clientX - this.state.modelLeft;
+    	var x = e.clientX - modelLeft;
     	var y = e.clientY;
     	var latSave = 0;
     	var lonSave = 0;
