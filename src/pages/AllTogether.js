@@ -611,59 +611,67 @@ class EachAlone extends React.Component {
     	width: '100%'
     };
     
+    const controlDivStyle = {
+    	height: this.state.pageBottom,
+    	width: this.state.pageRight / 5
+    };
+    
+    const controlBlockStyle = {
+    	height: this.state.pageBottom / 10,
+    	width: this.state.pageRight / 5,
+    	overflow: 'hidden'
+    };
+    
+    const instructionTextStyle = {
+    	"font-size": "10px"
+    };
+    
+    const paragraphTextStyle = {
+    	"font-size": "8px"
+    };
+    
+    const tempoButtonStyle = {
+    	height: this.state.pageBottom / 20,
+    	width: this.state.pageRight / 20,
+    	float: 'left'
+    }
+    
     this.updateGraph();
     
     /*** Return the page ***/
     return (
     <div style={containerStyle}>
     	<View style={styles.container}>
-    		<View style={{flex:0.20}}>
-    			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
-				<View style={{flex: 1}}>
-					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"/>
-				</View>
-			</TouchableOpacity>
+    		<View style={{flex:0.20}}> 
+			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
+				<img style={controlBlockStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
+			</div>
 			
-			<View style={{flex:0.15}}>
-				<Text style={{fontWeight: 'bold', fontSize: 14}}>Instructions</Text>
-				<Text style={{fontSize: 12}}>1.Select a variable below</Text>
-				<Text style={{fontSize: 12}}>2. Touch the map to select a location{"\n"}3. Touch the timeline to select a starting year.{"\n"}4. Press the play button.</Text>
-			</View>
+			<div style={controlBlockStyle}>
+				<p style={instructionTextStyle}>Instructions</p>
+				<p style={paragraphTextStyle}>1.Select a variable below{"\n"}2. Touch the map to select a location{"\n"}3. Touch the timeline to select a starting year.{"\n"}4. Press the play button.</p>
+			</div>
 			
-			<View style={{flex:0.1}}>
-				<TouchableOpacity onPress={() => this.handleClick()} style={{flex: 1}}>
-					<View style={{flex: 1}}>
-						<Image style={styles.image} source={this.state.playButton}/>
-					</View>
-				</TouchableOpacity>
-			</View>
+			<div style={controlBlockStyle} onPointerDown={() => this.handleClick()}>
+				<img style={controlBlockStyle} src={this.state.playButton}/>
+			</div>
 			
-			<View style={{flex:0.05}}>
-				<Text style={{fontSize: 12}}>5. Select a tempo</Text>
-			</View>
-			
-			<View style={{flex:0.05, flexDirection:'row'}}>
-				<View  style={styles.tempoButtonContainer}>
-					<TouchableHighlight style={this.state.adagioStyle} onPress={this.setAdagio}>
-						<Text style={{fontSize:12}}>adagio</Text>
-					</TouchableHighlight>
-				</View>
-				<View  style={styles.tempoButtonContainer}>
-					<TouchableHighlight style={this.state.moderatoStyle} onPress={this.setModerato}>
-						<Text style={{fontSize:12}}>moderato</Text>
-					</TouchableHighlight>
-				</View>
-				<View  style={styles.tempoButtonContainer}>
-					<TouchableHighlight style={this.state.allegroStyle} onPress={this.setAllegro}>
-						<Text style={{fontSize:12}}>allegro</Text>
-					</TouchableHighlight>
-				</View>
-				<View  style={styles.tempoButtonContainer}>
-					<TouchableHighlight style={this.state.prestoStyle} onPress={this.setPresto}>
-						<Text style={{fontSize:12}}>presto</Text>
-					</TouchableHighlight>
-				</View>
-			</View>
+			<div style={controlBlockStyle}>
+				<p style={paragraphTextStyle}>5. Select a tempo</p>
+				
+				<div style={tempoButtonStyle} onPointerDown={this.setAdagio}>
+					<p style={paragraphTextStyle}>adagio</p>
+				</div>
+				<div style={tempoButtonStyle} onPointerDown={this.setModerato}>
+					<p style={paragraphTextStyle}>moderato</p>
+				</div>
+				<div style={tempoButtonStyle} onPointerDown={this.setAllegro}>
+					<p style={paragraphTextStyle}>allegro</p>
+				</div>
+				<div style={tempoButtonStyle} onPointerDown={this.setPresto}>
+					<p style={paragraphTextStyle}>presto</p>
+				</div>
+			</div>
 			
 			<View style={{flex:0.05, flexDirection:'row'}}>
 				<View style={{flex:0.25}}>
