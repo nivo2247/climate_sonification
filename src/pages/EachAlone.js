@@ -362,6 +362,7 @@ class EachAlone extends React.Component {
     		Image.prefetch(picture);
     	});
 	window.addEventListener('resize', this.updateDimensions);
+	window.addEventListener('orientationchange', this.updateDimensions);
 	this.setupGraph();
 	this.doCoordHits(0, 0, 0);
 	this.doYearHits(0, this.state.index + 1920);
@@ -539,6 +540,7 @@ class EachAlone extends React.Component {
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
     	window.removeEventListener('resize', this.updateDimensions);
+    	window.removeEventListener('orientationchange', this.updateDimensions);
     }
     
     onChangeLat = (text) => {

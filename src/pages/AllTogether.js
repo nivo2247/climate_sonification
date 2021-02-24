@@ -23,6 +23,8 @@ const artifactImgs = [
 	pauseUrl
 ];
 
+const PADDING = 5;
+
 /*** Game Handler Block (recieves page state):  
 ***  if play=1, increment index with delay in loop
 ***  else interrupt loop			 ***/
@@ -82,8 +84,8 @@ class EachAlone extends React.Component {
     		token: "",
     		latitude: 0,
     		longitude: 0,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width,
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
     		CONTROLDIV: 2 / 10,
     		CONTROLVERTDIV: 1,
 		SKINNYDIV: 1 / 20,
@@ -248,10 +250,10 @@ class EachAlone extends React.Component {
         }    
         
     updateDimensions = () => {
-    if(this.state.pageBottom < this.state.pageRight){
+    if(Dimensions.get('window').height < Dimensions.get('window').width){
     	this.setState({
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width,
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
     		CONTROLDIV: 2 / 10,
 		SKINNYDIV: 1 / 20,
 		MAPDIV: 3 / 4,
@@ -266,8 +268,45 @@ class EachAlone extends React.Component {
     }
     else{
     	this.setState({
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width,
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
+    		CONTROLDIV: 1,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 19 / 20,
+		MAPVERTDIV: 1 / 4,
+		GRAPHVERTDIV: 1 / 5,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'right',
+		MAPDIVFLOAT: 'left',
+		CONTROLVERTDIV: 1 / 2,
+		CONTROLSPLIT: 1 / 2
+    	});
+    }	
+    this.setupGraph();
+    }
+    
+    rotateDimensions = async () => {
+    await timer(1000);
+    if(Dimensions.get('window').height < Dimensions.get('window').width){
+    	this.setState({
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
+    		CONTROLDIV: 2 / 10,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 3 / 4,
+		MAPVERTDIV: 3 / 4,
+		GRAPHVERTDIV: 2 / 10,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'left',
+		MAPDIVFLOAD: 'right',
+		CONTROLVERTDIV: 1,
+		CONTROLSPLIT: 1
+    	});
+    }
+    else{
+    	this.setState({
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
     		CONTROLDIV: 1,
 		SKINNYDIV: 1 / 20,
 		MAPDIV: 19 / 20,
@@ -297,8 +336,8 @@ class EachAlone extends React.Component {
     	this.setupGraph();
 	this.setState({
 		token: PubSub.subscribe('TOPIC', gameHandler),
-	    	pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+	    	pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING
 	});
 	
 	artifactImgs.forEach((picture) => {
@@ -309,6 +348,7 @@ class EachAlone extends React.Component {
     			Image.prefetch(picture);
     	});
 	window.addEventListener('resize', this.updateDimensions);
+	window.addEventListener('orientationchange', this.rotateDimensions);
 	this.setupGraph();
 	this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
@@ -497,6 +537,7 @@ class EachAlone extends React.Component {
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
     	window.removeEventListener('resize', this.updateDimensions);
+    	window.removeEventListener('oreintationchange', this.updateDimensions);
     }
     
     onChangeLat = (text) => {
