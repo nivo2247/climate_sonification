@@ -52,6 +52,7 @@ _As packages are installed, you should update this document on how to install th
     - `npm init`
     - `npm install express --save`
     - `npm install cors body-parser mysql --save`
+    - `npm install compression --save`
     - `node index.js`
 7. Server will be running on port 4040, to access API for LOCAL ONLY go to the following link (http://localhost:4040/co2/all this links to the results of the query in a web brower)
   
