@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity, TouchableHighlight, TextInput } from "react-native";
+import { Dimensions, Image } from "react-native";
 import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -35,47 +35,14 @@ const artifactImgs = [
 	pauseUrl
 ];
 
+/*** Div splits from left to right. Should add up to 1 ***/
+const CONTROLDIV = 2 / 10;
+const SKINNYDIV = 1 / 20;
+const MAPDIV = 3 / 4;
 
-/*** EachAlone specific stylesheet ***/
-var styles = StyleSheet.create({
-	container: {
-		width: Dimensions.get('window').width,
-		height: Dimensions.get('window').height,
-		flexDirection: 'row'
-	},
-
-	image: {
-		flex: 1,
-		resizeMode: 'contain'
-	},
-	
-	tempoButton: {
-		alignItems: 'center',
-		backgroundColor: '#DDDDDD'
-	},
-	
-	activeTempoButton: {
-		alignItems: 'center',
-		backgroundColor: '#88DD88'
-	},
-	
-	tempoButtonContainer: {
-		flex: 0.25,
-		paddingHorizontal: 5,
-		justifyContent: 'center'
-	},
-
-	title_text: {
-		fontWeight: 'bold',
-		fontSize: (Dimensions.get('window').height / 15 + Dimensions.get('window').width / 40),
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		textShadowColor: 'rgba(0, 0,0, 1)',
-		textShadowOffset: {width: -1, height: 1},
-		textShadowRadius: 10
-	}
-});
+const MAPVERTDIV = 3 / 4;
+const GRAPHVERTDIV = 2 / 10;
+const SLIDERVERTDIV = 1 / 20;
 
 
 /*** Game Handler Block (recieves page state):  
@@ -88,24 +55,32 @@ var gameHandler = async function(msg, data) {
 	if (data.state.play == 1){
 		while(data.state.index < 180){
 			if(data.state.play == 1){
+				data.setupGraph();
     				data.setState({
     					index: data.state.index+1, 
-    					playButton: pauseUrl
+    					playButton: pauseUrl,
+    					pageBottom: Dimensions.get('window').height,
+    					pageRight: Dimensions.get('window').width
    				});
    				await timer(data.state.timerLen);
    			}else{
    					return;
    			}
    		}
+   		data.setupGraph();
    		data.setState({
     			playButton: playUrl,
-    			play: 0
+    			play: 0,
+    			pageBottom: Dimensions.get('window').height,
+    			pageRight: Dimensions.get('window').width
     			
     		});
 	}
 	else {
     		data.setState({
-    			playButton: playUrl
+    			playButton: playUrl,
+    			pageBottom: Dimensions.get('window').height,
+    			pageRight: Dimensions.get('window').width
     		});
     	}
 };
@@ -136,17 +111,10 @@ class EachAlone extends React.Component {
     		iceBool: 0,
     		yearData: [0],
     		coordData: [0],
-    		adagioStyle: styles.tempoButton,
-    		moderatoStyle: styles.activeTempoButton,
-    		allegroStyle: styles.tempoButton,
-    		prestoStyle: styles.tempoButton,
     		latitude: 0,
     		longitude: 0,
-    		modelWidth: Math.floor(Dimensions.get('window').width * 3/4),
-		modelHeight: Math.floor(Dimensions.get('window').height * 3/4),
-		modelLeft: Math.floor(Dimensions.get('window').width * 1/4),
-		modelDiv: Math.floor(Dimensions.get('window').width * 1/4),
-		modelSplit: Math.floor(Dimensions.get('window').height * 3/8)
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
     	};
     }
 
@@ -158,6 +126,7 @@ class EachAlone extends React.Component {
     		Image.prefetch(picture);
     	});
     }
+    this.setupGraph();
     this.setState({ 
         state: 0,
     	modelStr: "/precip/precip_ens",
@@ -165,7 +134,9 @@ class EachAlone extends React.Component {
     	tempSrc: tempInactive,
     	iceSrc: iceInactive,
     	keySrc: precipKey,
-    	precipBool: 1
+    	precipBool: 1,
+    	pageBottom: Dimensions.get('window').height,
+    	pageRight: Dimensions.get('window').width
     });
     this.setupGraph();
     this.doYearHits(0, this.state.index + 1920);
@@ -175,6 +146,7 @@ class EachAlone extends React.Component {
     /*** onPress for 'Temperature' ***/   
     setTemp = () => {
     this.setupGraph();
+    this.setupGraph();
     this.setState({
         state: 1,
     	modelStr: "/temp/temp_ens",
@@ -182,7 +154,9 @@ class EachAlone extends React.Component {
     	tempSrc: tempActive,
         iceSrc: iceInactive,
     	keySrc: tempKey,
-    	tempBool: 1
+    	tempBool: 1,
+    	pageBottom: Dimensions.get('window').height,
+    	pageRight: Dimensions.get('window').width
     });
     if(this.state.tempBool == 0){
     	tempImgs.forEach((picture) => {
@@ -197,6 +171,7 @@ class EachAlone extends React.Component {
     /*** onPress for 'Sea Ice' ***/       
     setIce = () => {
     this.setupGraph();
+    this.setupGraph();
     this.setState({
         state: 2,
     	modelStr: "/seaIce/ice_ens",
@@ -204,7 +179,9 @@ class EachAlone extends React.Component {
         tempSrc: tempInactive,
     	iceSrc: iceActive,
     	keySrc: iceKey,
-    	iceBool: 1
+    	iceBool: 1,
+    	pageBottom: Dimensions.get('window').height,
+    	pageRight: Dimensions.get('window').width
     });
     if(this.state.iceBool == 0){
     	iceImgs.forEach((picture) => {
@@ -218,34 +195,31 @@ class EachAlone extends React.Component {
 
     /*** onPress for 'adagio' ***/       
     setAdagio = () => {
+    	this.setupGraph();
     	this.setState({
     		timerLen: 1200,
-    		adagioStyle: styles.activeTempoButton,
-    		moderatoStyle: styles.tempoButton,
-		allegroStyle: styles.tempoButton,
-		prestoStyle: styles.tempoButton
+		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
     		});
     }
     
     /*** onPress for 'moderato' ***/   
     setModerato = () => {
+    	this.setupGraph();
     	this.setState({
     		timerLen: 800,
-    		adagioStyle: styles.tempoButton,
-    		moderatoStyle: styles.activeTempoButton,
-		allegroStyle: styles.tempoButton,
-		prestoStyle: styles.tempoButton
+		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
 		});
     }
     
     /*** onPress for 'allegro' ***/   
     setAllegro = () => {
+    	this.setupGraph();
     	this.setState({
     		timerLen: 400,
-    		adagioStyle: styles.tempoButton,
-    		moderatoStyle: styles.tempoButton,
-		allegroStyle: styles.activeTempoButton,
-		prestoStyle: styles.tempoButton
+		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
     		});
     }
     
@@ -253,10 +227,8 @@ class EachAlone extends React.Component {
     setPresto = () => {
     	this.setState({
     		timerLen: 200,
-    	    	adagioStyle: styles.tempoButton,
-    		moderatoStyle: styles.tempoButton,
-		allegroStyle: styles.tempoButton,
-		prestoStyle: styles.activeTempoButton
+		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
 		});
     }
     
@@ -264,7 +236,12 @@ class EachAlone extends React.Component {
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
     	var newState = (this.state.play + 1) % 2;
-    	this.setState({play: newState });
+    	this.setupGraph();
+    	this.setState({
+    		play: newState,
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
+    	});
     	
     	if(newState == 0){
     		this.doYearHits(this.state.state, this.state.index + 1920);
@@ -283,8 +260,32 @@ class EachAlone extends React.Component {
     }
     
     
+    testMusic = (e) => {
+    	if(e.buttons == 1){
+    		var boxWidth = this.state.pageRight / 5;
+    		var boxHeight = this.state.pageBottom * 3 / 20;
+    		var boxTop = this.state.pageBottom * 3 / 5;
+    		var pressX = e.clientX;
+    		var pressY = e.clientY - boxTop;
+    		if(this.state.state == 0){
+    			console.log("precip x: ", pressX * 450 / boxWidth);
+    		}
+    		else if(this.state.state == 1){
+    			console.log("temp x: ", pressX * 22 / boxWidth - 3);
+    		}
+    		else if(this.state.state == 2){
+    			console.log("ice x: ", pressX * 100 / boxWidth, "%");
+    		}
+    	}
+    }
+    
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
+        var modelSplit = Math.floor(this.state.pageBottom * MAPVERTDIV / 2);
+    	var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
+    	var modelHeight = Math.floor(this.state.pageBottom * MAPVERTDIV);
+    	var modelLeft = Math.floor(this.state.pageRight * (1 - MAPDIV));
+    	var modelDiv = Math.floor(this.state.pageRight * MAPDIV / 3);
     	var x = e.clientX - this.state.modelLeft;
     	var y = e.clientY;
     	var latSave = 0;
@@ -292,34 +293,34 @@ class EachAlone extends React.Component {
     	var centerX = 0;
     	var centerY = 0;
     	if(this.state.play == 0 && e.buttons == 1) {
-		if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
-	    		centerX = this.state.modelDiv / 2;
-	    		centerY = this.state.modelSplit / 2;
+		if (x <= modelDiv && y <= modelSplit) {
+	    		centerX = modelDiv / 2;
+	    		centerY = modelSplit / 2;
 		}
-    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit){
-			centerX = this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit / 2;	
+    		else if (x <= modelDiv * 2 && y <= modelSplit){
+			centerX = modelDiv + modelDiv / 2;
+    			centerY = modelSplit / 2;	
     		}
-    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit){
-			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit / 2;
+    		else if (x <= modelDiv * 3 && y <= modelSplit){
+			centerX = 2 * modelDiv + modelDiv / 2;
+    			centerY = modelSplit / 2;
     		}
-    		else if (x <= this.state.modelDiv && y <= this.state.modelSplit * 2){
-			centerX = this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+    		else if (x <= modelDiv && y <= modelSplit * 2){
+			centerX = modelDiv / 2;
+    			centerY = modelSplit + modelSplit / 2;   	
     		}
-    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit * 2){
-			centerX = this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit + this.state.modelSplit / 2;   	
+    		else if (x <= modelDiv * 2 && y <= modelSplit * 2){
+			centerX = modelDiv + modelDiv / 2;
+    			centerY = modelSplit + modelSplit / 2;   	
     		}
-    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit * 2){
-			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit + this.state.modelSplit / 2;    	
+    		else if (x <= modelDiv * 3 && y <= modelSplit * 2){
+			centerX = 2 * modelDiv + modelDiv / 2;
+    			centerY = modelSplit + modelSplit / 2;    	
     		}
     		
     		if (this.state.state == 0 || this.state.state == 1) {
-		    	lonSave = (x - centerX) * 360 / this.state.modelDiv;
-		    	latSave = (centerY - y) * 180 / this.state.modelSplit;
+		    	lonSave = (x - centerX) * 360 / modelDiv;
+		    	latSave = (centerY - y) * 180 / modelSplit;
 		}
 		else if (this.state.state == 2) {
 			var dx = x - centerX;
@@ -334,8 +335,8 @@ class EachAlone extends React.Component {
 			else {
 				projx += r * Math.cos((theta - Math.PI / 2) / 2);
 			}
-			lonSave = (projx - centerX) * 540 / this.state.modelDiv;
-		    	latSave = 90 - projy * 90 / this.state.modelSplit;
+			lonSave = (projx - centerX) * 540 / modelDiv;
+		    	latSave = 90 - projy * 90 / modelSplit;
 		    	
 			/*
 			console.log("cx: ", centerX, "   x: ", x, "    dx: ", dx);
@@ -343,7 +344,13 @@ class EachAlone extends React.Component {
 			console.log("r: ", r, "   theta: ", theta);
 			console.log("px: ", projx, "py: ", projy);
 		}
-	    	this.setState({latitude: Math.floor(latSave), longitude: Math.floor(lonSave)});
+		this.setupGraph();
+	    	this.setState({
+	    		latitude: Math.floor(latSave), 
+	    		longitude: Math.floor(lonSave),
+    			pageBottom: Dimensions.get('window').height,
+    			pageRight: Dimensions.get('window').width
+	    	});
 	        }
         }    
     
@@ -358,8 +365,12 @@ class EachAlone extends React.Component {
     		const all_co2_data = res.data.data;
     		this.setState({ co2data: [...all_co2_data]});
     	});
-    	
-	this.setState({token: PubSub.subscribe('TOPIC', gameHandler)});
+	this.setState({
+		token: PubSub.subscribe('TOPIC', gameHandler),
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
+	
+	});
 	
 	artifactImgs.forEach((picture) => {
     		Image.prefetch(picture);
@@ -372,9 +383,11 @@ class EachAlone extends React.Component {
     }   
        
     setupGraph() {
+        var graphBottom = Math.floor(this.state.pageBottom * GRAPHVERTDIV);
+    	var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
     	const ctx = this.refs.models.getContext('2d');
-    	var bottom = this.state.modelSplit / 2 - 1;
-    	var right = this.state.modelWidth - 1;
+    	var bottom = graphBottom - 1;
+    	var right = modelWidth - 1;
     	
     	ctx.clearRect(0, 0, right, bottom);
     	
@@ -390,10 +403,12 @@ class EachAlone extends React.Component {
     
     updateGraph() {
 	if (this.state.index > 0){
+    	        var graphBottom = Math.floor(this.state.pageBottom * GRAPHVERTDIV);
+    		var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
 	    	const ctx = this.refs.models.getContext('2d');
 	    	
-    		var bottom = this.state.modelSplit / 2 - 1;
-    		var right = this.state.modelWidth - 1;
+    		var bottom = graphBottom - 1;
+    		var right = modelWidth - 1;
     		
     		var step = right / 180;
     		var avg = bottom / 2;
@@ -528,7 +543,12 @@ class EachAlone extends React.Component {
     };
     
     handleYear = (event) => {
-    	this.setState({index: parseInt(event.target.value)});
+    	this.setupGraph();
+    	this.setState({
+    		index: parseInt(event.target.value),
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
+    	});
     }
     
     /*** runs on page close ***/
@@ -563,7 +583,7 @@ class EachAlone extends React.Component {
     /*** store page stack info ***/
     const { navigation } = this.props;  
     
-    var co2val = this.state.co2data[this.state.index].co2_val;
+    var co2val = Math.floor(this.state.co2data[this.state.index].co2_val);
     
     /*** setup model URL ***/
     var urlAdd = urlPre.concat(this.state.modelStr);
@@ -589,156 +609,289 @@ class EachAlone extends React.Component {
     	}
     }
     
+    var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
+    var modelHeight = Math.floor(this.state.pageBottom * MAPVERTDIV);
+    var modelLeft = Math.floor(this.state.pageRight * (1 - MAPDIV));
+    var modelDiv = Math.floor(this.state.pageRight * MAPDIV / 3);
+    var modelSplit = Math.floor(this.state.pageBottom * MAPVERTDIV / 2);
+    
+    var controlWidth = this.state.pageRight * CONTROLDIV;
+    
+    var skinnyWidth = Math.floor(this.state.pageRight * SKINNYDIV);
+    
     /*** style for model images and div ***/
     const modelStyle = {
-	width: this.state.modelWidth,
-	height: this.state.modelHeight
+	width: modelWidth,
+	height: modelHeight
+    };
+    
+    const containerStyle = {
+    	height: this.state.pageBottom,
+    	width: this.state.pageRight,
+    	overflow: 'hidden'
+    };
+    
+    const graphStyle = {
+    	height: this.state.pageBottom * GRAPHVERTDIV,
+    	width: modelWidth
+    };
+    
+    const sliderDivStyle = {
+    	height: this.state.pageBottom * SLIDERVERTDIV,
+    	width: modelWidth
+    };
+    
+    const sliderStyle = {
+    	height: this.state.pageBottom * SLIDERVERTDIV,
+    	width: '99%'
+    };
+    
+    const controlDivStyle = {
+    	height: this.state.pageBottom,
+    	width: controlWidth,
+    	overflow: 'hidden',
+    	float: 'left'
+    };
+    
+    const largeControlDivStyle = {
+    	height: this.state.pageBottom / 10,
+    	width: controlWidth,
+    	overflow: 'hidden',
+    	float: 'left'
+    }
+    
+    const controlBlockStyle = {
+    	height: this.state.pageBottom / 10,
+    	width: controlWidth,
+    	overflow: 'hidden',
+    	float: 'left'
+    };
+    
+    const dataBlockStyle = {
+       	height: this.state.pageBottom / 20,
+    	width: controlWidth,
+    	overflow: 'hidden'
+    }
+    
+    const instructionTextStyle = {
+    	"font-size": "10px"
+    };
+    
+    const paragraphTextStyle = {
+    	"font-size": "8px"
+    };
+    
+    const smallLabelTextStyle = {
+    	"font-size": "10px"
+    };
+    
+    const quarterControlStyle = {
+    	height: this.state.pageBottom / 20,
+    	width: this.state.pageRight * CONTROLDIV / 4,
+    	float: 'left'
+    };
+    
+    const thirdControlStyle = {
+    	height: this.state.pageBottom / 20,
+    	width: this.state.pageRight * CONTROLDIV / 3,
+    	float: 'left'
+    };
+    
+    const skinnyDivStyle = {
+    	height: this.state.pageBottom * MAPVERTDIV,
+    	width: skinnyWidth,
+    	overflow: 'hidden',
+    	float:'left'
+    };
+    
+    const largeDivStyle = {
+    	height: this.state.pageBottom,
+    	width: this.state.pageRight * MAPDIV,
+    	overflow: 'hidden',
+    	float: 'right'
+    };
+
+    const skinnyImgStyle = {
+    	height: this.state.pageBottom * MAPVERTDIV / 2,
+    	width: skinnyWidth,
+    	overflow: 'hidden'
+    };
+    
+    var active = '#44CC44';
+    var inactive = '#EEEEEE';
+    var adagio = inactive;
+    var moderato = active;
+    var allegro = inactive;
+    var presto = inactive;
+    
+    if(this.state.timerLen == 1200){
+    	adagio = active;
+    	moderato = inactive;
+    	allegro = inactive;
+    	presto = inactive;
+    }
+    else if(this.state.timerLen == 800){
+    	adagio = inactive;
+    	moderato = active;
+    	allegro = inactive;
+    	presto = inactive;
+    }
+    else if(this.state.timerLen == 400){
+    	adagio = inactive;
+    	moderato = inactive;
+    	allegro = active;
+    	presto = inactive;
+    }
+    else if(this.state.timerLen == 200){
+    	adagio = inactive;
+    	moderato = inactive;
+    	allegro = inactive;
+    	presto = active;
+    }
+    const adagioHighlight = {
+    	'background-color': adagio,
+    	'font-size': '10px'
+    };
+    const moderatoHighlight = {
+    	'background-color': moderato,
+    	'font-size': '10px'
+    };
+    const allegroHighlight = {
+    	'background-color': allegro,
+    	'font-size': '10px'
+    };
+    const prestoHighlight = {
+    	'background-color': presto,
+    	'font-size': '10px'
+    };
+    
+    const keyContainer = {
+    	width: this.state.pageRight * CONTROLDIV,
+    	height: this.state.pageBottom * 3 / 20
     };
     
     this.updateGraph();
     
     /*** Return the page ***/
     return (
-    	<View style={styles.container}>
-    		<View style={{flex:0.2}}>
-    			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
-				<View style={{flex: 1}}>
-					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"/>
-				</View>
-			</TouchableOpacity>
+    	<div style={containerStyle}>
+    		<div style={controlDivStyle}>
+    			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
+				<img style={controlBlockStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
+			</div>
 			
-			<View style={{flex:0.05}}>
-				<Text style={{fontWeight: 'bold', fontSize: 14}}>Instructions</Text>
-				<Text style={{fontSize: 12}}>1.Select a variable below</Text>
-			</View>
+			<div style={dataBlockStyle}>
+				<p style={instructionTextStyle}>Instructions</p>
+				<p style={paragraphTextStyle}>1.Select a variable below</p>
+			</div>
 			
-			<View style={{flex:0.05, flexDirection:'row'}}>
-				<TouchableOpacity onPress={() => this.setPrecip()} style={{flex:0.33}}>
-				<View style={{flex:1}}>
-				<Image style={styles.image} source={this.state.precipSrc}/>
-				</View>
-				</TouchableOpacity>
+			<div style={dataBlockStyle}>
 				
-				<TouchableOpacity onPress={() => this.setTemp()} style={{flex:0.33}}>
-				<View style={{flex:1}}>
-				<Image style={styles.image} source={this.state.tempSrc}/>
-				</View>
-				</TouchableOpacity>
+				<div style={thirdControlStyle} onMouseDown={() => this.setPrecip()}>
+					<img style={thirdControlStyle} src={this.state.precipSrc}/>
+				</div>
 				
-				<TouchableOpacity onPress={() => this.setIce()} style={{flex:0.33}}>
-				<View style={{flex:1}}>
-				<Image style={styles.image} source={this.state.iceSrc}/>
-				</View>
-				</TouchableOpacity>
-			</View>
-			
-			<View style={{flex:0.1}}>
-				<Text style={{fontSize: 12}}>2. Touch the map to select a location{"\n"}3. Touch the timeline to select a starting year.{"\n"}4. Press the play button.</Text>
-			</View>
-			
-			<View style={{flex:0.1}}>
-				<TouchableOpacity onPress={() => this.handleClick()} style={{flex: 1}}>
-					<View style={{flex: 1}}>
-						<Image style={styles.image} source={this.state.playButton}/>
-					</View>
-				</TouchableOpacity>
-			</View>
-			
-			<View style={{flex:0.05}}>
-				<Text style={{fontSize: 12}}>4. Select a tempo</Text>
-			</View>
-			
-			<View style={{flex:0.05, flexDirection:'row'}}>
-				<View  style={styles.tempoButtonContainer}>
-					<TouchableHighlight style={this.state.adagioStyle} onPress={this.setAdagio}>
-						<Text style={{fontSize:12}}>adagio</Text>
-					</TouchableHighlight>
-				</View>
-				<View  style={styles.tempoButtonContainer}>
-					<TouchableHighlight style={this.state.moderatoStyle} onPress={this.setModerato}>
-						<Text style={{fontSize:12}}>moderato</Text>
-					</TouchableHighlight>
-				</View>
-				<View  style={styles.tempoButtonContainer}>
-					<TouchableHighlight style={this.state.allegroStyle} onPress={this.setAllegro}>
-						<Text style={{fontSize:12}}>allegro</Text>
-					</TouchableHighlight>
-				</View>
-				<View  style={styles.tempoButtonContainer}>
-					<TouchableHighlight style={this.state.prestoStyle} onPress={this.setPresto}>
-						<Text style={{fontSize:12}}>presto</Text>
-					</TouchableHighlight>
-				</View>
-			</View>
-			
-			<View style={{flex:0.05, flexDirection:'row'}}>
-				<View style={{flex:0.25}}>
-					<Text style={{fontSize: 12}}>Lat:</Text>
-				</View>
-				<View style={{flex:0.25}}>
-					<TextInput value={this.state.latitude} style={{flex:1, borderColor:'gray', borderWidth: 1}} onChangeText={(text) => this.onChangeLat(text)} />
-				</View>
-				<View style={{flex:0.25}}>
-					<Text style={{fontSize: 12}}>Lon:</Text>
-				</View>
-				<View style={{flex:0.25}}>
-					<TextInput value={this.state.longitude} style={{flex:1, borderColor:'gray', borderWidth: 1}} onChangeText={(text) => this.onChangeLon(text)} />
-				</View>
-			</View>
-			
-			<View style={{flex:0.1, flexDirection: 'row'}}>
-				<View style={{flex:0.5}}>
-				<Text style={{fontSize: 12}}>Year{"\n"}{this.state.index + 1920}</Text>
-				</View>
+				<div style={thirdControlStyle} onMouseDown={() => this.setTemp()}>
+					<img style={thirdControlStyle} src={this.state.tempSrc}/>
+				</div>
 				
-				<View style={{flex:0.5}}>
-				<Text style={{fontSize: 12}}>CO2{"\n"}{co2val}</Text>
-				</View>
-			</View>
+				<div style={thirdControlStyle} onMouseDown={() => this.setIce()}>
+					<img style={thirdControlStyle} src={this.state.iceSrc}/>
+				</div>
+				
+			</div>
 			
-			<View style={{flex: 0.05, flexDirection: 'row'}}>
-				<View style={{flex:1}}>
-					<Text style={{textAlign: 'center', fontSize: 12}}>Avg Value: {coord_val}</Text> 
-				</View>
-			</View>
+			<div style={controlBlockStyle}>
+				<p style={paragraphTextStyle}>2. Touch the map to select a location</p>
+				<p style={paragraphTextStyle}>3. Touch the timeline to select a starting year.</p>
+				<p style={paragraphTextStyle}>4. Press the play button.</p>
+			</div>
+			<div style={controlBlockStyle} onPointerDown={() => this.handleClick()}>
+				<img style={controlBlockStyle} src={this.state.playButton}/>
+			</div>
 			
-			<View style={{flex: 0.1, flexDirection: 'row'}}>
-				<View style={{flex:1}}>
-					<Image style={styles.image} source={this.state.keySrc} /> 
-				</View>
-			</View>
+			<div style={controlBlockStyle}>
+				<p style={paragraphTextStyle}>5. Select a tempo</p>
+				
+				<div style={quarterControlStyle} onPointerDown={this.setAdagio}>
+					<span style={adagioHighlight}>adagio</span>
+				</div>
+				<div style={quarterControlStyle} onPointerDown={this.setModerato}>
+					<span style={moderatoHighlight}>moderato</span>
+				</div>
+				<div style={quarterControlStyle} onPointerDown={this.setAllegro}>
+					<span style={allegroHighlight}>allegro</span>
+				</div>
+				<div style={quarterControlStyle} onPointerDown={this.setPresto}>
+					<span style={prestoHighlight}>presto</span>
+				</div>
+			</div>
 			
-			<View style={{flex:0.2}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png" /> 
-			</View>
-		</View>
+			<div style={dataBlockStyle}>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Lat: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{this.state.latitude}</p> {/*Need to implement onchangelat*/}
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Lon: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{this.state.longitude}</p>  {/*Need to implement onchangelon*/}
+				</div>
+			</div>
+			
+			<div style={dataBlockStyle}>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Year: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{this.state.index + 1920}</p> {/*Need to implement a way to input text*/}
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Co2: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{co2val}</p>
+				</div>
+			</div>
+			
+			<div style={dataBlockStyle}>
+				<p style={smallLabelTextStyle}>Avg Val: {coord_val}</p>
+			</div>
+			
+			<div style={controlBlockStyle} onPointerDown={this.testMusic} onPointerMove={this.testMusic}>
+				<img draggable="false" style={dataBlockStyle} src={this.state.keySrc}/>
+			</div>
+			
+			<div style={keyContainer}>
+				<img style={keyContainer} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
+			</div>
+		</div>
 		
-		<View style={{flex:0.05}}>
-			<View style={{flex:0.35}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png" /> 
-			</View>
-			<View style={{flex:0.35}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png" /> 
-			</View>
-		</View>
+		<div style={skinnyDivStyle}>
+			<img draggable="false" style={skinnyImgStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png"}/>
+			<img draggable="false" style={skinnyImgStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png"}/>
+		</div>
 		
-		<View style={{flex:.75}}>
-			<View style={{flex:0.75}}>
+		<div style={largeDivStyle}>
+			
 			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown}>
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
-			</View>
 			
-			<View style={{flex:0.19}}>
-				<canvas ref="models" height={this.state.modelSplit / 2} width={this.state.modelWidth} />
-			</View>
 			
-			<View style={{flex:0.06}}>
-				<input type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
-			</View>
+			<div style={graphStyle}>
+				<canvas ref="models" height={this.state.pageBottom * GRAPHVERTDIV} width={modelWidth} />
+			</div>
 			
-		</View>
-    	</View>   
+			<div style={sliderDivStyle}>
+				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
+			</div>
+			
+		</div>  
+    	</div>   
      );
      }
 }

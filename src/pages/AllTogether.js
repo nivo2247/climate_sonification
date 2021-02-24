@@ -32,9 +32,6 @@ const MAPVERTDIV = 3 / 4;
 const GRAPHVERTDIV = 2 / 10;
 const SLIDERVERTDIV = 1 / 20;
 
-const PADDING=0;
-
-
 /*** Game Handler Block (recieves page state):  
 ***  if play=1, increment index with delay in loop
 ***  else interrupt loop			 ***/
@@ -45,30 +42,33 @@ var gameHandler = async function(msg, data) {
 	if (data.state.play == 1){
 		while(data.state.index < 180){
 			if(data.state.play == 1){
+				data.setupGraph();
     				data.setState({
     					index: data.state.index+1, 
     					playButton: pauseUrl,
-    					pageBottom: Dimensions.get('window').height - PADDING,
-    					pageRight: Dimensions.get('window').width - PADDING
+    					pageBottom: Dimensions.get('window').height,
+    					pageRight: Dimensions.get('window').width
    				});
    				await timer(data.state.timerLen);
    			}else{
    					return;
    			}
    		}
+   		data.setupGraph();
    		data.setState({
     			playButton: playUrl,
     			play: 0,
-    			pageBottom: Dimensions.get('window').height - PADDING,
-    			pageRight: Dimensions.get('window').width - PADDING
+    			pageBottom: Dimensions.get('window').height,
+    			pageRight: Dimensions.get('window').width
     			
     		});
 	}
 	else {
+		data.setupGraph();
     		data.setState({
     			playButton: playUrl,
-    			pageBottom: Dimensions.get('window').height - PADDING,
-    			pageRight: Dimensions.get('window').width - PADDING
+    			pageBottom: Dimensions.get('window').height,
+    			pageRight: Dimensions.get('window').width
     		});
     	}
 };
@@ -97,44 +97,48 @@ class EachAlone extends React.Component {
     		token: "",
     		latitude: 0,
     		longitude: 0,
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
     	    	};
     }
 
     /*** onPress for 'adagio' ***/       
     setAdagio = () => {
+    	this.setupGraph();
     	this.setState({
     		timerLen: 1200,
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
     		});
     }
     
     /*** onPress for 'moderato' ***/   
     setModerato = () => {
+    	this.setupGraph();
     	this.setState({
     		timerLen: 800,
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
 		});
     }
     
     /*** onPress for 'allegro' ***/   
     setAllegro = () => {
+    	this.setupGraph();
     	this.setState({
     		timerLen: 400,
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
     		});
     }
     
     /*** onPress for 'presto' ***/   
     setPresto = () => {
+    	this.setupGraph();
     	this.setState({
     		timerLen: 200,
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
 		});
     }
     
@@ -142,10 +146,11 @@ class EachAlone extends React.Component {
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
     	var newState = (this.state.play + 1) % 2;
+    	this.setupGraph();
     	this.setState({
     		play: newState,
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
     	});
     	
     	if(newState == 0){
@@ -253,8 +258,8 @@ class EachAlone extends React.Component {
 	    	this.setState({
 	    		latitude: Math.floor(latSave), 
 	    		longitude: Math.floor(lonSave),
-    			pageBottom: Dimensions.get('window').height - PADDING,
-    			pageRight: Dimensions.get('window').width - PADDING
+    			pageBottom: Dimensions.get('window').height,
+    			pageRight: Dimensions.get('window').width
 	    		});	
 	        }
         }    
@@ -270,8 +275,13 @@ class EachAlone extends React.Component {
     		const all_co2_data = res.data.data;
     		this.setState({ co2data: [...all_co2_data]});
     	});
-    	
-	this.setState({token: PubSub.subscribe('TOPIC', gameHandler)});
+    	this.setupGraph();
+	this.setState({
+		token: PubSub.subscribe('TOPIC', gameHandler),
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
+	
+	});
 	
 	artifactImgs.forEach((picture) => {
     		Image.prefetch(picture);
@@ -418,11 +428,12 @@ class EachAlone extends React.Component {
     	var dbY = 1;
     	dbY = Math.floor((91 - lat) * (240 / 180));
 	dbX = Math.floor((181 + lon) * 320 / 360);
+	this.setupGraph();
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon),
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
 	});
 	/* Filter and do db hit here */
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
@@ -460,10 +471,11 @@ class EachAlone extends React.Component {
     };
     
     handleYear = (event) => {
+    	this.setupGraph();
     	this.setState({
     		index: parseInt(event.target.value),
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
     	});
     }
     
@@ -718,7 +730,9 @@ class EachAlone extends React.Component {
 			
 			<div style={controlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
-				<p style={paragraphTextStyle}>1.Select a variable below{"\n"}2. Touch the map to select a location{"\n"}3. Touch the timeline to select a starting year.{"\n"}4. Press the play button.</p>
+				<p style={paragraphTextStyle}>1. Touch the map to select a location</p>
+				<p style={paragraphTextStyle}>2. Touch the timeline to select a starting year</p>
+				<p style={paragraphTextStyle}>3. Press the play button.</p>
 			</div>
 			
 			<div style={controlBlockStyle} onPointerDown={() => this.handleClick()}>
