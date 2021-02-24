@@ -45,9 +45,7 @@ var gameHandler = async function(msg, data) {
 				data.setupGraph();
     				data.setState({
     					index: data.state.index+1, 
-    					playButton: pauseUrl,
-    					pageBottom: Dimensions.get('window').height,
-    					pageRight: Dimensions.get('window').width
+    					playButton: pauseUrl
    				});
    				await timer(data.state.timerLen);
    			}else{
@@ -57,18 +55,14 @@ var gameHandler = async function(msg, data) {
    		data.setupGraph();
    		data.setState({
     			playButton: playUrl,
-    			play: 0,
-    			pageBottom: Dimensions.get('window').height,
-    			pageRight: Dimensions.get('window').width
+    			play: 0
     			
     		});
 	}
 	else {
 		data.setupGraph();
     		data.setState({
-    			playButton: playUrl,
-    			pageBottom: Dimensions.get('window').height,
-    			pageRight: Dimensions.get('window').width
+    			playButton: playUrl
     		});
     	}
 };
@@ -96,9 +90,7 @@ class EachAlone extends React.Component {
     		iceAvgAllCoords: [0],
     		token: "",
     		latitude: 0,
-    		longitude: 0,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		longitude: 0
     	    	};
     }
 
@@ -106,9 +98,7 @@ class EachAlone extends React.Component {
     setAdagio = () => {
     	this.setupGraph();
     	this.setState({
-    		timerLen: 1200,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		timerLen: 1200
     		});
     }
     
@@ -116,9 +106,7 @@ class EachAlone extends React.Component {
     setModerato = () => {
     	this.setupGraph();
     	this.setState({
-    		timerLen: 800,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		timerLen: 800
 		});
     }
     
@@ -126,9 +114,7 @@ class EachAlone extends React.Component {
     setAllegro = () => {
     	this.setupGraph();
     	this.setState({
-    		timerLen: 400,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		timerLen: 400
     		});
     }
     
@@ -136,9 +122,7 @@ class EachAlone extends React.Component {
     setPresto = () => {
     	this.setupGraph();
     	this.setState({
-    		timerLen: 200,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		timerLen: 200
 		});
     }
     
@@ -148,9 +132,7 @@ class EachAlone extends React.Component {
     	var newState = (this.state.play + 1) % 2;
     	this.setupGraph();
     	this.setState({
-    		play: newState,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		play: newState
     	});
     	
     	if(newState == 0){
@@ -257,9 +239,7 @@ class EachAlone extends React.Component {
 		}
 	    	this.setState({
 	    		latitude: Math.floor(latSave), 
-	    		longitude: Math.floor(lonSave),
-    			pageBottom: Dimensions.get('window').height,
-    			pageRight: Dimensions.get('window').width
+	    		longitude: Math.floor(lonSave)
 	    		});	
 	        }
         }    
@@ -286,9 +266,8 @@ class EachAlone extends React.Component {
     	this.setupGraph();
 	this.setState({
 		token: PubSub.subscribe('TOPIC', gameHandler),
-    		pageBottom: Dimensions.get('window').height,
+	    	pageBottom: Dimensions.get('window').height,
     		pageRight: Dimensions.get('window').width
-	
 	});
 	
 	artifactImgs.forEach((picture) => {
@@ -439,9 +418,7 @@ class EachAlone extends React.Component {
 	this.setupGraph();
 	this.setState({
 		latitude: Math.floor(lat),
-		longitude: Math.floor(lon),
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+		longitude: Math.floor(lon)
 	});
 	/* Filter and do db hit here */
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
@@ -481,9 +458,7 @@ class EachAlone extends React.Component {
     handleYear = (event) => {
     	this.setupGraph();
     	this.setState({
-    		index: parseInt(event.target.value),
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		index: parseInt(event.target.value)
     	});
     }
     

@@ -58,9 +58,7 @@ var gameHandler = async function(msg, data) {
 				data.setupGraph();
     				data.setState({
     					index: data.state.index+1, 
-    					playButton: pauseUrl,
-    					pageBottom: Dimensions.get('window').height,
-    					pageRight: Dimensions.get('window').width
+    					playButton: pauseUrl
    				});
    				await timer(data.state.timerLen);
    			}else{
@@ -70,17 +68,13 @@ var gameHandler = async function(msg, data) {
    		data.setupGraph();
    		data.setState({
     			playButton: playUrl,
-    			play: 0,
-    			pageBottom: Dimensions.get('window').height,
-    			pageRight: Dimensions.get('window').width
+    			play: 0
     			
     		});
 	}
 	else {
     		data.setState({
-    			playButton: playUrl,
-    			pageBottom: Dimensions.get('window').height,
-    			pageRight: Dimensions.get('window').width
+    			playButton: playUrl
     		});
     	}
 };
@@ -112,9 +106,7 @@ class EachAlone extends React.Component {
     		yearData: [0],
     		coordData: [0],
     		latitude: 0,
-    		longitude: 0,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width,
+    		longitude: 0
     	};
     }
 
@@ -134,9 +126,7 @@ class EachAlone extends React.Component {
     	tempSrc: tempInactive,
     	iceSrc: iceInactive,
     	keySrc: precipKey,
-    	precipBool: 1,
-    	pageBottom: Dimensions.get('window').height,
-    	pageRight: Dimensions.get('window').width
+    	precipBool: 1
     });
     this.setupGraph();
     this.doYearHits(0, this.state.index + 1920);
@@ -154,9 +144,7 @@ class EachAlone extends React.Component {
     	tempSrc: tempActive,
         iceSrc: iceInactive,
     	keySrc: tempKey,
-    	tempBool: 1,
-    	pageBottom: Dimensions.get('window').height,
-    	pageRight: Dimensions.get('window').width
+    	tempBool: 1
     });
     if(this.state.tempBool == 0){
     	tempImgs.forEach((picture) => {
@@ -179,9 +167,7 @@ class EachAlone extends React.Component {
         tempSrc: tempInactive,
     	iceSrc: iceActive,
     	keySrc: iceKey,
-    	iceBool: 1,
-    	pageBottom: Dimensions.get('window').height,
-    	pageRight: Dimensions.get('window').width
+    	iceBool: 1
     });
     if(this.state.iceBool == 0){
     	iceImgs.forEach((picture) => {
@@ -197,9 +183,7 @@ class EachAlone extends React.Component {
     setAdagio = () => {
     	this.setupGraph();
     	this.setState({
-    		timerLen: 1200,
-		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		timerLen: 1200
     		});
     }
     
@@ -207,9 +191,7 @@ class EachAlone extends React.Component {
     setModerato = () => {
     	this.setupGraph();
     	this.setState({
-    		timerLen: 800,
-		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		timerLen: 800
 		});
     }
     
@@ -217,18 +199,14 @@ class EachAlone extends React.Component {
     setAllegro = () => {
     	this.setupGraph();
     	this.setState({
-    		timerLen: 400,
-		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		timerLen: 400
     		});
     }
     
     /*** onPress for 'presto' ***/   
     setPresto = () => {
     	this.setState({
-    		timerLen: 200,
-		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		timerLen: 200
 		});
     }
     
@@ -238,9 +216,7 @@ class EachAlone extends React.Component {
     	var newState = (this.state.play + 1) % 2;
     	this.setupGraph();
     	this.setState({
-    		play: newState,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		play: newState
     	});
     	
     	if(newState == 0){
@@ -347,9 +323,7 @@ class EachAlone extends React.Component {
 		this.setupGraph();
 	    	this.setState({
 	    		latitude: Math.floor(latSave), 
-	    		longitude: Math.floor(lonSave),
-    			pageBottom: Dimensions.get('window').height,
-    			pageRight: Dimensions.get('window').width
+	    		longitude: Math.floor(lonSave)
 	    	});
 	        }
         }   
@@ -555,9 +529,7 @@ class EachAlone extends React.Component {
     handleYear = (event) => {
     	this.setupGraph();
     	this.setState({
-    		index: parseInt(event.target.value),
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		index: parseInt(event.target.value)
     	});
     }
     
