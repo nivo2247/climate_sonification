@@ -114,7 +114,7 @@ class EachAlone extends React.Component {
     		latitude: 0,
     		longitude: 0,
     		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		pageRight: Dimensions.get('window').width,
     	};
     }
 
@@ -352,7 +352,17 @@ class EachAlone extends React.Component {
     			pageRight: Dimensions.get('window').width
 	    	});
 	        }
-        }    
+        }   
+        
+    
+    updateDimensions = () => {
+    	this.setState({
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
+    	});
+    	this.setupGraph();
+    }    
+      
     
     /*** runs on initial render
     *** get CO2 values from DB
@@ -375,7 +385,7 @@ class EachAlone extends React.Component {
 	artifactImgs.forEach((picture) => {
     		Image.prefetch(picture);
     	});
-	
+	window.addEventListener('resize', this.updateDimensions);
 	this.setupGraph();
 	this.doCoordHits(0, 0, 0);
 	this.doYearHits(0, this.state.index + 1920);
@@ -554,6 +564,7 @@ class EachAlone extends React.Component {
     /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
+    	window.removeEventListener('resize', this.updateDimensions);
     }
     
     onChangeLat = (text) => {
@@ -620,7 +631,7 @@ class EachAlone extends React.Component {
     var skinnyWidth = Math.floor(this.state.pageRight * SKINNYDIV);
     
     /*** style for model images and div ***/
-    const modelStyle = {
+    var modelStyle = {
 	width: modelWidth,
 	height: modelHeight
     };
@@ -631,90 +642,95 @@ class EachAlone extends React.Component {
     	overflow: 'hidden'
     };
     
-    const graphStyle = {
+    var graphStyle = {
     	height: this.state.pageBottom * GRAPHVERTDIV,
     	width: modelWidth
     };
     
-    const sliderDivStyle = {
+    var sliderDivStyle = {
     	height: this.state.pageBottom * SLIDERVERTDIV,
     	width: modelWidth
     };
     
-    const sliderStyle = {
+    var sliderStyle = {
     	height: this.state.pageBottom * SLIDERVERTDIV,
     	width: '99%'
     };
     
-    const controlDivStyle = {
+    var controlDivStyle = {
     	height: this.state.pageBottom,
     	width: controlWidth,
     	overflow: 'hidden',
     	float: 'left'
     };
     
-    const largeControlDivStyle = {
+    var largeControlDivStyle = {
     	height: this.state.pageBottom / 10,
     	width: controlWidth,
     	overflow: 'hidden',
     	float: 'left'
     }
     
-    const controlBlockStyle = {
+    var controlBlockStyle = {
     	height: this.state.pageBottom / 10,
     	width: controlWidth,
     	overflow: 'hidden',
     	float: 'left'
     };
     
-    const dataBlockStyle = {
+    var dataBlockStyle = {
        	height: this.state.pageBottom / 20,
     	width: controlWidth,
     	overflow: 'hidden'
     }
     
-    const instructionTextStyle = {
+    var instructionTextStyle = {
     	"font-size": "10px"
     };
     
-    const paragraphTextStyle = {
+    var paragraphTextStyle = {
     	"font-size": "8px"
     };
     
-    const smallLabelTextStyle = {
+    var smallLabelTextStyle = {
     	"font-size": "10px"
     };
     
-    const quarterControlStyle = {
+    var quarterControlStyle = {
     	height: this.state.pageBottom / 20,
     	width: this.state.pageRight * CONTROLDIV / 4,
     	float: 'left'
     };
     
-    const thirdControlStyle = {
+    var thirdControlStyle = {
     	height: this.state.pageBottom / 20,
     	width: this.state.pageRight * CONTROLDIV / 3,
     	float: 'left'
     };
     
-    const skinnyDivStyle = {
+    var skinnyDivStyle = {
     	height: this.state.pageBottom * MAPVERTDIV,
     	width: skinnyWidth,
     	overflow: 'hidden',
     	float:'left'
     };
     
-    const largeDivStyle = {
+    var largeDivStyle = {
     	height: this.state.pageBottom,
     	width: this.state.pageRight * MAPDIV,
     	overflow: 'hidden',
     	float: 'right'
     };
 
-    const skinnyImgStyle = {
+    var skinnyImgStyle = {
     	height: this.state.pageBottom * MAPVERTDIV / 2,
     	width: skinnyWidth,
     	overflow: 'hidden'
+    };
+    
+    var keyContainer = {
+    	width: this.state.pageRight * CONTROLDIV,
+    	height: this.state.pageBottom * 3 / 20
     };
     
     var active = '#44CC44';
@@ -763,11 +779,6 @@ class EachAlone extends React.Component {
     const prestoHighlight = {
     	'background-color': presto,
     	'font-size': '10px'
-    };
-    
-    const keyContainer = {
-    	width: this.state.pageRight * CONTROLDIV,
-    	height: this.state.pageBottom * 3 / 20
     };
     
     this.updateGraph();

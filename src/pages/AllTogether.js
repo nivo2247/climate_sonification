@@ -263,6 +263,14 @@ class EachAlone extends React.Component {
 	    		});	
 	        }
         }    
+        
+    updateDimensions = () => {
+    	this.setState({
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
+    	});
+    	this.setupGraph();
+    }
     
     /*** runs on initial render
     *** get CO2 values from DB
@@ -290,7 +298,7 @@ class EachAlone extends React.Component {
     	combinedImgs.forEach((picture) => {
     			Image.prefetch(picture);
     	});
-	
+	window.addEventListener('resize', this.updateDimensions);
 	this.setupGraph();
 	this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
@@ -482,6 +490,7 @@ class EachAlone extends React.Component {
     /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
+    	window.removeEventListener('resize', this.updateDimensions);
     }
     
     onChangeLat = (text) => {
