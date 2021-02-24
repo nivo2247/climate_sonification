@@ -23,6 +23,8 @@ const artifactImgs = [
 	pauseUrl
 ];
 
+const PADDING=40;
+
 
 /*** EachAlone specific stylesheet ***/
 var styles = StyleSheet.create({
@@ -126,12 +128,9 @@ class EachAlone extends React.Component {
     		prestoStyle: styles.tempoButton,
     		latitude: 0,
     		longitude: 0,
-    		modelWidth: Math.floor(Dimensions.get('window').width * 3/4),
-		modelHeight: Math.floor(Dimensions.get('window').height * 3/4),
-		modelLeft: Math.floor(Dimensions.get('window').width * 1/4),
-		modelDiv: Math.floor(Dimensions.get('window').width * 1/4),
-		modelSplit: Math.floor(Dimensions.get('window').height * 3/8)
-    	};
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING
+    	    	};
     }
 
     /*** onPress for 'adagio' ***/       
@@ -141,7 +140,9 @@ class EachAlone extends React.Component {
     		adagioStyle: styles.activeTempoButton,
     		moderatoStyle: styles.tempoButton,
 		allegroStyle: styles.tempoButton,
-		prestoStyle: styles.tempoButton
+		prestoStyle: styles.tempoButton,
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING
     		});
     }
     
@@ -152,7 +153,9 @@ class EachAlone extends React.Component {
     		adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.activeTempoButton,
 		allegroStyle: styles.tempoButton,
-		prestoStyle: styles.tempoButton
+		prestoStyle: styles.tempoButton,
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING
 		});
     }
     
@@ -163,7 +166,9 @@ class EachAlone extends React.Component {
     		adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.tempoButton,
 		allegroStyle: styles.activeTempoButton,
-		prestoStyle: styles.tempoButton
+		prestoStyle: styles.tempoButton,
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING
     		});
     }
     
@@ -174,7 +179,9 @@ class EachAlone extends React.Component {
     	    	adagioStyle: styles.tempoButton,
     		moderatoStyle: styles.tempoButton,
 		allegroStyle: styles.tempoButton,
-		prestoStyle: styles.activeTempoButton
+		prestoStyle: styles.activeTempoButton,
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING
 		});
     }
     
@@ -182,7 +189,11 @@ class EachAlone extends React.Component {
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
     	var newState = (this.state.play + 1) % 2;
-    	this.setState({play: newState });
+    	this.setState({
+    		play: newState,
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING
+    	});
     	
     	if(newState == 0){
     		this.doYearHits(this.state.index + 1920);
@@ -197,7 +208,12 @@ class EachAlone extends React.Component {
     
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
-    	var x = e.clientX - this.state.modelLeft;
+        var modelWidth = Math.floor(this.state.pageRight * 3/4);
+    	var modelHeight = Math.floor(this.state.pageBottom * 3/4);
+    	var modelLeft = Math.floor(this.state.pageRight * 1/4);
+    	var modelDiv = Math.floor(this.state.pageRight * 1/4);
+    	var modelSplit = Math.floor(this.state.pageBottom * 3/8);
+    	var x = e.clientX - modelLeft;
     	var y = e.clientY;
     	var latSave = 0;
     	var lonSave = 0;
@@ -205,40 +221,40 @@ class EachAlone extends React.Component {
     	var centerY = 0;
     	var boxType = 0;
     	if(this.state.play == 0 && e.buttons == 1) {
-		if (x <= this.state.modelDiv && y <= this.state.modelSplit) {
-	    		centerX = this.state.modelDiv / 2;
-	    		centerY = this.state.modelSplit / 2;
+		if (x <= modelDiv && y <= modelSplit) {
+	    		centerX = modelDiv / 2;
+	    		centerY = modelSplit / 2;
 	    		boxType = 1;
 		}
-    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit){
-			centerX = this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit / 2;
+    		else if (x <= modelDiv * 2 && y <= modelSplit){
+			centerX = modelDiv + modelDiv / 2;
+    			centerY = modelSplit / 2;
     			boxType = 1;	
     		}
-    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit){
-			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit / 2;
+    		else if (x <= modelDiv * 3 && y <= modelSplit){
+			centerX = 2 * modelDiv + modelDiv / 2;
+    			centerY = modelSplit / 2;
     			boxType = 2;
     		}
-    		else if (x <= this.state.modelDiv && y <= this.state.modelSplit * 2){
-			centerX = this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit + this.state.modelSplit / 2; 
+    		else if (x <= modelDiv && y <= modelSplit * 2){
+			centerX = modelDiv / 2;
+    			centerY = modelSplit + modelSplit / 2; 
     			boxType = 1;  	
     		}
-    		else if (x <= this.state.modelDiv * 2 && y <= this.state.modelSplit * 2){
-			centerX = this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit + this.state.modelSplit / 2; 
+    		else if (x <= modelDiv * 2 && y <= modelSplit * 2){
+			centerX = modelDiv + modelDiv / 2;
+    			centerY = modelSplit + modelSplit / 2; 
     			boxType = 1;  	
     		}
-    		else if (x <= this.state.modelDiv * 3 && y <= this.state.modelSplit * 2){
-			centerX = 2 * this.state.modelDiv + this.state.modelDiv / 2;
-    			centerY = this.state.modelSplit + this.state.modelSplit / 2; 
+    		else if (x <= modelDiv * 3 && y <= modelSplit * 2){
+			centerX = 2 * modelDiv + modelDiv / 2;
+    			centerY = modelSplit + modelSplit / 2; 
     			boxType = 2;   	
     		}
     		
     		if (boxType == 1) {
-		    	lonSave = (x - centerX) * 360 / this.state.modelDiv;
-		    	latSave = (centerY - y) * 180 / this.state.modelSplit;
+		    	lonSave = (x - centerX) * 360 / modelDiv;
+		    	latSave = (centerY - y) * 180 / modelSplit;
 		}
 		else if (boxType == 2) {
 			var dx = x - centerX;
@@ -253,8 +269,8 @@ class EachAlone extends React.Component {
 			else {
 				projx += r * Math.cos((theta - Math.PI / 2) / 2);
 			}
-			lonSave = (projx - centerX) * 540 / this.state.modelDiv;
-		    	latSave = 90 - projy * 90 / this.state.modelSplit;
+			lonSave = (projx - centerX) * 540 / modelDiv;
+		    	latSave = 90 - projy * 90 / modelSplit;
 			
 			console.log("lats: ", latSave, "   lons: ", lonSave);
 			
@@ -263,7 +279,12 @@ class EachAlone extends React.Component {
 			console.log("r: ", r, "   theta: ", theta);
 			console.log("px: ", projx, "py: ", projy);
 		}
-	    	this.setState({latitude: Math.floor(latSave), longitude: Math.floor(lonSave)});	
+	    	this.setState({
+	    		latitude: Math.floor(latSave), 
+	    		longitude: Math.floor(lonSave),
+    			pageBottom: Dimensions.get('window').height - PADDING,
+    			pageRight: Dimensions.get('window').width - PADDING
+	    		});	
 	        }
         }    
     
@@ -296,9 +317,11 @@ class EachAlone extends React.Component {
     }   
        
     setupGraph() {
+        var modelWidth = Math.floor(this.state.pageRight * 3/4);
+    	var modelSplit = Math.floor(this.state.pageBottom * 3/8);
     	const ctx = this.refs.models.getContext('2d');
-    	var bottom = this.state.modelSplit / 2 - 1;
-    	var right = this.state.modelWidth - 1;
+    	var bottom = modelSplit / 2 - 1;
+    	var right = modelWidth - 1;
     	
     	ctx.clearRect(0, 0, right, bottom);
     	
@@ -314,11 +337,13 @@ class EachAlone extends React.Component {
     
     updateGraph() {
     	if (this.state.index > 0){
+    	        var modelWidth = Math.floor(this.state.pageRight * 3/4);
+    		var modelSplit = Math.floor(this.state.pageBottom * 3/8);
 	    	const ctx = this.refs.models.getContext('2d');
 	    	
-    		var bottom = this.state.modelSplit / 2 - 1;
-    		var right = this.state.modelWidth - 1;
-    		
+    		var bottom = modelSplit / 2 - 1;
+    		var right = modelWidth - 1;
+    	
     		var step = right / 180;
     		var avg = bottom / 2;
     	
@@ -424,7 +449,9 @@ class EachAlone extends React.Component {
 	dbX = Math.floor((181 + lon) * 320 / 360);
 	this.setState({
 		latitude: Math.floor(lat),
-		longitude: Math.floor(lon)
+		longitude: Math.floor(lon),
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING
 	});
 	/* Filter and do db hit here */
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
@@ -462,7 +489,11 @@ class EachAlone extends React.Component {
     };
     
     handleYear = (event) => {
-    	this.setState({index: parseInt(event.target.value)});
+    	this.setState({
+    		index: parseInt(event.target.value),
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING
+    	});
     }
     
     /*** runs on page close ***/
@@ -542,18 +573,51 @@ class EachAlone extends React.Component {
     	}
     }
     
+    //modelWidth: Math.floor(Dimensions.get('window').width * 3/4),
+    //modelHeight: Math.floor(Dimensions.get('window').height * 3/4),
+    //modelLeft: Math.floor(Dimensions.get('window').width * 1/4),
+    //modelDiv: Math.floor(Dimensions.get('window').width * 1/4),
+    //modelSplit: Math.floor(Dimensions.get('window').height * 3/8)
+    
+    var modelWidth = Math.floor(this.state.pageRight * 3/4);
+    var modelHeight = Math.floor(this.state.pageBottom * 3/4);
+    var modelLeft = Math.floor(this.state.pageRight * 1/4);
+    var modelDiv = Math.floor(this.state.pageRight * 1/4);
+    var modelSplit = Math.floor(this.state.pageBottom * 3/8);
+    
     /*** style for model images and div ***/
     const modelStyle = {
-	width: this.state.modelWidth,
-	height: this.state.modelHeight
+	width: modelWidth,
+	height: modelHeight
+    };
+    
+    const containerStyle = {
+    	height: this.state.pageBottom,
+    	width: this.state.pageRight,
+    };
+    
+    const graphStyle = {
+    	height: modelDiv / 2,
+    	width: modelWidth
+    };
+    
+    const sliderDivStyle = {
+    	height: modelDiv / 6,
+    	width: modelWidth
+    };
+    
+    const sliderStyle = {
+    	height: modelDiv / 6,
+    	width: '100%'
     };
     
     this.updateGraph();
     
     /*** Return the page ***/
     return (
+    <div style={containerStyle}>
     	<View style={styles.container}>
-    		<View style={{flex:0.2}}>
+    		<View style={{flex:0.20}}>
     			<TouchableOpacity onPress={() => navigation.navigate('Home')} style={{flex: 0.1}}>
 				<View style={{flex: 1}}>
 					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"/>
@@ -671,22 +735,23 @@ class EachAlone extends React.Component {
 		</View>
 		
 		<View style={{flex:.75}}>
-			<View style={{flex:0.75}}>
+			
 			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown}>
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
-			</View>
 			
-			<View style={{flex:0.19}}>
-				<canvas ref="models" height={this.state.modelSplit / 2} width={this.state.modelWidth} />
-			</View>
 			
-			<View style={{flex:0.06}}>
-				<input type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
-			</View>
+			<div style={graphStyle}>
+				<canvas ref="models" height={modelSplit / 2} width={modelWidth} />
+			</div>
+			
+			<div style={sliderDivStyle}>
+				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
+			</div>
 			
 		</View>
-    	</View>   
+    	</View>  
+    	</div> 
      );
      }
 }
