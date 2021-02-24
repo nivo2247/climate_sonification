@@ -134,10 +134,15 @@ class EachAlone extends React.Component {
     /*** onPress for 'Play/Pause' 
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
+    	var newIndex = this.state.index;
+ 	if(this.state.play == 0 && this.state.index == 180){
+ 		newIndex = 0;
+ 	}
     	var newState = (this.state.play + 1) % 2;
     	this.setupGraph();
     	this.setState({
-    		play: newState
+    		play: newState,
+    		index: newIndex
     	});
     	
     	if(newState == 0){
@@ -150,22 +155,10 @@ class EachAlone extends React.Component {
     	PubSub.publish('TOPIC', this);
     }
     
+    /* TODO: activates when clicking map keys, make this play test note */
     testMusic = (e) => {
     	if(e.buttons == 1){
-    		var boxWidth = this.state.pageRight / 5;
-    		var boxHeight = this.state.pageBottom * 3 / 20;
-    		var boxTop = this.state.pageBottom * 3 / 5;
-    		var pressX = e.clientX;
-    		var pressY = e.clientY - boxTop;
-    		if(pressY <= boxHeight / 3){
-    			console.log("precip x: ", pressX * 450 / boxWidth);
-    		}
-    		else if(pressY <= boxHeight * 2 / 3){
-    			console.log("temp x: ", pressX * 22 / boxWidth - 3);
-    		}
-    		else if(pressY <= boxHeight){
-    			console.log("ice x: ", pressX * 100 / boxWidth, "%");
-    		}
+    		console.log("X: ", e.clientX, "Y: ", e.clientY);
     	}
     }
     
@@ -176,13 +169,19 @@ class EachAlone extends React.Component {
     	var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
     	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
-    	var x = e.clientX - modelLeft;
-    	var y = e.clientY;
+    	var modelTop = 0;
+    	if (this.state.pageBottom > this.state.pageRight){
+    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
+    	}
+    	var x = Math.floor(e.clientX - modelLeft);
+    	var y = Math.floor(e.clientY - modelTop);
     	var latSave = 0;
     	var lonSave = 0;
     	var centerX = 0;
     	var centerY = 0;
     	var boxType = 0;
+    	console.log(modelTop);
+    	console.log(x, ", ", y);
     	if(this.state.play == 0 && e.buttons == 1) {
 		if (x <= modelDiv && y <= modelSplit) {
 	    		centerX = modelDiv / 2;
