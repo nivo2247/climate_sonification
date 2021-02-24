@@ -1,4 +1,4 @@
-import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity, TouchableHighlight, TextInput } from "react-native";
+import { Dimensions, Image } from "react-native";
 import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -23,49 +23,16 @@ const artifactImgs = [
 	pauseUrl
 ];
 
-const PADDING=40;
+/*** Div splits from left to right. Should add up to 1 ***/
+const CONTROLDIV = 2 / 10;
+const SKINNYDIV = 1 / 20;
+const MAPDIV = 3 / 4;
 
+const MAPVERTDIV = 3 / 4;
+const GRAPHVERTDIV = 2 / 10;
+const SLIDERVERTDIV = 1 / 20;
 
-/*** EachAlone specific stylesheet ***/
-var styles = StyleSheet.create({
-	container: {
-		width: Dimensions.get('window').width,
-		height: Dimensions.get('window').height,
-		flexDirection: 'row'
-	},
-
-	image: {
-		flex: 1,
-		resizeMode: 'contain'
-	},
-	
-	tempoButton: {
-		alignItems: 'center',
-		backgroundColor: '#DDDDDD'
-	},
-	
-	activeTempoButton: {
-		alignItems: 'center',
-		backgroundColor: '#88DD88'
-	},
-	
-	tempoButtonContainer: {
-		flex: 0.25,
-		paddingHorizontal: 5,
-		justifyContent: 'center'
-	},
-
-	title_text: {
-		fontWeight: 'bold',
-		fontSize: (Dimensions.get('window').height / 15 + Dimensions.get('window').width / 40),
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		textShadowColor: 'rgba(0, 0,0, 1)',
-		textShadowOffset: {width: -1, height: 1},
-		textShadowRadius: 10
-	}
-});
+const PADDING=0;
 
 
 /*** Game Handler Block (recieves page state):  
@@ -80,7 +47,9 @@ var gameHandler = async function(msg, data) {
 			if(data.state.play == 1){
     				data.setState({
     					index: data.state.index+1, 
-    					playButton: pauseUrl
+    					playButton: pauseUrl,
+    					pageBottom: Dimensions.get('window').height - PADDING,
+    					pageRight: Dimensions.get('window').width - PADDING
    				});
    				await timer(data.state.timerLen);
    			}else{
@@ -89,13 +58,17 @@ var gameHandler = async function(msg, data) {
    		}
    		data.setState({
     			playButton: playUrl,
-    			play: 0
+    			play: 0,
+    			pageBottom: Dimensions.get('window').height - PADDING,
+    			pageRight: Dimensions.get('window').width - PADDING
     			
     		});
 	}
 	else {
     		data.setState({
-    			playButton: playUrl
+    			playButton: playUrl,
+    			pageBottom: Dimensions.get('window').height - PADDING,
+    			pageRight: Dimensions.get('window').width - PADDING
     		});
     	}
 };
@@ -122,10 +95,6 @@ class EachAlone extends React.Component {
     		tempAvgAllCoords: [0],
     		iceAvgAllCoords: [0],
     		token: "",
-    		adagioStyle: styles.tempoButton,
-    		moderatoStyle: styles.activeTempoButton,
-    		allegroStyle: styles.tempoButton,
-    		prestoStyle: styles.tempoButton,
     		latitude: 0,
     		longitude: 0,
     		pageBottom: Dimensions.get('window').height - PADDING,
@@ -137,10 +106,6 @@ class EachAlone extends React.Component {
     setAdagio = () => {
     	this.setState({
     		timerLen: 1200,
-    		adagioStyle: styles.activeTempoButton,
-    		moderatoStyle: styles.tempoButton,
-		allegroStyle: styles.tempoButton,
-		prestoStyle: styles.tempoButton,
     		pageBottom: Dimensions.get('window').height - PADDING,
     		pageRight: Dimensions.get('window').width - PADDING
     		});
@@ -150,10 +115,6 @@ class EachAlone extends React.Component {
     setModerato = () => {
     	this.setState({
     		timerLen: 800,
-    		adagioStyle: styles.tempoButton,
-    		moderatoStyle: styles.activeTempoButton,
-		allegroStyle: styles.tempoButton,
-		prestoStyle: styles.tempoButton,
     		pageBottom: Dimensions.get('window').height - PADDING,
     		pageRight: Dimensions.get('window').width - PADDING
 		});
@@ -163,10 +124,6 @@ class EachAlone extends React.Component {
     setAllegro = () => {
     	this.setState({
     		timerLen: 400,
-    		adagioStyle: styles.tempoButton,
-    		moderatoStyle: styles.tempoButton,
-		allegroStyle: styles.activeTempoButton,
-		prestoStyle: styles.tempoButton,
     		pageBottom: Dimensions.get('window').height - PADDING,
     		pageRight: Dimensions.get('window').width - PADDING
     		});
@@ -176,10 +133,6 @@ class EachAlone extends React.Component {
     setPresto = () => {
     	this.setState({
     		timerLen: 200,
-    	    	adagioStyle: styles.tempoButton,
-    		moderatoStyle: styles.tempoButton,
-		allegroStyle: styles.tempoButton,
-		prestoStyle: styles.activeTempoButton,
     		pageBottom: Dimensions.get('window').height - PADDING,
     		pageRight: Dimensions.get('window').width - PADDING
 		});
@@ -205,14 +158,32 @@ class EachAlone extends React.Component {
     	PubSub.publish('TOPIC', this);
     }
     
+    testMusic = (e) => {
+    	if(e.buttons == 1){
+    		var boxWidth = this.state.pageRight / 5;
+    		var boxHeight = this.state.pageBottom * 3 / 20;
+    		var boxTop = this.state.pageBottom * 3 / 5;
+    		var pressX = e.clientX;
+    		var pressY = e.clientY - boxTop;
+    		if(pressY <= boxHeight / 3){
+    			console.log("precip x: ", pressX * 450 / boxWidth);
+    		}
+    		else if(pressY <= boxHeight * 2 / 3){
+    			console.log("temp x: ", pressX * 22 / boxWidth - 3);
+    		}
+    		else if(pressY <= boxHeight){
+    			console.log("ice x: ", pressX * 100 / boxWidth, "%");
+    		}
+    	}
+    }
     
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
-        var modelWidth = Math.floor(this.state.pageRight * 3/4);
-    	var modelHeight = Math.floor(this.state.pageBottom * 3/4);
-    	var modelLeft = Math.floor(this.state.pageRight * 1/4);
-    	var modelDiv = Math.floor(this.state.pageRight * 1/4);
-    	var modelSplit = Math.floor(this.state.pageBottom * 3/8);
+    	var modelSplit = Math.floor(this.state.pageBottom * MAPVERTDIV / 2);
+    	var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
+    	var modelHeight = Math.floor(this.state.pageBottom * MAPVERTDIV);
+    	var modelLeft = Math.floor(this.state.pageRight * (1 - MAPDIV));
+    	var modelDiv = Math.floor(this.state.pageRight * MAPDIV / 3);
     	var x = e.clientX - modelLeft;
     	var y = e.clientY;
     	var latSave = 0;
@@ -317,10 +288,10 @@ class EachAlone extends React.Component {
     }   
        
     setupGraph() {
-        var modelWidth = Math.floor(this.state.pageRight * 3/4);
-    	var modelSplit = Math.floor(this.state.pageBottom * 3/8);
+        var graphBottom = Math.floor(this.state.pageBottom * GRAPHVERTDIV);
+    	var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
     	const ctx = this.refs.models.getContext('2d');
-    	var bottom = modelSplit / 2 - 1;
+    	var bottom = graphBottom - 1;
     	var right = modelWidth - 1;
     	
     	ctx.clearRect(0, 0, right, bottom);
@@ -337,11 +308,11 @@ class EachAlone extends React.Component {
     
     updateGraph() {
     	if (this.state.index > 0){
-    	        var modelWidth = Math.floor(this.state.pageRight * 3/4);
-    		var modelSplit = Math.floor(this.state.pageBottom * 3/8);
+    	        var graphBottom = Math.floor(this.state.pageBottom * GRAPHVERTDIV);
+    		var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
 	    	const ctx = this.refs.models.getContext('2d');
 	    	
-    		var bottom = modelSplit / 2 - 1;
+    		var bottom = graphBottom - 1;
     		var right = modelWidth - 1;
     	
     		var step = right / 180;
@@ -528,7 +499,7 @@ class EachAlone extends React.Component {
     /*** store page stack info ***/
     const { navigation } = this.props;  
     
-    var co2val = this.state.co2data[this.state.index].co2_val;
+    var co2val = Math.round(this.state.co2data[this.state.index].co2_val);
     
     /*** setup model URL ***/
     var urlAdd = urlPre.concat(this.state.modelStr);
@@ -573,17 +544,15 @@ class EachAlone extends React.Component {
     	}
     }
     
-    //modelWidth: Math.floor(Dimensions.get('window').width * 3/4),
-    //modelHeight: Math.floor(Dimensions.get('window').height * 3/4),
-    //modelLeft: Math.floor(Dimensions.get('window').width * 1/4),
-    //modelDiv: Math.floor(Dimensions.get('window').width * 1/4),
-    //modelSplit: Math.floor(Dimensions.get('window').height * 3/8)
+    var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
+    var modelHeight = Math.floor(this.state.pageBottom * MAPVERTDIV);
+    var modelLeft = Math.floor(this.state.pageRight * (1 - MAPDIV));
+    var modelDiv = Math.floor(this.state.pageRight * MAPDIV / 3);
+    var modelSplit = Math.floor(this.state.pageBottom * MAPVERTDIV / 2);
     
-    var modelWidth = Math.floor(this.state.pageRight * 3/4);
-    var modelHeight = Math.floor(this.state.pageBottom * 3/4);
-    var modelLeft = Math.floor(this.state.pageRight * 1/4);
-    var modelDiv = Math.floor(this.state.pageRight * 1/4);
-    var modelSplit = Math.floor(this.state.pageBottom * 3/8);
+    var controlWidth = this.state.pageRight * CONTROLDIV;
+    
+    var skinnyWidth = Math.floor(this.state.pageRight * SKINNYDIV);
     
     /*** style for model images and div ***/
     const modelStyle = {
@@ -594,33 +563,50 @@ class EachAlone extends React.Component {
     const containerStyle = {
     	height: this.state.pageBottom,
     	width: this.state.pageRight,
+    	overflow: 'hidden'
     };
     
     const graphStyle = {
-    	height: modelDiv / 2,
+    	height: this.state.pageBottom * GRAPHVERTDIV,
     	width: modelWidth
     };
     
     const sliderDivStyle = {
-    	height: modelDiv / 6,
+    	height: this.state.pageBottom * SLIDERVERTDIV,
     	width: modelWidth
     };
     
     const sliderStyle = {
-    	height: modelDiv / 6,
-    	width: '100%'
+    	height: this.state.pageBottom * SLIDERVERTDIV,
+    	width: '99%'
     };
     
     const controlDivStyle = {
     	height: this.state.pageBottom,
-    	width: this.state.pageRight / 5
+    	width: controlWidth,
+    	overflow: 'hidden',
+    	float: 'left'
     };
+    
+    const largeControlDivStyle = {
+    	height: this.state.pageBottom / 10,
+    	width: controlWidth,
+    	overflow: 'hidden',
+    	float: 'left'
+    }
     
     const controlBlockStyle = {
     	height: this.state.pageBottom / 10,
-    	width: this.state.pageRight / 5,
-    	overflow: 'hidden'
+    	width: controlWidth,
+    	overflow: 'hidden',
+    	float: 'left'
     };
+    
+    const dataBlockStyle = {
+       	height: this.state.pageBottom / 20,
+    	width: controlWidth,
+    	overflow: 'hidden'
+    }
     
     const instructionTextStyle = {
     	"font-size": "10px"
@@ -630,19 +616,102 @@ class EachAlone extends React.Component {
     	"font-size": "8px"
     };
     
-    const tempoButtonStyle = {
+    const smallLabelTextStyle = {
+    	"font-size": "10px"
+    };
+    
+    const quarterControlStyle = {
     	height: this.state.pageBottom / 20,
-    	width: this.state.pageRight / 20,
+    	width: this.state.pageRight * CONTROLDIV / 4,
     	float: 'left'
+    };
+    
+    const thirdControlStyle = {
+    	height: this.state.pageBottom / 20,
+    	width: this.state.pageRight * CONTROLDIV / 3,
+    	float: 'left'
+    };
+    
+    const skinnyDivStyle = {
+    	height: this.state.pageBottom * MAPVERTDIV,
+    	width: skinnyWidth,
+    	overflow: 'hidden',
+    	float:'left'
+    };
+    
+    const largeDivStyle = {
+    	height: this.state.pageBottom,
+    	width: this.state.pageRight * MAPDIV,
+    	overflow: 'hidden',
+    	float: 'right'
+    };
+
+    const skinnyImgStyle = {
+    	height: this.state.pageBottom * MAPVERTDIV / 2,
+    	width: skinnyWidth,
+    	overflow: 'hidden'
+    };
+    
+    var active = '#44CC44';
+    var inactive = '#EEEEEE';
+    var adagio = inactive;
+    var moderato = active;
+    var allegro = inactive;
+    var presto = inactive;
+    
+    if(this.state.timerLen == 1200){
+    	adagio = active;
+    	moderato = inactive;
+    	allegro = inactive;
+    	presto = inactive;
     }
+    else if(this.state.timerLen == 800){
+    	adagio = inactive;
+    	moderato = active;
+    	allegro = inactive;
+    	presto = inactive;
+    }
+    else if(this.state.timerLen == 400){
+    	adagio = inactive;
+    	moderato = inactive;
+    	allegro = active;
+    	presto = inactive;
+    }
+    else if(this.state.timerLen == 200){
+    	adagio = inactive;
+    	moderato = inactive;
+    	allegro = inactive;
+    	presto = active;
+    }
+    const adagioHighlight = {
+    	'background-color': adagio,
+    	'font-size': '10px'
+    };
+    const moderatoHighlight = {
+    	'background-color': moderato,
+    	'font-size': '10px'
+    };
+    const allegroHighlight = {
+    	'background-color': allegro,
+    	'font-size': '10px'
+    };
+    const prestoHighlight = {
+    	'background-color': presto,
+    	'font-size': '10px'
+    };
+    
+    const keyContainer = {
+    	width: this.state.pageRight * CONTROLDIV,
+    	height: this.state.pageBottom * 3 / 20
+    };
     
     this.updateGraph();
     
     /*** Return the page ***/
+    
     return (
     <div style={containerStyle}>
-    	<View style={styles.container}>
-    		<View style={{flex:0.20}}> 
+    		<div style={controlDivStyle}>
 			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
 				<img style={controlBlockStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
 			</div>
@@ -659,20 +728,51 @@ class EachAlone extends React.Component {
 			<div style={controlBlockStyle}>
 				<p style={paragraphTextStyle}>5. Select a tempo</p>
 				
-				<div style={tempoButtonStyle} onPointerDown={this.setAdagio}>
-					<p style={paragraphTextStyle}>adagio</p>
+				<div style={quarterControlStyle} onPointerDown={this.setAdagio}>
+					<span style={adagioHighlight}>adagio</span>
 				</div>
-				<div style={tempoButtonStyle} onPointerDown={this.setModerato}>
-					<p style={paragraphTextStyle}>moderato</p>
+				<div style={quarterControlStyle} onPointerDown={this.setModerato}>
+					<span style={moderatoHighlight}>moderato</span>
 				</div>
-				<div style={tempoButtonStyle} onPointerDown={this.setAllegro}>
-					<p style={paragraphTextStyle}>allegro</p>
+				<div style={quarterControlStyle} onPointerDown={this.setAllegro}>
+					<span style={allegroHighlight}>allegro</span>
 				</div>
-				<div style={tempoButtonStyle} onPointerDown={this.setPresto}>
-					<p style={paragraphTextStyle}>presto</p>
+				<div style={quarterControlStyle} onPointerDown={this.setPresto}>
+					<span style={prestoHighlight}>presto</span>
 				</div>
 			</div>
 			
+			<div style={dataBlockStyle}>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Lat: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{this.state.latitude}</p> {/*Need to implement onchangelat*/}
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Lon: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{this.state.longitude}</p>  {/*Need to implement onchangelon*/}
+				</div>
+			</div>
+			
+			<div style={dataBlockStyle}>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Year: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{this.state.index + 1920}</p> {/*Need to implement a way to input text*/}
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Co2: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{co2val}</p>
+				</div>
+			</div>
+			
+			{/*  Code which checked text input
 			<View style={{flex:0.05, flexDirection:'row'}}>
 				<View style={{flex:0.25}}>
 					<Text style={{fontSize: 12}}>Lat:</Text>
@@ -687,62 +787,50 @@ class EachAlone extends React.Component {
 					<TextInput value={this.state.longitude} style={{flex:1, borderColor:'gray', borderWidth: 1}} onChangeText={(text) => this.onChangeLon(text)} />
 				</View>
 			</View>
+			*/}
 			
-			<View style={{flex:0.1, flexDirection: 'row'}}>
-				<View style={{flex:0.5}}>
-				<Text style={{fontSize: 12}}>Year{"\n"}{this.state.index + 1920}</Text>
-				</View>
-				
-				<View style={{flex:0.5}}>
-				<Text style={{fontSize: 12}}>CO2{"\n"}{co2val}</Text>
-				</View>
-			</View>
+			<div style={controlBlockStyle}>
+				<div style={thirdControlStyle}>
+					<p style={smallLabelTextStyle}>Precip:</p>
+					<p style={smallLabelTextStyle}>{precip_val}</p>
+				</div>
+				<div style={thirdControlStyle}>
+					<p style={smallLabelTextStyle}>Temp:</p>
+					<p style={smallLabelTextStyle}>{temp_val}</p>
+				</div>
+				<div style={thirdControlStyle}>
+					<p style={smallLabelTextStyle}>Sea Ice:</p>
+					<p style={smallLabelTextStyle}>{ice_val}</p>
+				</div>
+			</div>
 			
-			<View style={{flex: 0.05, flexDirection: 'row'}}>
-				<View style={{flex:0.33}}>
-					<Text style={{textAlign: 'center', fontSize: 12}}>Precip: {"\n"}{precip_val}</Text> 
-				</View>
-				<View style={{flex:0.33}}>
-					<Text style={{textAlign: 'center', fontSize: 12}}>Temp: {"\n"}{temp_val}</Text> 
-				</View>
-				<View style={{flex:0.33}}>
-					<Text style={{textAlign: 'center', fontSize: 12}}>Sea Ice: {"\n"}{ice_val}</Text> 
-				</View>
-			</View>
+			<div style={keyContainer} onPointerDown={this.testMusic} onPointerMove={this.testMusic}>
+				<div style={dataBlockStyle}>
+					<img draggable="false" style={dataBlockStyle} src={precipKey}/>
+				</div>
+
+				<div style={dataBlockStyle}>
+					<img draggable="false" style={dataBlockStyle} src={tempKey}/>
+				</div>
+
+				<div style={controlBlockStyle}>
+					<img draggable="false" style={dataBlockStyle} src={iceKey}/>
+				</div>
+			</div>
 			
-			<View style={{flex: 0.05}}>
-				<View style={{flex:1}}>
-					<Image style={styles.image} source={precipKey} /> 
-				</View>
-			</View>
+			<div style={keyContainer}>
+				<img style={keyContainer} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
+			</div>
 			
-			<View style={{flex: 0.05}}>
-				<View style={{flex:1}}>
-					<Image style={styles.image} source={tempKey} /> 
-				</View>
-			</View>
-			
-			<View style={{flex: 0.05}}>
-				<View style={{flex:1}}>
-					<Image style={styles.image} source={iceKey} /> 
-				</View>
-			</View>
-			
-			<View style={{flex:0.2}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png" /> 
-			</View>
-		</View>
+		</div>
 		
-		<View style={{flex:0.05}}>
-			<View style={{flex:0.35}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png" /> 
-			</View>
-			<View style={{flex:0.35}}>
-				<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png" /> 
-			</View>
-		</View>
+		<div style={skinnyDivStyle}>
+			<img draggable="false" style={skinnyImgStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png"}/>
+			<img draggable="false" style={skinnyImgStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png"}/>
+		</div>
 		
-		<View style={{flex:.75}}>
+
+		<div style={largeDivStyle}>
 			
 			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown}>
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
@@ -750,15 +838,15 @@ class EachAlone extends React.Component {
 			
 			
 			<div style={graphStyle}>
-				<canvas ref="models" height={modelSplit / 2} width={modelWidth} />
+				<canvas ref="models" height={this.state.pageBottom * GRAPHVERTDIV} width={modelWidth} />
 			</div>
 			
 			<div style={sliderDivStyle}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
 			</div>
 			
-		</View>
-    	</View>  
+		</div>  
+		
     	</div> 
      );
      }
