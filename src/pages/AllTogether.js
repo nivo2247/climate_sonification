@@ -23,15 +23,6 @@ const artifactImgs = [
 	pauseUrl
 ];
 
-/*** Div splits from left to right. Should add up to 1 ***/
-const CONTROLDIV = 2 / 10;
-const SKINNYDIV = 1 / 20;
-const MAPDIV = 3 / 4;
-
-const MAPVERTDIV = 3 / 4;
-const GRAPHVERTDIV = 2 / 10;
-const SLIDERVERTDIV = 1 / 20;
-
 /*** Game Handler Block (recieves page state):  
 ***  if play=1, increment index with delay in loop
 ***  else interrupt loop			 ***/
@@ -90,7 +81,19 @@ class EachAlone extends React.Component {
     		iceAvgAllCoords: [0],
     		token: "",
     		latitude: 0,
-    		longitude: 0
+    		longitude: 0,
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width,
+    		CONTROLDIV: 2 / 10,
+    		CONTROLVERTDIV: 1,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 3 / 4,
+		MAPVERTDIV: 3 / 4,
+		GRAPHVERTDIV: 2 / 10,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'left',
+		MAPDIVFLOAT: 'right',
+		CONTROLSPLIT: 1
     	    	};
     }
 
@@ -166,11 +169,11 @@ class EachAlone extends React.Component {
     
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
-    	var modelSplit = Math.floor(this.state.pageBottom * MAPVERTDIV / 2);
-    	var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
-    	var modelHeight = Math.floor(this.state.pageBottom * MAPVERTDIV);
-    	var modelLeft = Math.floor(this.state.pageRight * (1 - MAPDIV));
-    	var modelDiv = Math.floor(this.state.pageRight * MAPDIV / 3);
+    	var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
+    	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
+    	var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
+    	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
+    	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
     	var x = e.clientX - modelLeft;
     	var y = e.clientY;
     	var latSave = 0;
@@ -245,11 +248,39 @@ class EachAlone extends React.Component {
         }    
         
     updateDimensions = () => {
+    if(this.state.pageBottom < this.state.pageRight){
     	this.setState({
     		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		pageRight: Dimensions.get('window').width,
+    		CONTROLDIV: 2 / 10,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 3 / 4,
+		MAPVERTDIV: 3 / 4,
+		GRAPHVERTDIV: 2 / 10,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'left',
+		MAPDIVFLOAD: 'right',
+		CONTROLVERTDIV: 1,
+		CONTROLSPLIT: 1
     	});
-    	this.setupGraph();
+    }
+    else{
+    	this.setState({
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width,
+    		CONTROLDIV: 1,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 19 / 20,
+		MAPVERTDIV: 1 / 4,
+		GRAPHVERTDIV: 1 / 5,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'right',
+		MAPDIVFLOAT: 'left',
+		CONTROLVERTDIV: 1 / 2,
+		CONTROLSPLIT: 1 / 2
+    	});
+    }	
+    this.setupGraph();
     }
     
     /*** runs on initial render
@@ -285,8 +316,8 @@ class EachAlone extends React.Component {
     }   
        
     setupGraph() {
-        var graphBottom = Math.floor(this.state.pageBottom * GRAPHVERTDIV);
-    	var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
+        var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
+    	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
     	const ctx = this.refs.models.getContext('2d');
     	var bottom = graphBottom - 1;
     	var right = modelWidth - 1;
@@ -305,8 +336,8 @@ class EachAlone extends React.Component {
     
     updateGraph() {
     	if (this.state.index > 0){
-    	        var graphBottom = Math.floor(this.state.pageBottom * GRAPHVERTDIV);
-    		var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
+    	        var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
+    		var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
 	    	const ctx = this.refs.models.getContext('2d');
 	    	
     		var bottom = graphBottom - 1;
@@ -540,15 +571,16 @@ class EachAlone extends React.Component {
     	}
     }
     
-    var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
-    var modelHeight = Math.floor(this.state.pageBottom * MAPVERTDIV);
-    var modelLeft = Math.floor(this.state.pageRight * (1 - MAPDIV));
-    var modelDiv = Math.floor(this.state.pageRight * MAPDIV / 3);
-    var modelSplit = Math.floor(this.state.pageBottom * MAPVERTDIV / 2);
+    var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
+    var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
+    var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
+    var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
+    var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
     
-    var controlWidth = this.state.pageRight * CONTROLDIV;
+    var controlWidth = this.state.pageRight * this.state.CONTROLDIV;
+    var controlHeight = this.state.pageBottom * this.state.CONTROLVERTDIV;
     
-    var skinnyWidth = Math.floor(this.state.pageRight * SKINNYDIV);
+    var skinnyWidth = Math.floor(this.state.pageRight * this.state.SKINNYDIV);
     
     /*** style for model images and div ***/
     const modelStyle = {
@@ -562,46 +594,53 @@ class EachAlone extends React.Component {
     	overflow: 'hidden'
     };
     
+    const controlContainerStyle = {
+    	height: this.state.pageBottom * this.state.CONTROLVERTDIV,
+    	width: this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT,
+    	float: 'left'
+    }
+    
     const graphStyle = {
-    	height: this.state.pageBottom * GRAPHVERTDIV,
+    	height: this.state.pageBottom * this.state.GRAPHVERTDIV,
     	width: modelWidth
     };
     
     const sliderDivStyle = {
-    	height: this.state.pageBottom * SLIDERVERTDIV,
+    	height: this.state.pageBottom * this.state.SLIDERVERTDIV,
     	width: modelWidth
     };
     
     const sliderStyle = {
-    	height: this.state.pageBottom * SLIDERVERTDIV,
+    	height: this.state.pageBottom * this.state.SLIDERVERTDIV,
     	width: '99%'
     };
     
     const controlDivStyle = {
-    	height: this.state.pageBottom,
+    	height: controlHeight,
     	width: controlWidth,
     	overflow: 'hidden',
-    	float: 'left'
+    	float: this.state.CONTROLDIVFLOAT,
     };
     
     const largeControlDivStyle = {
-    	height: this.state.pageBottom / 10,
-    	width: controlWidth,
+    	height: controlHeight / 10,
+    	width: controlWidth * this.state.CONTROLSPLIT,
     	overflow: 'hidden',
     	float: 'left'
     }
     
     const controlBlockStyle = {
-    	height: this.state.pageBottom / 10,
-    	width: controlWidth,
+    	height: controlHeight / 10,
+    	width: controlWidth * this.state.CONTROLSPLIT,
     	overflow: 'hidden',
     	float: 'left'
     };
     
     const dataBlockStyle = {
-       	height: this.state.pageBottom / 20,
-    	width: controlWidth,
-    	overflow: 'hidden'
+       	height: controlHeight / 20,
+    	width: controlWidth * this.state.CONTROLSPLIT,
+    	overflow: 'hidden',
+    	float: 'left'
     }
     
     const instructionTextStyle = {
@@ -617,19 +656,19 @@ class EachAlone extends React.Component {
     };
     
     const quarterControlStyle = {
-    	height: this.state.pageBottom / 20,
-    	width: this.state.pageRight * CONTROLDIV / 4,
+    	height: controlHeight / 20,
+    	width: controlWidth  * this.state.CONTROLSPLIT / 4,
     	float: 'left'
     };
     
     const thirdControlStyle = {
     	height: this.state.pageBottom / 20,
-    	width: this.state.pageRight * CONTROLDIV / 3,
+    	width: controlWidth  * this.state.CONTROLSPLIT / 3,
     	float: 'left'
     };
     
     const skinnyDivStyle = {
-    	height: this.state.pageBottom * MAPVERTDIV,
+    	height: this.state.pageBottom * this.state.MAPVERTDIV,
     	width: skinnyWidth,
     	overflow: 'hidden',
     	float:'left'
@@ -637,13 +676,13 @@ class EachAlone extends React.Component {
     
     const largeDivStyle = {
     	height: this.state.pageBottom,
-    	width: this.state.pageRight * MAPDIV,
+    	width: modelWidth,
     	overflow: 'hidden',
-    	float: 'right'
+    	float: this.state.MAPDIVFLOAT
     };
 
     const skinnyImgStyle = {
-    	height: this.state.pageBottom * MAPVERTDIV / 2,
+    	height: this.state.pageBottom * this.state.MAPVERTDIV / 2,
     	width: skinnyWidth,
     	overflow: 'hidden'
     };
@@ -697,8 +736,9 @@ class EachAlone extends React.Component {
     };
     
     const keyContainer = {
-    	width: this.state.pageRight * CONTROLDIV,
-    	height: this.state.pageBottom * 3 / 20
+    	width: this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT,
+    	height: this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / 20,
+    	float: 'left'
     };
     
     this.updateGraph();
@@ -836,7 +876,7 @@ class EachAlone extends React.Component {
 			
 			
 			<div style={graphStyle}>
-				<canvas ref="models" height={this.state.pageBottom * GRAPHVERTDIV} width={modelWidth} />
+				<canvas ref="models" height={this.state.pageBottom * this.state.GRAPHVERTDIV} width={modelWidth} />
 			</div>
 			
 			<div style={sliderDivStyle}>

@@ -106,7 +106,9 @@ class EachAlone extends React.Component {
     		yearData: [0],
     		coordData: [0],
     		latitude: 0,
-    		longitude: 0
+    		longitude: 0,
+    		pageBottom: Dimensions.get('window').height,
+    		pageRight: Dimensions.get('window').width
     	};
     }
 
