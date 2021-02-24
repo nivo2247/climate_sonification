@@ -352,7 +352,7 @@ class EachAlone extends React.Component {
 	this.setupGraph();
 	this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
-
+	this.updateDimensions();
     }   
        
     setupGraph() {
@@ -664,22 +664,22 @@ class EachAlone extends React.Component {
     };
     
     const largeControlDivStyle = {
-    	height: controlHeight / 10,
-    	width: controlWidth * this.state.CONTROLSPLIT,
+    	height: controlHeight / (10 * this.state.CONTROLSPLIT),
+    	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     	overflow: 'hidden',
     	float: 'left'
     }
     
     const controlBlockStyle = {
-    	height: controlHeight / 10,
+    	height: Math.floor(controlHeight / (10 * this.state.CONTROLSPLIT)),
     	width: controlWidth * this.state.CONTROLSPLIT,
     	overflow: 'hidden',
     	float: 'left'
     };
     
     const dataBlockStyle = {
-       	height: controlHeight / 20,
-    	width: controlWidth * this.state.CONTROLSPLIT,
+       	height: controlHeight / (20 * this.state.CONTROLSPLIT),
+    	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     	overflow: 'hidden',
     	float: 'left'
     }
@@ -698,13 +698,13 @@ class EachAlone extends React.Component {
     
     const quarterControlStyle = {
     	height: controlHeight / 20,
-    	width: controlWidth  * this.state.CONTROLSPLIT / 4,
+    	width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 4),
     	float: 'left'
     };
     
     const thirdControlStyle = {
     	height: this.state.pageBottom / 20,
-    	width: controlWidth  * this.state.CONTROLSPLIT / 3,
+    	width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     	float: 'left'
     };
     
@@ -777,9 +777,10 @@ class EachAlone extends React.Component {
     };
     
     const keyContainer = {
-    	width: this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT,
-    	height: this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / 20,
-    	float: 'left'
+    	width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
+    	height: this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / (20 * this.state.CONTROLSPLIT),
+    	float: 'left',
+    	overflow: 'hidden'
     };
     
     this.updateGraph();
@@ -804,8 +805,9 @@ class EachAlone extends React.Component {
 				<img style={controlBlockStyle} src={this.state.playButton}/>
 			</div>
 			
-			<div style={controlBlockStyle}>
-				<p style={paragraphTextStyle}>5. Select a tempo</p>
+			<div style={dataBlockStyle}>
+			
+				{/*<p style={paragraphTextStyle}>5. Select a tempo</p> */}
 				
 				<div style={quarterControlStyle} onPointerDown={this.setAdagio}>
 					<span style={adagioHighlight}>adagio</span>
@@ -883,6 +885,11 @@ class EachAlone extends React.Component {
 				</div>
 			</div>
 			
+			<div style={keyContainer}>
+				<img style={keyContainer} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
+			</div>
+			
+			
 			<div style={keyContainer} onPointerDown={this.testMusic} onPointerMove={this.testMusic}>
 				<div style={dataBlockStyle}>
 					<img draggable="false" style={dataBlockStyle} src={precipKey}/>
@@ -897,9 +904,6 @@ class EachAlone extends React.Component {
 				</div>
 			</div>
 			
-			<div style={keyContainer}>
-				<img style={keyContainer} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
-			</div>
 			
 		</div>
 		
