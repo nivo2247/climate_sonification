@@ -612,7 +612,7 @@ class EachAlone extends React.Component {
         var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.yearData.length > coord_index){
     		var avgKeys = Object.keys(this.state.yearData[coord_index]);
-    		var useAvgKey = avgKeys[1];
+    		var useAvgKey = avgKeys[0];
     		coord_val = this.state.yearData[coord_index][useAvgKey];
     	}
     	else{

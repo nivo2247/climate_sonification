@@ -550,17 +550,17 @@ class EachAlone extends React.Component {
     	var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.precipAvgAllCoords.length > coord_index){
     		var avgKeys0 = Object.keys(this.state.precipAvgAllCoords[coord_index]);
-    		var useAvgKey0 = avgKeys0[1];
+    		var useAvgKey0 = avgKeys0[0];
     		precip_val = this.state.precipAvgAllCoords[coord_index][useAvgKey0];
     	}
     	if(this.state.tempAvgAllCoords.length > coord_index){
     		var avgKeys1 = Object.keys(this.state.tempAvgAllCoords[coord_index]);
-    		var useAvgKey1 = avgKeys1[1];
+    		var useAvgKey1 = avgKeys1[0];
     		temp_val = this.state.tempAvgAllCoords[coord_index][useAvgKey1];
     	}
     	if(this.state.iceAvgAllCoords.length > coord_index){
     		var avgKeys2 = Object.keys(this.state.iceAvgAllCoords[coord_index]);
-    		var useAvgKey2 = avgKeys2[1];
+    		var useAvgKey2 = avgKeys2[0];
     		ice_val = this.state.iceAvgAllCoords[coord_index][useAvgKey2];
     	}
     }
