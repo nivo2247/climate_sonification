@@ -335,7 +335,6 @@ class EachAlone extends React.Component {
     		const all_co2_data = res.data.data;
     		this.setState({ co2data: [...all_co2_data]});
     	});
-    	this.setupGraph();
 	this.setState({
 		token: PubSub.subscribe('TOPIC', gameHandler),
 	    	pageBottom: Dimensions.get('window').height - PADDING,
@@ -392,13 +391,13 @@ class EachAlone extends React.Component {
     		var precip_max = 120;
     		
     		ctx.beginPath();
-    		for(var precipInd = 0; precipInd < this.state.index; precipInd++){
+    		for(var precipInd = 0; precipInd <= this.state.index; precipInd++){
     		    	var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
-    			var usePrecipAvgKey = precipAvgKeys[precipInd + 2];
+    			var usePrecipAvgKey = precipAvgKeys[precipInd + 1];
     			var prev_val = this.state.precipAvg[0][usePrecipAvgKey];
     			
     			var precipAvgKeys1 = Object.keys(this.state.precipAvg[0]);
-    			var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 3];
+    			var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 2];
     			var coord_val = this.state.precipAvg[0][usePrecipAvgKey1];
     			
     			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
@@ -412,13 +411,13 @@ class EachAlone extends React.Component {
     		var temp_avg = Math.floor(avg * 1.5);
     		
     		ctx.beginPath();
-    		for(var tempInd = 0; tempInd < this.state.index; tempInd++){
+    		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){
     		    	var tempAvgKeys = Object.keys(this.state.tempAvg[0]);
-    			var useTempAvgKey = tempAvgKeys[tempInd + 2];
+    			var useTempAvgKey = tempAvgKeys[tempInd + 1];
     			var prev_val = this.state.tempAvg[0][useTempAvgKey];
     			
     			var tempAvgKeys1 = Object.keys(this.state.tempAvg[0]);
-    			var useTempAvgKey1 = tempAvgKeys1[tempInd + 3];
+    			var useTempAvgKey1 = tempAvgKeys1[tempInd + 2];
     			var coord_val = this.state.tempAvg[0][useTempAvgKey1];
     			
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
@@ -432,13 +431,13 @@ class EachAlone extends React.Component {
     		var ice_avg = Math.floor(avg * 0.5);
     		
     		ctx.beginPath();
-    		for(var iceInd = 0; iceInd < this.state.index; iceInd++){
+    		for(var iceInd = 0; iceInd <= this.state.index; iceInd++){
     		    	var iceAvgKeys = Object.keys(this.state.iceAvg[0]);
-    			var useIceAvgKey = iceAvgKeys[iceInd + 2];
+    			var useIceAvgKey = iceAvgKeys[iceInd + 1];
     			var prev_val = this.state.iceAvg[0][useIceAvgKey];
     			
     			var iceAvgKeys1 = Object.keys(this.state.iceAvg[0]);
-    			var useIceAvgKey1 = iceAvgKeys1[iceInd + 3];
+    			var useIceAvgKey1 = iceAvgKeys1[iceInd + 2];
     			var coord_val = this.state.iceAvg[0][useIceAvgKey1];
     			
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
@@ -517,7 +516,6 @@ class EachAlone extends React.Component {
     	var dbY = 1;
     	dbY = Math.floor((91 - lat) * (240 / 180));
 	dbX = Math.floor((181 + lon) * 320 / 360);
-	this.setupGraph();
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon)
@@ -572,7 +570,7 @@ class EachAlone extends React.Component {
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
     	window.removeEventListener('resize', this.updateDimensions);
-    	window.removeEventListener('oreintationchange', this.updateDimensions);
+    	window.removeEventListener('orientationchange', this.rotateDimensions);
     }
     
     onChangeLat = (text) => {

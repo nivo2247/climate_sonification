@@ -35,14 +35,9 @@ const artifactImgs = [
 	pauseUrl
 ];
 
-/*** Div splits from left to right. Should add up to 1 ***/
-const CONTROLDIV = 2 / 10;
-const SKINNYDIV = 1 / 20;
-const MAPDIV = 3 / 4;
+const PADDING = 5;
 
-const MAPVERTDIV = 3 / 4;
-const GRAPHVERTDIV = 2 / 10;
-const SLIDERVERTDIV = 1 / 20;
+/*** Div splits from left to right. Should add up to 1 ***/
 
 
 /*** Game Handler Block (recieves page state):  
@@ -68,11 +63,13 @@ var gameHandler = async function(msg, data) {
    		data.setupGraph();
    		data.setState({
     			playButton: playUrl,
-    			play: 0
+    			play: 0,
+    			useArray: 1
     			
     		});
 	}
 	else {
+		data.setupGraph();
     		data.setState({
     			playButton: playUrl
     		});
@@ -107,20 +104,29 @@ class EachAlone extends React.Component {
     		coordData: [0],
     		latitude: 0,
     		longitude: 0,
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
+    		CONTROLDIV: 2 / 10,
+    		CONTROLVERTDIV: 1,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 3 / 4,
+		MAPVERTDIV: 3 / 4,
+		GRAPHVERTDIV: 2 / 10,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'left',
+		MAPDIVFLOAT: 'right',
+		CONTROLSPLIT: 1,
+		useArray: 0
     	};
     }
 
     /*** onPress for 'Precipitation' ***/    
     setPrecip = () => {
-    this.setupGraph();
     if(this.state.precipBool == 0){
     	precipImgs.forEach((picture) => {
     		Image.prefetch(picture);
     	});
     }
-    this.setupGraph();
     this.setState({ 
         state: 0,
     	modelStr: "/precip/precip_ens",
@@ -137,8 +143,6 @@ class EachAlone extends React.Component {
    
     /*** onPress for 'Temperature' ***/   
     setTemp = () => {
-    this.setupGraph();
-    this.setupGraph();
     this.setState({
         state: 1,
     	modelStr: "/temp/temp_ens",
@@ -160,8 +164,6 @@ class EachAlone extends React.Component {
 
     /*** onPress for 'Sea Ice' ***/       
     setIce = () => {
-    this.setupGraph();
-    this.setupGraph();
     this.setState({
         state: 2,
     	modelStr: "/seaIce/ice_ens",
@@ -215,17 +217,20 @@ class EachAlone extends React.Component {
     /*** onPress for 'Play/Pause' 
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
+    	var newIndex = this.state.index;
+    	if(this.state.play == 0 && this.state.index == 180){
+ 		newIndex = 0;
+ 	}
     	var newState = (this.state.play + 1) % 2;
     	this.setupGraph();
     	this.setState({
-    		play: newState
+    		play: newState,
+    		useArray: 1,
+    		index: newIndex
     	});
     	
     	if(newState == 0){
     		this.doYearHits(this.state.state, this.state.index + 1920);
-    	}else if(newState == 1){
-    		this.setupGraph();
-    		this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
     	}
     	
     	if(this.state.precipBool == 0){
@@ -240,32 +245,27 @@ class EachAlone extends React.Component {
     
     testMusic = (e) => {
     	if(e.buttons == 1){
-    		var boxWidth = this.state.pageRight / 5;
-    		var boxHeight = this.state.pageBottom * 3 / 20;
-    		var boxTop = this.state.pageBottom * 3 / 5;
-    		var pressX = e.clientX;
-    		var pressY = e.clientY - boxTop;
-    		if(this.state.state == 0){
-    			console.log("precip x: ", pressX * 450 / boxWidth);
-    		}
-    		else if(this.state.state == 1){
-    			console.log("temp x: ", pressX * 22 / boxWidth - 3);
-    		}
-    		else if(this.state.state == 2){
-    			console.log("ice x: ", pressX * 100 / boxWidth, "%");
-    		}
+    		console.log("TODO: Play note");
     	}
+    }
+    
+    onPointerUp = (e) => {
+    	this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
     }
     
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
-        var modelSplit = Math.floor(this.state.pageBottom * MAPVERTDIV / 2);
-    	var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
-    	var modelHeight = Math.floor(this.state.pageBottom * MAPVERTDIV);
-    	var modelLeft = Math.floor(this.state.pageRight * (1 - MAPDIV));
-    	var modelDiv = Math.floor(this.state.pageRight * MAPDIV / 3);
-    	var x = e.clientX - modelLeft;
-    	var y = e.clientY;
+        var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
+    	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
+    	var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
+    	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
+    	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
+    	var modelTop = 0;
+    	if (this.state.pageBottom > this.state.pageRight){
+    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
+    	}
+    	var x = Math.floor(e.clientX - modelLeft);
+    	var y = Math.floor(e.clientY - modelTop);
     	var latSave = 0;
     	var lonSave = 0;
     	var centerX = 0;
@@ -322,22 +322,87 @@ class EachAlone extends React.Component {
 			console.log("r: ", r, "   theta: ", theta);
 			console.log("px: ", projx, "py: ", projy);
 		}
-		this.setupGraph();
 	    	this.setState({
 	    		latitude: Math.floor(latSave), 
-	    		longitude: Math.floor(lonSave)
+	    		longitude: Math.floor(lonSave),
+	    		useArray: 0
 	    	});
 	        }
         }   
         
     
     updateDimensions = () => {
+    if(Dimensions.get('window').height < Dimensions.get('window').width){
     	this.setState({
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
+    		CONTROLDIV: 2 / 10,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 3 / 4,
+		MAPVERTDIV: 3 / 4,
+		GRAPHVERTDIV: 2 / 10,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'left',
+		MAPDIVFLOAD: 'right',
+		CONTROLVERTDIV: 1,
+		CONTROLSPLIT: 1
     	});
-    	this.setupGraph();
-    }    
+    }
+    else{
+    	this.setState({
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
+    		CONTROLDIV: 1,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 19 / 20,
+		MAPVERTDIV: 1 / 4,
+		GRAPHVERTDIV: 1 / 5,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'right',
+		MAPDIVFLOAT: 'left',
+		CONTROLVERTDIV: 1 / 2,
+		CONTROLSPLIT: 1 / 2
+    	});
+    }	
+    this.setupGraph();
+    } 
+    
+    rotateDimensions = async () => {
+    await timer(1000);
+    if(Dimensions.get('window').height < Dimensions.get('window').width){
+    	this.setState({
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
+    		CONTROLDIV: 2 / 10,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 3 / 4,
+		MAPVERTDIV: 3 / 4,
+		GRAPHVERTDIV: 2 / 10,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'left',
+		MAPDIVFLOAD: 'right',
+		CONTROLVERTDIV: 1,
+		CONTROLSPLIT: 1
+    	});
+    }
+    else{
+    	this.setState({
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
+    		CONTROLDIV: 1,
+		SKINNYDIV: 1 / 20,
+		MAPDIV: 19 / 20,
+		MAPVERTDIV: 1 / 4,
+		GRAPHVERTDIV: 1 / 5,
+		SLIDERVERTDIV: 1 / 20,
+		CONTROLDIVFLOAT: 'right',
+		MAPDIVFLOAT: 'left',
+		CONTROLVERTDIV: 1 / 2,
+		CONTROLSPLIT: 1 / 2
+    	});
+    }	
+    this.setupGraph();
+    }   
       
     
     /*** runs on initial render
@@ -362,16 +427,16 @@ class EachAlone extends React.Component {
     		Image.prefetch(picture);
     	});
 	window.addEventListener('resize', this.updateDimensions);
-	window.addEventListener('orientationchange', this.updateDimensions);
+	window.addEventListener('orientationchange', this.rotateDimensions);
 	this.setupGraph();
 	this.doCoordHits(0, 0, 0);
 	this.doYearHits(0, this.state.index + 1920);
-
+	this.updateDimensions();
     }   
        
     setupGraph() {
-        var graphBottom = Math.floor(this.state.pageBottom * GRAPHVERTDIV);
-    	var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
+        var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
+    	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
     	const ctx = this.refs.models.getContext('2d');
     	var bottom = graphBottom - 1;
     	var right = modelWidth - 1;
@@ -389,9 +454,9 @@ class EachAlone extends React.Component {
     } 
     
     updateGraph() {
-	if (this.state.index > 0){
-    	        var graphBottom = Math.floor(this.state.pageBottom * GRAPHVERTDIV);
-    		var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
+	if (this.state.index > 0 && this.state.index <= 180){
+    	        var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
+    		var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
 	    	const ctx = this.refs.models.getContext('2d');
 	    	
     		var bottom = graphBottom - 1;
@@ -405,13 +470,13 @@ class EachAlone extends React.Component {
     			var precip_max = 120;
     		
     			ctx.beginPath();
-    			for(var precipInd = 1; precipInd < this.state.index; precipInd++){
+    			for(var precipInd = 0; precipInd <= this.state.index; precipInd++){
     			    	var precipAvgKeys = Object.keys(this.state.coordData[0]);
-    				var usePrecipAvgKey = precipAvgKeys[precipInd];
+    				var usePrecipAvgKey = precipAvgKeys[precipInd + 1];
     				var prev_val = this.state.coordData[0][usePrecipAvgKey];
     				
     				var precipAvgKeys1 = Object.keys(this.state.coordData[0]);
-    				var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 1];
+    				var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 2];
     				var coord_val = this.state.coordData[0][usePrecipAvgKey1];
     			
     				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
@@ -427,13 +492,13 @@ class EachAlone extends React.Component {
     		var temp_avg = Math.floor(avg * 1.5);
     		
     		ctx.beginPath();
-    		for(var tempInd = 1; tempInd < this.state.index; tempInd++){
+    		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){
     		    	var tempAvgKeys = Object.keys(this.state.coordData[0]);
-    			var useTempAvgKey = tempAvgKeys[tempInd];
+    			var useTempAvgKey = tempAvgKeys[tempInd + 1];
     			var prev_val = this.state.coordData[0][useTempAvgKey];
     			
     			var tempAvgKeys1 = Object.keys(this.state.coordData[0]);
-    			var useTempAvgKey1 = tempAvgKeys1[tempInd + 1];
+    			var useTempAvgKey1 = tempAvgKeys1[tempInd + 2];
     			var coord_val = this.state.coordData[0][useTempAvgKey1];
     			
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
@@ -450,13 +515,13 @@ class EachAlone extends React.Component {
     		var ice_avg = Math.floor(avg * 0.5);
     		
     		ctx.beginPath();
-    		for(var iceInd = 1; iceInd < this.state.index; iceInd++){
+    		for(var iceInd = 0; iceInd <= this.state.index; iceInd++){
     		    	var iceAvgKeys = Object.keys(this.state.coordData[0]);
-    			var useIceAvgKey = iceAvgKeys[iceInd];
+    			var useIceAvgKey = iceAvgKeys[iceInd + 1];
     			var prev_val = this.state.coordData[0][useIceAvgKey];
     			
     			var iceAvgKeys1 = Object.keys(this.state.coordData[0]);
-    			var useIceAvgKey1 = iceAvgKeys1[iceInd + 1];
+    			var useIceAvgKey1 = iceAvgKeys1[iceInd + 2];
     			var coord_val = this.state.coordData[0][useIceAvgKey1];
     			
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
@@ -467,6 +532,39 @@ class EachAlone extends React.Component {
     		}
     	}
     }
+    
+    doYearHits(state, year){
+	/* Filter and do db hit here */
+	if(year >= 1920 && year <= 2100){
+		var table = dbUrl.concat("/table/")
+		var intermediate = "";
+		if(state == 0){
+			intermediate = table.concat("precipavg/year/");
+		}
+		else if(state == 1){
+			intermediate = table.concat("tempavg/year/");
+		}
+		else if(state == 2){
+			intermediate = table.concat("seaiceavg/year/");
+		}
+		var request = intermediate.concat(year.toString(10));
+		console.log(request);
+		Axios.get(request)
+			.then(res => {
+    			const year_data = res.data.data;
+    			if(this.state.play == 0){
+    				this.setState({ 
+    					yearData: [...year_data],
+    					useArray: 1
+    				});
+    			}
+    			else{
+    				this.setState({ yearData: [...year_data]});
+    			}
+    			console.log(year_data);
+    		});
+	}
+    };
     
     doCoordHits(state, lat, lon){
     	var dbX = 1;
@@ -497,6 +595,7 @@ class EachAlone extends React.Component {
     			const coord_data = res.data.data;
     			this.setState({ coordData: [...coord_data]});
     			this.setupGraph();
+    			this.updateGraph();
     			console.log(coord_data);
     		});
 	}
@@ -504,35 +603,12 @@ class EachAlone extends React.Component {
     	console.log("dbX: ", dbX, "dbY: ", dbY);
     };
     
-    doYearHits(state, year){
-	/* Filter and do db hit here */
-	if(year >= 1920 && year <= 2100){
-		var table = dbUrl.concat("/table/")
-		var intermediate = "";
-		if(state == 0){
-			intermediate = table.concat("precipavg/year/");
-		}
-		else if(state == 1){
-			intermediate = table.concat("tempavg/year/");
-		}
-		else if(state == 2){
-			intermediate = table.concat("seaiceavg/year/");
-		}
-		var request = intermediate.concat(year.toString(10));
-		console.log(request);
-		Axios.get(request)
-			.then(res => {
-    			const year_data = res.data.data;
-    			this.setState({ yearData: [...year_data]});
-    			console.log(year_data);
-    		});
-	}
-    };
     
     handleYear = (event) => {
     	this.setupGraph();
     	this.setState({
-    		index: parseInt(event.target.value)
+    		index: parseInt(event.target.value),
+    		useArray: 1
     	});
     }
     
@@ -540,7 +616,7 @@ class EachAlone extends React.Component {
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
     	window.removeEventListener('resize', this.updateDimensions);
-    	window.removeEventListener('orientationchange', this.updateDimensions);
+    	window.removeEventListener('orientationchange', this.rotateDimensions);
     }
     
     onChangeLat = (text) => {
@@ -570,7 +646,7 @@ class EachAlone extends React.Component {
     /*** store page stack info ***/
     const { navigation } = this.props;  
     
-    var co2val = Math.floor(this.state.co2data[this.state.index].co2_val);
+    var co2val = Math.round(this.state.co2data[this.state.index].co2_val);
     
     /*** setup model URL ***/
     var urlAdd = urlPre.concat(this.state.modelStr);
@@ -580,11 +656,12 @@ class EachAlone extends React.Component {
     
     /*** Avg db value ***/
     var coord_val = 0;
-    if(this.state.play == 1){
+    if(this.state.useArray == 1){
     	var avgKeys = Object.keys(this.state.coordData[0]);
     	var useAvgKey = avgKeys[this.state.index+2];
     	coord_val = this.state.coordData[0][useAvgKey];
-    }else if(this.state.play == 0){
+    }
+    else {
         var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.yearData.length > coord_index){
     		var avgKeys = Object.keys(this.state.yearData[coord_index]);
@@ -596,18 +673,19 @@ class EachAlone extends React.Component {
     	}
     }
     
-    var modelWidth = Math.floor(this.state.pageRight * MAPDIV);
-    var modelHeight = Math.floor(this.state.pageBottom * MAPVERTDIV);
-    var modelLeft = Math.floor(this.state.pageRight * (1 - MAPDIV));
-    var modelDiv = Math.floor(this.state.pageRight * MAPDIV / 3);
-    var modelSplit = Math.floor(this.state.pageBottom * MAPVERTDIV / 2);
+    var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
+    var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
+    var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
+    var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
+    var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
     
-    var controlWidth = this.state.pageRight * CONTROLDIV;
+    var controlWidth = this.state.pageRight * this.state.CONTROLDIV;
+    var controlHeight = this.state.pageBottom * this.state.CONTROLVERTDIV;
     
-    var skinnyWidth = Math.floor(this.state.pageRight * SKINNYDIV);
+    var skinnyWidth = Math.floor(this.state.pageRight * this.state.SKINNYDIV);
     
     /*** style for model images and div ***/
-    var modelStyle = {
+    const modelStyle = {
 	width: modelWidth,
 	height: modelHeight
     };
@@ -618,95 +696,97 @@ class EachAlone extends React.Component {
     	overflow: 'hidden'
     };
     
-    var graphStyle = {
-    	height: this.state.pageBottom * GRAPHVERTDIV,
+    const controlContainerStyle = {
+    	height: Math.floor(this.state.pageBottom / 2),
+    	width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
+    	float: 'left'
+    }
+    
+    const graphStyle = {
+    	height: this.state.pageBottom * this.state.GRAPHVERTDIV,
     	width: modelWidth
     };
     
-    var sliderDivStyle = {
-    	height: this.state.pageBottom * SLIDERVERTDIV,
+    const sliderDivStyle = {
+    	height: this.state.pageBottom * this.state.SLIDERVERTDIV,
     	width: modelWidth
     };
     
-    var sliderStyle = {
-    	height: this.state.pageBottom * SLIDERVERTDIV,
+    const sliderStyle = {
+    	height: this.state.pageBottom * this.state.SLIDERVERTDIV,
     	width: '99%'
     };
     
-    var controlDivStyle = {
-    	height: this.state.pageBottom,
+    const controlDivStyle = {
+    	height: controlHeight,
     	width: controlWidth,
     	overflow: 'hidden',
-    	float: 'left'
+    	float: this.state.CONTROLDIVFLOAT,
     };
     
-    var largeControlDivStyle = {
-    	height: this.state.pageBottom / 10,
-    	width: controlWidth,
+    const largeControlBlockStyle = {
+    	height: Math.floor(controlHeight * 1 / (5 * this.state.CONTROLSPLIT)),
+    	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     	overflow: 'hidden',
     	float: 'left'
     }
     
-    var controlBlockStyle = {
-    	height: this.state.pageBottom / 10,
-    	width: controlWidth,
+    const controlBlockStyle = {
+    	height: Math.floor(controlHeight / (10 * this.state.CONTROLSPLIT)),
+    	width: controlWidth * this.state.CONTROLSPLIT,
     	overflow: 'hidden',
     	float: 'left'
     };
     
-    var dataBlockStyle = {
-       	height: this.state.pageBottom / 20,
-    	width: controlWidth,
-    	overflow: 'hidden'
+    const dataBlockStyle = {
+       	height: controlHeight / (20 * this.state.CONTROLSPLIT),
+    	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
+    	overflow: 'hidden',
+    	float: 'left'
     }
     
-    var instructionTextStyle = {
+    const instructionTextStyle = {
     	"font-size": "10px"
     };
     
-    var paragraphTextStyle = {
+    const paragraphTextStyle = {
     	"font-size": "8px"
     };
     
-    var smallLabelTextStyle = {
+    const smallLabelTextStyle = {
     	"font-size": "10px"
     };
     
-    var quarterControlStyle = {
-    	height: this.state.pageBottom / 20,
-    	width: this.state.pageRight * CONTROLDIV / 4,
+    const quarterControlStyle = {
+    	height: controlHeight / 20,
+    	width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 4),
     	float: 'left'
     };
     
-    var thirdControlStyle = {
+    const thirdControlStyle = {
     	height: this.state.pageBottom / 20,
-    	width: this.state.pageRight * CONTROLDIV / 3,
+    	width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     	float: 'left'
     };
     
-    var skinnyDivStyle = {
-    	height: this.state.pageBottom * MAPVERTDIV,
+    const skinnyDivStyle = {
+    	height: this.state.pageBottom * this.state.MAPVERTDIV,
     	width: skinnyWidth,
     	overflow: 'hidden',
     	float:'left'
     };
     
-    var largeDivStyle = {
+    const largeDivStyle = {
     	height: this.state.pageBottom,
-    	width: this.state.pageRight * MAPDIV,
+    	width: modelWidth,
     	overflow: 'hidden',
-    	float: 'right'
+    	float: this.state.MAPDIVFLOAT
     };
 
-    var skinnyImgStyle = {
-    	height: this.state.pageBottom * MAPVERTDIV / 2,
+    const skinnyImgStyle = {
+    	height: this.state.pageBottom * this.state.MAPVERTDIV / 2,
     	width: skinnyWidth,
     	overflow: 'hidden'
-    };
-    
-    var keyContainer = {
-    	width: this.state.pageRight * CONTROLDIV,
-    	height: this.state.pageBottom * 3 / 20
     };
     
     var active = '#44CC44';
@@ -757,19 +837,30 @@ class EachAlone extends React.Component {
     	'font-size': '10px'
     };
     
-    this.updateGraph();
+    const keyContainer = {
+    	width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
+    	height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / (20 * this.state.CONTROLSPLIT)),
+    	float: 'left',
+    	overflow: 'hidden'
+    };
     
+    this.updateGraph();    
     /*** Return the page ***/
     return (
     	<div style={containerStyle}>
     		<div style={controlDivStyle}>
+    		<div style={controlContainerStyle}>
     			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
 				<img style={controlBlockStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
 			</div>
 			
-			<div style={dataBlockStyle}>
+			<div style={largeControlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
 				<p style={paragraphTextStyle}>1.Select a variable below</p>
+				<p style={paragraphTextStyle}>2. Touch the map to select a location</p>
+				<p style={paragraphTextStyle}>3. Touch the timeline to select a starting year.</p>
+				<p style={paragraphTextStyle}>4. Press the play button.</p>
+				<p style={paragraphTextStyle}>5. Select a tempo</p>
 			</div>
 			
 			<div style={dataBlockStyle}>
@@ -788,17 +879,11 @@ class EachAlone extends React.Component {
 				
 			</div>
 			
-			<div style={controlBlockStyle}>
-				<p style={paragraphTextStyle}>2. Touch the map to select a location</p>
-				<p style={paragraphTextStyle}>3. Touch the timeline to select a starting year.</p>
-				<p style={paragraphTextStyle}>4. Press the play button.</p>
-			</div>
 			<div style={controlBlockStyle} onPointerDown={() => this.handleClick()}>
 				<img style={controlBlockStyle} src={this.state.playButton}/>
 			</div>
 			
 			<div style={controlBlockStyle}>
-				<p style={paragraphTextStyle}>5. Select a tempo</p>
 				
 				<div style={quarterControlStyle} onPointerDown={this.setAdagio}>
 					<span style={adagioHighlight}>adagio</span>
@@ -813,7 +898,9 @@ class EachAlone extends React.Component {
 					<span style={prestoHighlight}>presto</span>
 				</div>
 			</div>
+		</div>
 			
+		<div style={controlContainerStyle}>
 			<div style={dataBlockStyle}>
 				<div style={quarterControlStyle}>
 					<p style={smallLabelTextStyle}>Lat: </p>
@@ -856,6 +943,7 @@ class EachAlone extends React.Component {
 				<img style={keyContainer} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
 			</div>
 		</div>
+		</div>
 		
 		<div style={skinnyDivStyle}>
 			<img draggable="false" style={skinnyImgStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png"}/>
@@ -864,13 +952,13 @@ class EachAlone extends React.Component {
 		
 		<div style={largeDivStyle}>
 			
-			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown}>
+			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
 			
 			
 			<div style={graphStyle}>
-				<canvas ref="models" height={this.state.pageBottom * GRAPHVERTDIV} width={modelWidth} />
+				<canvas ref="models" height={this.state.pageBottom * this.state.GRAPHVERTDIV} width={modelWidth} />
 			</div>
 			
 			<div style={sliderDivStyle}>
