@@ -150,8 +150,6 @@ class EachAlone extends React.Component {
     	
     	if(newState == 0){
     		this.doYearHits(this.state.index + 1920);
-    	}else if(newState == 1){
-    		this.setupGraph();
     	}
     	
     	PubSub.publish('TOPIC', this);
@@ -165,7 +163,6 @@ class EachAlone extends React.Component {
     }
     
     onPointerUp = (e) => {
-    	console.log("do db hit ");
     	this.doCoordHits(this.state.latitude, this.state.longitude);
     }
     
@@ -380,7 +377,7 @@ class EachAlone extends React.Component {
     } 
     
     updateGraph() {
-    	if (this.state.index > 0){
+    	if (this.state.index > 0 && this.state.index <= 180){
     	        var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
     		var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
 	    	const ctx = this.refs.models.getContext('2d');
@@ -395,13 +392,13 @@ class EachAlone extends React.Component {
     		var precip_max = 120;
     		
     		ctx.beginPath();
-    		for(var precipInd = 1; precipInd < this.state.index; precipInd++){
+    		for(var precipInd = 0; precipInd < this.state.index; precipInd++){
     		    	var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
-    			var usePrecipAvgKey = precipAvgKeys[precipInd];
+    			var usePrecipAvgKey = precipAvgKeys[precipInd + 2];
     			var prev_val = this.state.precipAvg[0][usePrecipAvgKey];
     			
     			var precipAvgKeys1 = Object.keys(this.state.precipAvg[0]);
-    			var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 1];
+    			var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 3];
     			var coord_val = this.state.precipAvg[0][usePrecipAvgKey1];
     			
     			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
@@ -415,13 +412,13 @@ class EachAlone extends React.Component {
     		var temp_avg = Math.floor(avg * 1.5);
     		
     		ctx.beginPath();
-    		for(var tempInd = 1; tempInd < this.state.index; tempInd++){
+    		for(var tempInd = 0; tempInd < this.state.index; tempInd++){
     		    	var tempAvgKeys = Object.keys(this.state.tempAvg[0]);
-    			var useTempAvgKey = tempAvgKeys[tempInd];
+    			var useTempAvgKey = tempAvgKeys[tempInd + 2];
     			var prev_val = this.state.tempAvg[0][useTempAvgKey];
     			
     			var tempAvgKeys1 = Object.keys(this.state.tempAvg[0]);
-    			var useTempAvgKey1 = tempAvgKeys1[tempInd + 1];
+    			var useTempAvgKey1 = tempAvgKeys1[tempInd + 3];
     			var coord_val = this.state.tempAvg[0][useTempAvgKey1];
     			
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
@@ -435,13 +432,13 @@ class EachAlone extends React.Component {
     		var ice_avg = Math.floor(avg * 0.5);
     		
     		ctx.beginPath();
-    		for(var iceInd = 1; iceInd < this.state.index; iceInd++){
+    		for(var iceInd = 0; iceInd < this.state.index; iceInd++){
     		    	var iceAvgKeys = Object.keys(this.state.iceAvg[0]);
-    			var useIceAvgKey = iceAvgKeys[iceInd];
+    			var useIceAvgKey = iceAvgKeys[iceInd + 2];
     			var prev_val = this.state.iceAvg[0][useIceAvgKey];
     			
     			var iceAvgKeys1 = Object.keys(this.state.iceAvg[0]);
-    			var useIceAvgKey1 = iceAvgKeys1[iceInd + 1];
+    			var useIceAvgKey1 = iceAvgKeys1[iceInd + 3];
     			var coord_val = this.state.iceAvg[0][useIceAvgKey1];
     			
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
@@ -533,6 +530,7 @@ class EachAlone extends React.Component {
     		const precip_coord_data = res.data.data;
     		this.setState({ precipAvg: [...precip_coord_data]});
     		this.setupGraph();
+    		this.updateGraph();
     		console.log(precip_coord_data);
     	});
 	}
@@ -543,6 +541,7 @@ class EachAlone extends React.Component {
     		const temp_coord_data = res.data.data;
     		this.setState({ tempAvg: [...temp_coord_data]});
     		this.setupGraph();
+    		this.updateGraph();
     		console.log(temp_coord_data);
     	});
 	}
@@ -553,6 +552,7 @@ class EachAlone extends React.Component {
     		const seaice_coord_data = res.data.data;
     		this.setState({ iceAvg: [...seaice_coord_data]});
     		this.setupGraph();
+    		this.updateGraph();
     		console.log(seaice_coord_data);
     	});
 	}
@@ -671,8 +671,8 @@ class EachAlone extends React.Component {
     };
     
     const controlContainerStyle = {
-    	height: this.state.pageBottom * this.state.CONTROLVERTDIV,
-    	width: this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT,
+    	height: Math.floor(this.state.pageBottom / 2),
+    	width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
     	float: 'left'
     }
     
@@ -698,8 +698,8 @@ class EachAlone extends React.Component {
     	float: this.state.CONTROLDIVFLOAT,
     };
     
-    const largeControlDivStyle = {
-    	height: controlHeight / (10 * this.state.CONTROLSPLIT),
+    const largeControlBlockStyle = {
+    	height: Math.floor(controlHeight * 3 / (20 * this.state.CONTROLSPLIT)),
     	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     	overflow: 'hidden',
     	float: 'left'
@@ -813,7 +813,7 @@ class EachAlone extends React.Component {
     
     const keyContainer = {
     	width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
-    	height: this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / (20 * this.state.CONTROLSPLIT),
+    	height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / (20 * this.state.CONTROLSPLIT)),
     	float: 'left',
     	overflow: 'hidden'
     };
@@ -825,15 +825,17 @@ class EachAlone extends React.Component {
     return (
     <div style={containerStyle}>
     		<div style={controlDivStyle}>
+    		<div style={controlContainerStyle}>
 			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
 				<img style={controlBlockStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
 			</div>
 			
-			<div style={controlBlockStyle}>
+			<div style={largeControlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
 				<p style={paragraphTextStyle}>1. Touch the map to select a location</p>
 				<p style={paragraphTextStyle}>2. Touch the timeline to select a starting year</p>
 				<p style={paragraphTextStyle}>3. Press the play button.</p>
+				<p style={paragraphTextStyle}>4. Select a tempo</p>
 			</div>
 			
 			<div style={controlBlockStyle} onPointerDown={() => this.handleClick()}>
@@ -873,21 +875,6 @@ class EachAlone extends React.Component {
 				</div>
 			</div>
 			
-			<div style={dataBlockStyle}>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Year: </p>
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{this.state.index + 1920}</p> {/*Need to implement a way to input text*/}
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Co2: </p>
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{co2val}</p>
-				</div>
-			</div>
-			
 			{/*  Code which checked text input
 			<View style={{flex:0.05, flexDirection:'row'}}>
 				<View style={{flex:0.25}}>
@@ -905,6 +892,25 @@ class EachAlone extends React.Component {
 			</View>
 			*/}
 			
+			<div style={dataBlockStyle}>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Year: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{this.state.index + 1920}</p> {/*Need to implement a way to input text*/}
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>Co2: </p>
+				</div>
+				<div style={quarterControlStyle}>
+					<p style={smallLabelTextStyle}>{co2val}</p>
+				</div>
+			</div>
+			
+		</div>
+			
+		<div style={controlContainerStyle}>
+		
 			<div style={controlBlockStyle}>
 				<div style={thirdControlStyle}>
 					<p style={smallLabelTextStyle}>Precip:</p>
@@ -939,7 +945,7 @@ class EachAlone extends React.Component {
 				</div>
 			</div>
 			
-			
+		</div>
 		</div>
 		
 		<div style={skinnyDivStyle}>
