@@ -48,7 +48,8 @@ var gameHandler = async function(msg, data) {
    		data.setupGraph();
    		data.setState({
     			playButton: playUrl,
-    			play: 0
+    			play: 0,
+    			useArray: 3
     			
     		});
 	}
@@ -95,7 +96,8 @@ class EachAlone extends React.Component {
 		SLIDERVERTDIV: 1 / 20,
 		CONTROLDIVFLOAT: 'left',
 		MAPDIVFLOAT: 'right',
-		CONTROLSPLIT: 1
+		CONTROLSPLIT: 1,
+		useArray: 0
     	    	};
     }
 
@@ -142,6 +144,7 @@ class EachAlone extends React.Component {
     	this.setupGraph();
     	this.setState({
     		play: newState,
+    		useArray: 3,
     		index: newIndex
     	});
     	
@@ -149,7 +152,6 @@ class EachAlone extends React.Component {
     		this.doYearHits(this.state.index + 1920);
     	}else if(newState == 1){
     		this.setupGraph();
-    		this.doCoordHits(this.state.latitude, this.state.longitude);
     	}
     	
     	PubSub.publish('TOPIC', this);
@@ -160,6 +162,11 @@ class EachAlone extends React.Component {
     	if(e.buttons == 1){
     		console.log("X: ", e.clientX, "Y: ", e.clientY);
     	}
+    }
+    
+    onPointerUp = (e) => {
+    	console.log("do db hit ");
+    	this.doCoordHits(this.state.latitude, this.state.longitude);
     }
     
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
@@ -180,8 +187,6 @@ class EachAlone extends React.Component {
     	var centerX = 0;
     	var centerY = 0;
     	var boxType = 0;
-    	console.log(modelTop);
-    	console.log(x, ", ", y);
     	if(this.state.play == 0 && e.buttons == 1) {
 		if (x <= modelDiv && y <= modelSplit) {
 	    		centerX = modelDiv / 2;
@@ -243,7 +248,8 @@ class EachAlone extends React.Component {
 		}
 	    	this.setState({
 	    		latitude: Math.floor(latSave), 
-	    		longitude: Math.floor(lonSave)
+	    		longitude: Math.floor(lonSave),
+	    		useArray: 0
 	    		});	
 	        }
         }    
@@ -456,7 +462,16 @@ class EachAlone extends React.Component {
 		Axios.get(request0)
 			.then(res => {
     			const precip_data = res.data.data;
-    			this.setState({ precipAvgAllCoords: [...precip_data]});
+    			if(this.state.play == 0){
+    			this.setState({ 
+    				precipAvgAllCoords: [...precip_data],
+    				useArray: this.state.useArray + 1
+    			});
+    			}else{
+    			this.setState({ 
+    				precipAvgAllCoords: [...precip_data]
+    			});
+    			}
     			console.log(precip_data);
     		});
     		var intermediate1 = table.concat("tempavg/year/");
@@ -465,7 +480,17 @@ class EachAlone extends React.Component {
 		Axios.get(request1)
 			.then(res => {
     			const temp_data = res.data.data;
-    			this.setState({ tempAvgAllCoords: [...temp_data]});
+    			if(this.state.play == 0){
+    			this.setState({ 
+    				tempAvgAllCoords: [...temp_data],
+    				useArray: this.state.useArray + 1
+    			});
+    			}
+  			else{
+  			this.setState({ 
+    				tempAvgAllCoords: [...temp_data]
+    			});
+  			}
     			console.log(temp_data);
     		});
     		var intermediate2 = table.concat("seaiceavg/year/");
@@ -474,7 +499,17 @@ class EachAlone extends React.Component {
 		Axios.get(request2)
 			.then(res => {
     			const ice_data = res.data.data;
-    			this.setState({ iceAvgAllCoords: [...ice_data]});
+    			if(this.state.play == 0){
+    			this.setState({ 
+    				iceAvgAllCoords: [...ice_data],
+    				useArray: this.state.useArray + 1
+    			});
+    			}
+    			else{
+    			this.setState({ 
+    				iceAvgAllCoords: [...ice_data]
+    			});
+    			}
     			console.log(ice_data);
     		});
 	}
@@ -528,7 +563,8 @@ class EachAlone extends React.Component {
     handleYear = (event) => {
     	this.setupGraph();
     	this.setState({
-    		index: parseInt(event.target.value)
+    		index: parseInt(event.target.value),
+    		useArray: 3
     	});
     }
     
@@ -579,7 +615,7 @@ class EachAlone extends React.Component {
     var ice_val = 0;
     
     /*** Set avg db values ***/
-    if(this.state.play == 1){
+    if(this.state.useArray == 3){
     	var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
     	var usePrecipAvgKey = precipAvgKeys[this.state.index+2];
     	precip_val = this.state.precipAvg[0][usePrecipAvgKey];
@@ -592,7 +628,7 @@ class EachAlone extends React.Component {
     	var useIceAvgKey = iceAvgKeys[this.state.index+2];
     	ice_val = this.state.iceAvg[0][useIceAvgKey];
     }
-    else if(this.state.play == 0){
+    else{
     	var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.precipAvgAllCoords.length > coord_index){
     		var avgKeys0 = Object.keys(this.state.precipAvgAllCoords[coord_index]);
@@ -914,7 +950,7 @@ class EachAlone extends React.Component {
 
 		<div style={largeDivStyle}>
 			
-			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown}>
+			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
 			
