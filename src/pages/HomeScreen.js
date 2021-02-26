@@ -19,7 +19,8 @@ class HomeScreen extends Page {
     getStyles(){
     	const containerStyle = {
     		height: Math.floor(this.state.pageBottom),
-    		width: Math.floor(this.state.pageRight)
+    		width: Math.floor(this.state.pageRight),
+    		backgroundImage: 'url("https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg")'
     	};
     	const titleDivStyle = {
     		height: this.state.pageBottom / 5,
@@ -84,9 +85,6 @@ class HomeScreen extends Page {
     render(){
     
     const { navigation } = this.props;
-    
-    //TODO: Implement this as background image
-    const image = { uri : "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg" };
     
     const { containerStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle } = this.getStyles();
 
