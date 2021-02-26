@@ -243,34 +243,41 @@ export class Simulation extends Page {
     		float: 'left'
     	}
     	
-    	if(this.state.CONTROLVERTDIV != 1){
-    		var largeControlBlockStyle = {
-    			height: Math.floor(controlHeight * 3 / (20 * (1 - this.state.CONTROLVERTDIV))),
-    			width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
-    			overflow: 'hidden',
-    			float: 'left'
-    		}
+    	var keyContainer = {
+    		width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
+    		height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / 20),
+    		float: 'left',
+    		overflow: 'hidden'
+    	};
     	
-    		var playSplitDivStyle = {
+    	if(this.state.CONTROLVERTDIV != 1){
+    	
+    		playSplitDivStyle = {
     			height: Math.floor(controlHeight / (10 * (1 - this.state.CONTROLVERTDIV))),
     			width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 2),
     			overflow: 'hidden',
     			float: 'left',
     		};
     
-    		var controlBlockStyle = {
+    		controlBlockStyle = {
     			height: Math.floor(controlHeight / (10 * (1 - this.state.CONTROLVERTDIV))),
     			width: controlWidth * this.state.CONTROLSPLIT,
     			overflow: 'hidden',
     			float: 'left'
     		};
     
-    		var dataBlockStyle = {
+    		dataBlockStyle = {
     	   		height: controlHeight / (20 * (1 - this.state.CONTROLVERTDIV)),
     			width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     			overflow: 'hidden',
     			float: 'left'
-    		}
+    		};
+    		keyContainer = {
+    			width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
+    			height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / (20 * 1 - this.state.CONTROLVERTDIV)),
+    			float: 'left',
+    			overflow: 'hidden'
+    		};
     	
     	}
     
@@ -364,13 +371,6 @@ export class Simulation extends Page {
     	const prestoHighlight = {
     		'background-color': presto,
     		'font-size': '10px'
-    	};
-    
-    	const keyContainer = {
-    		width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
-    		height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / (20 * this.state.CONTROLSPLIT)),
-    		float: 'left',
-    		overflow: 'hidden'
     	};
     
     	return ({ modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
