@@ -471,7 +471,7 @@ class EachAlone extends Simulation {
     }
     
     /* contains almost all the styling for the page */
-    const { modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
     var newh = controlHeight * 1 / 5;
     if(this.state.CONTROLVERTDIV != 1){
@@ -573,10 +573,6 @@ class EachAlone extends Simulation {
 				</div>
 			</div>
 			
-			<div style={dataBlockStyle}>
-				<p style={smallLabelTextStyle}>Avg Val: {coord_val}</p>
-			</div>
-			
 			<div style={controlBlockStyle} onPointerDown={this.testMusic} onPointerMove={this.testMusic}>
 				<img draggable="false" style={dataBlockStyle} src={this.state.keySrc}/>
 			</div>
@@ -598,10 +594,16 @@ class EachAlone extends Simulation {
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
 			
+			<div style={graphBufferStyle}>
+				<p style={smallLabelTextStyle}>Avg Val: {coord_val}</p>
+			</div>
 			
 			<div style={graphStyle}>
 				<canvas ref="models" height={this.state.pageBottom * this.state.GRAPHVERTDIV} width={modelWidth} />
 			</div>
+			
+			
+			<div style={graphBufferStyle}/>
 			
 			<div style={sliderDivStyle}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />

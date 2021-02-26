@@ -433,7 +433,7 @@ class AllTogether extends Simulation {
     	}
     }
     
-    const { modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
     var newh = controlHeight * 3 / 20;
     if(this.state.CONTROLVERTDIV != 1){
@@ -443,6 +443,13 @@ class AllTogether extends Simulation {
     var largeControlBlockStyle = {
     	height: Math.floor(newh),
     	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
+    	overflow: 'hidden',
+    	float: 'left'
+    }
+    
+    const dataThirdStyle = {
+    	width: Math.floor(modelWidth / 3),
+    	height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
     	overflow: 'hidden',
     	float: 'left'
     }
@@ -536,21 +543,6 @@ class AllTogether extends Simulation {
 		</div>
 			
 		<div style={controlContainerStyle}>
-		
-			<div style={controlBlockStyle}>
-				<div style={thirdControlStyle}>
-					<p style={smallLabelTextStyle}>Precip:</p>
-					<p style={smallLabelTextStyle}>{precip_val}</p>
-				</div>
-				<div style={thirdControlStyle}>
-					<p style={smallLabelTextStyle}>Temp:</p>
-					<p style={smallLabelTextStyle}>{temp_val}</p>
-				</div>
-				<div style={thirdControlStyle}>
-					<p style={smallLabelTextStyle}>Sea Ice:</p>
-					<p style={smallLabelTextStyle}>{ice_val}</p>
-				</div>
-			</div>
 			
 			<div style={keyContainer}>
 				<img style={keyContainer} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
@@ -586,10 +578,23 @@ class AllTogether extends Simulation {
 				<img draggable="false" src={fullUrl} style={modelStyle}/>
 			</div>
 			
+			<div style={graphBufferStyle}>
+				<div style={dataThirdStyle}>
+					<p style={smallLabelTextStyle}>Precip: {precip_val}</p>
+				</div>
+				<div style={dataThirdStyle}>
+					<p style={smallLabelTextStyle}>Temp: {temp_val}</p>
+				</div>
+				<div style={dataThirdStyle}>
+					<p style={smallLabelTextStyle}>Sea Ice: {ice_val}</p>
+				</div>
+			</div>
 			
 			<div style={graphStyle}>
 				<canvas ref="models" height={this.state.pageBottom * this.state.GRAPHVERTDIV} width={modelWidth} />
 			</div>
+			
+			<div style={graphBufferStyle}/>
 			
 			<div style={sliderDivStyle}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />

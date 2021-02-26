@@ -145,7 +145,8 @@ export class Simulation extends Page {
 			SKINNYDIV: 1 / 20,
 			MAPDIV: 3 / 4,
 			MAPVERTDIV: 7 / 10,
-			GRAPHVERTDIV: 2 / 10,
+			DATAVERTDIV: 1 / 20,
+			GRAPHVERTDIV: 3 / 20,
 			SLIDERVERTDIV: 1 / 10,
 			CONTROLVERTDIV: 1,
 			CONTROLSPLIT: 1
@@ -159,7 +160,8 @@ export class Simulation extends Page {
 			SKINNYDIV: 1 / 20,
 			MAPDIV: 19 / 20,
 			MAPVERTDIV: 7 / 20,
-			GRAPHVERTDIV: 2 / 10,
+			DATAVERTDIV: 1 / 20,
+			GRAPHVERTDIV: 3 / 20,
 			SLIDERVERTDIV: 1 / 10,
 			CONTROLVERTDIV: 4 / 10,
 			CONTROLSPLIT: 1 / 2
@@ -280,6 +282,13 @@ export class Simulation extends Page {
     		};
     	
     	}
+    	
+    	const graphBufferStyle = {
+    		width: Math.floor(modelWidth),
+    		height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
+    		float: 'left',
+    		overflow: 'hidden'
+    	}
     
     	const instructionTextStyle = {
     		"font-size": "10px"
@@ -373,7 +382,7 @@ export class Simulation extends Page {
     		'font-size': '10px'
     	};
     
-    	return ({ modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
+    	return ({ modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
     }
     
     /*** Templates for functions which would change the text of lat and lon from textbox input ***/
