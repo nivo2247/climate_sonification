@@ -276,7 +276,7 @@ export class Simulation extends Page {
     		};
     		keyContainer = {
     			width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
-    			height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / (20 * 1 - this.state.CONTROLVERTDIV)),
+    			height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 1 / (2 * 1 - this.state.CONTROLVERTDIV)),
     			float: 'left',
     			overflow: 'hidden'
     		};
