@@ -1,7 +1,8 @@
 import { Image } from "react-native";
 import * as React from 'react';
 import { PADDING, Page } from './Page.js';
-
+import { dbUrl } from './../const/url.js'
+import Axios from 'axios';
 
 /*** Links to AWS S3 media ***/
 const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
@@ -72,8 +73,6 @@ export class Simulation extends Page {
 		MAPVERTDIV: 3 / 4,
 		GRAPHVERTDIV: 2 / 10,
 		SLIDERVERTDIV: 1 / 20,
-		CONTROLDIVFLOAT: 'left',
-		MAPDIVFLOAT: 'right',
 		CONTROLSPLIT: 1,
 		useArray: 0
     	};
@@ -145,11 +144,9 @@ export class Simulation extends Page {
     			CONTROLDIV: 2 / 10,
 			SKINNYDIV: 1 / 20,
 			MAPDIV: 3 / 4,
-			MAPVERTDIV: 3 / 4,
+			MAPVERTDIV: 7 / 10,
 			GRAPHVERTDIV: 2 / 10,
-			SLIDERVERTDIV: 1 / 20,
-			CONTROLDIVFLOAT: 'left',
-			MAPDIVFLOAD: 'right',
+			SLIDERVERTDIV: 1 / 10,
 			CONTROLVERTDIV: 1,
 			CONTROLSPLIT: 1
     		});
@@ -161,11 +158,9 @@ export class Simulation extends Page {
     			CONTROLDIV: 1,
 			SKINNYDIV: 1 / 20,
 			MAPDIV: 19 / 20,
-			MAPVERTDIV: 1 / 4,
-			GRAPHVERTDIV: 1 / 5,
-			SLIDERVERTDIV: 1 / 20,
-			CONTROLDIVFLOAT: 'right',
-			MAPDIVFLOAT: 'left',
+			MAPVERTDIV: 2 / 10,
+			GRAPHVERTDIV: 2 / 10,
+			SLIDERVERTDIV: 1 / 10,
 			CONTROLVERTDIV: 1 / 2,
 			CONTROLSPLIT: 1 / 2
     		});
@@ -211,12 +206,12 @@ export class Simulation extends Page {
     	};
     	
     	const sliderDivStyle = {
-    		height: this.state.pageBottom * this.state.SLIDERVERTDIV,
+    		height: Math.floor(this.state.pageBottom * this.state.SLIDERVERTDIV),
     		width: modelWidth
     	};
     
     	const sliderStyle = {
-    		height: this.state.pageBottom * this.state.SLIDERVERTDIV,
+    		height: Math.floor(this.state.pageBottom * this.state.SLIDERVERTDIV / 2) - PADDING,
     		width: '99%'
     	};
     
@@ -224,7 +219,7 @@ export class Simulation extends Page {
     		height: controlHeight,
     		width: controlWidth,
     		overflow: 'hidden',
-    		float: this.state.CONTROLDIVFLOAT,
+    		float: 'left',
     	};
     
     	const controlBlockStyle = {
@@ -276,7 +271,7 @@ export class Simulation extends Page {
     		height: this.state.pageBottom,
     		width: modelWidth,
     		overflow: 'hidden',
-    		float: this.state.MAPDIVFLOAT
+    		float: 'left'
     	};
 
     	const skinnyImgStyle = {
