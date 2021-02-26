@@ -433,10 +433,15 @@ class AllTogether extends Simulation {
     	}
     }
     
-    const { modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
-    const largeControlBlockStyle = {
-    	height: Math.floor(controlHeight * 3 / (20 * this.state.CONTROLSPLIT)),
+    var newh = controlHeight * 3 / 20;
+    if(this.state.CONTROLVERTDIV != 1){
+    	newh /= (1 - this.state.CONTROLVERTDIV)
+    }
+    
+    var largeControlBlockStyle = {
+    	height: Math.floor(newh),
     	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     	overflow: 'hidden',
     	float: 'left'
@@ -462,13 +467,10 @@ class AllTogether extends Simulation {
 				<p style={paragraphTextStyle}>4. Select a tempo</p>
 			</div>
 			
-			<div style={controlBlockStyle} onPointerDown={() => this.handleClick()}>
-				<img style={controlBlockStyle} src={this.state.playButton}/>
-			</div>
-			
-			<div style={dataBlockStyle}>
-			
-				{/*<p style={paragraphTextStyle}>5. Select a tempo</p> */}
+			<div style={controlBlockStyle}>
+				<div style={playSplitDivStyle} onPointerDown={() => this.handleClick()}>
+					<img style={playSplitDivStyle} src={this.state.playButton}/>
+				</div>
 				
 				<div style={quarterControlStyle} onPointerDown={this.setAdagio}>
 					<span style={adagioHighlight}>adagio</span>

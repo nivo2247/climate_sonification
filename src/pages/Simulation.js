@@ -158,10 +158,10 @@ export class Simulation extends Page {
     			CONTROLDIV: 1,
 			SKINNYDIV: 1 / 20,
 			MAPDIV: 19 / 20,
-			MAPVERTDIV: 2 / 10,
+			MAPVERTDIV: 7 / 20,
 			GRAPHVERTDIV: 2 / 10,
 			SLIDERVERTDIV: 1 / 10,
-			CONTROLVERTDIV: 1 / 2,
+			CONTROLVERTDIV: 4 / 10,
 			CONTROLSPLIT: 1 / 2
     		});
     	}	
@@ -195,7 +195,7 @@ export class Simulation extends Page {
     	};
     
     	const controlContainerStyle = {
-    		height: Math.floor(this.state.pageBottom / 2),
+    		height: Math.floor(controlHeight / 2),
     		width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
     		float: 'left'
     	}
@@ -221,19 +221,57 @@ export class Simulation extends Page {
     		overflow: 'hidden',
     		float: 'left',
     	};
+    	
+    	var playSplitDivStyle = {
+    		height: Math.floor(controlHeight / (10)),
+    		width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 2),
+    		overflow: 'hidden',
+    		float: 'left',
+    	};
     
-    	const controlBlockStyle = {
-    		height: Math.floor(controlHeight / (10 * this.state.CONTROLSPLIT)),
+    	var controlBlockStyle = {
+    		height: Math.floor(controlHeight / (10)),
     		width: controlWidth * this.state.CONTROLSPLIT,
     		overflow: 'hidden',
     		float: 'left'
     	};
     
-    	const dataBlockStyle = {
-    	   	height: controlHeight / (20 * this.state.CONTROLSPLIT),
+    	var dataBlockStyle = {
+    	   	height: controlHeight / (20),
     		width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     		overflow: 'hidden',
     		float: 'left'
+    	}
+    	
+    	if(this.state.CONTROLVERTDIV != 1){
+    		var largeControlBlockStyle = {
+    			height: Math.floor(controlHeight * 3 / (20 * (1 - this.state.CONTROLVERTDIV))),
+    			width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
+    			overflow: 'hidden',
+    			float: 'left'
+    		}
+    	
+    		var playSplitDivStyle = {
+    			height: Math.floor(controlHeight / (10 * (1 - this.state.CONTROLVERTDIV))),
+    			width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 2),
+    			overflow: 'hidden',
+    			float: 'left',
+    		};
+    
+    		var controlBlockStyle = {
+    			height: Math.floor(controlHeight / (10 * (1 - this.state.CONTROLVERTDIV))),
+    			width: controlWidth * this.state.CONTROLSPLIT,
+    			overflow: 'hidden',
+    			float: 'left'
+    		};
+    
+    		var dataBlockStyle = {
+    	   		height: controlHeight / (20 * (1 - this.state.CONTROLVERTDIV)),
+    			width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
+    			overflow: 'hidden',
+    			float: 'left'
+    		}
+    	
     	}
     
     	const instructionTextStyle = {
@@ -249,13 +287,13 @@ export class Simulation extends Page {
     	};
     
     	const quarterControlStyle = {
-    		height: controlHeight / 20,
+    		height: controlHeight / (20),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 4),
     		float: 'left'
     	};
     
     	const thirdControlStyle = {
-    		height: this.state.pageBottom / 20,
+    		height: Math.floor(controlHeight / 20),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     		float: 'left'
     	};
@@ -281,7 +319,7 @@ export class Simulation extends Page {
     	};
     
     	var active = '#44CC44';
-    	var inactive = '#EEEEEE';
+    	var inactive = '#DDDDDD';
     	var adagio = inactive;
     	var moderato = active;
     	var allegro = inactive;
@@ -335,7 +373,7 @@ export class Simulation extends Page {
     		overflow: 'hidden'
     	};
     
-    	return ({ modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
+    	return ({ modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
     }
     
     /*** Templates for functions which would change the text of lat and lon from textbox input ***/
