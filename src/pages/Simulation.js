@@ -1,4 +1,4 @@
-import { Dimensions, Image } from "react-native";
+import { Image } from "react-native";
 import * as React from 'react';
 import { PADDING, Page } from './Page.js';
 
@@ -55,8 +55,8 @@ export class Simulation extends Page {
     constructor(props){
     super(props)
         this.state = {
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING,
+    		pageBottom: window.clientHeight - PADDING,
+    		pageRight: window.clientWidth - PADDING,
     		index: 0,
     		play: 0,
     		timerLen: 800,
@@ -135,6 +135,44 @@ export class Simulation extends Page {
     	ctx.strokeStyle = "black";
     	ctx.stroke();
     } 
+    
+    /*** called when the window is resized ***/
+    updateDimensions = () => {
+    	if(window.innerHeight < window.innerWidth){
+    		this.setState({
+    			pageBottom: window.innerHeight - PADDING,
+    			pageRight: window.innerWidth - PADDING,
+    			CONTROLDIV: 2 / 10,
+			SKINNYDIV: 1 / 20,
+			MAPDIV: 3 / 4,
+			MAPVERTDIV: 3 / 4,
+			GRAPHVERTDIV: 2 / 10,
+			SLIDERVERTDIV: 1 / 20,
+			CONTROLDIVFLOAT: 'left',
+			MAPDIVFLOAD: 'right',
+			CONTROLVERTDIV: 1,
+			CONTROLSPLIT: 1
+    		});
+    	}
+    	else{
+    		this.setState({
+    			pageBottom: window.innerHeight - PADDING,
+    			pageRight: window.innerWidth - PADDING,
+    			CONTROLDIV: 1,
+			SKINNYDIV: 1 / 20,
+			MAPDIV: 19 / 20,
+			MAPVERTDIV: 1 / 4,
+			GRAPHVERTDIV: 1 / 5,
+			SLIDERVERTDIV: 1 / 20,
+			CONTROLDIVFLOAT: 'right',
+			MAPDIVFLOAT: 'left',
+			CONTROLVERTDIV: 1 / 2,
+			CONTROLSPLIT: 1 / 2
+    		});
+    	}	
+    	this.setupGraph();
+    } 
+ 
     
     /*** Huge section of common styling, relies on the page size and what the DIVs are set at ***/
     getCommonStyles() {

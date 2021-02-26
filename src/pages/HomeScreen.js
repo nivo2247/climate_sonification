@@ -1,122 +1,136 @@
-import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity, ImageBackground } from "react-native";
 import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Page } from './Page.js';
 
-const styles = StyleSheet.create({
-	container: {
-		width: Dimensions.get('window').width,
-		height: Dimensions.get('window').height
-	},
-	rcontainer: {
-		width: Dimensions.get('window').width,
-		height: Dimensions.get('window').height,
-		flexDirection: 'row'
-	},
+//TODO: Declare URLS as consts
 
-	start_buttons: {
-		flex: 0.35,
-		flexDirection: 'row',
-	},
-	info: {
-		flex: 0.3,
-		flexDirection: 'row',
-	},
-
-	image: {
-		flex: 1,
-		resizeMode: 'contain'
-	},
-	
-	backgroundImage: {
-		flex: 1,
-		resizeMode: 'cover',
-		justifyContent: 'center'
-	},
-	
-	button: {
-		flex: 1
-	},
-
-	title_text: {
-		fontWeight: 'bold',
-		fontSize: (Dimensions.get('window').height / 15 + Dimensions.get('window').width / 40),
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		textShadowColor: 'rgba(0, 0,0, 1)',
-		textShadowOffset: {width: -1, height: 1},
-		textShadowRadius: 10
-	},
-	desc_text: {
-		fontSize: (Dimensions.get('window').height / 30 + Dimensions.get('window').width / 80),
-		color: 'white',
-		textAlign: 'center',
-		textAlignVertical: 'center',
-		textShadowColor: 'rgba(0, 0,0, 1)',
-		textShadowOffset: {width: -1, height: 1},
-		textShadowRadius: 8
-	}
-});
-
+//TODO: Rename function to make sense
 function onClick(){
 	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
 };
 
-class HomeScreen extends React.Component {
+class HomeScreen extends Page {
+    constructor(props){
+    	super(props)
+    }  
+    
+    //TODO: Add text styles
+    getStyles(){
+    	const containerStyle = {
+    		height: Math.floor(this.state.pageBottom),
+    		width: Math.floor(this.state.pageRight)
+    	};
+    	const titleDivStyle = {
+    		height: this.state.pageBottom / 5,
+    		width: this.state.pageRight,
+    		overflow: 'hidden',
+    		float: 'left'
+    	};
+    	const descDivStyle = {
+    		height: this.state.pageBottom * 3 / 20,
+    		width: this.state.pageRight,
+    		overflow: 'hidden',
+    		float: 'left'
+    	};
+    	const buttonDivStyle = {
+    		height: Math.floor(this.state.pageBottom * 7 / 20),
+    		width: Math.floor(this.state.pageRight),
+    		overflow: 'hidden',
+    		float: 'left'
+    	};
+    	const qrDivStyle = {
+    		height: this.state.pageBottom * 6 / 20,
+    		width: this.state.pageRight,
+    		overflow: 'hidden'
+    	};
+    	const buttonBumperStyle = {
+    		height: Math.floor(this.state.pageBottom * 7 / 20),
+    		width: Math.floor(this.state.pageRight / 20),
+    		float: 'left'
+    	};
+    	const buttonStyle = {
+    		height: Math.floor(this.state.pageBottom * 7 / 20),
+    		width: Math.floor(this.state.pageRight * 2 / 5),
+    		overflow: 'hidden',
+    		float: 'left'
+	};
+	const qrBumperStyle = {
+		height: Math.floor(this.state.pageBottom * 6 / 20),
+		width: Math.floor(this.state.pageRight * 6 / 20),
+		float: 'left'
+	};
+	const qrStyle = {
+		height: Math.floor(this.state.pageBottom * 6 / 20),
+		width: Math.floor(this.state.pageRight * 8 / 20),
+		float: 'left'
+	};
+    	
+    	return { containerStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle };
+    }
+    
+    /*** runs on page open ***/
+    componentDidMount = () => {
+    	window.addEventListener('resize', this.updateDimensions);
+    	window.addEventListener('orientationchange', this.rotateDimensions);
+    }
+    
+    /*** runs on page close ***/
+    componentWillUnmount = () => {
+    	window.removeEventListener('resize', this.updateDimensions);
+    	window.removeEventListener('orientationchange', this.rotateDimensions);
+    }
+    
     render(){
     
     const { navigation } = this.props;
     
+    //TODO: Implement this as background image
     const image = { uri : "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg" };
- 
+    
+    const { containerStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle } = this.getStyles();
 
     return (
 
-    <View style={styles.container}>
-	<ImageBackground source={image} style={styles.backgroundImage}>
+	<div style={containerStyle}>
 
 		{/* Row for title text */}
-		<View style={{flex: 0.2, padding: 10}}>
-			<Text style={styles.title_text}> Sounding Climate </Text>
-		</View>
+		<div style={titleDivStyle}>
+			<h1>Sounding Climate</h1>
+		</div>
 
 		{/* Row for description text */}
-		<View style={{flex: 0.15}}>
-			<Text style={styles.desc_text}> What do changes in temperature, precipitation, and sea ice sound like... </Text>
-		</View>
+		<div style={descDivStyle}>
+			<h2> What do changes in temperature, precipitation, and sea ice sound like... </h2>
+		</div>
 
 		{/* Row for start buttons */}
-		<View style={styles.start_buttons}>
-			<View style={{flex: 0.05}}></View>
-			<TouchableOpacity onPress={() => { navigation.navigate('EachAlone', { modelType: 0, index: 0, state: 0 }); }} style={{flex: 0.4}}>
-				<View style={{flex: 1}}>
-					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" />
-				</View>
-			</TouchableOpacity>
+		<div style={buttonDivStyle}>
+			<div style={buttonBumperStyle}/>
 			
-			<View style={{flex: 0.1}}></View>
+			<div style={buttonStyle} onPointerUp={() => navigation.navigate('EachAlone')}>
+				<img style={buttonStyle} src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" />
+			</div>
 			
-			<TouchableOpacity onPress={() => navigation.navigate('AllTogether')} style={{flex: 0.4}}>
-				<View style={{flex: 1}}>
-					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_basicBkg.png"/>
-				</View>
-			</TouchableOpacity>
-			<View style={{flex: 0.05}}></View>
-		</View>
+			<div style={buttonBumperStyle}/>
+			<div style={buttonBumperStyle}/>
+			
+			<div style={buttonStyle} onPointerUp={() => navigation.navigate('AllTogether')}>
+				<img style={buttonStyle} src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_basicBkg.png" />
+			</div>
+			
+			<div style={buttonBumperStyle}/>
+		</div>
+		
+		<div style={qrDivStyle}>
+			<div style={qrBumperStyle}/>
+			<div style={qrStyle} onPointerUp={this.onClick}>
+				<img style={qrStyle} src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/articleqr.png"/>
+			</div>
+			<div style={qrBumperStyle}/>
+		</div>
 
-		{/* Row for QR code */}
-		<View style={styles.info}>
-			<View style={{flex: 0.35}}></View>
-			<TouchableOpacity onPress={onClick} style={{flex: 0.3}}>
-				<View style={{flex: 1}}>
-					<Image style={styles.image} source="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/articleqr.png"/>
-				</View>
-			</TouchableOpacity>
-			<View style={{flex: 0.35}}></View>
-		</View>
-	</ImageBackground>
-    </View>
+    </div>
       
     );
     }

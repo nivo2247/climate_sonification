@@ -1,4 +1,4 @@
-import { Dimensions, Image } from "react-native";
+import { Image } from "react-native";
 import * as React from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,7 +7,7 @@ import PubSub from 'pubsub-js';
 import { combinedImgs, dbUrl } from './../const/url.js';
 import { indexIncrementer, Simulation } from './Simulation.js'
 
-
+//TODO: Make sure ALL Links are declared here
 /*** Links to AWS S3 media ***/
 const urlPre = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
 const precipKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/precipLegend1.png";
@@ -16,6 +16,7 @@ const iceKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/
 const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
 const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
 
+//TODO: Verify this is all the images we need
 /*** used to preload images in the page ***/
 const artifactImgs = [
 	precipKey,
