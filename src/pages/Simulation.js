@@ -124,78 +124,46 @@ export class Simulation extends React.Component {
     
     /*** called when the window is resized ***/
     updateDimensions = () => {
-    if(Dimensions.get('window').height < Dimensions.get('window').width){
-    	this.setState({
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING,
-    		CONTROLDIV: 2 / 10,
-		SKINNYDIV: 1 / 20,
-		MAPDIV: 3 / 4,
-		MAPVERTDIV: 3 / 4,
-		GRAPHVERTDIV: 2 / 10,
-		SLIDERVERTDIV: 1 / 20,
-		CONTROLDIVFLOAT: 'left',
-		MAPDIVFLOAD: 'right',
-		CONTROLVERTDIV: 1,
-		CONTROLSPLIT: 1
-    	});
-    }
-    else{
-    	this.setState({
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING,
-    		CONTROLDIV: 1,
-		SKINNYDIV: 1 / 20,
-		MAPDIV: 19 / 20,
-		MAPVERTDIV: 1 / 4,
-		GRAPHVERTDIV: 1 / 5,
-		SLIDERVERTDIV: 1 / 20,
-		CONTROLDIVFLOAT: 'right',
-		MAPDIVFLOAT: 'left',
-		CONTROLVERTDIV: 1 / 2,
-		CONTROLSPLIT: 1 / 2
-    	});
-    }	
-    this.setupGraph();
+    	if(Dimensions.get('window').height < Dimensions.get('window').width){
+    		this.setState({
+    			pageBottom: Dimensions.get('window').height - PADDING,
+    			pageRight: Dimensions.get('window').width - PADDING,
+    			CONTROLDIV: 2 / 10,
+			SKINNYDIV: 1 / 20,
+			MAPDIV: 3 / 4,
+			MAPVERTDIV: 3 / 4,
+			GRAPHVERTDIV: 2 / 10,
+			SLIDERVERTDIV: 1 / 20,
+			CONTROLDIVFLOAT: 'left',
+			MAPDIVFLOAD: 'right',
+			CONTROLVERTDIV: 1,
+			CONTROLSPLIT: 1
+    		});
+    	}
+    	else{
+    		this.setState({
+    			pageBottom: Dimensions.get('window').height - PADDING,
+    			pageRight: Dimensions.get('window').width - PADDING,
+    			CONTROLDIV: 1,
+			SKINNYDIV: 1 / 20,
+			MAPDIV: 19 / 20,
+			MAPVERTDIV: 1 / 4,
+			GRAPHVERTDIV: 1 / 5,
+			SLIDERVERTDIV: 1 / 20,
+			CONTROLDIVFLOAT: 'right',
+			MAPDIVFLOAT: 'left',
+			CONTROLVERTDIV: 1 / 2,
+			CONTROLSPLIT: 1 / 2
+    		});
+    	}	
+    	this.setupGraph();
     } 
     
     /*** Called when the window is rotated on mobile ***/
     rotateDimensions = async () => {
-    await timer(1000);
-    if(Dimensions.get('window').height < Dimensions.get('window').width){
-    	this.setState({
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING,
-    		CONTROLDIV: 2 / 10,
-		SKINNYDIV: 1 / 20,
-		MAPDIV: 3 / 4,
-		MAPVERTDIV: 3 / 4,
-		GRAPHVERTDIV: 2 / 10,
-		SLIDERVERTDIV: 1 / 20,
-		CONTROLDIVFLOAT: 'left',
-		MAPDIVFLOAD: 'right',
-		CONTROLVERTDIV: 1,
-		CONTROLSPLIT: 1
-    	});
+    	await timer(1000);
+    	this.updateDimensions();
     }
-    else{
-    	this.setState({
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING,
-    		CONTROLDIV: 1,
-		SKINNYDIV: 1 / 20,
-		MAPDIV: 19 / 20,
-		MAPVERTDIV: 1 / 4,
-		GRAPHVERTDIV: 1 / 5,
-		SLIDERVERTDIV: 1 / 20,
-		CONTROLDIVFLOAT: 'right',
-		MAPDIVFLOAT: 'left',
-		CONTROLVERTDIV: 1 / 2,
-		CONTROLSPLIT: 1 / 2
-    	});
-    }	
-    this.setupGraph();
-    }   
       
     /*** clears and redraws rectangle around the graph area ***/ 
     setupGraph() {
@@ -219,171 +187,171 @@ export class Simulation extends React.Component {
     
     /*** Huge section of common styling, relies on the page size and what the DIVs are set at ***/
     getCommonStyles() {
-    var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
-    var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
-    var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
-    var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
-    var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
+    	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
+    	var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
+    	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
+    	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
+    	var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
+    	
+    	var controlWidth = this.state.pageRight * this.state.CONTROLDIV;
+    	var controlHeight = this.state.pageBottom * this.state.CONTROLVERTDIV;
+    	
+    	var skinnyWidth = Math.floor(this.state.pageRight * this.state.SKINNYDIV);
+    	
+    	/*** style for model images and div ***/
+    	const modelStyle = {
+		width: modelWidth,
+		height: modelHeight
+    	};
     
-    var controlWidth = this.state.pageRight * this.state.CONTROLDIV;
-    var controlHeight = this.state.pageBottom * this.state.CONTROLVERTDIV;
+    	const containerStyle = {
+    		height: this.state.pageBottom,
+    		width: this.state.pageRight,
+    		overflow: 'hidden'
+    	};
     
-    var skinnyWidth = Math.floor(this.state.pageRight * this.state.SKINNYDIV);
+    	const controlContainerStyle = {
+    		height: Math.floor(this.state.pageBottom / 2),
+    		width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
+    		float: 'left'
+    	}
+    	
+    	const graphStyle = {
+    		height: this.state.pageBottom * this.state.GRAPHVERTDIV,
+    		width: modelWidth
+    	};
+    	
+    	const sliderDivStyle = {
+    		height: this.state.pageBottom * this.state.SLIDERVERTDIV,
+    		width: modelWidth
+    	};
     
-    /*** style for model images and div ***/
-    const modelStyle = {
-	width: modelWidth,
-	height: modelHeight
-    };
+    	const sliderStyle = {
+    		height: this.state.pageBottom * this.state.SLIDERVERTDIV,
+    		width: '99%'
+    	};
     
-    const containerStyle = {
-    	height: this.state.pageBottom,
-    	width: this.state.pageRight,
-    	overflow: 'hidden'
-    };
+    	const controlDivStyle = {
+    		height: controlHeight,
+    		width: controlWidth,
+    		overflow: 'hidden',
+    		float: this.state.CONTROLDIVFLOAT,
+    	};
     
-    const controlContainerStyle = {
-    	height: Math.floor(this.state.pageBottom / 2),
-    	width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
-    	float: 'left'
-    }
+    	const controlBlockStyle = {
+    		height: Math.floor(controlHeight / (10 * this.state.CONTROLSPLIT)),
+    		width: controlWidth * this.state.CONTROLSPLIT,
+    		overflow: 'hidden',
+    		float: 'left'
+    	};
     
-    const graphStyle = {
-    	height: this.state.pageBottom * this.state.GRAPHVERTDIV,
-    	width: modelWidth
-    };
+    	const dataBlockStyle = {
+    	   	height: controlHeight / (20 * this.state.CONTROLSPLIT),
+    		width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
+    		overflow: 'hidden',
+    		float: 'left'
+    	}
     
-    const sliderDivStyle = {
-    	height: this.state.pageBottom * this.state.SLIDERVERTDIV,
-    	width: modelWidth
-    };
+    	const instructionTextStyle = {
+    		"font-size": "10px"
+    	};
+    	
+    	const paragraphTextStyle = {
+    		"font-size": "8px"
+    	};
     
-    const sliderStyle = {
-    	height: this.state.pageBottom * this.state.SLIDERVERTDIV,
-    	width: '99%'
-    };
+    	const smallLabelTextStyle = {
+    		"font-size": "10px"
+    	};
     
-    const controlDivStyle = {
-    	height: controlHeight,
-    	width: controlWidth,
-    	overflow: 'hidden',
-    	float: this.state.CONTROLDIVFLOAT,
-    };
+    	const quarterControlStyle = {
+    		height: controlHeight / 20,
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 4),
+    		float: 'left'
+    	};
     
-    const controlBlockStyle = {
-    	height: Math.floor(controlHeight / (10 * this.state.CONTROLSPLIT)),
-    	width: controlWidth * this.state.CONTROLSPLIT,
-    	overflow: 'hidden',
-    	float: 'left'
-    };
+    	const thirdControlStyle = {
+    		height: this.state.pageBottom / 20,
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
+    		float: 'left'
+    	};
+    	
+    	const skinnyDivStyle = {
+    		height: this.state.pageBottom * this.state.MAPVERTDIV,
+    		width: skinnyWidth,
+    		overflow: 'hidden',
+    		float:'left'
+    	};
     
-    const dataBlockStyle = {
-       	height: controlHeight / (20 * this.state.CONTROLSPLIT),
-    	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
-    	overflow: 'hidden',
-    	float: 'left'
-    }
-    
-    const instructionTextStyle = {
-    	"font-size": "10px"
-    };
-    
-    const paragraphTextStyle = {
-    	"font-size": "8px"
-    };
-    
-    const smallLabelTextStyle = {
-    	"font-size": "10px"
-    };
-    
-    const quarterControlStyle = {
-    	height: controlHeight / 20,
-    	width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 4),
-    	float: 'left'
-    };
-    
-    const thirdControlStyle = {
-    	height: this.state.pageBottom / 20,
-    	width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
-    	float: 'left'
-    };
-    
-    const skinnyDivStyle = {
-    	height: this.state.pageBottom * this.state.MAPVERTDIV,
-    	width: skinnyWidth,
-    	overflow: 'hidden',
-    	float:'left'
-    };
-    
-    const largeDivStyle = {
-    	height: this.state.pageBottom,
-    	width: modelWidth,
-    	overflow: 'hidden',
-    	float: this.state.MAPDIVFLOAT
-    };
+    	const largeDivStyle = {
+    		height: this.state.pageBottom,
+    		width: modelWidth,
+    		overflow: 'hidden',
+    		float: this.state.MAPDIVFLOAT
+    	};
 
-    const skinnyImgStyle = {
-    	height: this.state.pageBottom * this.state.MAPVERTDIV / 2,
-    	width: skinnyWidth,
-    	overflow: 'hidden'
-    };
+    	const skinnyImgStyle = {
+    		height: this.state.pageBottom * this.state.MAPVERTDIV / 2,
+    		width: skinnyWidth,
+    		overflow: 'hidden'
+    	};
     
-    var active = '#44CC44';
-    var inactive = '#EEEEEE';
-    var adagio = inactive;
-    var moderato = active;
-    var allegro = inactive;
-    var presto = inactive;
+    	var active = '#44CC44';
+    	var inactive = '#EEEEEE';
+    	var adagio = inactive;
+    	var moderato = active;
+    	var allegro = inactive;
+    	var presto = inactive;
     
-    if(this.state.timerLen == 1200){
-    	adagio = active;
-    	moderato = inactive;
-    	allegro = inactive;
-    	presto = inactive;
-    }
-    else if(this.state.timerLen == 800){
-    	adagio = inactive;
-    	moderato = active;
-    	allegro = inactive;
-    	presto = inactive;
-    }
-    else if(this.state.timerLen == 400){
-    	adagio = inactive;
-    	moderato = inactive;
-    	allegro = active;
-    	presto = inactive;
-    }
-    else if(this.state.timerLen == 200){
-    	adagio = inactive;
-    	moderato = inactive;
-    	allegro = inactive;
-    	presto = active;
-    }
-    const adagioHighlight = {
-    	'background-color': adagio,
-    	'font-size': '10px'
-    };
-    const moderatoHighlight = {
-    	'background-color': moderato,
-    	'font-size': '10px'
-    };
-    const allegroHighlight = {
-    	'background-color': allegro,
-    	'font-size': '10px'
-    };
-    const prestoHighlight = {
-    	'background-color': presto,
-    	'font-size': '10px'
-    };
+    	if(this.state.timerLen == 1200){
+    		adagio = active;
+    		moderato = inactive;
+    		allegro = inactive;
+    		presto = inactive;
+    	}
+    	else if(this.state.timerLen == 800){
+    		adagio = inactive;
+    		moderato = active;
+    		allegro = inactive;
+    		presto = inactive;
+    	}
+    	else if(this.state.timerLen == 400){
+    		adagio = inactive;
+    		moderato = inactive;
+    		allegro = active;
+    		presto = inactive;
+    	}
+    	else if(this.state.timerLen == 200){
+    		adagio = inactive;
+    		moderato = inactive;
+    		allegro = inactive;
+    		presto = active;
+    	}
+    	const adagioHighlight = {
+    		'background-color': adagio,
+    		'font-size': '10px'
+    	};
+    	const moderatoHighlight = {
+    		'background-color': moderato,
+    		'font-size': '10px'
+    	};
+    	const allegroHighlight = {
+    		'background-color': allegro,
+    		'font-size': '10px'
+    	};
+    	const prestoHighlight = {
+    		'background-color': presto,
+    		'font-size': '10px'
+    	};
     
-    const keyContainer = {
-    	width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
-    	height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / (20 * this.state.CONTROLSPLIT)),
-    	float: 'left',
-    	overflow: 'hidden'
-    };
+    	const keyContainer = {
+    		width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
+    		height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / (20 * this.state.CONTROLSPLIT)),
+    		float: 'left',
+    		overflow: 'hidden'
+    	};
     
-    return ({ modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
+    	return ({ modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
     }
     
     /*** Templates for functions which would change the text of lat and lon from textbox input ***/
