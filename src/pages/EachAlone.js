@@ -50,19 +50,13 @@ class EachAlone extends Simulation {
     	this.state.tempSrc = tempInactive;
     	this.state.iceSrc = iceInactive;
     	this.state.keySrc = precipKey;
-    	this.state.precipBool = 0;
+    	this.state.precipBool = 1;
     	this.state.tempBool = 0;
     	this.state.iceBool = 0;
     }
     
     /*** onPress for 'Precipitation' Button ***/  
     setPrecip = () => {
-    	/* Preload Model Images */
-    	if(this.state.precipBool == 0){
-    		precipImgs.forEach((picture) => {
-	    		Image.prefetch(picture);
-	    	});
-	}
 	/* change page vars */
 	this.setState({ 
         	state: 0,
@@ -70,8 +64,7 @@ class EachAlone extends Simulation {
         	precipSrc: precipActive,
     		tempSrc: tempInactive,
     		iceSrc: iceInactive,
-    		keySrc: precipKey,
-    		precipBool: 1
+    		keySrc: precipKey
     	});
     	/* setup graph and query db */
     	this.setupGraph();
