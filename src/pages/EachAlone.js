@@ -22,6 +22,7 @@ const iceKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/
 const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
 const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
 
+/*** used to preload images in the page ***/
 const artifactImgs = [
 	precipActive,
 	precipInactive,
@@ -36,9 +37,11 @@ const artifactImgs = [
 	pauseUrl
 ];
 
+/*** padding set to 5 to eliminate random scrollbars ***/
 const PADDING = 5;
 
-/*** Page class ***/
+/*** EachAlone Class, returns interactive page
+*** Many items inherited from Simulation Class ***/
 class EachAlone extends Simulation {
     constructor(props){
     super(props)
@@ -55,76 +58,83 @@ class EachAlone extends Simulation {
     	this.state.iceBool = 0;
     }
     
-    /*** onPress for 'Precipitation' ***/  
+    /*** onPress for 'Precipitation' Button ***/  
     setPrecip = () => {
-    if(this.state.precipBool == 0){
-    	precipImgs.forEach((picture) => {
-    		Image.prefetch(picture);
+    	/* Preload Model Images */
+    	if(this.state.precipBool == 0){
+    		precipImgs.forEach((picture) => {
+	    		Image.prefetch(picture);
+	    	});
+	}
+	/* change page vars */
+	this.setState({ 
+        	state: 0,
+    		modelStr: "/precip/precip_ens",
+        	precipSrc: precipActive,
+    		tempSrc: tempInactive,
+    		iceSrc: iceInactive,
+    		keySrc: precipKey,
+    		precipBool: 1
     	});
-    }
-    this.setState({ 
-        state: 0,
-    	modelStr: "/precip/precip_ens",
-        precipSrc: precipActive,
-    	tempSrc: tempInactive,
-    	iceSrc: iceInactive,
-    	keySrc: precipKey,
-    	precipBool: 1
-    });
-    this.setupGraph();
-    this.doYearHits(0, this.state.index + 1920);
-    this.doCoordHits(0, this.state.latitude, this.state.longitude);
+    	/* setup graph and query db */
+    	this.setupGraph();
+    	this.doYearHits(0, this.state.index + 1920);
+    	this.doCoordHits(0, this.state.latitude, this.state.longitude);
     }
    
-    /*** onPress for 'Temperature' ***/   
+    /*** onPress for 'Temperature' Button ***/   
     setTemp = () => {
-    this.setState({
-        state: 1,
-    	modelStr: "/temp/temp_ens",
-    	precipSrc: precipInactive,
-    	tempSrc: tempActive,
-        iceSrc: iceInactive,
-    	keySrc: tempKey,
-    	tempBool: 1
-    });
-    if(this.state.tempBool == 0){
-    	tempImgs.forEach((picture) => {
-    		Image.prefetch(picture);
+	this.setState({
+	        state: 1,
+    		modelStr: "/temp/temp_ens",
+    		precipSrc: precipInactive,
+    		tempSrc: tempActive,
+        	iceSrc: iceInactive,
+    		keySrc: tempKey,
+    		tempBool: 1
     	});
-    }
-    this.setupGraph();
-    this.doYearHits(1, this.state.index + 1920);
-    this.doCoordHits(1, this.state.latitude, this.state.longitude);
+    	if(this.state.tempBool == 0){
+    		tempImgs.forEach((picture) => {
+    			Image.prefetch(picture);
+    		});
+    	}
+    	this.setupGraph();
+    	this.doYearHits(1, this.state.index + 1920);
+    	this.doCoordHits(1, this.state.latitude, this.state.longitude);
     }
 
-    /*** onPress for 'Sea Ice' ***/       
+    /*** onPress for 'Sea Ice' Button ***/       
     setIce = () => {
-    this.setState({
-        state: 2,
-    	modelStr: "/seaIce/ice_ens",
-    	precipSrc: precipInactive,
-        tempSrc: tempInactive,
-    	iceSrc: iceActive,
-    	keySrc: iceKey,
-    	iceBool: 1
-    });
-    if(this.state.iceBool == 0){
-    	iceImgs.forEach((picture) => {
-    		Image.prefetch(picture);
+    	this.setState({
+        	state: 2,
+    		modelStr: "/seaIce/ice_ens",
+    		precipSrc: precipInactive,
+        	tempSrc: tempInactive,
+    		iceSrc: iceActive,
+    		keySrc: iceKey,
+    		iceBool: 1
     	});
-    }
-    this.setupGraph();
-    this.doYearHits(2, this.state.index + 1920);
-    this.doCoordHits(2, this.state.latitude, this.state.longitude);
+    	if(this.state.iceBool == 0){
+    		iceImgs.forEach((picture) => {
+    			Image.prefetch(picture);
+    		});
+    	}
+    	this.setupGraph();
+    	this.doYearHits(2, this.state.index + 1920);
+    	this.doCoordHits(2, this.state.latitude, this.state.longitude);
     }
 
-
+    /*** Queries db upon mouse/finger release from map, only if simulation stopped ***/
     onPointerUp = (e) => {
-    	this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
+    	if(this.state.play == 0){
+    		this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
+    	}
     }
     
-    /*** Used to calculate coords for onMouseDown and onMouseMove ***/
+    /*** Used to calculate coords pressed on the map
+    *** Leave this alone unless messing with DIV sizing ***/
     onMouseDown = (e) => {
+    	/* A bunch of variables used to calculate mouse position */
         var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
     	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
     	var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
@@ -136,6 +146,7 @@ class EachAlone extends Simulation {
     	}
     	var x = Math.floor(e.clientX - modelLeft);
     	var y = Math.floor(e.clientY - modelTop);
+    	
     	var latSave = 0;
     	var lonSave = 0;
     	var centerX = 0;
@@ -204,30 +215,27 @@ class EachAlone extends Simulation {
     *** publish the state, recieved by indexIncrementer     ***/   
     handleClick = () => {
     	var newIndex = this.state.index;
+    	
+    	/* handle game reset at year 2100 */
     	if(this.state.play == 0 && this.state.index == 180){
  		newIndex = 0;
  	}
     	var newState = (this.state.play + 1) % 2;
-    	this.setupGraph();
     	this.setState({
     		play: newState,
     		useArray: 3,
     		index: newIndex
     	});
     	
+    	/* when pausing, we must grab data for entire map */
     	if(newState == 0){
     		this.doYearHits(this.state.state, this.state.index + 1920);
     	}
-    	
-    	if(this.state.precipBool == 0){
-    		precipImgs.forEach((picture) => {
-    			Image.prefetch(picture);
-    		});
-    		this.setState({precipBool: 1})
-    	}
+
     	PubSub.publish('TOPIC', this);
     }
     
+    /*** Writes data to the graph, will need to be checked after music implementation ***/
     updateGraph() {
 	if (this.state.index > 0 && this.state.index <= 180){
     	        var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
@@ -308,6 +316,7 @@ class EachAlone extends Simulation {
     	}
     }
     
+    /*** get the value of every coordinate at a specific state and year ***/
     doYearHits(state, year){
 	/* Filter and do db hit here */
 	if(year >= 1920 && year <= 2100){
@@ -341,6 +350,7 @@ class EachAlone extends Simulation {
 	}
     };
     
+    /*** Get the value of every year of a coords lifespan ***/
     doCoordHits(state, lat, lon){
     	var dbX = 1;
     	var dbY = 1;
@@ -378,37 +388,45 @@ class EachAlone extends Simulation {
     	console.log("dbX: ", dbX, "dbY: ", dbY);
     };
 
-
+    /*** This is an onPointerDown for the map keys.
+    *** When a user clicks the key, it should figure out
+    *** what value they are pressing and pay the corresponding note ***/
     testMusic = (e) => {
     	if(e.buttons == 1){
     		console.log("TODO: Play note");
     	}
     }
     
-    /*** runs on initial render
-    *** get CO2 values from DB
-    *** preload images
-    *** setup indexIncrementer as subscriber ***/
+    /*** runs on initial render ***/
     componentDidMount = () => {
+    
+    	/* create and send DB request for CO2 data */
     	var request = dbUrl.concat("/co2/all");
     	Axios.get(request)
     	.then(res => {
     		const all_co2_data = res.data.data;
     		this.setState({ co2data: [...all_co2_data]});
     	});
+    	
+    	/* setup subscriber indexIncrementer */
 	this.setState({
-		token: PubSub.subscribe('TOPIC', indexIncrementer),
-    		pageBottom: Dimensions.get('window').height,
-    		pageRight: Dimensions.get('window').width
+		token: PubSub.subscribe('TOPIC', indexIncrementer)
 	
 	});
 	
+	/* preload artifacts and simulation images */
 	artifactImgs.forEach((picture) => {
     		Image.prefetch(picture);
+    	});	
+	precipImgs.forEach((picture) => {
+    		Image.prefetch(picture);
     	});
+    	
+    	/* setup event listeners for dynamic page resizing */
 	window.addEventListener('resize', this.updateDimensions);
 	window.addEventListener('orientationchange', this.rotateDimensions);
-	this.setupGraph();
+	
+	/* fetch data and setup window size */
 	this.doCoordHits(0, 0, 0);
 	this.doYearHits(0, this.state.index + 1920);
 	this.updateDimensions();
@@ -440,13 +458,15 @@ class EachAlone extends Simulation {
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
     
-    /*** Avg db value ***/
+    /*** Get db value ***/
     var coord_val = 0;
+    /* if useArray == 3, use the dataset that contains all years of a coord */
     if(this.state.useArray == 3){
     	var avgKeys = Object.keys(this.state.coordData[0]);
     	var useAvgKey = avgKeys[this.state.index+2];
     	coord_val = this.state.coordData[0][useAvgKey];
     }
+    /* use the dataset that contains all coords at a specific year */
     else {
         var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.yearData.length > coord_index){
@@ -454,13 +474,16 @@ class EachAlone extends Simulation {
     		var useAvgKey = avgKeys[0];
     		coord_val = this.state.yearData[coord_index][useAvgKey];
     	}
+    	/* catches OOB database requests */
     	else{
     		console.log("dbx: ", dbX, " dbY: ", dbY);
     	}
     }
     
+    /* contains almost all the styling for the page */
     const { modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
+    /* div block for text */
     const largeControlBlockStyle = {
     	height: Math.floor(controlHeight * 1 / (5 * this.state.CONTROLSPLIT)),
     	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
@@ -468,7 +491,8 @@ class EachAlone extends Simulation {
     	float: 'left'
     }
     
-    this.updateGraph();    
+    this.updateGraph();   
+     
     /*** Return the page ***/
     return (
     	<div style={containerStyle}>

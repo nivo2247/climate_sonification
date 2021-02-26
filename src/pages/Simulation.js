@@ -13,16 +13,12 @@ const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/image
 
 const PADDING = 5;
 
-/*** Div splits from left to right. Should add up to 1 ***/
-
-
-/*** Index Handler Block (recieves page state):  
-***  if play=1, increment index with delay in loop
-***  else interrupt loop			 ***/
-
+/* used to wait a certain amount of ms */
 const timer = ms => new Promise(res => setTimeout(res, ms));
 
+/*** Index Handler Block (recieves Class as state)  ***/
 export var indexIncrementer = async function(msg, data) {
+	/* if simulation is in play state, increment until 180 */
 	if (data.state.play == 1){
 		while(data.state.index < 180){
 			if(data.state.play == 1){
@@ -36,6 +32,7 @@ export var indexIncrementer = async function(msg, data) {
    					return;
    			}
    		}
+   		/* Stop at index 180 */
    		data.setupGraph();
    		data.setState({
     			playButton: playUrl,
@@ -44,6 +41,7 @@ export var indexIncrementer = async function(msg, data) {
     			
     		});
 	}
+	/* This else is used when the simulation is stopped */
 	else {
 		data.setupGraph();
     		data.setState({
@@ -52,11 +50,13 @@ export var indexIncrementer = async function(msg, data) {
     	}
 };
 
+/* TODO: Implement this with latitude, longitude, and year,
+* convert those to textboxes and check val */
 function isNumeric(value) {
 	return /^-?\d+$/.test(value);
 }
 
-/*** Page class ***/
+/*** Shared class for EachAlone and AllTogether class ***/
 export class Simulation extends React.Component {
     constructor(props){
     super(props)
@@ -113,6 +113,7 @@ export class Simulation extends React.Component {
 		});
     } 
     
+    /*** handle year changes from the slider ***/
     handleYear = (event) => {
     	this.setupGraph();
     	this.setState({
@@ -121,6 +122,7 @@ export class Simulation extends React.Component {
     	});
     }       
     
+    /*** called when the window is resized ***/
     updateDimensions = () => {
     if(Dimensions.get('window').height < Dimensions.get('window').width){
     	this.setState({
@@ -157,6 +159,7 @@ export class Simulation extends React.Component {
     this.setupGraph();
     } 
     
+    /*** Called when the window is rotated on mobile ***/
     rotateDimensions = async () => {
     await timer(1000);
     if(Dimensions.get('window').height < Dimensions.get('window').width){
@@ -194,11 +197,7 @@ export class Simulation extends React.Component {
     this.setupGraph();
     }   
       
-    
-    componentDidMount = () => {
-    	console.log("class fail");
-    }
-       
+    /*** clears and redraws rectangle around the graph area ***/ 
     setupGraph() {
     	const ctx = this.refs.models.getContext('2d');
         var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
@@ -218,6 +217,7 @@ export class Simulation extends React.Component {
     	ctx.stroke();
     } 
     
+    /*** Huge section of common styling, relies on the page size and what the DIVs are set at ***/
     getCommonStyles() {
     var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
     var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
@@ -386,17 +386,23 @@ export class Simulation extends React.Component {
     return ({ modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, controlBlockStyle, dataBlockStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
     }
     
-    /*** runs on page close ***/
-    componentWillUnmount = () => {
-    	console.log("class fail");
-    }
-    
+    /*** Templates for functions which would change the text of lat and lon from textbox input ***/
     onChangeLat = (text) => {
     	//implement isnumeric check
     }
     
     onChangeLon = (text) => {
     	//implement isnumeric check
+    }
+    
+    /*** These should never run because each class has separate functions,
+    *** but these are here to keep react from complaining ***/
+    componentDidMount = () => {
+    	console.log("class fail");
+    }
+    
+    componentWillUnmount = () => {
+    	console.log("class fail");
     }
 
     render(){

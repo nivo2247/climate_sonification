@@ -16,6 +16,7 @@ const iceKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/
 const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
 const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
 
+/*** used to preload images in the page ***/
 const artifactImgs = [
 	precipKey,
 	tempKey,
@@ -24,6 +25,7 @@ const artifactImgs = [
 	pauseUrl
 ];
 
+/*** padding set to 5 to eliminate random scrollbars ***/
 const PADDING = 5;
 
 /*** Page class ***/
@@ -67,8 +69,11 @@ class AllTogether extends Simulation {
     	}
     }
     
+    /*** When map coord is selected, do db query ***/
     onPointerUp = (e) => {
-    	this.doCoordHits(this.state.latitude, this.state.longitude);
+    	if(this.state.play == 0){
+    		this.doCoordHits(this.state.latitude, this.state.longitude);
+    	}
     }
     
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
@@ -156,10 +161,7 @@ class AllTogether extends Simulation {
 	        }
         }    
     
-    /*** runs on initial render
-    *** get CO2 values from DB
-    *** preload images
-    *** setup gameHandler as subscriber ***/
+    /*** runs on initial render ***/
     componentDidMount = () => {
     	var request = dbUrl.concat("/co2/all");
     	Axios.get(request)
@@ -168,9 +170,7 @@ class AllTogether extends Simulation {
     		this.setState({ co2data: [...all_co2_data]});
     	});
 	this.setState({
-		token: PubSub.subscribe('TOPIC', indexIncrementer),
-	    	pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING
+		token: PubSub.subscribe('TOPIC', indexIncrementer)
 	});
 	
 	artifactImgs.forEach((picture) => {
@@ -180,9 +180,9 @@ class AllTogether extends Simulation {
     	combinedImgs.forEach((picture) => {
     			Image.prefetch(picture);
     	});
+    	
 	window.addEventListener('resize', this.updateDimensions);
 	window.addEventListener('orientationchange', this.rotateDimensions);
-	this.setupGraph();
 	this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
 	this.updateDimensions();
@@ -261,8 +261,8 @@ class AllTogether extends Simulation {
     	}
     }
     
+    /*** query db for all coords at a specific year ***/
     doYearHits(year){
-	/* Filter and do db hit here */
 	if(year >= 1920 && year <= 2100){
 		var table = dbUrl.concat("/table/")
 		var intermediate0 = table.concat("precipavg/year/");
@@ -324,6 +324,7 @@ class AllTogether extends Simulation {
 	}
     };
     
+    /*** query db for all years of a specific coord ***/
     doCoordHits(lat, lon){
     	var dbX = 1;
     	var dbY = 1;
