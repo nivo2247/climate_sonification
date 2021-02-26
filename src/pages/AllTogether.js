@@ -25,9 +25,6 @@ const artifactImgs = [
 	pauseUrl
 ];
 
-/*** padding set to 5 to eliminate random scrollbars ***/
-const PADDING = 5;
-
 /*** Page class ***/
 class AllTogether extends Simulation {
     constructor(props){

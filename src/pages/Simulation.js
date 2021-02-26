@@ -1,17 +1,11 @@
 import { Dimensions, Image } from "react-native";
 import * as React from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import Axios from 'axios';
-import PubSub from 'pubsub-js';
-import { precipImgs, tempImgs, iceImgs, dbUrl } from './../const/url.js';
+import { PADDING, Page } from './Page.js';
 
 
 /*** Links to AWS S3 media ***/
 const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
 const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
-
-const PADDING = 5;
 
 /* used to wait a certain amount of ms */
 const timer = ms => new Promise(res => setTimeout(res, ms));
@@ -57,10 +51,12 @@ function isNumeric(value) {
 }
 
 /*** Shared class for EachAlone and AllTogether class ***/
-export class Simulation extends React.Component {
+export class Simulation extends Page {
     constructor(props){
     super(props)
         this.state = {
+    		pageBottom: Dimensions.get('window').height - PADDING,
+    		pageRight: Dimensions.get('window').width - PADDING,
     		index: 0,
     		play: 0,
     		timerLen: 800,
@@ -69,8 +65,6 @@ export class Simulation extends React.Component {
     		token: "",
     		latitude: 0,
     		longitude: 0,
-    		pageBottom: Dimensions.get('window').height - PADDING,
-    		pageRight: Dimensions.get('window').width - PADDING,
     		CONTROLDIV: 2 / 10,
     		CONTROLVERTDIV: 1,
 		SKINNYDIV: 1 / 20,
@@ -121,49 +115,6 @@ export class Simulation extends React.Component {
     		useArray: 3
     	});
     }       
-    
-    /*** called when the window is resized ***/
-    updateDimensions = () => {
-    	if(Dimensions.get('window').height < Dimensions.get('window').width){
-    		this.setState({
-    			pageBottom: Dimensions.get('window').height - PADDING,
-    			pageRight: Dimensions.get('window').width - PADDING,
-    			CONTROLDIV: 2 / 10,
-			SKINNYDIV: 1 / 20,
-			MAPDIV: 3 / 4,
-			MAPVERTDIV: 3 / 4,
-			GRAPHVERTDIV: 2 / 10,
-			SLIDERVERTDIV: 1 / 20,
-			CONTROLDIVFLOAT: 'left',
-			MAPDIVFLOAD: 'right',
-			CONTROLVERTDIV: 1,
-			CONTROLSPLIT: 1
-    		});
-    	}
-    	else{
-    		this.setState({
-    			pageBottom: Dimensions.get('window').height - PADDING,
-    			pageRight: Dimensions.get('window').width - PADDING,
-    			CONTROLDIV: 1,
-			SKINNYDIV: 1 / 20,
-			MAPDIV: 19 / 20,
-			MAPVERTDIV: 1 / 4,
-			GRAPHVERTDIV: 1 / 5,
-			SLIDERVERTDIV: 1 / 20,
-			CONTROLDIVFLOAT: 'right',
-			MAPDIVFLOAT: 'left',
-			CONTROLVERTDIV: 1 / 2,
-			CONTROLSPLIT: 1 / 2
-    		});
-    	}	
-    	this.setupGraph();
-    } 
-    
-    /*** Called when the window is rotated on mobile ***/
-    rotateDimensions = async () => {
-    	await timer(1000);
-    	this.updateDimensions();
-    }
       
     /*** clears and redraws rectangle around the graph area ***/ 
     setupGraph() {

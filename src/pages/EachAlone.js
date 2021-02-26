@@ -37,9 +37,6 @@ const artifactImgs = [
 	pauseUrl
 ];
 
-/*** padding set to 5 to eliminate random scrollbars ***/
-const PADDING = 5;
-
 /*** EachAlone Class, returns interactive page
 *** Many items inherited from Simulation Class ***/
 class EachAlone extends Simulation {
