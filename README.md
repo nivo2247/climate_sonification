@@ -23,6 +23,7 @@ _As packages are installed, you should update this document on how to install th
     - `npm install @react-navigation/stack --force`
     - `npm install axios --save --force`
     - `npm install pubsub-js --save --force`
+    - `npm install tone --save` (use --force if necessary.  I didn't need to)
 10. Create a new folder outside of the project entirely
 11. Open up a Terminal and navigate to this new folder
 12. Clone the climate_sonification repository into this folder

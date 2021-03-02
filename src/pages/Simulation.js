@@ -1,8 +1,6 @@
-import { Image } from "react-native";
 import * as React from 'react';
+import * as Tone from 'tone';
 import { PADDING, Page } from './Page.js';
-import { dbUrl } from './../const/url.js'
-import Axios from 'axios';
 
 /*** Links to AWS S3 media ***/
 const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
@@ -51,38 +49,100 @@ function isNumeric(value) {
 	return /^-?\d+$/.test(value);
 }
 
+// I'm not sure if we need this inside the class or not
+// it seems like we shouldn't.  In the long term we should
+// consider a sampler, or at least build a synth in a separate
+// file and import it.
+// const synth = new Tone.Synth.toDestination();
+
 /*** Shared class for EachAlone and AllTogether class ***/
 export class Simulation extends Page {
-    constructor(props){
-    super(props)
-        this.state = {
-    		pageBottom: window.clientHeight - PADDING,
-    		pageRight: window.clientWidth - PADDING,
-    		index: 0,
-    		play: 0,
-    		timerLen: 800,
-    		playButton: playUrl,
-    		co2data : [0],
-    		token: "",
-    		latitude: 0,
-    		longitude: 0,
-    		CONTROLDIV: 2 / 10,
-    		CONTROLVERTDIV: 1,
-		SKINNYDIV: 1 / 20,
-		MAPDIV: 3 / 4,
-		MAPVERTDIV: 3 / 4,
-		GRAPHVERTDIV: 2 / 10,
-		SLIDERVERTDIV: 1 / 20,
-		CONTROLSPLIT: 1,
-		useArray: 0
-    	};
-    }  
+
+	// There's probably a better solution but I want to see if this allows the synth to be inhereted
+	static defaultProps = {
+		synth: new Tone.Synth().toDestination()
+	}
+
+	constructor(props){
+	    super(props)
+	    this.state = {
+			pageBottom: window.clientHeight - PADDING,
+			pageRight: window.clientWidth - PADDING,
+			index: 0,
+			play: 0,
+			timerLen: 800,
+			playButton: playUrl,
+			co2data : [0],
+			token: "",
+			latitude: 0,
+			longitude: 0,
+			CONTROLDIV: 2 / 10,
+			CONTROLVERTDIV: 1,
+			SKINNYDIV: 1 / 20,
+			MAPDIV: 3 / 4,
+			MAPVERTDIV: 3 / 4,
+			GRAPHVERTDIV: 2 / 10,
+			SLIDERVERTDIV: 1 / 20,
+			CONTROLSPLIT: 1,
+			useArray: 0
+	    };
+		// I'm pretty sure I need to bind the index incrementer
+		this.incrementIndex = this.incrementIndex.bind(this);
+	}  
+
+	/*** Run this when stop is pressed or when index === 180 ***/
+	stopMusic = () => {
+		this.setState({ play: 0, playButton: playUrl });
+		// Maybe I need to also stop the sequence?
+		Tone.Transport.stop();
+		Tone.Transport.cancel(0);
+	}
+
+	/*** Run this when play button is pressed
+	 * A few modifications for the real thing:
+	 * 	- use Sequence instead of Pattern
+	 * 	- determine start based on index, may need to
+	 * 	slice to make this work.  But should first see
+	 * 	if this can be accomplished using pause rather
+	 * 	than stop.
+	 ****/	
+	playMusic = () => {
+		this.setState( { play: 1, playButton: pauseUrl });
+		// TODO: replace this with music generated from data
+		// should be done in a separate loadMusic method
+		const { synth } = this.props;
+		const testPattern = new Tone.Pattern((time, note) => {
+			synth.triggerAttackRelease(note, '8n', time);
+			// will need to increment, so I need to bind the
+			// incrementing function
+			Tone.Draw.schedule(() => {
+				this.incrementIndex();
+			}, time)
+		}, ['C5', 'D5', 'E5', 'G5'], 'up');
+
+		testPattern.start(0);
+		Tone.Transport.start('+0.1');
+	}
+
+	/*** Another increment method to work with tone ***/
+	incrementIndex = () => {
+		this.setupGraph();
+		const { index } = this.state;
+		if (index < 180) {
+			this.setState({ index: index + 1 });
+		} else {
+			this.stopMusic();
+		}
+	}
 
     /*** onPress for 'adagio' ***/       
     setAdagio = () => {
     	this.setState({
     		timerLen: 1200
-    		});
+    	});
+		// Might need to stop the music to
+		// avoid bugs
+		Tone.Transport.bpm.value = 70;
     }
     
     /*** onPress for 'moderato' ***/   
@@ -90,13 +150,15 @@ export class Simulation extends Page {
     	this.setState({
     		timerLen: 800
 		});
+		Tone.Transport.bpm.value = 110;
     }
     
     /*** onPress for 'allegro' ***/   
     setAllegro = () => {
     	this.setState({
     		timerLen: 400
-    		});
+    	});
+		Tone.Transport.bpm.value = 140;
     }
     
     /*** onPress for 'presto' ***/   
@@ -104,6 +166,7 @@ export class Simulation extends Page {
     	this.setState({
     		timerLen: 200
 		});
+		Tone.Transport.bpm.value = 180;
     } 
     
     /*** handle year changes from the slider ***/

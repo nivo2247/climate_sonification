@@ -62,8 +62,11 @@ class AllTogether extends Simulation {
     
     /* TODO: activates when clicking map keys, make this play test note */
     testMusic = (e) => {
-    	if(e.buttons == 1){
+		// inhereted from Simulation default props.  May change this.
+		const { synth } = this.props;
+    	if(e.buttons === 1) {
     		console.log("X: ", e.clientX, "Y: ", e.clientY);
+			synth.triggerAttackRelease('A5', '8n');
     	}
     }
     
@@ -475,7 +478,10 @@ class AllTogether extends Simulation {
 			</div>
 			
 			<div style={controlBlockStyle}>
-				<div style={playSplitDivStyle} onPointerDown={() => this.handleClick()}>
+				{/* This originally used this.handleClick().  I may still need to use the game
+				handler here.  But I might be able to just use the inhereted play method.  I think
+				I will need to use some methods in this file too.  I'm just not sure which ones yet */}
+				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic() : () => this.playMusic()}>
 					<img style={playSplitDivStyle} src={this.state.playButton}/>
 				</div>
 				
