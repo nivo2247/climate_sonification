@@ -84,7 +84,8 @@ export class Simulation extends Page {
 			GRAPHVERTDIV: 2 / 10,
 			SLIDERVERTDIV: 1 / 20,
 			CONTROLSPLIT: 1,
-			useArray: 0
+			useArray: 0,
+			audioAvailable: false
 	    };
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
@@ -120,8 +121,17 @@ export class Simulation extends Page {
 			}, time)
 		}, ['C5', 'D5', 'E5', 'G5'], 'up');
 
-		testPattern.start(0);
-		Tone.Transport.start('+0.1');
+		// this is kind of a guess to be honest
+		if(this.state.audioAvailable) {
+			testPattern.start(0);
+			Tone.Transport.start('+0.1');
+		} else {
+			Tone.start().then(() => {
+				this.setState({ audioAvailable: true })
+				testPattern.start(0);
+				Tone.Transport.start('+0.1');
+			}).catch(error => console.error(error));
+		}
 	}
 
 	/*** Another increment method to work with tone ***/
