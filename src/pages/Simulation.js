@@ -256,6 +256,7 @@ export class Simulation extends Page {
     /*** Called when the window is rotated on mobile ***/
     rotateDimensions = async () => {
     	await timer(1000);
+    	window.resizeTo(this.state.pageRightMax, this.state.pageBottomMax);
     	this.updateDimensions();
     } 
     
