@@ -251,6 +251,12 @@ export class Simulation extends Page {
     	ctx.lineTo(1, 1);
     	ctx.strokeStyle = "black";
     	ctx.stroke();
+    }
+    
+    /*** Called when the window is rotated on mobile ***/
+    rotateDimensions = async () => {
+    	await timer(1000);
+    	this.updateDimensions();
     } 
     
     /*** called when the window is resized ***/
