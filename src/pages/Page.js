@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const PADDING = 0;
+export const PADDING = 1;
 
 const timer = ms => new Promise(res => setTimeout(res, ms));
 
@@ -9,8 +9,8 @@ export class Page extends React.Component {
     constructor(props){
     super(props)
         this.state = {
-    		pageBottom: window.innerHeight - PADDING,
-    		pageRight: window.innerWidth - PADDING,
+    		pageBottom: window.innerHeight,
+    		pageRight: window.innerWidth,
     	};
     }  
     

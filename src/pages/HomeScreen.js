@@ -19,7 +19,8 @@ class HomeScreen extends Page {
     	const containerStyle = {
     		height: Math.floor(this.state.pageBottom),
     		width: Math.floor(this.state.pageRight),
-    		backgroundImage: 'url("https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg")'
+    		backgroundImage: 'url("https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg")',
+    		overflow: 'hidden'
     	};
     	const bumperDivStyle = {
     		height: this.state.pageBottom * 1 / 20,
@@ -113,7 +114,6 @@ class HomeScreen extends Page {
     const { containerStyle, bumperDivStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle, titleTextStyle, descTextStyle } = this.getStyles();
 
     return (
-
 	<div style={containerStyle}>
 
 		<div style={bumperDivStyle}/>
