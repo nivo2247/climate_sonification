@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Axios from 'axios';
 import PubSub from 'pubsub-js';
+import { isBrowser } from 'react-device-detect';
 import { precipImgs, tempImgs, iceImgs, dbUrl } from './../const/url.js';
 import { indexIncrementer, Simulation } from './Simulation.js';
 
@@ -414,7 +415,9 @@ class EachAlone extends Simulation {
     	});
     	
     	/* setup event listeners for dynamic page resizing */
-	window.addEventListener('resize', this.updateDimensions);
+    	if(isBrowser){
+		window.addEventListener('resize', this.updateDimensions);
+	}
 	window.addEventListener('orientationchange', this.rotateDimensions);
 	
 	/* fetch data and setup window size */
@@ -426,7 +429,9 @@ class EachAlone extends Simulation {
     /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
-    	window.removeEventListener('resize', this.updateDimensions);
+    	if(isBrowser){
+    		window.removeEventListener('resize', this.updateDimensions);
+    	}
     	window.removeEventListener('orientationchange', this.rotateDimensions);
     }  
     	

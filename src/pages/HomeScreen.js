@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Page } from './Page.js';
+import { isBrowser } from 'react-device-detect';
 
 //TODO: Declare URLS as consts
 
@@ -8,16 +9,6 @@ import { Page } from './Page.js';
 function onClick(){
 	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
 };
-
-function isMobile(){
-	try{
-		document.createEvent("TouchEvent");
-		return true;
-	}
-	catch(e){
-		return false;
-	}
-}
 
 class HomeScreen extends Page { 
     
@@ -107,7 +98,7 @@ class HomeScreen extends Page {
     
     /*** runs on page open ***/
     componentDidMount = () => {
-    	if(isMobile() === false){
+    	if(isBrowser){
     		window.addEventListener('resize', this.updateDimensions);
     	}
     	window.addEventListener('orientationchange', this.rotateDimensions);
@@ -119,7 +110,7 @@ class HomeScreen extends Page {
     
     /*** runs on page close ***/
     componentWillUnmount = () => {
-    	if(isMobile() === false){
+    	if(isBrowser){
     		window.removeEventListener('resize', this.updateDimensions);
     	}
     	window.removeEventListener('orientationchange', this.rotateDimensions);
@@ -133,7 +124,6 @@ class HomeScreen extends Page {
 
     return (
 	<div style={containerStyle}>
-
 		<div style={bumperDivStyle}/>
 
 		{/* Row for title text */}
@@ -171,7 +161,6 @@ class HomeScreen extends Page {
 			</div>
 			<div style={qrBumperStyle}/>
 		</div>
-
     </div>
       
     );

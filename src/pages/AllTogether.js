@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Axios from 'axios';
 import PubSub from 'pubsub-js';
+import { isBrowser } from 'react-device-detect';
 import { combinedImgs, dbUrl } from './../const/url.js';
 import { indexIncrementer, Simulation } from './Simulation.js'
 
@@ -179,7 +180,9 @@ class AllTogether extends Simulation {
     			Image.prefetch(picture);
     	});
     	
-	window.addEventListener('resize', this.updateDimensions);
+    	if(isBrowser){
+		window.addEventListener('resize', this.updateDimensions);
+	}
 	window.addEventListener('orientationchange', this.rotateDimensions);
 	this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
@@ -377,7 +380,9 @@ class AllTogether extends Simulation {
     /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
-    	window.removeEventListener('resize', this.updateDimensions);
+    	if(isBrowser){
+    		window.removeEventListener('resize', this.updateDimensions);
+    	}
     	window.removeEventListener('orientationchange', this.rotateDimensions);
     }
 
