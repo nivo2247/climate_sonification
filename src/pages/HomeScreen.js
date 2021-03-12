@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import { Page } from './Page.js';
 
 //TODO: Declare URLS as consts
@@ -10,10 +9,7 @@ function onClick(){
 	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
 };
 
-class HomeScreen extends Page {
-    constructor(props){
-    	super(props)
-    }  
+class HomeScreen extends Page { 
     
     //TODO: Add text styles
     getStyles(){
@@ -107,14 +103,14 @@ class HomeScreen extends Page {
 			<div style={buttonBumperStyle}/>
 			
 			<div style={buttonStyle} onPointerUp={() => navigation.navigate('EachAlone')}>
-				<img style={buttonStyle} src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" />
+				<img style={buttonStyle} alt="each on its own" src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" />
 			</div>
 			
 			<div style={buttonBumperStyle}/>
 			<div style={buttonBumperStyle}/>
 			
 			<div style={buttonStyle} onPointerUp={() => navigation.navigate('AllTogether')}>
-				<img style={buttonStyle} src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_basicBkg.png" />
+				<img style={buttonStyle} alt="all together" src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_basicBkg.png" />
 			</div>
 			
 			<div style={buttonBumperStyle}/>
@@ -122,8 +118,8 @@ class HomeScreen extends Page {
 		
 		<div style={qrDivStyle}>
 			<div style={qrBumperStyle}/>
-			<div style={qrStyle} onPointerUp={this.onClick}>
-				<img style={qrStyle} src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/articleqr.png"/>
+			<div style={qrStyle} onPointerDown={onClick}>
+				<img style={qrStyle} alt="link to article" src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/articleqr.png"/>
 			</div>
 			<div style={qrBumperStyle}/>
 		</div>
@@ -136,7 +132,7 @@ class HomeScreen extends Page {
 
 
 
-export default function(props){
+export default function HomeScreenWrapper(props){
     const navigation = useNavigation();
 
     return <HomeScreen {...props} navigation={navigation} />;

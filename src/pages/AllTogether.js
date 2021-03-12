@@ -1,7 +1,6 @@
 import { Image } from "react-native";
 import * as React from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import Axios from 'axios';
 import PubSub from 'pubsub-js';
 import { combinedImgs, dbUrl } from './../const/url.js';
@@ -43,7 +42,7 @@ class AllTogether extends Simulation {
     *** publish the state, recieved by gameHandler     ***/   
     handleClick = () => {
     	var newIndex = this.state.index;
- 	if(this.state.play == 0 && this.state.index == 180){
+ 	if(this.state.play === 0 && this.state.index === 180){
  		newIndex = 0;
  	}
     	var newState = (this.state.play + 1) % 2;
@@ -53,7 +52,7 @@ class AllTogether extends Simulation {
     		index: newIndex
     	});
     	
-    	if(newState == 0){
+    	if(newState === 0){
     		this.doYearHits(this.state.index + 1920);
     	}
     	
@@ -72,7 +71,7 @@ class AllTogether extends Simulation {
     
     /*** When map coord is selected, do db query ***/
     onPointerUp = (e) => {
-    	if(this.state.play == 0){
+    	if(this.state.play === 0){
     		this.doCoordHits(this.state.latitude, this.state.longitude);
     	}
     }
@@ -80,8 +79,6 @@ class AllTogether extends Simulation {
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
     	var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
-    	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
-    	var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
     	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
     	var modelTop = 0;
@@ -95,7 +92,7 @@ class AllTogether extends Simulation {
     	var centerX = 0;
     	var centerY = 0;
     	var boxType = 0;
-    	if(this.state.play == 0 && e.buttons == 1) {
+    	if(this.state.play === 0 && e.buttons === 1) {
 		if (x <= modelDiv && y <= modelSplit) {
 	    		centerX = modelDiv / 2;
 	    		centerY = modelSplit / 2;
@@ -127,11 +124,11 @@ class AllTogether extends Simulation {
     			boxType = 2;   	
     		}
     		
-    		if (boxType == 1) {
+    		if (boxType === 1) {
 		    	lonSave = (x - centerX) * 360 / modelDiv;
 		    	latSave = (centerY - y) * 180 / modelSplit;
 		}
-		else if (boxType == 2) {
+		else if (boxType === 2) {
 			var dx = x - centerX;
 			var dy = centerY - y;
 			var r = Math.sqrt(dx ** 2 + dy ** 2);
@@ -204,15 +201,18 @@ class AllTogether extends Simulation {
     		var precip_median = 100;
     		var precip_max = 120;
     		
+    		var prev_val = 0;
+    		var coord_val = 0;
+    		
     		ctx.beginPath();
     		for(var precipInd = 0; precipInd <= this.state.index; precipInd++){
     		    	var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
     			var usePrecipAvgKey = precipAvgKeys[precipInd + 1];
-    			var prev_val = this.state.precipAvg[0][usePrecipAvgKey];
+    			prev_val = this.state.precipAvg[0][usePrecipAvgKey];
     			
     			var precipAvgKeys1 = Object.keys(this.state.precipAvg[0]);
     			var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 2];
-    			var coord_val = this.state.precipAvg[0][usePrecipAvgKey1];
+    			coord_val = this.state.precipAvg[0][usePrecipAvgKey1];
     			
     			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
     			ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_max));
@@ -228,11 +228,11 @@ class AllTogether extends Simulation {
     		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){
     		    	var tempAvgKeys = Object.keys(this.state.tempAvg[0]);
     			var useTempAvgKey = tempAvgKeys[tempInd + 1];
-    			var prev_val = this.state.tempAvg[0][useTempAvgKey];
+    			prev_val = this.state.tempAvg[0][useTempAvgKey];
     			
     			var tempAvgKeys1 = Object.keys(this.state.tempAvg[0]);
     			var useTempAvgKey1 = tempAvgKeys1[tempInd + 2];
-    			var coord_val = this.state.tempAvg[0][useTempAvgKey1];
+    			coord_val = this.state.tempAvg[0][useTempAvgKey1];
     			
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
     			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_max));
@@ -240,7 +240,6 @@ class AllTogether extends Simulation {
     		}
     		ctx.stroke();
     		
-    		var ice_median = 0;
     		var ice_max = 1;
     		var ice_avg = Math.floor(avg * 0.5);
     		
@@ -248,11 +247,11 @@ class AllTogether extends Simulation {
     		for(var iceInd = 0; iceInd <= this.state.index; iceInd++){
     		    	var iceAvgKeys = Object.keys(this.state.iceAvg[0]);
     			var useIceAvgKey = iceAvgKeys[iceInd + 1];
-    			var prev_val = this.state.iceAvg[0][useIceAvgKey];
+    			prev_val = this.state.iceAvg[0][useIceAvgKey];
     			
     			var iceAvgKeys1 = Object.keys(this.state.iceAvg[0]);
     			var useIceAvgKey1 = iceAvgKeys1[iceInd + 2];
-    			var coord_val = this.state.iceAvg[0][useIceAvgKey1];
+    			coord_val = this.state.iceAvg[0][useIceAvgKey1];
     			
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
     			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
@@ -272,7 +271,7 @@ class AllTogether extends Simulation {
 		Axios.get(request0)
 			.then(res => {
     			const precip_data = res.data.data;
-    			if(this.state.play == 0){
+    			if(this.state.play === 0){
     			this.setState({ 
     				precipAvgAllCoords: [...precip_data],
     				useArray: this.state.useArray + 1
@@ -290,7 +289,7 @@ class AllTogether extends Simulation {
 		Axios.get(request1)
 			.then(res => {
     			const temp_data = res.data.data;
-    			if(this.state.play == 0){
+    			if(this.state.play === 0){
     			this.setState({ 
     				tempAvgAllCoords: [...temp_data],
     				useArray: this.state.useArray + 1
@@ -309,7 +308,7 @@ class AllTogether extends Simulation {
 		Axios.get(request2)
 			.then(res => {
     			const ice_data = res.data.data;
-    			if(this.state.play == 0){
+    			if(this.state.play === 0){
     			this.setState({ 
     				iceAvgAllCoords: [...ice_data],
     				useArray: this.state.useArray + 1
@@ -335,9 +334,10 @@ class AllTogether extends Simulation {
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon)
 	});
+	var request;
 	/* Filter and do db hit here */
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
-		var request = dbUrl.concat("/table/precipavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		request = dbUrl.concat("/table/precipavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
 		Axios.get(request)
     		.then(res => {
     		const precip_coord_data = res.data.data;
@@ -348,7 +348,7 @@ class AllTogether extends Simulation {
     	});
 	}
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
-		var request = dbUrl.concat("/table/tempavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		request = dbUrl.concat("/table/tempavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
 		Axios.get(request)
     		.then(res => {
     		const temp_coord_data = res.data.data;
@@ -359,7 +359,7 @@ class AllTogether extends Simulation {
     	});
 	}
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
-		var request = dbUrl.concat("/table/seaiceavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		request = dbUrl.concat("/table/seaiceavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
 		Axios.get(request)
     		.then(res => {
     		const seaice_coord_data = res.data.data;
@@ -404,7 +404,7 @@ class AllTogether extends Simulation {
     var ice_val = 0;
     
     /*** Set avg db values ***/
-    if(this.state.useArray == 3){
+    if(this.state.useArray === 3){
     	var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
     	var usePrecipAvgKey = precipAvgKeys[this.state.index+2];
     	precip_val = this.state.precipAvg[0][usePrecipAvgKey];
@@ -436,10 +436,10 @@ class AllTogether extends Simulation {
     	}
     }
     
-    const { modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
     var newh = controlHeight * 4 / 20;
-    if(this.state.CONTROLVERTDIV != 1){
+    if(this.state.CONTROLVERTDIV !== 1){
     	newh /= (1 - this.state.CONTROLVERTDIV)
     }
     
@@ -466,7 +466,7 @@ class AllTogether extends Simulation {
     		<div style={controlDivStyle}>
     		<div style={controlContainerStyle}>
 			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
-				<img style={controlBlockStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
+				<img style={controlBlockStyle} alt="home button" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
 			</div>
 			
 			<div style={largeControlBlockStyle}>
@@ -482,7 +482,7 @@ class AllTogether extends Simulation {
 				handler here.  But I might be able to just use the inhereted play method.  I think
 				I will need to use some methods in this file too.  I'm just not sure which ones yet */}
 				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic() : () => this.playMusic()}>
-					<img style={playSplitDivStyle} src={this.state.playButton}/>
+					<img style={playSplitDivStyle} alt="play button" src={this.state.playButton}/>
 				</div>
 				
 				<div style={quarterControlStyle} onPointerDown={this.setAdagio}>
@@ -551,21 +551,21 @@ class AllTogether extends Simulation {
 		<div style={controlContainerStyle}>
 			
 			<div style={keyContainer}>
-				<img style={keyContainer} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
+				<img style={keyContainer} alt="graph key" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
 			</div>
 			
 			
 			<div style={keyContainer} onPointerDown={this.testMusic} onPointerMove={this.testMusic}>
 				<div style={dataBlockStyle}>
-					<img draggable="false" style={dataBlockStyle} src={precipKey}/>
+					<img style={dataBlockStyle} alt="precipitation key" src={precipKey} draggable="false"/>
 				</div>
 
 				<div style={dataBlockStyle}>
-					<img draggable="false" style={dataBlockStyle} src={tempKey}/>
+					<img style={dataBlockStyle} alt="temperature key" src={tempKey} draggable="false"/>
 				</div>
 
 				<div style={controlBlockStyle}>
-					<img draggable="false" style={dataBlockStyle} src={iceKey}/>
+					<img style={dataBlockStyle} alt="sea ice key" src={iceKey} draggable="false"/>
 				</div>
 			</div>
 			
@@ -573,15 +573,15 @@ class AllTogether extends Simulation {
 		</div>
 		
 		<div style={skinnyDivStyle}>
-			<img draggable="false" style={skinnyImgStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png"}/>
-			<img draggable="false" style={skinnyImgStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png"}/>
+			<img style={skinnyImgStyle} alt="human influence on climate" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png"} draggable="false"/>
+			<img style={skinnyImgStyle} alt="human and natural influence on climate" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png"} draggable="false"/>
 		</div>
 		
 
 		<div style={largeDivStyle}>
 			
 			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>
-				<img draggable="false" src={fullUrl} style={modelStyle}/>
+				<img src={fullUrl} alt="climate model" style={modelStyle} draggable="false"/>
 			</div>
 			
 			<div style={graphBufferStyle}>
@@ -604,7 +604,7 @@ class AllTogether extends Simulation {
 			
 			<div style={sliderDivStyle}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
-				<img style={sliderStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/timelinenumbersimage.png"}/>
+				<img style={sliderStyle} alt="" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/timelinenumbersimage.png"}/>
 			</div>
 			
 		</div>  
@@ -616,7 +616,7 @@ class AllTogether extends Simulation {
 
 
 /*** class wrapper for naviagion functionality ***/
-export default function(props){
+export default function AllTogetherWrapper(props){
     const navigation = useNavigation();
 
     return <AllTogether {...props} navigation={navigation} />;

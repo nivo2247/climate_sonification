@@ -12,9 +12,9 @@ const timer = ms => new Promise(res => setTimeout(res, ms));
 /*** Index Handler Block (recieves Class as state)  ***/
 export var indexIncrementer = async function(msg, data) {
 	/* if simulation is in play state, increment until 180 */
-	if (data.state.play == 1){
+	if (data.state.play === 1){
 		while(data.state.index < 180){
-			if(data.state.play == 1){
+			if(data.state.play === 1){
 				data.setupGraph();
     				data.setState({
     					index: data.state.index+1, 
@@ -44,10 +44,13 @@ export var indexIncrementer = async function(msg, data) {
 };
 
 /* TODO: Implement this with latitude, longitude, and year,
-* convert those to textboxes and check val */
+* convert those to textboxes and check val 
 function isNumeric(value) {
 	return /^-?\d+$/.test(value);
 }
+*/
+
+const synth = new Tone.Synth().toDestination();
 
 // I'm not sure if we need this inside the class or not
 // it seems like we shouldn't.  In the long term we should
@@ -111,7 +114,7 @@ export class Simulation extends Page {
 		this.setState( { play: 1, playButton: pauseUrl });
 		// TODO: replace this with music generated from data
 		// should be done in a separate loadMusic method
-		const { synth } = this.props;
+		//const { synth } = this.props;
 		const testPattern = new Tone.Pattern((time, note) => {
 			synth.triggerAttackRelease(note, '8n', time);
 			// will need to increment, so I need to bind the
@@ -248,10 +251,7 @@ export class Simulation extends Page {
     getCommonStyles() {
     	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
     	var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
-    	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
-    	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
-    	var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
-    	
+
     	var controlWidth = this.state.pageRight * this.state.CONTROLDIV;
     	var controlHeight = this.state.pageBottom * this.state.CONTROLVERTDIV;
     	
@@ -325,7 +325,7 @@ export class Simulation extends Page {
     		overflow: 'hidden'
     	};
     	
-    	if(this.state.CONTROLVERTDIV != 1){
+    	if(this.state.CONTROLVERTDIV !== 1){
     	
     		playSplitDivStyle = {
     			height: Math.floor(controlHeight / (10 * (1 - this.state.CONTROLVERTDIV))),
@@ -414,25 +414,25 @@ export class Simulation extends Page {
     	var allegro = inactive;
     	var presto = inactive;
     
-    	if(this.state.timerLen == 1200){
+    	if(this.state.timerLen === 1200){
     		adagio = active;
     		moderato = inactive;
     		allegro = inactive;
     		presto = inactive;
     	}
-    	else if(this.state.timerLen == 800){
+    	else if(this.state.timerLen === 800){
     		adagio = inactive;
     		moderato = active;
     		allegro = inactive;
     		presto = inactive;
     	}
-    	else if(this.state.timerLen == 400){
+    	else if(this.state.timerLen === 400){
     		adagio = inactive;
     		moderato = inactive;
     		allegro = active;
     		presto = inactive;
     	}
-    	else if(this.state.timerLen == 200){
+    	else if(this.state.timerLen === 200){
     		adagio = inactive;
     		moderato = inactive;
     		allegro = inactive;
@@ -455,7 +455,7 @@ export class Simulation extends Page {
     		'font-size': '10px'
     	};
     
-    	return ({ modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
+    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
     }
     
     /*** Templates for functions which would change the text of lat and lon from textbox input ***/

@@ -1,7 +1,6 @@
 import { Image } from "react-native";
 import * as React from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import Axios from 'axios';
 import PubSub from 'pubsub-js';
 import { precipImgs, tempImgs, iceImgs, dbUrl } from './../const/url.js';
@@ -83,7 +82,7 @@ class EachAlone extends Simulation {
     		keySrc: tempKey,
     		tempBool: 1
     	});
-    	if(this.state.tempBool == 0){
+    	if(this.state.tempBool === 0){
     		tempImgs.forEach((picture) => {
     			Image.prefetch(picture);
     		});
@@ -104,7 +103,7 @@ class EachAlone extends Simulation {
     		keySrc: iceKey,
     		iceBool: 1
     	});
-    	if(this.state.iceBool == 0){
+    	if(this.state.iceBool === 0){
     		iceImgs.forEach((picture) => {
     			Image.prefetch(picture);
     		});
@@ -116,7 +115,7 @@ class EachAlone extends Simulation {
 
     /*** Queries db upon mouse/finger release from map, only if simulation stopped ***/
     onPointerUp = (e) => {
-    	if(this.state.play == 0){
+    	if(this.state.play === 0){
     		this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
     	}
     }
@@ -126,8 +125,6 @@ class EachAlone extends Simulation {
     onMouseDown = (e) => {
     	/* A bunch of variables used to calculate mouse position */
         var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
-    	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
-    	var modelHeight = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV);
     	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
     	var modelTop = 0;
@@ -141,7 +138,7 @@ class EachAlone extends Simulation {
     	var lonSave = 0;
     	var centerX = 0;
     	var centerY = 0;
-    	if(this.state.play == 0 && e.buttons == 1) {
+    	if(this.state.play === 0 && e.buttons === 1) {
 		if (x <= modelDiv && y <= modelSplit) {
 	    		centerX = modelDiv / 2;
 	    		centerY = modelSplit / 2;
@@ -167,11 +164,11 @@ class EachAlone extends Simulation {
     			centerY = modelSplit + modelSplit / 2;    	
     		}
     		
-    		if (this.state.state == 0 || this.state.state == 1) {
+    		if (this.state.state === 0 || this.state.state === 1) {
 		    	lonSave = (x - centerX) * 360 / modelDiv;
 		    	latSave = (centerY - y) * 180 / modelSplit;
 		}
-		else if (this.state.state == 2) {
+		else if (this.state.state === 2) {
 			var dx = x - centerX;
 			var dy = centerY - y;
 			var r = Math.sqrt(dx ** 2 + dy ** 2);
@@ -207,7 +204,7 @@ class EachAlone extends Simulation {
     	var newIndex = this.state.index;
     	
     	/* handle game reset at year 2100 */
-    	if(this.state.play == 0 && this.state.index == 180){
+    	if(this.state.play === 0 && this.state.index === 180){
  		newIndex = 0;
  	}
     	var newState = (this.state.play + 1) % 2;
@@ -218,7 +215,7 @@ class EachAlone extends Simulation {
     	});
     	
     	/* when pausing, we must grab data for entire map */
-    	if(newState == 0){
+    	if(newState === 0){
     		this.doYearHits(this.state.state, this.state.index + 1920);
     	}
 
@@ -238,7 +235,10 @@ class EachAlone extends Simulation {
     		var step = right / 180;
     		var avg = bottom / 2;
     		
-    		if(this.state.state == 0){
+    		var prev_val = 0;
+    		var coord_val = 0;
+    		
+    		if(this.state.state === 0){
     			var precip_median = 100;
     			var precip_max = 120;
     		
@@ -246,11 +246,11 @@ class EachAlone extends Simulation {
     			for(var precipInd = 0; precipInd <= this.state.index; precipInd++){
     			    	var precipAvgKeys = Object.keys(this.state.coordData[0]);
     				var usePrecipAvgKey = precipAvgKeys[precipInd + 1];
-    				var prev_val = this.state.coordData[0][usePrecipAvgKey];
+    				prev_val = this.state.coordData[0][usePrecipAvgKey];
     				
     				var precipAvgKeys1 = Object.keys(this.state.coordData[0]);
     				var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 2];
-    				var coord_val = this.state.coordData[0][usePrecipAvgKey1];
+    				coord_val = this.state.coordData[0][usePrecipAvgKey1];
     			
     				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
     				ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_max));
@@ -259,7 +259,7 @@ class EachAlone extends Simulation {
     			ctx.stroke();
     		}
     		
-    		if(this.state.state == 1){
+    		if(this.state.state === 1){
     		var temp_median = 0;
     		var temp_max = 20;
     		var temp_avg = Math.floor(avg * 1.5);
@@ -268,11 +268,11 @@ class EachAlone extends Simulation {
     		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){
     		    	var tempAvgKeys = Object.keys(this.state.coordData[0]);
     			var useTempAvgKey = tempAvgKeys[tempInd + 1];
-    			var prev_val = this.state.coordData[0][useTempAvgKey];
+    			prev_val = this.state.coordData[0][useTempAvgKey];
     			
     			var tempAvgKeys1 = Object.keys(this.state.coordData[0]);
     			var useTempAvgKey1 = tempAvgKeys1[tempInd + 2];
-    			var coord_val = this.state.coordData[0][useTempAvgKey1];
+    			coord_val = this.state.coordData[0][useTempAvgKey1];
     			
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
     			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_max));
@@ -282,8 +282,7 @@ class EachAlone extends Simulation {
     		}
     		
     		
-    		if(this.state.state == 2) {
-    		var ice_median = 0;
+    		if(this.state.state === 2) {
     		var ice_max = 1;
     		var ice_avg = Math.floor(avg * 0.5);
     		
@@ -291,11 +290,11 @@ class EachAlone extends Simulation {
     		for(var iceInd = 0; iceInd <= this.state.index; iceInd++){
     		    	var iceAvgKeys = Object.keys(this.state.coordData[0]);
     			var useIceAvgKey = iceAvgKeys[iceInd + 1];
-    			var prev_val = this.state.coordData[0][useIceAvgKey];
+    			prev_val = this.state.coordData[0][useIceAvgKey];
     			
     			var iceAvgKeys1 = Object.keys(this.state.coordData[0]);
     			var useIceAvgKey1 = iceAvgKeys1[iceInd + 2];
-    			var coord_val = this.state.coordData[0][useIceAvgKey1];
+    			coord_val = this.state.coordData[0][useIceAvgKey1];
     			
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
     			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
@@ -312,13 +311,13 @@ class EachAlone extends Simulation {
 	if(year >= 1920 && year <= 2100){
 		var table = dbUrl.concat("/table/")
 		var intermediate = "";
-		if(state == 0){
+		if(state === 0){
 			intermediate = table.concat("precipavg/year/");
 		}
-		else if(state == 1){
+		else if(state === 1){
 			intermediate = table.concat("tempavg/year/");
 		}
-		else if(state == 2){
+		else if(state === 2){
 			intermediate = table.concat("seaiceavg/year/");
 		}
 		var request = intermediate.concat(year.toString(10));
@@ -326,7 +325,7 @@ class EachAlone extends Simulation {
 		Axios.get(request)
 			.then(res => {
     			const year_data = res.data.data;
-    			if(this.state.play == 0){
+    			if(this.state.play === 0){
     				this.setState({ 
     					yearData: [...year_data],
     					useArray: 3
@@ -354,13 +353,13 @@ class EachAlone extends Simulation {
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
 		var table = dbUrl.concat("/table/")
 		var intermediate = "";
-		if(state == 0){
+		if(state === 0){
 			intermediate = table.concat("precipavg/coord/(");
 		}
-		else if(state == 1){
+		else if(state === 1){
 			intermediate = table.concat("tempavg/coord/(");
 		}
-		else if(state == 2){
+		else if(state === 2){
 			intermediate = table.concat("seaiceavg/coord/(");
 		}
 		var request = intermediate.concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
@@ -382,7 +381,7 @@ class EachAlone extends Simulation {
     *** When a user clicks the key, it should figure out
     *** what value they are pressing and pay the corresponding note ***/
     testMusic = (e) => {
-    	if(e.buttons == 1){
+    	if(e.buttons === 1){
     		console.log("TODO: Play note");
     	}
     }
@@ -450,18 +449,20 @@ class EachAlone extends Simulation {
     
     /*** Get db value ***/
     var coord_val = 0;
+    var avgKeys;
+    var useAvgKey;
     /* if useArray == 3, use the dataset that contains all years of a coord */
-    if(this.state.useArray == 3){
-    	var avgKeys = Object.keys(this.state.coordData[0]);
-    	var useAvgKey = avgKeys[this.state.index+2];
+    if(this.state.useArray === 3){
+    	avgKeys = Object.keys(this.state.coordData[0]);
+    	useAvgKey = avgKeys[this.state.index+2];
     	coord_val = this.state.coordData[0][useAvgKey];
     }
     /* use the dataset that contains all coords at a specific year */
     else {
         var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.yearData.length > coord_index){
-    		var avgKeys = Object.keys(this.state.yearData[coord_index]);
-    		var useAvgKey = avgKeys[0];
+    		avgKeys = Object.keys(this.state.yearData[coord_index]);
+    		useAvgKey = avgKeys[0];
     		coord_val = this.state.yearData[coord_index][useAvgKey];
     	}
     	/* catches OOB database requests */
@@ -471,10 +472,10 @@ class EachAlone extends Simulation {
     }
     
     /* contains almost all the styling for the page */
-    const { modelWidth, modelHeight, modelLeft, modelDiv, modelSplit, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
     var newh = controlHeight * 5 / 20;
-    if(this.state.CONTROLVERTDIV != 1){
+    if(this.state.CONTROLVERTDIV !== 1){
     	newh /= (1 - this.state.CONTROLVERTDIV)
     }
     
@@ -493,7 +494,7 @@ class EachAlone extends Simulation {
     		<div style={controlDivStyle}>
     		<div style={controlContainerStyle}>
     			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
-				<img style={controlBlockStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
+				<img style={controlBlockStyle} alt="home button" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
 			</div>
 			
 			<div style={largeControlBlockStyle}>
@@ -508,22 +509,22 @@ class EachAlone extends Simulation {
 			<div style={dataBlockStyle}>
 				
 				<div style={thirdControlStyle} onMouseDown={() => this.setPrecip()}>
-					<img style={thirdControlStyle} src={this.state.precipSrc}/>
+					<img style={thirdControlStyle} alt="select precipitation" src={this.state.precipSrc}/>
 				</div>
 				
 				<div style={thirdControlStyle} onMouseDown={() => this.setTemp()}>
-					<img style={thirdControlStyle} src={this.state.tempSrc}/>
+					<img style={thirdControlStyle} alt="select temperature" src={this.state.tempSrc}/>
 				</div>
 				
 				<div style={thirdControlStyle} onMouseDown={() => this.setIce()}>
-					<img style={thirdControlStyle} src={this.state.iceSrc}/>
+					<img style={thirdControlStyle} alt="select sea ice" src={this.state.iceSrc}/>
 				</div>
 				
 			</div>
 			
 			<div style={controlBlockStyle}>
 				<div style={playSplitDivStyle} onPointerDown={() => this.handleClick()}>
-					<img style={playSplitDivStyle} src={this.state.playButton}/>
+					<img style={playSplitDivStyle} alt="play button" src={this.state.playButton}/>
 				</div>
 				
 				<div style={quarterControlStyle} onPointerDown={this.setAdagio}>
@@ -574,24 +575,24 @@ class EachAlone extends Simulation {
 			</div>
 			
 			<div style={controlBlockStyle} onPointerDown={this.testMusic} onPointerMove={this.testMusic}>
-				<img draggable="false" style={dataBlockStyle} src={this.state.keySrc}/>
+				<img style={dataBlockStyle} alt="map key" src={this.state.keySrc} draggable="false"/>
 			</div>
 			
 			<div style={keyContainer}>
-				<img style={keyContainer} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
+				<img style={keyContainer} alt="graph key" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
 			</div>
 		</div>
 		</div>
 		
 		<div style={skinnyDivStyle}>
-			<img draggable="false" style={skinnyImgStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part2.png"}/>
-			<img draggable="false" style={skinnyImgStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part1.png"}/>
+			<img style={skinnyImgStyle} alt="" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part2.png"} draggable="false"/>
+			<img style={skinnyImgStyle} alt="" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part1.png"} draggable="false"/>
 		</div>
 		
 		<div style={largeDivStyle}>
 			
 			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>
-				<img draggable="false" src={fullUrl} style={modelStyle}/>
+				<img src={fullUrl} alt="climate model" style={modelStyle} draggable="false"/>
 			</div>
 			
 			<div style={graphBufferStyle}>
@@ -607,7 +608,7 @@ class EachAlone extends Simulation {
 			
 			<div style={sliderDivStyle}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
-				<img style={sliderStyle} src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/timelinenumbersimage.png"}/>
+				<img style={sliderStyle} alt="" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/timelinenumbersimage.png"}/>
 			</div>
 			
 		</div>  
@@ -619,7 +620,7 @@ class EachAlone extends Simulation {
 
 
 /*** class wrapper for naviagion functionality ***/
-export default function(props){
+export default function EachAloneWrapper(props){
     const navigation = useNavigation();
 
     return <EachAlone {...props} navigation={navigation} />;
