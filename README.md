@@ -13,26 +13,16 @@ _As packages are installed, you should update this document on how to install th
 5. Navigate in your directory to where you would like to create a new project and make a new folder
 6. Open up a Terminal and navigate to this new folder as the current directory
 7. Execute `npx create-react-app APP_NAME_HERE` (obviously replace `app_name_here`)
-8. Navigate into the folder APP_NAME_HERE
-9. Execute:
-    - `npm install mariadb --save --force`
-    - `npm install react-native --save --force`
-    - `npm install react-native-web --save --force`
-    - `npm install @react-navigation/native --force`
-    - `npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view --force`
-    - `npm install @react-navigation/stack --force`
-    - `npm install axios --save --force`
-    - `npm install pubsub-js --save --force`
-    - `npm install tone --save` (use --force if necessary.  I didn't need to)
-10. Create a new folder outside of the project entirely
-11. Open up a Terminal and navigate to this new folder
-12. Clone the climate_sonification repository into this folder
+8. Create a new folder outside of the project entirely (for repo)
+9. Open up a Terminal and navigate to this new folder
+10. Clone the climate_sonification repository into this folder
     - Open up a Terminal and navigate to this new folder
-13. Clone the climate_sonification repository into this folder
+11. Clone the climate_sonification repository into this folder
     - This repository only contains the src folder and README.md, nothing else
-14. Open up the cloned repository and replace your app’s src folder with this folder
-15. Open up a Terminal and navigate to your folder APP_NAME_HERE
-16. Execute `npm start` to view app in your browser and test locally
+12. Copy contents of repo into your react app (replacing /src/, /public/, package.json)
+13. Open up a Terminal and navigate to your folder APP_NAME_HERE
+14. Execute `npm install --force`
+15. Execute `npm start` to view app in your browser and test locally
     - You do not have to close and reopen the app to view changes. Just save the file locally and hit refresh or sometimes it updates on its own.
 
 ## Local Backend Setup:
