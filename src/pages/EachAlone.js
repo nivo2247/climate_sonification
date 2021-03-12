@@ -449,21 +449,16 @@ class EachAlone extends Simulation {
     
     /*** Get db value ***/
     var coord_val = 0;
-    var avgKeys;
-    var useAvgKey;
     /* if useArray == 3, use the dataset that contains all years of a coord */
     if(this.state.useArray === 3){
-    	avgKeys = Object.keys(this.state.coordData[0]);
-    	useAvgKey = avgKeys[this.state.index+2];
-    	coord_val = this.state.coordData[0][useAvgKey];
+    	coord_val = this.getValByIndex(this.state.coordData, this.state.index);
+    	
     }
     /* use the dataset that contains all coords at a specific year */
     else {
         var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.yearData.length > coord_index){
-    		avgKeys = Object.keys(this.state.yearData[coord_index]);
-    		useAvgKey = avgKeys[0];
-    		coord_val = this.state.yearData[coord_index][useAvgKey];
+    		coord_val = this.getValByCoord(this.state.yearData, this.state.index);
     	}
     	/* catches OOB database requests */
     	else{

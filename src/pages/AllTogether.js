@@ -406,34 +406,20 @@ class AllTogether extends Simulation {
     
     /*** Set avg db values ***/
     if(this.state.useArray === 3){
-    	var precipAvgKeys = Object.keys(this.state.precipAvg[0]);
-    	var usePrecipAvgKey = precipAvgKeys[this.state.index+2];
-    	precip_val = this.state.precipAvg[0][usePrecipAvgKey];
-    
-    	var tempAvgKeys = Object.keys(this.state.tempAvg[0]);
-    	var useTempAvgKey = tempAvgKeys[this.state.index+2];
-    	temp_val = this.state.tempAvg[0][useTempAvgKey];
-    
-    	var iceAvgKeys = Object.keys(this.state.iceAvg[0]);
-    	var useIceAvgKey = iceAvgKeys[this.state.index+2];
-    	ice_val = this.state.iceAvg[0][useIceAvgKey];
+    	precip_val = this.getValByIndex(this.state.precipAvg, this.state.index);
+    	temp_val = this.getValByIndex(this.state.tempAvg, this.state.index);
+    	ice_val = this.getValByIndex(this.state.iceAvg, this.state.index);
     }
     else{
     	var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.precipAvgAllCoords.length > coord_index){
-    		var avgKeys0 = Object.keys(this.state.precipAvgAllCoords[coord_index]);
-    		var useAvgKey0 = avgKeys0[0];
-    		precip_val = this.state.precipAvgAllCoords[coord_index][useAvgKey0];
+    		precip_val = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
     	}
     	if(this.state.tempAvgAllCoords.length > coord_index){
-    		var avgKeys1 = Object.keys(this.state.tempAvgAllCoords[coord_index]);
-    		var useAvgKey1 = avgKeys1[0];
-    		temp_val = this.state.tempAvgAllCoords[coord_index][useAvgKey1];
+    		temp_val = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
     	}
     	if(this.state.iceAvgAllCoords.length > coord_index){
-    		var avgKeys2 = Object.keys(this.state.iceAvgAllCoords[coord_index]);
-    		var useAvgKey2 = avgKeys2[0];
-    		ice_val = this.state.iceAvgAllCoords[coord_index][useAvgKey2];
+    		ice_val = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
     	}
     }
     

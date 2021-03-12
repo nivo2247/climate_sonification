@@ -90,17 +90,28 @@ export class Simulation extends Page {
 		this.incrementIndex = this.incrementIndex.bind(this);
 	}  
 	
+	getValByIndex = (arr, ind) => {
+		var avgKeys = Object.keys(arr[0]);
+    		var useAvgKey = avgKeys[ind+2];
+    		var val = arr[0][useAvgKey];
+    		return val;
+	}
+	
+	getValByCoord = (arr, coord) => {
+		var avgKeys0 = Object.keys(arr[coord]);
+    		var useAvgKey0 = avgKeys0[0];
+    		var val = arr[coord][useAvgKey0];
+    		return val;
+	}
+	
 	setPrecipNotes = (data) => {
 		var precipNoteArr = [];
 		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
-		var precipAvgKeys, usePrecipAvgKey, precip_val;
-		
-		console.log("data", data);
+		var precip_val;
 		
 		for(var i = 0; i < 181; i++){
-			precipAvgKeys = Object.keys(data[0]);
-    			usePrecipAvgKey = precipAvgKeys[i+2];
-    			precip_val = data[0][usePrecipAvgKey];
+    			precip_val = this.getValByIndex(data, i);
+    			
     			if(precip_val < 100){
 				precipNoteArr.push(scale[7]);
 				console.log("small val");
