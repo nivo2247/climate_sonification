@@ -85,6 +85,7 @@ export class Simulation extends Page {
 		this.state.audioAvailable = false;
 		this.state.precipNotes = [];
 	    
+	    	this.graphRef = React.createRef();
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
 	}  
@@ -234,7 +235,7 @@ export class Simulation extends Page {
       
     /*** clears and redraws rectangle around the graph area ***/ 
     setupGraph() {
-    	const ctx = this.refs.models.getContext('2d');
+    	const ctx = this.graphRef.current.getContext('2d');
         var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
     	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
     	var bottom = graphBottom - 1;
@@ -412,19 +413,19 @@ export class Simulation extends Page {
     	}
     
     	const instructionTextStyle = {
-    		'font-family': 'Verdana, sans-serif',
-    		"font-size": largeFontSize,
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": largeFontSize,
     		'display': 'inline'
     	};
     	
     	const paragraphTextStyle = {
-    		'font-family': 'Verdana, sans-serif',
-    		"font-size": smallFontSize
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": smallFontSize
     	};
     
     	const smallLabelTextStyle = {
-    		'font-family': 'Verdana, sans-serif',
-    		"font-size": smallFontSize
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": smallFontSize
     	};
     
     	const quarterControlStyle = {
@@ -491,24 +492,24 @@ export class Simulation extends Page {
     		presto = active;
     	}
     	const adagioHighlight = {
-    		'background-color': adagio,
-    		'font-size': microFontSize,
-    		'font-family': 'Verdana, sans-serif'
+    		'backgroundColor': adagio,
+    		'fontSize': microFontSize,
+    		'fontFamily': 'Verdana, sans-serif'
     	};
     	const moderatoHighlight = {
-    		'background-color': moderato,
-    		'font-size': microFontSize,
-    		'font-family': 'Verdana, sans-serif'
+    		'backgroundColor': moderato,
+    		'fontSize': microFontSize,
+    		'fontFamily': 'Verdana, sans-serif'
     	};
     	const allegroHighlight = {
-    		'background-color': allegro,
-    		'font-size': microFontSize,
-    		'font-family': 'Verdana, sans-serif'
+    		'backgroundColor': allegro,
+    		'fontSize': microFontSize,
+    		'fontFamily': 'Verdana, sans-serif'
     	};
     	const prestoHighlight = {
-    		'background-color': presto,
-    		'font-size': microFontSize,
-    		'font-family': 'Verdana, sans-serif',
+    		'backgroundColor': presto,
+    		'fontSize': microFontSize,
+    		'fontFamily': 'Verdana, sans-serif',
     	};
     
     	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });

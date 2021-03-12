@@ -42,14 +42,14 @@ class HomeScreen extends Page {
     		height: this.state.pageBottom * 3 / 20,
     		width: this.state.pageRight,
     		float: 'left',
-    		'text-align': 'center'
+    		'textAlign': 'center'
     	};
     	const descDivStyle = {
     		height: this.state.pageBottom * 3 / 20,
     		width: this.state.pageRight,
     		overflow: 'hidden',
     		float: 'left',
-    		'text-align': 'center'
+    		'textAlign': 'center'
     	};
     	const buttonDivStyle = {
     		height: Math.floor(this.state.pageBottom * 7 / 20),
@@ -84,21 +84,21 @@ class HomeScreen extends Page {
 		float: 'left'
 	};
 	const titleTextStyle = {
-		'font-family': 'Verdana, sans-serif',
-		'font-size': titleTextSize,
-		'font-weight': 'bold',
+		'fontFamily': 'Verdana, sans-serif',
+		'fontSize': titleTextSize,
+		'fontWeight': 'bold',
 		'color':'white',
-		'-webkit-text-stroke-width': '1px',
-		'-webkit-text-stroke-color': 'black',
+		'WebkitTextStrokeWidth': '1px',
+		'WebkitTextStrokeColor': 'black',
 		'display': 'inline'
 	}
 	const descTextStyle = {
-		'font-family': 'Verdana, sans-serif',
-		'font-size': descTextSize,
-		'font-weight': 'bold',
+		'fontFamily': 'Verdana, sans-serif',
+		'fontSize': descTextSize,
+		'fontWeight': 'bold',
 		'color':'white',
-		'-webkit-text-stroke-width': '1px',
-		'-webkit-text-stroke-color': '#333333',
+		'WebkitTextStrokeWidth': '1px',
+		'WebkitTextStrokeColor': '#333333',
 		'display': 'inline'
 	}
     	

@@ -190,7 +190,7 @@ class AllTogether extends Simulation {
     	if (this.state.index > 0 && this.state.index <= 180){
     	        var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
     		var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
-	    	const ctx = this.refs.models.getContext('2d');
+	    	const ctx = this.graphRef.current.getContext('2d');
 	    	
     		var bottom = graphBottom - 1;
     		var right = modelWidth - 1;
@@ -581,7 +581,7 @@ class AllTogether extends Simulation {
 			</div>
 			
 			<div style={graphStyle}>
-				<canvas ref="models" height={this.state.pageBottom * this.state.GRAPHVERTDIV} width={modelWidth} />
+				<canvas ref={this.graphRef} height={this.state.pageBottom * this.state.GRAPHVERTDIV} width={modelWidth} />
 			</div>
 			
 			<div style={graphBufferStyle}/>
