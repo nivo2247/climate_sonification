@@ -132,8 +132,8 @@ class EachAlone extends Simulation {
     	if (this.state.pageBottom > this.state.pageRight){
     		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
     	}
-    	var x = Math.floor(e.clientX - modelLeft);
-    	var y = Math.floor(e.clientY - modelTop);
+    	var x = Math.floor(e.pageX - modelLeft);
+    	var y = Math.floor(e.pageY - modelTop);
     	
     	var latSave = 0;
     	var lonSave = 0;

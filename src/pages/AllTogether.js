@@ -65,7 +65,7 @@ class AllTogether extends Simulation {
 		// inhereted from Simulation default props.  May change this.
 		const { synth } = this.props;
     	if(e.buttons === 1) {
-    		console.log("X: ", e.clientX, "Y: ", e.clientY);
+    		console.log("X: ", e.pageX, "Y: ", e.pageY);
 			synth.triggerAttackRelease('A5', '8n');
     	}
     }
@@ -86,8 +86,8 @@ class AllTogether extends Simulation {
     	if (this.state.pageBottom > this.state.pageRight){
     		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
     	}
-    	var x = Math.floor(e.clientX - modelLeft);
-    	var y = Math.floor(e.clientY - modelTop);
+    	var x = Math.floor(e.pageX - modelLeft);
+    	var y = Math.floor(e.pageY - modelTop);
     	var latSave = 0;
     	var lonSave = 0;
     	var centerX = 0;
@@ -502,23 +502,6 @@ class AllTogether extends Simulation {
 					<p style={smallLabelTextStyle}>{this.state.longitude}</p>  {/*Need to implement onchangelon*/}
 				</div>
 			</div>
-			
-			{/*  Code which checked text input
-			<View style={{flex:0.05, flexDirection:'row'}}>
-				<View style={{flex:0.25}}>
-					<Text style={{fontSize: 12}}>Lat:</Text>
-				</View>
-				<View style={{flex:0.25}}>
-					<TextInput value={this.state.latitude} style={{flex:1, borderColor:'gray', borderWidth: 1}} onChangeText={(text) => this.onChangeLat(text)} />
-				</View>
-				<View style={{flex:0.25}}>
-					<Text style={{fontSize: 12}}>Lon:</Text>
-				</View>
-				<View style={{flex:0.25}}>
-					<TextInput value={this.state.longitude} style={{flex:1, borderColor:'gray', borderWidth: 1}} onChangeText={(text) => this.onChangeLon(text)} />
-				</View>
-			</View>
-			*/}
 			
 			<div style={dataBlockStyle}>
 				<div style={quarterControlStyle}>
