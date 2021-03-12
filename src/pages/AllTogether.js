@@ -345,6 +345,7 @@ class AllTogether extends Simulation {
     		this.setupGraph();
     		this.updateGraph();
     		console.log(precip_coord_data);
+    		this.setPrecipNotes(precip_coord_data);
     	});
 	}
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){

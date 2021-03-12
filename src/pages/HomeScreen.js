@@ -9,6 +9,16 @@ function onClick(){
 	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
 };
 
+function isMobile(){
+	try{
+		document.createEvent("TouchEvent");
+		return true;
+	}
+	catch(e){
+		return false;
+	}
+}
+
 class HomeScreen extends Page { 
     
     //TODO: Add text styles
@@ -97,13 +107,17 @@ class HomeScreen extends Page {
     
     /*** runs on page open ***/
     componentDidMount = () => {
-    	window.addEventListener('resize', this.updateDimensions);
+    	if(isMobile() === false){
+    		window.addEventListener('resize', this.updateDimensions);
+    	}
     	window.addEventListener('orientationchange', this.rotateDimensions);
     }
     
     /*** runs on page close ***/
     componentWillUnmount = () => {
-    	window.removeEventListener('resize', this.updateDimensions);
+    	if(isMobile() === false){
+    		window.removeEventListener('resize', this.updateDimensions);
+    	}
     	window.removeEventListener('orientationchange', this.rotateDimensions);
     }
     

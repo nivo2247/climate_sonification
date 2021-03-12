@@ -83,11 +83,48 @@ export class Simulation extends Page {
 			SLIDERVERTDIV: 1 / 20,
 			CONTROLSPLIT: 1,
 			useArray: 0,
-			audioAvailable: false
+			audioAvailable: false,
+			precipNotes: []
 	    };
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
 	}  
+	
+	setPrecipNotes = (data) => {
+		var precipNoteArr = [];
+		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
+		var precipAvgKeys, usePrecipAvgKey, precip_val;
+		
+		console.log("data", data);
+		
+		for(var i = 0; i < 181; i++){
+			precipAvgKeys = Object.keys(data[0]);
+    			usePrecipAvgKey = precipAvgKeys[i+2];
+    			precip_val = data[0][usePrecipAvgKey];
+    			if(precip_val < 100){
+				precipNoteArr.push(scale[7]);
+				console.log("small val");
+			}else if(precip_val < 150){
+				precipNoteArr.push(scale[4]);
+			}else if(precip_val < 200){
+				precipNoteArr.push(scale[0]);
+			}else{
+				precipNoteArr.push(scale[2]);
+			}
+		}
+		
+		this.setState({
+			precipNotes: [...precipNoteArr]
+		});
+	}
+	
+	getPrecipNotes = (index) => {
+		if(this.state.precipNotes.length === 0){
+			return ['C5', 'D5', 'F5', 'G5'];
+		}else{
+			return this.state.precipNotes.slice(index);
+		}
+	}
 
 	/*** Run this when stop is pressed or when index === 180 ***/
 	stopMusic = () => {
@@ -106,7 +143,7 @@ export class Simulation extends Page {
 	 * 	than stop.
 	 ****/	
 	playMusic = () => {
-		this.setState( { play: 1, playButton: pauseUrl });
+		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
 		// TODO: replace this with music generated from data
 		// should be done in a separate loadMusic method
 		const testPattern = new Tone.Pattern((time, note) => {
@@ -116,7 +153,7 @@ export class Simulation extends Page {
 			Tone.Draw.schedule(() => {
 				this.incrementIndex();
 			}, time)
-		}, ['C5', 'D5', 'E5', 'G5'], 'up');
+		}, this.getPrecipNotes(this.state.index), 'up');
 
 		// this is kind of a guess to be honest
 		if(this.state.audioAvailable) {

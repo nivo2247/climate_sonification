@@ -25,7 +25,10 @@ export class Page extends React.Component {
     /*** Called when the window is rotated on mobile ***/
     rotateDimensions = async () => {
     	await timer(1000);
-    	this.updateDimensions();
+    	this.setState({
+    		pageBottom: window.innerHeight,
+    		pageRight: window.innerWidth
+    	});
     }
           
     /*** These should never run because each class has separate functions,
