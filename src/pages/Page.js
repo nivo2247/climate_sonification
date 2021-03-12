@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const PADDING = 5;
+export const PADDING = 0;
 
 const timer = ms => new Promise(res => setTimeout(res, ms));
 

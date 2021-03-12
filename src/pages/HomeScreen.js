@@ -13,15 +13,23 @@ class HomeScreen extends Page {
     
     //TODO: Add text styles
     getStyles(){
+    	var titleTextSize = Math.floor(this.state.pageRight / 30 + this.state.pageBottom / 30);
+    	var descTextSize = Math.floor(titleTextSize / 2);
+    
     	const containerStyle = {
     		height: Math.floor(this.state.pageBottom),
     		width: Math.floor(this.state.pageRight),
     		backgroundImage: 'url("https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tAnom.0181.jpg")'
     	};
-    	const titleDivStyle = {
-    		height: this.state.pageBottom / 5,
+    	const bumperDivStyle = {
+    		height: this.state.pageBottom * 1 / 20,
     		width: this.state.pageRight,
     		overflow: 'hidden',
+    		float: 'left'
+    	};
+    	const titleDivStyle = {
+    		height: this.state.pageBottom * 3 / 20,
+    		width: this.state.pageRight,
     		float: 'left',
     		'text-align': 'center'
     	};
@@ -66,22 +74,24 @@ class HomeScreen extends Page {
 	};
 	const titleTextStyle = {
 		'font-family': 'Verdana, sans-serif',
-		'font-size': '60px',
+		'font-size': titleTextSize,
 		'font-weight': 'bold',
 		'color':'white',
 		'-webkit-text-stroke-width': '1px',
-		'-webkit-text-stroke-color': 'black'
+		'-webkit-text-stroke-color': 'black',
+		'display': 'inline'
 	}
 	const descTextStyle = {
 		'font-family': 'Verdana, sans-serif',
-		'font-size': '30px',
+		'font-size': descTextSize,
 		'font-weight': 'bold',
 		'color':'white',
 		'-webkit-text-stroke-width': '1px',
-		'-webkit-text-stroke-color': '#333333'
+		'-webkit-text-stroke-color': '#333333',
+		'display': 'inline'
 	}
     	
-    	return { containerStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle, titleTextStyle, descTextStyle };
+    	return { containerStyle, bumperDivStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle, titleTextStyle, descTextStyle };
     }
     
     /*** runs on page open ***/
@@ -100,11 +110,13 @@ class HomeScreen extends Page {
     
     const { navigation } = this.props;
     
-    const { containerStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle, titleTextStyle, descTextStyle } = this.getStyles();
+    const { containerStyle, bumperDivStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle, titleTextStyle, descTextStyle } = this.getStyles();
 
     return (
 
 	<div style={containerStyle}>
+
+		<div style={bumperDivStyle}/>
 
 		{/* Row for title text */}
 		<div style={titleDivStyle}>

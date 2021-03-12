@@ -251,6 +251,10 @@ export class Simulation extends Page {
     	
     	var skinnyWidth = Math.floor(this.state.pageRight * this.state.SKINNYDIV);
     	
+    	var smallFontSize = Math.floor(this.state.pageRight / 200 + this.state.pageBottom / 100);
+    	var microFontSize = smallFontSize - 2;
+    	var largeFontSize = Math.floor(this.state.pageRight / 160 + this.state.pageBottom / 80);
+    	
     	/*** style for model images and div ***/
     	const modelStyle = {
 		width: modelWidth,
@@ -359,17 +363,18 @@ export class Simulation extends Page {
     
     	const instructionTextStyle = {
     		'font-family': 'Verdana, sans-serif',
-    		"font-size": "14px"
+    		"font-size": largeFontSize,
+    		'display': 'inline'
     	};
     	
     	const paragraphTextStyle = {
     		'font-family': 'Verdana, sans-serif',
-    		"font-size": "12px"
+    		"font-size": smallFontSize
     	};
     
     	const smallLabelTextStyle = {
     		'font-family': 'Verdana, sans-serif',
-    		"font-size": "10px"
+    		"font-size": smallFontSize
     	};
     
     	const quarterControlStyle = {
@@ -437,22 +442,22 @@ export class Simulation extends Page {
     	}
     	const adagioHighlight = {
     		'background-color': adagio,
-    		'font-size': '10px',
+    		'font-size': microFontSize,
     		'font-family': 'Verdana, sans-serif'
     	};
     	const moderatoHighlight = {
     		'background-color': moderato,
-    		'font-size': '10px',
+    		'font-size': microFontSize,
     		'font-family': 'Verdana, sans-serif'
     	};
     	const allegroHighlight = {
     		'background-color': allegro,
-    		'font-size': '10px',
+    		'font-size': microFontSize,
     		'font-family': 'Verdana, sans-serif'
     	};
     	const prestoHighlight = {
     		'background-color': presto,
-    		'font-size': '10px',
+    		'font-size': microFontSize,
     		'font-family': 'Verdana, sans-serif',
     	};
     
