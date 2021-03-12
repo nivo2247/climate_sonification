@@ -471,10 +471,7 @@ class AllTogether extends Simulation {
 			
 			<div style={largeControlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
-				<p style={paragraphTextStyle}>1. Touch the map to select a location</p>
-				<p style={paragraphTextStyle}>2. Touch the timeline to select a starting year</p>
-				<p style={paragraphTextStyle}>3. Press the play button.</p>
-				<p style={paragraphTextStyle}>4. Select a tempo</p>
+				<p style={paragraphTextStyle}>1. Touch the map to select a location<br/>2. Touch the timeline to select a starting year<br/>3. Press the play button.<br/>4. Select a tempo</p>
 			</div>
 			
 			<div style={controlBlockStyle}>

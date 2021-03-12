@@ -61,11 +61,6 @@ const synth = new Tone.Synth().toDestination();
 /*** Shared class for EachAlone and AllTogether class ***/
 export class Simulation extends Page {
 
-	// There's probably a better solution but I want to see if this allows the synth to be inhereted
-	static defaultProps = {
-		synth: new Tone.Synth().toDestination()
-	}
-
 	constructor(props){
 	    super(props)
 	    this.state = {
@@ -114,7 +109,6 @@ export class Simulation extends Page {
 		this.setState( { play: 1, playButton: pauseUrl });
 		// TODO: replace this with music generated from data
 		// should be done in a separate loadMusic method
-		//const { synth } = this.props;
 		const testPattern = new Tone.Pattern((time, note) => {
 			synth.triggerAttackRelease(note, '8n', time);
 			// will need to increment, so I need to bind the
@@ -364,14 +358,17 @@ export class Simulation extends Page {
     	}
     
     	const instructionTextStyle = {
-    		"font-size": "10px"
+    		'font-family': 'Verdana, sans-serif',
+    		"font-size": "14px"
     	};
     	
     	const paragraphTextStyle = {
-    		"font-size": "8px"
+    		'font-family': 'Verdana, sans-serif',
+    		"font-size": "12px"
     	};
     
     	const smallLabelTextStyle = {
+    		'font-family': 'Verdana, sans-serif',
     		"font-size": "10px"
     	};
     
@@ -440,19 +437,23 @@ export class Simulation extends Page {
     	}
     	const adagioHighlight = {
     		'background-color': adagio,
-    		'font-size': '10px'
+    		'font-size': '10px',
+    		'font-family': 'Verdana, sans-serif'
     	};
     	const moderatoHighlight = {
     		'background-color': moderato,
-    		'font-size': '10px'
+    		'font-size': '10px',
+    		'font-family': 'Verdana, sans-serif'
     	};
     	const allegroHighlight = {
     		'background-color': allegro,
-    		'font-size': '10px'
+    		'font-size': '10px',
+    		'font-family': 'Verdana, sans-serif'
     	};
     	const prestoHighlight = {
     		'background-color': presto,
-    		'font-size': '10px'
+    		'font-size': '10px',
+    		'font-family': 'Verdana, sans-serif',
     	};
     
     	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });

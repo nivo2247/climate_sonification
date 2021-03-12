@@ -499,11 +499,7 @@ class EachAlone extends Simulation {
 			
 			<div style={largeControlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
-				<p style={paragraphTextStyle}>1.Select a variable below</p>
-				<p style={paragraphTextStyle}>2. Touch the map to select a location</p>
-				<p style={paragraphTextStyle}>3. Touch the timeline to select a starting year.</p>
-				<p style={paragraphTextStyle}>4. Press the play button.</p>
-				<p style={paragraphTextStyle}>5. Select a tempo</p>
+				<p style={paragraphTextStyle}>1.Select a variable below<br/>2. Touch the map to select a location<br/>3. Touch the timeline to select a starting year.<br/>4. Press the play button.<br/>5. Select a tempo</p>
 			</div>
 			
 			<div style={dataBlockStyle}>

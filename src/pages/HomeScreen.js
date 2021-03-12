@@ -22,13 +22,15 @@ class HomeScreen extends Page {
     		height: this.state.pageBottom / 5,
     		width: this.state.pageRight,
     		overflow: 'hidden',
-    		float: 'left'
+    		float: 'left',
+    		'text-align': 'center'
     	};
     	const descDivStyle = {
     		height: this.state.pageBottom * 3 / 20,
     		width: this.state.pageRight,
     		overflow: 'hidden',
-    		float: 'left'
+    		float: 'left',
+    		'text-align': 'center'
     	};
     	const buttonDivStyle = {
     		height: Math.floor(this.state.pageBottom * 7 / 20),
@@ -62,8 +64,24 @@ class HomeScreen extends Page {
 		width: Math.floor(this.state.pageRight * 8 / 20),
 		float: 'left'
 	};
+	const titleTextStyle = {
+		'font-family': 'Verdana, sans-serif',
+		'font-size': '60px',
+		'font-weight': 'bold',
+		'color':'white',
+		'-webkit-text-stroke-width': '1px',
+		'-webkit-text-stroke-color': 'black'
+	}
+	const descTextStyle = {
+		'font-family': 'Verdana, sans-serif',
+		'font-size': '30px',
+		'font-weight': 'bold',
+		'color':'white',
+		'-webkit-text-stroke-width': '1px',
+		'-webkit-text-stroke-color': '#333333'
+	}
     	
-    	return { containerStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle };
+    	return { containerStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle, titleTextStyle, descTextStyle };
     }
     
     /*** runs on page open ***/
@@ -82,7 +100,7 @@ class HomeScreen extends Page {
     
     const { navigation } = this.props;
     
-    const { containerStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle } = this.getStyles();
+    const { containerStyle, titleDivStyle, descDivStyle, buttonDivStyle, qrDivStyle, buttonBumperStyle, buttonStyle, qrBumperStyle, qrStyle, titleTextStyle, descTextStyle } = this.getStyles();
 
     return (
 
@@ -90,12 +108,12 @@ class HomeScreen extends Page {
 
 		{/* Row for title text */}
 		<div style={titleDivStyle}>
-			<h1>Sounding Climate</h1>
+			<p style={titleTextStyle}>Sounding Climate</p>
 		</div>
 
 		{/* Row for description text */}
 		<div style={descDivStyle}>
-			<h2> What do changes in temperature, precipitation, and sea ice sound like... </h2>
+			<p style={descTextStyle}> What do changes in temperature, precipitation, and sea ice sound like... </p>
 		</div>
 
 		{/* Row for start buttons */}
