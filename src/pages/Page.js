@@ -29,8 +29,8 @@ export class Page extends React.Component {
     /*** Called when the window is rotated on mobile ***/
     rotateDimensions = async () => {
     	await timer(1000);
-	window.resizeTo(window.innerWidth, window.innerHeight);
     	window.scrollTo(0, 0);
+	window.resizeTo(this.state.pageBottom, this.state.pageRight);
     	window.focus();
     	this.setState({
     		pageBottom: window.innerHeight,
