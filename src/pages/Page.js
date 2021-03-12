@@ -11,14 +11,18 @@ export class Page extends React.Component {
         this.state = {
     		pageBottom: window.innerHeight,
     		pageRight: window.innerWidth,
+    		pageBottomMax: window.innerHeight,
+    		pageRightMax: window.innerWidth,
     	};
     }  
     
     /*** called when the window is resized ***/
     updateDimensions = () => {
+    	var newheight = window.innerHeight;
+    	var newwidth = window.innerWidth;
     	this.setState({
-    		pageBottom: window.innerHeight - PADDING,
-    		pageRight: window.innerWidth - PADDING
+    		pageBottom: newheight - PADDING,
+    		pageRight: newwidth - PADDING
     	});
     } 
     

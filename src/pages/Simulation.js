@@ -63,29 +63,28 @@ export class Simulation extends Page {
 
 	constructor(props){
 	    super(props)
-	    this.state = {
-			pageBottom: window.clientHeight - PADDING,
-			pageRight: window.clientWidth - PADDING,
-			index: 0,
-			play: 0,
-			timerLen: 800,
-			playButton: playUrl,
-			co2data : [0],
-			token: "",
-			latitude: 0,
-			longitude: 0,
-			CONTROLDIV: 2 / 10,
-			CONTROLVERTDIV: 1,
-			SKINNYDIV: 1 / 20,
-			MAPDIV: 3 / 4,
-			MAPVERTDIV: 3 / 4,
-			GRAPHVERTDIV: 2 / 10,
-			SLIDERVERTDIV: 1 / 20,
-			CONTROLSPLIT: 1,
-			useArray: 0,
-			audioAvailable: false,
-			precipNotes: []
-	    };
+		this.state.pageBottom = window.clientHeight - PADDING;
+		this.state.pageRight = window.clientWidth - PADDING;
+		this.state.index = 0;
+		this.state.play = 0;
+		this.state.timerLen = 800;
+		this.state.playButton = playUrl;
+		this.state.co2data = [0];
+		this.state.token = "";
+		this.state.latitude = 0;
+		this.state.longitude = 0;
+		this.state.CONTROLDIV = 2 / 10;
+		this.state.CONTROLVERTDIV = 1;
+		this.state.SKINNYDIV = 1 / 20;
+		this.state.MAPDIV = 3 / 4;
+		this.state.MAPVERTDIV = 3 / 4;
+		this.state.GRAPHVERTDIV = 2 / 10;
+		this.state.SLIDERVERTDIV = 1 / 20;
+		this.state.CONTROLSPLIT = 1;
+		this.state.useArray = 0;
+		this.state.audioAvailable = false;
+		this.state.precipNotes = [];
+	    
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
 	}  
@@ -255,10 +254,13 @@ export class Simulation extends Page {
     
     /*** called when the window is resized ***/
     updateDimensions = () => {
+    	var newheight = window.innerHeight;
+    	var newwidth = window.innerWidth;
+    	
     	if(window.innerHeight < window.innerWidth){
     		this.setState({
-    			pageBottom: window.innerHeight - PADDING,
-    			pageRight: window.innerWidth - PADDING,
+    			pageBottom: newheight - PADDING,
+    			pageRight: newwidth - PADDING,
     			CONTROLDIV: 2 / 10,
 			SKINNYDIV: 1 / 20,
 			MAPDIV: 3 / 4,
@@ -272,8 +274,8 @@ export class Simulation extends Page {
     	}
     	else{
     		this.setState({
-    			pageBottom: window.innerHeight - PADDING,
-    			pageRight: window.innerWidth - PADDING,
+    			pageBottom: newheight - PADDING,
+    			pageRight: newwidth - PADDING,
     			CONTROLDIV: 1,
 			SKINNYDIV: 1 / 20,
 			MAPDIV: 19 / 20,

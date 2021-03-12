@@ -399,7 +399,9 @@ class EachAlone extends Simulation {
     	
     	/* setup subscriber indexIncrementer */
 	this.setState({
-		token: PubSub.subscribe('TOPIC', indexIncrementer)
+		token: PubSub.subscribe('TOPIC', indexIncrementer),
+		pageBottomMax: window.innerHeight,
+		pageRightMax: window.innerWidth
 	
 	});
 	

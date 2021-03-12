@@ -111,6 +111,10 @@ class HomeScreen extends Page {
     		window.addEventListener('resize', this.updateDimensions);
     	}
     	window.addEventListener('orientationchange', this.rotateDimensions);
+    	this.setState({
+    		pageBottomMax: window.innerHeight,
+    		pageRightMax: window.innerWidth
+    	});
     }
     
     /*** runs on page close ***/
