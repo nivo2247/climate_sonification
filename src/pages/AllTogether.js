@@ -52,7 +52,7 @@ class AllTogether extends Simulation {
     		var keyLeft = 0;
     		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
     		var keyTop = Math.floor(this.state.pageBottom * 14 / 20);
-    		var keyBottom = Math.floor(this.state.pageBottom * 18 / 20);
+    		var keyBottom = Math.floor(this.state.pageBottom * 17 / 20);
     		if(this.state.CONTROLVERTDIV !== 1){
     			keyLeft = this.state.pageRight / 2;
     			keyRight = this.state.pageRight;
@@ -66,15 +66,15 @@ class AllTogether extends Simulation {
    		var percX = x / rangeX;
    		var percY = y / rangeY;
    		var playVal;
-   		if(percY <= 0.3){
+   		if(percY <= 0.33){
    			playVal = (percX - .175) * 500 + 100;
    			console.log("playprecip: ", playVal);
    		}
-   		else if(percY <= 0.6){
+   		else if(percY <= 0.66){
    			playVal = (percX - .14) * 23;
    			console.log("playtemp: ", playVal);
    		}
-   		else if(percY <= .9){
+   		else if(percY <= 1){
    			playVal = percX;
    			console.log("playice: ", playVal);
    		}

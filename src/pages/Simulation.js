@@ -213,11 +213,13 @@ export class Simulation extends Page {
     
     /*** handle year changes from the slider ***/
     handleYear = (event) => {
-    	this.setState({
-    		index: parseInt(event.target.value),
-    		useArray: 3
-    	});
-    	this.setupGraph();
+    	if(this.state.play === 0){
+    		this.setState({
+    			index: parseInt(event.target.value),
+    			useArray: 3
+    		});
+    		this.setupGraph();
+    	}
     }   
       
     /*** clears and redraws rectangle around the graph area ***/ 
