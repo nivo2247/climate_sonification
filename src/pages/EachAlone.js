@@ -186,19 +186,30 @@ class EachAlone extends Simulation {
     		var prev_val = 0;
     		var coord_val = 0;
     		
+    		var co2_median = 300;
+    		var co2_range = 700;
+    		var co2_avg = Math.floor(avg * 1.6);
+    		
+    		ctx.beginPath();
+    		for(var co2Ind = 1; co2Ind <= this.state.index; co2Ind++){
+    		    	prev_val = this.state.co2data[co2Ind - 1].co2_val;
+    			coord_val = this.state.co2data[co2Ind].co2_val;
+    			
+    			console.log(prev_val);
+    			ctx.moveTo(1 + step * (co2Ind - 1), co2_avg - co2_avg * (prev_val - co2_median) / co2_range);
+    			ctx.lineTo(1 + step * co2Ind, co2_avg - co2_avg * (coord_val - co2_median) / co2_range);
+    			ctx.strokeStyle = "yellow";
+    		}
+    		ctx.stroke();
+    		
     		if(this.state.state === 0){
     			var precip_median = 100;
     			var precip_max = 120;
     		
     			ctx.beginPath();
     			for(var precipInd = 0; precipInd <= this.state.index; precipInd++){
-    			    	var precipAvgKeys = Object.keys(this.state.coordData[0]);
-    				var usePrecipAvgKey = precipAvgKeys[precipInd + 1];
-    				prev_val = this.state.coordData[0][usePrecipAvgKey];
-    				
-    				var precipAvgKeys1 = Object.keys(this.state.coordData[0]);
-    				var usePrecipAvgKey1 = precipAvgKeys1[precipInd + 2];
-    				coord_val = this.state.coordData[0][usePrecipAvgKey1];
+    				prev_val = this.getValByIndex(this.state.coordData, precipInd - 1);
+    				coord_val = this.getValByIndex(this.state.coordData, precipInd);
     			
     				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
     				ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_max));
@@ -214,13 +225,8 @@ class EachAlone extends Simulation {
     		
     		ctx.beginPath();
     		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){
-    		    	var tempAvgKeys = Object.keys(this.state.coordData[0]);
-    			var useTempAvgKey = tempAvgKeys[tempInd + 1];
-    			prev_val = this.state.coordData[0][useTempAvgKey];
-    			
-    			var tempAvgKeys1 = Object.keys(this.state.coordData[0]);
-    			var useTempAvgKey1 = tempAvgKeys1[tempInd + 2];
-    			coord_val = this.state.coordData[0][useTempAvgKey1];
+    		    	prev_val = this.getValByIndex(this.state.coordData, tempInd - 1);
+    			coord_val = this.getValByIndex(this.state.coordData, tempInd);
     			
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
     			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_max));
@@ -236,13 +242,8 @@ class EachAlone extends Simulation {
     		
     		ctx.beginPath();
     		for(var iceInd = 0; iceInd <= this.state.index; iceInd++){
-    		    	var iceAvgKeys = Object.keys(this.state.coordData[0]);
-    			var useIceAvgKey = iceAvgKeys[iceInd + 1];
-    			prev_val = this.state.coordData[0][useIceAvgKey];
-    			
-    			var iceAvgKeys1 = Object.keys(this.state.coordData[0]);
-    			var useIceAvgKey1 = iceAvgKeys1[iceInd + 2];
-    			coord_val = this.state.coordData[0][useIceAvgKey1];
+    		    	prev_val = this.getValByIndex(this.state.coordData, iceInd - 1);
+    			coord_val = this.getValByIndex(this.state.coordData, iceInd);
     			
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
     			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
