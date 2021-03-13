@@ -28,16 +28,16 @@ class AllTogether extends Simulation {
     
     /* TODO: activates when clicking map keys, make this play test note */
     testMusic = (e) => {
-    	if(e.buttons === 1){
+    	if(e.buttons === 1 && this.state.play === 0){
     		var keyLeft = 0;
     		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
-    		var keyTop = Math.floor(this.state.pageBottom * 14 / 20);
-    		var keyBottom = Math.floor(this.state.pageBottom * 17 / 20);
+    		var keyTop = Math.floor(this.state.pageBottom * 15 / 20);
+    		var keyBottom = Math.floor(this.state.pageBottom * 18 / 20);
     		if(this.state.CONTROLVERTDIV !== 1){
     			keyLeft = this.state.pageRight / 2;
     			keyRight = this.state.pageRight;
-    			keyTop = this.state.pageBottom * 17 / 80;
-    			keyBottom = this.state.pageBottom * 25 / 80;
+    			keyTop = this.state.pageBottom * 2 / 10;
+    			keyBottom = this.state.pageBottom * 8 / 25;
     		}
     		var x = e.pageX - keyLeft;
     		var y = e.pageY - keyTop;
@@ -46,6 +46,8 @@ class AllTogether extends Simulation {
    		var percX = x / rangeX;
    		var percY = y / rangeY;
    		var playVal;
+   		var type = 0;
+   		console.log(percY);
    		if(percY <= 0.33){
    			playVal = (percX - .175) * 500 + 100;
    			console.log("playprecip: ", playVal);
@@ -53,11 +55,15 @@ class AllTogether extends Simulation {
    		else if(percY <= 0.66){
    			playVal = (percX - .14) * 23;
    			console.log("playtemp: ", playVal);
+   			type = 1;
    		}
    		else if(percY <= 1){
    			playVal = percX;
    			console.log("playice: ", playVal);
+   			type = 2;
    		}
+   		console.log(type);
+   		this.playNoteByVal(type, playVal, this.state.index, this.state.coordData);
    	}
     }
     
@@ -232,7 +238,6 @@ class AllTogether extends Simulation {
     		    	prev_val = this.state.co2data[co2Ind - 1].co2_val;
     			coord_val = this.state.co2data[co2Ind].co2_val;
     			
-    			console.log(prev_val);
     			ctx.moveTo(1 + step * (co2Ind - 1), co2_avg - co2_avg * (prev_val - co2_median) / co2_range);
     			ctx.lineTo(1 + step * co2Ind, co2_avg - co2_avg * (coord_val - co2_median) / co2_range);
     			ctx.strokeStyle = "yellow";
@@ -391,12 +396,10 @@ class AllTogether extends Simulation {
 	 * 	than stop.
 	 ****/	
 	playMusic = () => {
-		const precipsynth = new Tone.FMSynth().toDestination();
-		const tempsynth = new Tone.Synth().toDestination();
-		tempsynth.oscillator.type = "sine";
-		tempsynth.volume.value = 10;
-		const icesynth = new Tone.AMSynth().toDestination();
-		icesynth.volume.value = 6;
+		const precipsynth = this.getSynth(0);
+		const tempsynth = this.getSynth(1);
+		const icesynth = this.getSynth(2);
+		
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
 		const precipPattern = new Tone.Sequence((time, note) => {
 			precipsynth.triggerAttackRelease(note, '8n', time);

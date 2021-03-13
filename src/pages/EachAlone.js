@@ -195,7 +195,6 @@ class EachAlone extends Simulation {
     		    	prev_val = this.state.co2data[co2Ind - 1].co2_val;
     			coord_val = this.state.co2data[co2Ind].co2_val;
     			
-    			console.log(prev_val);
     			ctx.moveTo(1 + step * (co2Ind - 1), co2_avg - co2_avg * (prev_val - co2_median) / co2_range);
     			ctx.lineTo(1 + step * co2Ind, co2_avg - co2_avg * (coord_val - co2_median) / co2_range);
     			ctx.strokeStyle = "yellow";
@@ -365,7 +364,7 @@ class EachAlone extends Simulation {
     *** When a user clicks the key, it should figure out
     *** what value they are pressing and pay the corresponding note ***/
     testMusic = (e) => {
-    	if(e.buttons === 1){
+    	if(e.buttons === 1 && this.state.play === 0){
     		var keyLeft = 0;
     		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
     		if(this.state.CONTROLVERTDIV !== 1){
@@ -388,30 +387,30 @@ class EachAlone extends Simulation {
    			playVal = percX;
    			console.log("playice: ", playVal);
    		}
+   		this.playNoteByVal(this.state.state, playVal, this.state.index, this.state.coordData);
    	}
     }
     
+    noteHelper = () => {
+    	var notes = [];
+    	if(this.state.state === 0){
+		notes = this.getPrecipNotes(this.state.index);
+	}
+	
+	else if(this.state.state === 1){
+		notes = this.getTempNotes(this.state.index);
+	}
+	
+	else{
+		notes = this.getIceNotes(this.state.index);
+	}
+	return notes;
+    }
+    
     playMusic = () => {
-		var synth;
+		const synth = this.getSynth(this.state.state);
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
-		var notes = [];
-		
-		if(this.state.state === 0){
-			notes = this.getPrecipNotes(this.state.index);
-			synth = new Tone.FMSynth().toDestination();
-		}
-		
-		else if(this.state.state === 1){
-			notes = this.getTempNotes(this.state.index);
-			synth = new Tone.Synth().toDestination()
-			synth.volume.value = 10;
-		}
-		
-		else{
-			notes = this.getIceNotes(this.state.index);
-			synth = new Tone.AMSynth().toDestination()
-			synth.volume.value = 10;
-		}
+		const notes = this.noteHelper();
 		
 		const notePattern = new Tone.Sequence((time, note) => {
 			synth.triggerAttackRelease(note, '8n', time);

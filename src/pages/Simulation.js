@@ -59,39 +59,13 @@ export class Simulation extends Page {
 	
 	setPrecipNotes = (data) => {
 		var precipNoteArr = [];
-		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
 		var precip_val;
-		var prev_val = 100;
+		var note;
 		
 		for(var i = 0; i < 181; i++){
-			if(i > 100){
-				scale = ['G5', 'A5', 'A#5', 'C5', 'D5', 'D#5', 'F5', 'G4'];
-			}
     			precip_val = this.getValByIndex(data, i);
-    			var diff = Math.abs(precip_val - prev_val);
-    			var rand = Math.random();
-    			if(diff < 10){
-    				if(rand <= 0.33){
-					precipNoteArr.push(scale[7]);
-				}else if(rand <= 0.67){
-					precipNoteArr.push(scale[0]);
-				}else{
-					precipNoteArr.push(scale[4]);
-				}
-			}else if(diff < 50){
-				if(rand <= 0.5){
-					precipNoteArr.push(scale[6]);
-				}else{
-					precipNoteArr.push(scale[3]);
-				}
-			}else{
-				if(rand <= 0.5){
-					precipNoteArr.push(scale[6]);
-				}else{
-					precipNoteArr.push(scale[1]);
-				}
-			}
-			prev_val = precip_val;
+    			note = this.getNoteByVal(0, precip_val, i, data);
+    			precipNoteArr.push(note)
 		}
 		
 		this.setState({
@@ -101,37 +75,14 @@ export class Simulation extends Page {
 	
 	setTempNotes = (data) => {
 		var tempNoteArr = [];
-		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
 		var temp_val;
+		var note;
 		
 		for(var i = 0; i < 181; i++){
-			if(i > 100){
-				scale = ['G5', 'A5', 'A#5', 'C5', 'D5', 'D#5', 'F5', 'G4'];
-			}
     			temp_val = this.getValByIndex(data, i);
-    			var rand = Math.random();
+    			note = this.getNoteByVal(1, temp_val, i, data);
+    			tempNoteArr.push(note);
     			
-    			if(temp_val < 1){
-    				if(rand <= 0.33){
-					tempNoteArr.push(scale[7]);
-				}else if(rand <= 0.67){
-					tempNoteArr.push(scale[0]);
-				}else{
-					tempNoteArr.push(scale[4]);
-				}
-			}else if(temp_val < 2){
-				if(rand <= 0.5){
-					tempNoteArr.push(scale[6]);
-				}else{
-					tempNoteArr.push(scale[3]);
-				}
-			}else{
-				if(rand <= 0.5){
-					tempNoteArr.push(scale[6]);
-				}else{
-					tempNoteArr.push(scale[1]);
-				}
-			}
 		}
 		
 		this.setState({
@@ -141,38 +92,13 @@ export class Simulation extends Page {
 	
 	setIceNotes = (data) => {
 		var iceNoteArr = [];
-		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
 		var ice_val;
+		var note;
 		
 		for(var i = 0; i < 181; i++){
-			if(i > 100){
-				scale = ['G5', 'A5', 'A#5', 'C5', 'D5', 'D#5', 'F5', 'G4'];
-			}
-			
     			ice_val = this.getValByIndex(data, i);
-    			var rand = Math.random();
-    			
-    			if(ice_val >= .95){
-    				if(rand <= 0.33){
-					iceNoteArr.push(scale[7]);
-				}else if(rand <= 0.67){
-					iceNoteArr.push(scale[0]);
-				}else{
-					iceNoteArr.push(scale[4]);
-				}
-			}else if(ice_val < 0.8){
-				if(rand <= 0.5){
-					iceNoteArr.push(scale[6]);
-				}else{
-					iceNoteArr.push(scale[3]);
-				}
-			}else{
-				if(rand <= 0.5){
-					iceNoteArr.push(scale[6]);
-				}else{
-					iceNoteArr.push(scale[1]);
-				}
-			}
+    			note = this.getNoteByVal(2, ice_val, i, data);
+    			iceNoteArr.push(note);
 		}
 		
 		this.setState({
@@ -202,6 +128,117 @@ export class Simulation extends Page {
 		}else{
 			return this.state.iceNotes.slice(index);
 		}
+	}
+	
+	getNoteByVal(type, val, index, data){
+		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
+		if(index > 100){
+			scale = ['G5', 'A5', 'A#5', 'C5', 'D5', 'D#5', 'F5', 'G4'];
+		}
+		var rand = Math.random();
+		if(type === 0){
+    			var precip_val = val;
+    			var prev_val = 100;
+    			if(index !== 0){
+    				prev_val = this.getValByIndex(data, index - 1)
+    			}
+    			var diff = Math.abs(precip_val - prev_val);
+    			if(diff < 10){
+    				if(rand <= 0.33){
+					return scale[7];
+				}else if(rand <= 0.67){
+					return scale[0];
+				}else{
+					return scale[4];
+				}
+			}else if(diff < 50){
+				if(rand <= 0.5){
+					return scale[6];
+				}else{
+					return scale[3];
+				}
+			}else{
+				if(rand <= 0.5){
+					return scale[6];
+				}else{
+					return scale[1];
+				}
+			}
+		}
+		else if(type === 1){
+			var temp_val = val;
+    			
+    			if(temp_val < 1){
+    				if(rand <= 0.33){
+					return scale[7];
+				}else if(rand <= 0.67){
+					return scale[0];
+				}else{
+					return scale[4];
+				}
+			}else if(temp_val < 2){
+				if(rand <= 0.5){
+					return scale[6];
+				}else{
+					return scale[3];
+				}
+			}else{
+				if(rand <= 0.5){
+					return scale[6];
+				}else{
+					return scale[1];
+				}
+			}
+		}
+		else if(type === 2){
+			var ice_val = val;
+    			
+    			if(ice_val >= .95){
+    				if(rand <= 0.33){
+					return scale[7];
+				}else if(rand <= 0.67){
+					return scale[0];
+				}else{
+					return scale[4];
+				}
+			}else if(ice_val < 0.8){
+				if(rand <= 0.5){
+					return scale[6];
+				}else{
+					return scale[3];
+				}
+			}else{
+				if(rand <= 0.5){
+					return scale[6];
+				}else{
+					return scale[1];
+				}
+			}
+		}
+		return 'C5';
+	}
+	
+	playNoteByVal = (type, val, index, data) => {
+		const synth = this.getSynth(type);
+		const note = this.getNoteByVal(type, val, index, data);
+		console.log(note);
+		synth.triggerAttackRelease(note, '8n');
+	}
+	
+	getSynth = (type) => {
+		var retsynth;
+		if(type === 0){
+			 retsynth = new Tone.FMSynth().toDestination();
+		}
+		else if(type === 1){
+			 retsynth = new Tone.FMSynth().toDestination();
+			 retsynth.volume.value = 5;
+		}
+		else if(type === 2){
+			 retsynth = new Tone.AMSynth().toDestination();
+			 retsynth.volume.value = 10;
+		}
+		return retsynth;
 	}
 
 	/*** Run this when stop is pressed or when index === 180 ***/
