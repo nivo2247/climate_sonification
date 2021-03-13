@@ -63,19 +63,34 @@ export class Simulation extends Page {
 		var precipNoteArr = [];
 		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
 		var precip_val;
+		var prev_val = 100;
 		
 		for(var i = 0; i < 181; i++){
     			precip_val = this.getValByIndex(data, i);
-    			
-    			if(precip_val < 100){
-				precipNoteArr.push(scale[7]);
-			}else if(precip_val < 150){
-				precipNoteArr.push(scale[4]);
-			}else if(precip_val < 200){
-				precipNoteArr.push(scale[0]);
+    			var diff = Math.abs(precip_val - prev_val);
+    			var rand = Math.random();
+    			if(diff < 10){
+    				if(rand <= 0.33){
+					precipNoteArr.push(scale[7]);
+				}else if(rand <= 0.67){
+					precipNoteArr.push(scale[0]);
+				}else{
+					precipNoteArr.push(scale[4]);
+				}
+			}else if(diff < 50){
+				if(rand <= 0.5){
+					precipNoteArr.push(scale[6]);
+				}else{
+					precipNoteArr.push(scale[3]);
+				}
 			}else{
-				precipNoteArr.push(scale[2]);
+				if(rand <= 0.5){
+					precipNoteArr.push(scale[6]);
+				}else{
+					precipNoteArr.push(scale[1]);
+				}
 			}
+			prev_val = precip_val;
 		}
 		
 		this.setState({
@@ -90,15 +105,28 @@ export class Simulation extends Page {
 		
 		for(var i = 0; i < 181; i++){
     			temp_val = this.getValByIndex(data, i);
+    			var rand = Math.random();
     			
-    			if(temp_val < 0.5){
-				tempNoteArr.push(scale[7]);
-			}else if(temp_val < 1){
-				tempNoteArr.push(scale[4]);
+    			if(temp_val < 1){
+    				if(rand <= 0.33){
+					tempNoteArr.push(scale[7]);
+				}else if(rand <= 0.67){
+					tempNoteArr.push(scale[0]);
+				}else{
+					tempNoteArr.push(scale[4]);
+				}
 			}else if(temp_val < 2){
-				tempNoteArr.push(scale[0]);
+				if(rand <= 0.5){
+					tempNoteArr.push(scale[6]);
+				}else{
+					tempNoteArr.push(scale[3]);
+				}
 			}else{
-				tempNoteArr.push(scale[2]);
+				if(rand <= 0.5){
+					tempNoteArr.push(scale[6]);
+				}else{
+					tempNoteArr.push(scale[1]);
+				}
 			}
 		}
 		
@@ -114,15 +142,28 @@ export class Simulation extends Page {
 		
 		for(var i = 0; i < 181; i++){
     			ice_val = this.getValByIndex(data, i);
+    			var rand = Math.random();
     			
-    			if(ice_val > 0.75){
-				iceNoteArr.push(scale[7]);
-			}else if(ice_val > 0.5){
-				iceNoteArr.push(scale[4]);
-			}else if(ice_val > 0.25){
-				iceNoteArr.push(scale[0]);
+    			if(ice_val >= .95){
+    				if(rand <= 0.33){
+					iceNoteArr.push(scale[7]);
+				}else if(rand <= 0.67){
+					iceNoteArr.push(scale[0]);
+				}else{
+					iceNoteArr.push(scale[4]);
+				}
+			}else if(ice_val < 0.8){
+				if(rand <= 0.5){
+					iceNoteArr.push(scale[6]);
+				}else{
+					iceNoteArr.push(scale[3]);
+				}
 			}else{
-				iceNoteArr.push(scale[2]);
+				if(rand <= 0.5){
+					iceNoteArr.push(scale[6]);
+				}else{
+					iceNoteArr.push(scale[1]);
+				}
 			}
 		}
 		
