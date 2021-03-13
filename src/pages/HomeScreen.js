@@ -2,17 +2,14 @@ import * as React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Page } from './Page.js';
 import { isBrowser } from 'react-device-detect';
+import { eachAloneButton, allTogetherButton, qrImg } from './../const/url.js';
 
-//TODO: Declare URLS as consts
-
-//TODO: Rename function to make sense
-function onClick(){
+function redirect(){
 	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
 };
 
 class HomeScreen extends Page { 
     
-    //TODO: Add text styles
     getStyles(){
     	var titleTextSize = Math.floor(this.state.pageRight / 30 + this.state.pageBottom / 30);
     	var descTextSize = Math.floor(titleTextSize / 2);
@@ -116,6 +113,7 @@ class HomeScreen extends Page {
     	window.removeEventListener('orientationchange', this.rotateDimensions);
     }
     
+    /*** return html ***/
     render(){
     
     const { navigation } = this.props;
@@ -141,14 +139,14 @@ class HomeScreen extends Page {
 			<div style={buttonBumperStyle}/>
 			
 			<div style={buttonStyle} onPointerUp={() => navigation.navigate('EachAlone')}>
-				<img style={buttonStyle} alt="each on its own" src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png" />
+				<img style={buttonStyle} alt="each on its own" src={eachAloneButton} />
 			</div>
 			
 			<div style={buttonBumperStyle}/>
 			<div style={buttonBumperStyle}/>
 			
 			<div style={buttonStyle} onPointerUp={() => navigation.navigate('AllTogether')}>
-				<img style={buttonStyle} alt="all together" src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_basicBkg.png" />
+				<img style={buttonStyle} alt="all together" src={allTogetherButton} />
 			</div>
 			
 			<div style={buttonBumperStyle}/>
@@ -156,8 +154,8 @@ class HomeScreen extends Page {
 		
 		<div style={qrDivStyle}>
 			<div style={qrBumperStyle}/>
-			<div style={qrStyle} onPointerDown={onClick}>
-				<img style={qrStyle} alt="link to article" src="https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/articleqr.png"/>
+			<div style={qrStyle} onPointerDown={redirect}>
+				<img style={qrStyle} alt="link to article" src={qrImg}/>
 			</div>
 			<div style={qrBumperStyle}/>
 		</div>

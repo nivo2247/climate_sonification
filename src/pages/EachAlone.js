@@ -4,41 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import Axios from 'axios';
 import PubSub from 'pubsub-js';
 import { isBrowser } from 'react-device-detect';
-import { precipImgs, tempImgs, iceImgs, dbUrl } from './../const/url.js';
 import { indexIncrementer, Simulation } from './Simulation.js';
 
+import { precipImgs, tempImgs, iceImgs, dbUrl, urlPre, precipActive, precipInactive, tempActive, tempInactive, iceActive, iceInactive, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImgAlone, bottomSkinnyImgAlone, timelineImg, aloneArtifactImgs } from './../const/url.js';
 
-/*** Links to AWS S3 media ***/
-const urlPre = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
-const precipActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.png";
-const precipInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_inactive.png";
-const tempActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_active.png";
-const tempInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_inactive.png";
-const iceActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_active.png";
-const iceInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_inactive.png";
-const precipKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/precipLegend1.png";
-const tempKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tempLegend2.png";
-const iceKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/seaiceLegend.png";
-const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
-const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
-
-/*** used to preload images in the page ***/
-const artifactImgs = [
-	precipActive,
-	precipInactive,
-	tempActive,
-	tempInactive,
-	iceActive,
-	iceInactive,
-	precipKey,
-	tempKey,
-	iceKey,
-	playUrl,
-	pauseUrl
-];
-
-/* TODO: Implement this with latitude, longitude, and year,
-* convert those to textboxes and check val */
 function isNumeric(value) {
 	return /^-?\d+$/.test(value);
 }
@@ -191,11 +160,6 @@ class EachAlone extends Simulation {
 			lonSave = (projx - centerX) * 540 / modelDiv;
 		    	latSave = 90 - projy * 90 / modelSplit;
 		    	
-			/*
-			console.log("cx: ", centerX, "   x: ", x, "    dx: ", dx);
-			console.log("cy: ", centerY, "   y: ", y, "    dy: ", dy); */
-			console.log("r: ", r, "   theta: ", theta);
-			console.log("px: ", projx, "py: ", projy);
 		}
 	    	this.setState({
 	    		latitude: Math.floor(latSave), 
@@ -328,7 +292,6 @@ class EachAlone extends Simulation {
 			intermediate = table.concat("seaiceavg/year/");
 		}
 		var request = intermediate.concat(year.toString(10));
-		console.log(request);
 		Axios.get(request)
 			.then(res => {
     			const year_data = res.data.data;
@@ -357,7 +320,6 @@ class EachAlone extends Simulation {
     				latitude: parsedval,
     				useArray: 0
     			});	
-    			console.log("changed lat to", newval);
     			this.setupGraph();
     		}
     	}
@@ -373,7 +335,6 @@ class EachAlone extends Simulation {
     				longitude: parsedval,
     				useArray: 0
     			});	
-    			console.log("changed lon to", newval);
     			this.setupGraph();
     		}
     	}
@@ -403,7 +364,7 @@ class EachAlone extends Simulation {
 			intermediate = table.concat("seaiceavg/coord/(");
 		}
 		var request = intermediate.concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
-		console.log(request);
+		
 		Axios.get(request)
 			.then(res => {
     			const coord_data = res.data.data;
@@ -413,8 +374,6 @@ class EachAlone extends Simulation {
     			console.log(coord_data);
     		});
 	}
-	/* Filter and do db hit here */
-    	console.log("dbX: ", dbX, "dbY: ", dbY);
     };
 
     /*** This is an onPointerDown for the map keys.
@@ -446,7 +405,7 @@ class EachAlone extends Simulation {
 	});
 	
 	/* preload artifacts and simulation images */
-	artifactImgs.forEach((picture) => {
+	aloneArtifactImgs.forEach((picture) => {
     		Image.prefetch(picture);
     	});	
 	precipImgs.forEach((picture) => {
@@ -506,10 +465,6 @@ class EachAlone extends Simulation {
     	if(this.state.yearData.length > coord_index){
     		coord_val = this.getValByCoord(this.state.yearData, this.state.latitude, this.state.longitude);
     	}
-    	/* catches OOB database requests */
-    	else{
-    		console.log("dbx: ", dbX, " dbY: ", dbY);
-    	}
     }
     
     /* contains almost all the styling for the page */
@@ -535,7 +490,7 @@ class EachAlone extends Simulation {
     		<div style={controlDivStyle}>
     		<div style={controlContainerStyle}>
     			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
-				<img style={controlBlockStyle} alt="home button" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png"} />
+				<img style={controlBlockStyle} alt="home button" src={homeButton} />
 			</div>
 			
 			<div style={largeControlBlockStyle}>
@@ -603,14 +558,14 @@ class EachAlone extends Simulation {
 			</div>
 			
 			<div style={keyContainer}>
-				<img style={keyContainer} alt="graph key" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>
+				<img style={keyContainer} alt="graph key" src={graphKey}/>
 			</div>
 		</div>
 		</div>
 		
 		<div style={skinnyDivStyle}>
-			<img style={skinnyImgStyle} alt="" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part2.png"} draggable="false"/>
-			<img style={skinnyImgStyle} alt="" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part1.png"} draggable="false"/>
+			<img style={skinnyImgStyle} alt="" src={topSkinnyImgAlone} draggable="false"/>
+			<img style={skinnyImgStyle} alt="" src={bottomSkinnyImgAlone} draggable="false"/>
 		</div>
 		
 		<div style={largeDivStyle}>
@@ -632,7 +587,7 @@ class EachAlone extends Simulation {
 			
 			<div style={sliderDivStyle}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
-				<img style={sliderStyle} alt="" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/timelinenumbersimage.png"}/>
+				<img style={sliderStyle} alt="" src={timelineImg}/>
 			</div>
 			
 		</div>  

@@ -1,10 +1,7 @@
 import * as React from 'react';
 import * as Tone from 'tone';
 import { PADDING, Page } from './Page.js';
-
-/*** Links to AWS S3 media ***/
-const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
-const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
+import { playUrl, pauseUrl } from './../const/url.js';
 
 /* used to wait a certain amount of ms */
 const timer = ms => new Promise(res => setTimeout(res, ms));
