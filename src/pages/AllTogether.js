@@ -48,11 +48,8 @@ class AllTogether extends Simulation {
     
     /* TODO: activates when clicking map keys, make this play test note */
     testMusic = (e) => {
-		// inhereted from Simulation default props.  May change this.
-		const { synth } = this.props;
     	if(e.buttons === 1) {
     		console.log("X: ", e.pageX, "Y: ", e.pageY);
-			synth.triggerAttackRelease('A5', '8n');
     	}
     }
     
@@ -378,6 +375,41 @@ class AllTogether extends Simulation {
 	}
     };
     
+    getTogetherStyles(mw, ch, cw) {
+    	var modelWidth = mw;
+    	var controlHeight = ch;
+    	var controlWidth = cw;
+    	var newh = controlHeight * 4 / 20;
+    	if(this.state.CONTROLVERTDIV !== 1){
+    		newh /= (1 - this.state.CONTROLVERTDIV)
+    	}
+    
+    	var largeControlBlockStyle = {
+    		height: Math.floor(newh),
+    		width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
+    		overflow: 'hidden',
+    		float: 'left'
+    	}
+    
+    	const dataThirdStyle = {
+    		width: Math.floor(modelWidth / 3),
+    		height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
+    		overflow: 'hidden',
+    		float: 'left'
+    	}
+    
+    	var graphHeight = this.state.pageBottom * this.state.GRAPHVERTDIV;
+    	if(isNaN(graphHeight)){
+    		graphHeight = 0;
+    	}
+    
+    	var graphWidth = modelWidth;
+    	if(isNaN(graphWidth)){
+    		graphWidth = 0;
+    	}
+    	return { largeControlBlockStyle, dataThirdStyle, graphHeight, graphWidth };
+    }
+    
     /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
@@ -431,24 +463,7 @@ class AllTogether extends Simulation {
     
     const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, inputControlStyle, labelControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
-    var newh = controlHeight * 4 / 20;
-    if(this.state.CONTROLVERTDIV !== 1){
-    	newh /= (1 - this.state.CONTROLVERTDIV)
-    }
-    
-    var largeControlBlockStyle = {
-    	height: Math.floor(newh),
-    	width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
-    	overflow: 'hidden',
-    	float: 'left'
-    }
-    
-    const dataThirdStyle = {
-    	width: Math.floor(modelWidth / 3),
-    	height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
-    	overflow: 'hidden',
-    	float: 'left'
-    }
+    const { largeControlBlockStyle, dataThirdStyle, graphHeight, graphWidth } = this.getTogetherStyles(modelWidth, controlHeight, controlWidth );
     
     this.updateGraph();
     
@@ -491,9 +506,9 @@ class AllTogether extends Simulation {
 			
 			<form>	
 				<div style={dataBlockStyle}>
-					<label for='lat' style={labelControlStyle}> Lat:</label>
+					<label htmlFor='lat' style={labelControlStyle}> Lat:</label>
 					<input type='text' style={inputControlStyle} id='lat' value={this.state.latitude} onChange={this.onChangeLat}/>
-					<label for='lon' style={labelControlStyle}> Lon:</label>
+					<label htmlFor='lon' style={labelControlStyle}> Lon:</label>
 					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
 				</div>
 			</form>
@@ -557,7 +572,7 @@ class AllTogether extends Simulation {
 			</div>
 			
 			<div style={graphStyle}>
-				<canvas ref={this.graphRef} height={this.state.pageBottom * this.state.GRAPHVERTDIV} width={modelWidth} />
+				<canvas ref={this.graphRef} height={graphHeight} width={graphWidth} />
 			</div>
 			
 			<div style={graphBufferStyle}/>

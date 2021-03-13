@@ -40,8 +40,6 @@ export var indexIncrementer = async function(msg, data) {
     	}
 };
 
-const synth = new Tone.Synth().toDestination();
-
 // I'm not sure if we need this inside the class or not
 // it seems like we shouldn't.  In the long term we should
 // consider a sampler, or at least build a synth in a separate
@@ -142,6 +140,7 @@ export class Simulation extends Page {
 	 * 	than stop.
 	 ****/	
 	playMusic = () => {
+		const synth = new Tone.Synth().toDestination();
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
 		// TODO: replace this with music generated from data
 		// should be done in a separate loadMusic method
@@ -157,12 +156,12 @@ export class Simulation extends Page {
 		// this is kind of a guess to be honest
 		if(this.state.audioAvailable) {
 			testPattern.start(0);
-			Tone.Transport.start('+0.1');
+			Tone.Transport.start('+0');
 		} else {
 			Tone.start().then(() => {
 				this.setState({ audioAvailable: true })
 				testPattern.start(0);
-				Tone.Transport.start('+0.1');
+				Tone.Transport.start('+0');
 			}).catch(error => console.error(error));
 		}
 	}
