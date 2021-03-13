@@ -354,7 +354,7 @@ class EachAlone extends Simulation {
     			}else if(this.state.state === 1){
     				this.setTempNotes(coord_data);
     			}else if(this.state.state === 2){
-    				this.setTempNotes(coord_data);
+    				this.setIceNotes(coord_data);
     			}
     		});
 	}
@@ -391,20 +391,25 @@ class EachAlone extends Simulation {
     }
     
     playMusic = () => {
-		const synth = new Tone.Synth().toDestination();
+		var synth;
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
 		var notes = [];
 		
 		if(this.state.state === 0){
-			notes = this.getPrecipNotes();
+			notes = this.getPrecipNotes(this.state.index);
+			synth = new Tone.FMSynth().toDestination();
 		}
 		
 		else if(this.state.state === 1){
-			notes = this.getTempNotes();
+			notes = this.getTempNotes(this.state.index);
+			synth = new Tone.Synth().toDestination()
+			synth.volume.value = 10;
 		}
 		
-		else if(this.state.state === 2){
-			notes = this.getIceNotes();
+		else{
+			notes = this.getIceNotes(this.state.index);
+			synth = new Tone.AMSynth().toDestination()
+			synth.volume.value = 10;
 		}
 		
 		const notePattern = new Tone.Sequence((time, note) => {

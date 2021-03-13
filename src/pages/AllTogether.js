@@ -390,12 +390,12 @@ class AllTogether extends Simulation {
 	 * 	than stop.
 	 ****/	
 	playMusic = () => {
-		const precipsynth = new Tone.Synth().toDestination();
-		precipsynth.oscillator.type = "sine";
+		const precipsynth = new Tone.FMSynth().toDestination();
 		const tempsynth = new Tone.Synth().toDestination();
-		tempsynth.oscillator.type = "square";
-		const icesynth = new Tone.Synth().toDestination();
-		icesynth.oscillator.type = "triangle";
+		tempsynth.oscillator.type = "sine";
+		tempsynth.volume.value = 10;
+		const icesynth = new Tone.AMSynth().toDestination();
+		icesynth.volume.value = 6;
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
 		const precipPattern = new Tone.Sequence((time, note) => {
 			precipsynth.triggerAttackRelease(note, '8n', time);
