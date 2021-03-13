@@ -59,7 +59,6 @@ export class Simulation extends Page {
 		this.state.play = 0;
 		this.state.timerLen = 800;
 		this.state.playButton = playUrl;
-		this.state.co2data = [0];
 		this.state.token = "";
 		this.state.latitude = 0;
 		this.state.longitude = 0;

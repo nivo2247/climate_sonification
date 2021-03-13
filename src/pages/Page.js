@@ -13,7 +13,7 @@ export class Page extends React.Component {
     		pageRight: window.innerWidth,
     		pageBottomMax: window.innerHeight,
     		pageRightMax: window.innerWidth,
-    		co2data: []
+    		co2data: [0]
     	};
     }  
     
