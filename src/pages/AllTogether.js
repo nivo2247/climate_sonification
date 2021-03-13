@@ -141,12 +141,8 @@ class AllTogether extends Simulation {
     
     /*** runs on initial render ***/
     componentDidMount = () => {
-    	var request = dbUrl.concat("/co2/all");
-    	Axios.get(request)
-    	.then(res => {
-    		const all_co2_data = res.data.data;
-    		this.setState({ co2data: [...all_co2_data]});
-    	});
+    	this.setState({ co2data: [...this.props.route.params.co2data]});
+    	
 	this.setState({
 		token: PubSub.subscribe('TOPIC', indexIncrementer)
 	});

@@ -2,7 +2,8 @@ import * as React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Page } from './Page.js';
 import { isBrowser } from 'react-device-detect';
-import { eachAloneButton, allTogetherButton, qrImg } from './../const/url.js';
+import { eachAloneButton, allTogetherButton, qrImg, dbUrl } from './../const/url.js';
+import Axios from 'axios';
 
 function redirect(){
 	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
@@ -95,6 +96,14 @@ class HomeScreen extends Page {
     
     /*** runs on page open ***/
     componentDidMount = () => {
+    	/* create and send DB request for CO2 data */
+    	var request = dbUrl.concat("/co2/all");
+    	Axios.get(request)
+    	.then(res => {
+    		const all_co2_data = res.data.data;
+    		this.setState({ co2data: [...all_co2_data]});
+    	});
+    	
     	if(isBrowser){
     		window.addEventListener('resize', this.updateDimensions);
     	}
@@ -138,14 +147,14 @@ class HomeScreen extends Page {
 		<div style={buttonDivStyle}>
 			<div style={buttonBumperStyle}/>
 			
-			<div style={buttonStyle} onPointerUp={() => navigation.navigate('EachAlone')}>
+			<div style={buttonStyle} onPointerUp={() => navigation.navigate('EachAlone', {co2data: this.state.co2data})}>
 				<img style={buttonStyle} alt="each on its own" src={eachAloneButton} />
 			</div>
 			
 			<div style={buttonBumperStyle}/>
 			<div style={buttonBumperStyle}/>
 			
-			<div style={buttonStyle} onPointerUp={() => navigation.navigate('AllTogether')}>
+			<div style={buttonStyle} onPointerUp={() => navigation.navigate('AllTogether', {co2data: this.state.co2data})}>
 				<img style={buttonStyle} alt="all together" src={allTogetherButton} />
 			</div>
 			
