@@ -222,7 +222,7 @@ export class Simulation extends Page {
 		const synth = this.getSynth(type);
 		const note = this.getNoteByVal(type, val, index, data);
 		console.log(note);
-		synth.triggerAttackRelease(note, '8n');
+		synth.triggerAttackRelease(note, '32n');
 	}
 	
 	getSynth = (type) => {

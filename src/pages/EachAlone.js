@@ -539,15 +539,15 @@ class EachAlone extends Simulation {
 			
 			<div style={dataBlockStyle}>
 				
-				<div style={thirdControlStyle} onMouseDown={() => this.setPrecip()}>
+				<div style={thirdControlStyle} onPointerUp={() => this.setPrecip()}>
 					<img style={thirdControlStyle} alt="select precipitation" src={this.state.precipSrc}/>
 				</div>
 				
-				<div style={thirdControlStyle} onMouseDown={() => this.setTemp()}>
+				<div style={thirdControlStyle} onPointerUp={() => this.setTemp()}>
 					<img style={thirdControlStyle} alt="select temperature" src={this.state.tempSrc}/>
 				</div>
 				
-				<div style={thirdControlStyle} onMouseDown={() => this.setIce()}>
+				<div style={thirdControlStyle} onPointerUp={() => this.setIce()}>
 					<img style={thirdControlStyle} alt="select sea ice" src={this.state.iceSrc}/>
 				</div>
 				

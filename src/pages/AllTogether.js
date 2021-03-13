@@ -26,44 +26,53 @@ class AllTogether extends Simulation {
     	this.state.iceAvgAllCoords = [0];
     }
     
-    /* TODO: activates when clicking map keys, make this play test note */
-    testMusic = (e) => {
+    /* TODO: cleanup similar code */
+    testPrecipMusic = (e) => {
     	if(e.buttons === 1 && this.state.play === 0){
     		var keyLeft = 0;
     		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
-    		var keyTop = Math.floor(this.state.pageBottom * 15 / 20);
-    		var keyBottom = Math.floor(this.state.pageBottom * 18 / 20);
     		if(this.state.CONTROLVERTDIV !== 1){
     			keyLeft = this.state.pageRight / 2;
     			keyRight = this.state.pageRight;
-    			keyTop = this.state.pageBottom * 2 / 10;
-    			keyBottom = this.state.pageBottom * 8 / 25;
     		}
     		var x = e.pageX - keyLeft;
-    		var y = e.pageY - keyTop;
     		var rangeX = keyRight - keyLeft;
-    		var rangeY = keyBottom - keyTop;
    		var percX = x / rangeX;
-   		var percY = y / rangeY;
-   		var playVal;
-   		var type = 0;
-   		console.log(percY);
-   		if(percY <= 0.33){
-   			playVal = (percX - .175) * 500 + 100;
-   			console.log("playprecip: ", playVal);
-   		}
-   		else if(percY <= 0.66){
-   			playVal = (percX - .14) * 23;
-   			console.log("playtemp: ", playVal);
-   			type = 1;
-   		}
-   		else if(percY <= 1){
-   			playVal = percX;
-   			console.log("playice: ", playVal);
-   			type = 2;
-   		}
-   		console.log(type);
-   		this.playNoteByVal(type, playVal, this.state.index, this.state.coordData);
+		var playVal = (percX - .175) * 500 + 100;
+   		this.playNoteByVal(0, playVal, this.state.index, this.state.precipAvg);
+   	}
+    }
+    
+        testTempMusic = (e) => {
+    	if(e.buttons === 1 && this.state.play === 0){
+    		var keyLeft = 0;
+    		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
+    		if(this.state.CONTROLVERTDIV !== 1){
+    			keyLeft = this.state.pageRight / 2;
+    			keyRight = this.state.pageRight;
+    		}
+    		var x = e.pageX - keyLeft;
+    		var rangeX = keyRight - keyLeft;
+   		var percX = x / rangeX;
+		var playVal = (percX - .175) * 500 + 100;
+   		this.playNoteByVal(1, playVal, this.state.index, this.state.tempAvg);
+   	}
+    }
+    
+    testIceMusic = (e) => {
+    	if(e.buttons === 1 && this.state.play === 0){
+    		var keyLeft = 0;
+    		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
+    		if(this.state.CONTROLVERTDIV !== 1){
+    			keyLeft = this.state.pageRight / 2;
+    			keyRight = this.state.pageRight;
+    		}
+    		var x = e.pageX - keyLeft;
+    		var rangeX = keyRight - keyLeft;
+   		var percX = x / rangeX;
+		var playVal;
+   		playVal = (percX - .175) * 500 + 100;
+   		this.playNoteByVal(2, playVal, this.state.index, this.state.iceAvg);
    	}
     }
     
@@ -593,16 +602,16 @@ class AllTogether extends Simulation {
 			</div>
 			
 			
-			<div style={keyContainer} onPointerDown={this.testMusic} onPointerMove={this.testMusic}>
-				<div style={dataBlockStyle}>
+			<div style={keyContainer} >
+				<div style={dataBlockStyle} onPointerDown={this.testPrecipMusic}>
 					<img style={dataBlockStyle} alt="precipitation key" src={precipKey} draggable="false"/>
 				</div>
 
-				<div style={dataBlockStyle}>
+				<div style={dataBlockStyle} onPointerDown={this.testTempMusic}>
 					<img style={dataBlockStyle} alt="temperature key" src={tempKey} draggable="false"/>
 				</div>
 
-				<div style={controlBlockStyle}>
+				<div style={controlBlockStyle} onPointerDown={this.testIceMusic}>
 					<img style={dataBlockStyle} alt="sea ice key" src={iceKey} draggable="false"/>
 				</div>
 			</div>
