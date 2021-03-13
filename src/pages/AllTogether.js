@@ -4,9 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import Axios from 'axios';
 import PubSub from 'pubsub-js';
 import { isBrowser } from 'react-device-detect';
-import { indexIncrementer, Simulation } from './Simulation.js';
+import { Simulation } from './Simulation.js';
+import * as Tone from 'tone';
 
-import { combinedImgs, dbUrl, urlPre, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImg, bottomSkinnyImg, timelineImg, togetherArtifactImgs } from './../const/url.js';
+import { combinedImgs, dbUrl, urlPre, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImg, bottomSkinnyImg, timelineImg, togetherArtifactImgs, pauseUrl } from './../const/url.js';
 
 function isNumeric(value) {
 	return /^-?\d+$/.test(value);
@@ -23,27 +24,6 @@ class AllTogether extends Simulation {
     	this.state.precipAvgAllCoords = [0];
     	this.state.tempAvgAllCoords = [0];
     	this.state.iceAvgAllCoords = [0];
-    }
-    
-    /*** onPress for 'Play/Pause' 
-    *** publish the state, recieved by gameHandler     ***/   
-    handleClick = () => {
-    	var newIndex = this.state.index;
- 	if(this.state.play === 0 && this.state.index === 180){
- 		newIndex = 0;
- 	}
-    	var newState = (this.state.play + 1) % 2;
-    	this.setState({
-    		play: newState,
-    		useArray: 3,
-    		index: newIndex
-    	});
-    	
-    	if(newState === 0){
-    		this.doYearHits(this.state.index + 1920);
-    	}
-    	
-    	PubSub.publish('TOPIC', this);
     }
     
     /* TODO: activates when clicking map keys, make this play test note */
@@ -167,10 +147,6 @@ class AllTogether extends Simulation {
     /*** runs on initial render ***/
     componentDidMount = () => {
     	this.setState({ co2data: [...this.props.route.params.co2data]});
-    	
-	this.setState({
-		token: PubSub.subscribe('TOPIC', indexIncrementer)
-	});
 	
 	togetherArtifactImgs.forEach((picture) => {
     		Image.prefetch(picture);
@@ -388,6 +364,7 @@ class AllTogether extends Simulation {
     			this.setupGraph();
     			this.updateGraph();
     			console.log(temp_coord_data);
+    			this.setTempNotes(temp_coord_data);
     		});
 	}
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
@@ -399,9 +376,60 @@ class AllTogether extends Simulation {
     			this.setupGraph();
     			this.updateGraph();
     			console.log(seaice_coord_data);
+    			this.setIceNotes(seaice_coord_data);
     		});
 	}
     };
+    
+    /*** Run this when play button is pressed
+	 * A few modifications for the real thing:
+	 * 	- use Sequence instead of Pattern
+	 * 	- determine start based on index, may need to
+	 * 	slice to make this work.  But should first see
+	 * 	if this can be accomplished using pause rather
+	 * 	than stop.
+	 ****/	
+	playMusic = () => {
+		const precipsynth = new Tone.Synth().toDestination();
+		const tempsynth = new Tone.Synth().toDestination();
+		const icesynth = new Tone.Synth().toDestination();
+		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
+		const precipPattern = new Tone.Sequence((time, note) => {
+			precipsynth.triggerAttackRelease(note, '8n', time);
+			// bind incrementing
+			Tone.Draw.schedule(() => {
+				this.incrementIndex();
+			}, time)
+		}, this.getPrecipNotes(this.state.index));
+		
+		const tempPattern = new Tone.Sequence((time, note) => {
+			tempsynth.triggerAttackRelease(note, '8n', time);
+		}, this.getTempNotes(this.state.index));
+		
+		const icePattern = new Tone.Sequence((time, note) => {
+			icesynth.triggerAttackRelease(note, '8n', time);
+		}, this.getIceNotes(this.state.index));
+
+		// catches most errors
+		if(this.state.audioAvailable) {
+			precipPattern.start(0);
+			tempPattern.start(0);
+			if(this.getValByIndex(this.state.iceAvg, 0) !== 0){
+				icePattern.start(0);
+			}
+			Tone.Transport.start('+0');
+		} else {
+			Tone.start().then(() => {
+				this.setState({ audioAvailable: true })
+				precipPattern.start(0);
+				tempPattern.start(0);
+				if(this.getValByIndex(this.state.iceAvg, 0) !== 0){
+					icePattern.start(0);
+				}
+				Tone.Transport.start('+0');
+			}).catch(error => console.error(error));
+		}
+	}
     
     getTogetherStyles(mw, ch, cw) {
     	var modelWidth = mw;

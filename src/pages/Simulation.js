@@ -1,44 +1,10 @@
 import * as React from 'react';
 import * as Tone from 'tone';
 import { PADDING, Page } from './Page.js';
-import { playUrl, pauseUrl } from './../const/url.js';
+import { playUrl } from './../const/url.js';
 
 /* used to wait a certain amount of ms */
 const timer = ms => new Promise(res => setTimeout(res, ms));
-
-/*** Index Handler Block (recieves Class as state)  ***/
-export var indexIncrementer = async function(msg, data) {
-	/* if simulation is in play state, increment until 180 */
-	if (data.state.play === 1){
-		while(data.state.index < 180){
-			if(data.state.play === 1){
-				data.setupGraph();
-    				data.setState({
-    					index: data.state.index+1, 
-    					playButton: pauseUrl
-   				});
-   				await timer(data.state.timerLen);
-   			}else{
-   					return;
-   			}
-   		}
-   		/* Stop at index 180 */
-   		data.setupGraph();
-   		data.setState({
-    			playButton: playUrl,
-    			play: 0,
-    			useArray: 3
-    			
-    		});
-	}
-	/* This else is used when the simulation is stopped */
-	else {
-		data.setupGraph();
-    		data.setState({
-    			playButton: playUrl
-    		});
-    	}
-};
 
 // I'm not sure if we need this inside the class or not
 // it seems like we shouldn't.  In the long term we should
@@ -71,6 +37,8 @@ export class Simulation extends Page {
 		this.state.useArray = 0;
 		this.state.audioAvailable = false;
 		this.state.precipNotes = [];
+		this.state.tempNotes = [];
+		this.state.iceNotes = [];
 	    
 	    	this.graphRef = React.createRef();
 		// I'm pretty sure I need to bind the index incrementer
@@ -115,11 +83,75 @@ export class Simulation extends Page {
 		});
 	}
 	
+	setTempNotes = (data) => {
+		var tempNoteArr = [];
+		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
+		var temp_val;
+		
+		for(var i = 0; i < 181; i++){
+    			temp_val = this.getValByIndex(data, i);
+    			
+    			if(temp_val < 0.5){
+				tempNoteArr.push(scale[7]);
+			}else if(temp_val < 1){
+				tempNoteArr.push(scale[4]);
+			}else if(temp_val < 2){
+				tempNoteArr.push(scale[0]);
+			}else{
+				tempNoteArr.push(scale[2]);
+			}
+		}
+		
+		this.setState({
+			tempNotes: [...tempNoteArr]
+		});
+	}
+	
+	setIceNotes = (data) => {
+		var iceNoteArr = [];
+		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
+		var ice_val;
+		
+		for(var i = 0; i < 181; i++){
+    			ice_val = this.getValByIndex(data, i);
+    			
+    			if(ice_val > 0.75){
+				iceNoteArr.push(scale[7]);
+			}else if(ice_val > 0.5){
+				iceNoteArr.push(scale[4]);
+			}else if(ice_val > 0.25){
+				iceNoteArr.push(scale[0]);
+			}else{
+				iceNoteArr.push(scale[2]);
+			}
+		}
+		
+		this.setState({
+			iceNotes: [...iceNoteArr]
+		});
+	}
+	
 	getPrecipNotes = (index) => {
 		if(this.state.precipNotes.length === 0){
 			return ['C5', 'D5', 'F5', 'G5'];
 		}else{
 			return this.state.precipNotes.slice(index);
+		}
+	}
+	
+	getTempNotes = (index) => {
+		if(this.state.precipNotes.length === 0){
+			return ['C5', 'D5', 'F5', 'G5'];
+		}else{
+			return this.state.tempNotes.slice(index);
+		}
+	}
+	
+	getIceNotes = (index) => {
+		if(this.state.precipNotes.length === 0){
+			return ['C5', 'D5', 'F5', 'G5'];
+		}else{
+			return this.state.iceNotes.slice(index);
 		}
 	}
 
@@ -129,41 +161,6 @@ export class Simulation extends Page {
 		// Maybe I need to also stop the sequence?
 		Tone.Transport.stop();
 		Tone.Transport.cancel(0);
-	}
-
-	/*** Run this when play button is pressed
-	 * A few modifications for the real thing:
-	 * 	- use Sequence instead of Pattern
-	 * 	- determine start based on index, may need to
-	 * 	slice to make this work.  But should first see
-	 * 	if this can be accomplished using pause rather
-	 * 	than stop.
-	 ****/	
-	playMusic = () => {
-		const synth = new Tone.Synth().toDestination();
-		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
-		// TODO: replace this with music generated from data
-		// should be done in a separate loadMusic method
-		const testPattern = new Tone.Pattern((time, note) => {
-			synth.triggerAttackRelease(note, '8n', time);
-			// will need to increment, so I need to bind the
-			// incrementing function
-			Tone.Draw.schedule(() => {
-				this.incrementIndex();
-			}, time)
-		}, this.getPrecipNotes(this.state.index), 'up');
-
-		// this is kind of a guess to be honest
-		if(this.state.audioAvailable) {
-			testPattern.start(0);
-			Tone.Transport.start('+0');
-		} else {
-			Tone.start().then(() => {
-				this.setState({ audioAvailable: true })
-				testPattern.start(0);
-				Tone.Transport.start('+0.1');
-			}).catch(error => console.error(error));
-		}
 	}
 
 	/*** Another increment method to work with tone ***/

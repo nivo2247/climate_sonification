@@ -4,9 +4,10 @@ import { useNavigation } from '@react-navigation/native';
 import Axios from 'axios';
 import PubSub from 'pubsub-js';
 import { isBrowser } from 'react-device-detect';
-import { indexIncrementer, Simulation } from './Simulation.js';
+import { Simulation } from './Simulation.js';
+import * as Tone from 'tone';
 
-import { precipImgs, tempImgs, iceImgs, dbUrl, urlPre, precipActive, precipInactive, tempActive, tempInactive, iceActive, iceInactive, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImgAlone, bottomSkinnyImgAlone, timelineImg, aloneArtifactImgs } from './../const/url.js';
+import { precipImgs, tempImgs, iceImgs, dbUrl, urlPre, precipActive, precipInactive, tempActive, tempInactive, iceActive, iceInactive, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImgAlone, bottomSkinnyImgAlone, timelineImg, aloneArtifactImgs, pauseUrl } from './../const/url.js';
 
 function isNumeric(value) {
 	return /^-?\d+$/.test(value);
@@ -168,30 +169,6 @@ class EachAlone extends Simulation {
 	    	});
 	}
     }   
-    
-    /*** onPress for 'Play/Pause' 
-    *** publish the state, recieved by indexIncrementer     ***/   
-    handleClick = () => {
-    	var newIndex = this.state.index;
-    	
-    	/* handle game reset at year 2100 */
-    	if(this.state.play === 0 && this.state.index === 180){
- 		newIndex = 0;
- 	}
-    	var newState = (this.state.play + 1) % 2;
-    	this.setState({
-    		play: newState,
-    		useArray: 3,
-    		index: newIndex
-    	});
-    	
-    	/* when pausing, we must grab data for entire map */
-    	if(newState === 0){
-    		this.doYearHits(this.state.state, this.state.index + 1920);
-    	}
-
-    	PubSub.publish('TOPIC', this);
-    }
     
     /*** Writes data to the graph, will need to be checked after music implementation ***/
     updateGraph() {
@@ -372,6 +349,13 @@ class EachAlone extends Simulation {
     			this.setupGraph();
     			this.updateGraph();
     			console.log(coord_data);
+    			if(this.state.state === 0){
+    				this.setPrecipNotes(coord_data);
+    			}else if(this.state.state === 1){
+    				this.setTempNotes(coord_data);
+    			}else if(this.state.state === 2){
+    				this.setTempNotes(coord_data);
+    			}
     		});
 	}
     };
@@ -406,13 +390,49 @@ class EachAlone extends Simulation {
    	}
     }
     
+    playMusic = () => {
+		const synth = new Tone.Synth().toDestination();
+		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
+		var notes = [];
+		
+		if(this.state.state === 0){
+			notes = this.getPrecipNotes();
+		}
+		
+		else if(this.state.state === 1){
+			notes = this.getTempNotes();
+		}
+		
+		else if(this.state.state === 2){
+			notes = this.getIceNotes();
+		}
+		
+		const notePattern = new Tone.Sequence((time, note) => {
+			synth.triggerAttackRelease(note, '8n', time);
+			// bind incrementing
+			Tone.Draw.schedule(() => {
+				this.incrementIndex();
+			}, time)
+		}, notes);
+		
+		// catches most errors
+		if(this.state.audioAvailable) {
+			notePattern.start(0);
+			Tone.Transport.start('+0');
+		} else {
+			Tone.start().then(() => {
+				this.setState({ audioAvailable: true })
+				notePattern.start(0);
+				Tone.Transport.start('+0');
+			}).catch(error => console.error(error));
+		}
+	}
+    
     /*** runs on initial render ***/
     componentDidMount = () => {
     	this.setState({ co2data: [...this.props.route.params.co2data]});
     	
-    	/* setup subscriber indexIncrementer */
 	this.setState({
-		token: PubSub.subscribe('TOPIC', indexIncrementer),
 		pageBottomMax: window.innerHeight,
 		pageRightMax: window.innerWidth
 	
@@ -529,7 +549,7 @@ class EachAlone extends Simulation {
 			</div>
 			
 			<div style={controlBlockStyle}>
-				<div style={playSplitDivStyle} onPointerDown={() => this.handleClick()}>
+				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic() : () => this.playMusic()}>
 					<img style={playSplitDivStyle} alt="play button" src={this.state.playButton}/>
 				</div>
 				
