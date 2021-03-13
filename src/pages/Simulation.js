@@ -39,8 +39,6 @@ export class Simulation extends Page {
 		this.state.precipNotes = [];
 		this.state.tempNotes = [];
 		this.state.iceNotes = [];
-	    
-	    	this.graphRef = React.createRef();
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
 	}  

@@ -503,7 +503,7 @@ class EachAlone extends Simulation {
     else {
         var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.yearData.length > coord_index){
-    		coord_val = this.getValByCoord(this.state.yearData, this.state.latitude, this.state.longitude);
+    		coord_val = this.getValByCoord(this.state.yearData, coord_index);
     	}
     }
     

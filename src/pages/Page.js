@@ -15,6 +15,7 @@ export class Page extends React.Component {
     		pageRightMax: window.innerWidth,
     		co2data: [0]
     	};
+    	this.graphRef = React.createRef();
     }  
     
     /*** called when the window is resized ***/

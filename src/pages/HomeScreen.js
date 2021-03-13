@@ -147,7 +147,7 @@ class HomeScreen extends Page {
 		<div style={buttonDivStyle}>
 			<div style={buttonBumperStyle}/>
 			
-			<div style={buttonStyle} onPointerUp={() => navigation.navigate('EachAlone', {co2data: this.state.co2data})}>
+			<div style={buttonStyle} onPointerUp={() => navigation.navigate('EachAlone', {co2data: this.state.co2data, graphref:     		this.graphRef})}>
 				<img style={buttonStyle} alt="each on its own" src={eachAloneButton} />
 			</div>
 			
