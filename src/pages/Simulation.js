@@ -66,6 +66,9 @@ export class Simulation extends Page {
 		var prev_val = 100;
 		
 		for(var i = 0; i < 181; i++){
+			if(i > 100){
+				scale = ['G5', 'A5', 'A#5', 'C5', 'D5', 'D#5', 'F5', 'G4'];
+			}
     			precip_val = this.getValByIndex(data, i);
     			var diff = Math.abs(precip_val - prev_val);
     			var rand = Math.random();
@@ -104,6 +107,9 @@ export class Simulation extends Page {
 		var temp_val;
 		
 		for(var i = 0; i < 181; i++){
+			if(i > 100){
+				scale = ['G5', 'A5', 'A#5', 'C5', 'D5', 'D#5', 'F5', 'G4'];
+			}
     			temp_val = this.getValByIndex(data, i);
     			var rand = Math.random();
     			
@@ -141,6 +147,10 @@ export class Simulation extends Page {
 		var ice_val;
 		
 		for(var i = 0; i < 181; i++){
+			if(i > 100){
+				scale = ['G5', 'A5', 'A#5', 'C5', 'D5', 'D#5', 'F5', 'G4'];
+			}
+			
     			ice_val = this.getValByIndex(data, i);
     			var rand = Math.random();
     			
