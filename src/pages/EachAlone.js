@@ -381,8 +381,29 @@ class EachAlone extends Simulation {
     *** what value they are pressing and pay the corresponding note ***/
     testMusic = (e) => {
     	if(e.buttons === 1){
-    		console.log("TODO: Play note");
-    	}
+    		var keyLeft = 0;
+    		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
+    		if(this.state.CONTROLVERTDIV !== 1){
+    			keyLeft = this.state.pageRight / 2;
+    			keyRight = this.state.pageRight;
+    		}
+    		var x = e.pageX - keyLeft;
+    		var rangeX = keyRight - keyLeft;
+   		var percX = x / rangeX;
+		var playVal;
+   		if(this.state.state === 0){
+   			playVal = (percX - .175) * 500 + 100;
+   			console.log("playprecip: ", playVal);
+   		}
+   		else if(this.state.state === 1){
+   			playVal = (percX - .14) * 23;
+   			console.log("playtemp: ", playVal);
+   		}
+   		else if(this.state.state === 2){
+   			playVal = percX;
+   			console.log("playice: ", playVal);
+   		}
+   	}
     }
     
     /*** runs on initial render ***/

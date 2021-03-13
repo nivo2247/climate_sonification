@@ -48,9 +48,37 @@ class AllTogether extends Simulation {
     
     /* TODO: activates when clicking map keys, make this play test note */
     testMusic = (e) => {
-    	if(e.buttons === 1) {
-    		console.log("X: ", e.pageX, "Y: ", e.pageY);
-    	}
+    	if(e.buttons === 1){
+    		var keyLeft = 0;
+    		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
+    		var keyTop = Math.floor(this.state.pageBottom * 14 / 20);
+    		var keyBottom = Math.floor(this.state.pageBottom * 18 / 20);
+    		if(this.state.CONTROLVERTDIV !== 1){
+    			keyLeft = this.state.pageRight / 2;
+    			keyRight = this.state.pageRight;
+    			keyTop = this.state.pageBottom * 17 / 80;
+    			keyBottom = this.state.pageBottom * 25 / 80;
+    		}
+    		var x = e.pageX - keyLeft;
+    		var y = e.pageY - keyTop;
+    		var rangeX = keyRight - keyLeft;
+    		var rangeY = keyBottom - keyTop;
+   		var percX = x / rangeX;
+   		var percY = y / rangeY;
+   		var playVal;
+   		if(percY <= 0.3){
+   			playVal = (percX - .175) * 500 + 100;
+   			console.log("playprecip: ", playVal);
+   		}
+   		else if(percY <= 0.6){
+   			playVal = (percX - .14) * 23;
+   			console.log("playtemp: ", playVal);
+   		}
+   		else if(percY <= .9){
+   			playVal = percX;
+   			console.log("playice: ", playVal);
+   		}
+   	}
     }
     
     /*** When map coord is selected, do db query ***/

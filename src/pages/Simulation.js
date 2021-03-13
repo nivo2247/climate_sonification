@@ -161,7 +161,7 @@ export class Simulation extends Page {
 			Tone.start().then(() => {
 				this.setState({ audioAvailable: true })
 				testPattern.start(0);
-				Tone.Transport.start('+0');
+				Tone.Transport.start('+0.1');
 			}).catch(error => console.error(error));
 		}
 	}
