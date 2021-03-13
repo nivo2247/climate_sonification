@@ -26,6 +26,12 @@ const artifactImgs = [
 	pauseUrl
 ];
 
+/* TODO: Implement this with latitude, longitude, and year,
+* convert those to textboxes and check val */
+function isNumeric(value) {
+	return /^-?\d+$/.test(value);
+}
+
 /*** Page class ***/
 class AllTogether extends Simulation {
     constructor(props){
@@ -327,6 +333,39 @@ class AllTogether extends Simulation {
 	}
     };
     
+    /*** Templates for functions which would change the text of lat and lon from textbox input ***/
+    onChangeLat = (event) => {
+    	var newval = event.target.value;
+    	if(this.state.play === 0 && isNumeric(newval)){
+    		var parsedval = parseInt(newval);
+    		if(parsedval >= -89 && parsedval <= 89){
+    			this.doCoordHits(parsedval, this.state.longitude);
+    			this.setState({
+    				latitude: parsedval,
+    				useArray: 0
+    			});	
+    			console.log("changed lat to", newval);
+    			this.setupGraph();
+    		}
+    	}
+    }
+    
+    onChangeLon = (event) => {
+    	var newval = event.target.value;
+    	if(this.state.play === 0 && isNumeric(newval)){
+    		var parsedval = parseInt(newval);
+    		if(parsedval >= -180 && parsedval <= 180){
+    			this.doCoordHits(this.state.latitude, parsedval);
+    			this.setState({
+    				longitude: parsedval,
+    				useArray: 0
+    			});	
+    			console.log("changed lon to", newval);
+    			this.setupGraph();
+    		}
+    	}
+    }
+    
     /*** query db for all years of a specific coord ***/
     doCoordHits(lat, lon){
     	var dbX = 1;
@@ -428,7 +467,7 @@ class AllTogether extends Simulation {
     	}
     }
     
-    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, inputControlStyle, labelControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
     var newh = controlHeight * 4 / 20;
     if(this.state.CONTROLVERTDIV !== 1){
@@ -488,39 +527,26 @@ class AllTogether extends Simulation {
 				</div>
 			</div>
 			
-			<div style={dataBlockStyle}>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Lat: </p>
+			<form>	
+				<div style={dataBlockStyle}>
+					<label for='lat' style={labelControlStyle}> Lat:</label>
+					<input type='text' style={inputControlStyle} id='lat' value={this.state.latitude} onChange={this.onChangeLat}/>
+					<label for='lon' style={labelControlStyle}> Lon:</label>
+					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
 				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{this.state.latitude}</p> {/*Need to implement onchangelat*/}
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Lon: </p>
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{this.state.longitude}</p>  {/*Need to implement onchangelon*/}
-				</div>
-			</div>
+			</form>
 			
 			<div style={dataBlockStyle}>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Year: </p>
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{this.state.index + 1920}</p> {/*Need to implement a way to input text*/}
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Co2: </p>
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{co2val}</p>
-				</div>
+				<p style={smallLabelTextStyle}> Year: {this.state.index + 1920}</p>
 			</div>
 			
 		</div>
 			
 		<div style={controlContainerStyle}>
+		
+			<div style={dataBlockStyle}>
+				<p style={smallLabelTextStyle}>Co2: {co2val}</p>
+			</div>
 			
 			<div style={keyContainer}>
 				<img style={keyContainer} alt="graph key" src={"https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png"}/>

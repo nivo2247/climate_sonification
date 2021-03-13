@@ -43,13 +43,6 @@ export var indexIncrementer = async function(msg, data) {
     	}
 };
 
-/* TODO: Implement this with latitude, longitude, and year,
-* convert those to textboxes and check val 
-function isNumeric(value) {
-	return /^-?\d+$/.test(value);
-}
-*/
-
 const synth = new Tone.Synth().toDestination();
 
 // I'm not sure if we need this inside the class or not
@@ -114,7 +107,6 @@ export class Simulation extends Page {
     			
     			if(precip_val < 100){
 				precipNoteArr.push(scale[7]);
-				console.log("small val");
 			}else if(precip_val < 150){
 				precipNoteArr.push(scale[4]);
 			}else if(precip_val < 200){
@@ -226,12 +218,12 @@ export class Simulation extends Page {
     
     /*** handle year changes from the slider ***/
     handleYear = (event) => {
-    	this.setupGraph();
     	this.setState({
     		index: parseInt(event.target.value),
     		useArray: 3
     	});
-    }       
+    	this.setupGraph();
+    }   
       
     /*** clears and redraws rectangle around the graph area ***/ 
     setupGraph() {
@@ -373,7 +365,8 @@ export class Simulation extends Page {
     	   	height: controlHeight / (20),
     		width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     		overflow: 'hidden',
-    		float: 'left'
+    		float: 'left',
+    		'textAlign': 'center'
     	}
     	
     	var keyContainer = {
@@ -403,7 +396,8 @@ export class Simulation extends Page {
     	   		height: controlHeight / (20 * (1 - this.state.CONTROLVERTDIV)),
     			width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     			overflow: 'hidden',
-    			float: 'left'
+    			float: 'left',
+    			'textAlign': 'center'
     		};
     		keyContainer = {
     			width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
@@ -438,9 +432,28 @@ export class Simulation extends Page {
     	};
     
     	const quarterControlStyle = {
-    		height: controlHeight / (20),
+    		height: Math.floor(controlHeight / (20)),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 4),
-    		float: 'left'
+    		float: 'left',
+    		'textAlign': 'center'
+    	};
+    	
+    	const inputControlStyle = {
+    		height: Math.floor(controlHeight / (20)) - 1,
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 5),
+    		float: 'left',
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": smallFontSize
+    	};
+    	
+    	const labelControlStyle = {
+    		height: Math.floor(controlHeight / (20)),
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 6) - 1,
+    		float: 'left',
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": smallFontSize,
+    		'textAlign': 'right',
+    		'paddingTop': 5
     	};
     
     	const thirdControlStyle = {
@@ -521,16 +534,7 @@ export class Simulation extends Page {
     		'fontFamily': 'Verdana, sans-serif',
     	};
     
-    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
-    }
-    
-    /*** Templates for functions which would change the text of lat and lon from textbox input ***/
-    onChangeLat = (text) => {
-    	//implement isnumeric check
-    }
-    
-    onChangeLon = (text) => {
-    	//implement isnumeric check
+    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, inputControlStyle, labelControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
     }
     
     /*** These should never run because each class has separate functions,

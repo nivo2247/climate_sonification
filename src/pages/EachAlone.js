@@ -37,6 +37,12 @@ const artifactImgs = [
 	pauseUrl
 ];
 
+/* TODO: Implement this with latitude, longitude, and year,
+* convert those to textboxes and check val */
+function isNumeric(value) {
+	return /^-?\d+$/.test(value);
+}
+
 /*** EachAlone Class, returns interactive page
 *** Many items inherited from Simulation Class ***/
 class EachAlone extends Simulation {
@@ -340,6 +346,39 @@ class EachAlone extends Simulation {
 	}
     };
     
+    /*** Templates for functions which would change the text of lat and lon from textbox input ***/
+    onChangeLat = (event) => {
+    	var newval = event.target.value;
+    	if(this.state.play === 0 && isNumeric(newval)){
+    		var parsedval = parseInt(newval);
+    		if(parsedval >= -89 && parsedval <= 89){
+    			this.doCoordHits(this.state.state, parsedval, this.state.longitude);
+    			this.setState({
+    				latitude: parsedval,
+    				useArray: 0
+    			});	
+    			console.log("changed lat to", newval);
+    			this.setupGraph();
+    		}
+    	}
+    }
+    
+    onChangeLon = (event) => {
+    	var newval = event.target.value;
+    	if(this.state.play === 0 && isNumeric(newval)){
+    		var parsedval = parseInt(newval);
+    		if(parsedval >= -180 && parsedval <= 180){
+    			this.doCoordHits(this.state.state, this.state.latitude, parsedval);
+    			this.setState({
+    				longitude: parsedval,
+    				useArray: 0
+    			});	
+    			console.log("changed lon to", newval);
+    			this.setupGraph();
+    		}
+    	}
+    }
+    
     /*** Get the value of every year of a coords lifespan ***/
     doCoordHits(state, lat, lon){
     	var dbX = 1;
@@ -465,7 +504,7 @@ class EachAlone extends Simulation {
     else {
         var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.yearData.length > coord_index){
-    		coord_val = this.getValByCoord(this.state.yearData, this.state.index);
+    		coord_val = this.getValByCoord(this.state.yearData, this.state.latitude, this.state.longitude);
     	}
     	/* catches OOB database requests */
     	else{
@@ -474,7 +513,7 @@ class EachAlone extends Simulation {
     }
     
     /* contains almost all the styling for the page */
-    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, inputControlStyle, labelControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
     var newh = controlHeight * 5 / 20;
     if(this.state.CONTROLVERTDIV !== 1){
@@ -542,34 +581,21 @@ class EachAlone extends Simulation {
 		</div>
 			
 		<div style={controlContainerStyle}>
+			<form>	
+				<div style={dataBlockStyle}>
+					<label for='lat' style={labelControlStyle}> Lat:</label>
+					<input type='text' style={inputControlStyle} id='lat' value={this.state.latitude} onChange={this.onChangeLat}/>
+					<label for='lon' style={labelControlStyle}> Lon:</label>
+					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
+				</div>
+			</form>
+			
 			<div style={dataBlockStyle}>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Lat: </p>
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{this.state.latitude}</p> {/*Need to implement onchangelat*/}
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Lon: </p>
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{this.state.longitude}</p>  {/*Need to implement onchangelon*/}
-				</div>
+					<p style={smallLabelTextStyle}> Year: {this.state.index + 1920}</p>
 			</div>
 			
 			<div style={dataBlockStyle}>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Year: </p>
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{this.state.index + 1920}</p> {/*Need to implement a way to input text*/}
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>Co2: </p>
-				</div>
-				<div style={quarterControlStyle}>
-					<p style={smallLabelTextStyle}>{co2val}</p>
-				</div>
+				<p style={smallLabelTextStyle}>Co2: {co2val}</p>
 			</div>
 			
 			<div style={controlBlockStyle} onPointerDown={this.testMusic} onPointerMove={this.testMusic}>
