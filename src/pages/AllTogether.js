@@ -391,8 +391,11 @@ class AllTogether extends Simulation {
 	 ****/	
 	playMusic = () => {
 		const precipsynth = new Tone.Synth().toDestination();
+		precipsynth.oscillator.type = "sine";
 		const tempsynth = new Tone.Synth().toDestination();
+		tempsynth.oscillator.type = "square";
 		const icesynth = new Tone.Synth().toDestination();
+		icesynth.oscillator.type = "triangle";
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
 		const precipPattern = new Tone.Sequence((time, note) => {
 			precipsynth.triggerAttackRelease(note, '8n', time);
@@ -413,16 +416,16 @@ class AllTogether extends Simulation {
 		// catches most errors
 		if(this.state.audioAvailable) {
 			precipPattern.start(0);
-			tempPattern.start(0);
+			tempPattern.start(0.001);
 			if(this.getValByIndex(this.state.iceAvg, 0) !== 0){
-				icePattern.start(0);
+				icePattern.start(0.002);
 			}
 			Tone.Transport.start('+0');
 		} else {
 			Tone.start().then(() => {
 				this.setState({ audioAvailable: true })
-				precipPattern.start(0);
-				tempPattern.start(0);
+				precipPattern.start(0.001);
+				tempPattern.start(0.002);
 				if(this.getValByIndex(this.state.iceAvg, 0) !== 0){
 					icePattern.start(0);
 				}
