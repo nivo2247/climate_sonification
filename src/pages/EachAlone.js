@@ -624,7 +624,7 @@ class EachAlone extends Simulation {
 				<p style={smallLabelTextStyle}>Co2: {co2val}</p>
 			</div>
 			
-			<div style={controlBlockStyle} onPointerEnter={this.setupTransport} onPointerDown={this.testMusic} onPointerMove={this.testMusic} onPointerLeave={this.killTransport}>
+			<div style={controlBlockStyle} onPointerDown={this.setupTransport} onPointerMove={this.testMusic} onPointerUp={this.killTransport}>
 				<img style={dataBlockStyle} alt="map key" src={this.state.keySrc} draggable="false"/>
 			</div>
 			
