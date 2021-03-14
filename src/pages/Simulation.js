@@ -323,6 +323,14 @@ export class Simulation extends Page {
     		this.setupGraph();
     	}
     }   
+    
+    callHome = () => {
+    	const { navigation } = this.props;
+    	if(this.state.play === 1){
+    		this.stopMusic();
+    	}
+    	navigation.navigate('Home');
+    }
       
     /*** clears and redraws rectangle around the graph area ***/ 
     setupGraph() {

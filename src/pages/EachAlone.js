@@ -434,30 +434,34 @@ class EachAlone extends Simulation {
     }
     
     playMusic = () => {
-		const synth = this.getSynth(this.state.state);
-		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
-		const notes = this.noteHelper();
+    	var newind = this.state.index;
+	if(newind === 180){
+		newind = 0;
+	}
+	const synth = this.getSynth(this.state.state);
+	this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
+	const notes = this.noteHelper();
 		
-		const notePattern = new Tone.Sequence((time, note) => {
-			synth.triggerAttackRelease(note, '8n', time);
-			// bind incrementing
-			Tone.Draw.schedule(() => {
-				this.incrementIndex();
-			}, time)
-		}, notes);
-		
-		// catches most errors
-		if(this.state.audioAvailable) {
+	const notePattern = new Tone.Sequence((time, note) => {
+		synth.triggerAttackRelease(note, '8n', time);
+		// bind incrementing
+		Tone.Draw.schedule(() => {
+			this.incrementIndex();
+		}, time)
+	}, notes);
+	
+	// catches most errors
+	if(this.state.audioAvailable) {
+		notePattern.start(0);
+		Tone.Transport.start('+0');
+	} else {
+		Tone.start().then(() => {
+			this.setState({ audioAvailable: true })
 			notePattern.start(0);
 			Tone.Transport.start('+0');
-		} else {
-			Tone.start().then(() => {
-				this.setState({ audioAvailable: true })
-				notePattern.start(0);
-				Tone.Transport.start('+0');
-			}).catch(error => console.error(error));
-		}
+		}).catch(error => console.error(error));
 	}
+    }
 	
     updateYearVals = () => {
     	if(this.state.play === 0){
@@ -512,9 +516,6 @@ class EachAlone extends Simulation {
     dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
     dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
     
-    /*** store page stack info ***/
-    const { navigation } = this.props;  
-    
     var co2val = Math.round(this.state.co2data[this.state.index].co2_val);
     
     /*** setup model URL ***/
@@ -560,7 +561,7 @@ class EachAlone extends Simulation {
     	<div style={containerStyle}>
     		<div style={controlDivStyle}>
     		<div style={controlContainerStyle}>
-    			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
+    			<div style={controlBlockStyle} onPointerUp={() => this.callHome()}>
 				<img style={controlBlockStyle} alt="home button" src={homeButton} />
 			</div>
 			

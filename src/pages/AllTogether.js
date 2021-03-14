@@ -432,11 +432,15 @@ class AllTogether extends Simulation {
 	 * 	than stop.
 	 ****/	
 	playMusic = () => {
+		var newind = this.state.index;
+		if(newind === 180){
+			newind = 0;
+		}
 		const precipsynth = this.getSynth(0);
 		const tempsynth = this.getSynth(1);
 		const icesynth = this.getSynth(2);
 		
-		this.setState( { play: 1, playButton: pauseUrl, useArray: 3 });
+		this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
 		const precipPattern = new Tone.Sequence((time, note) => {
 			precipsynth.triggerAttackRelease(note, '8n', time);
 			// bind incrementing
@@ -569,10 +573,7 @@ class AllTogether extends Simulation {
     var dbX = 1;
     var dbY = 1;
     dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
-    dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
-    
-    /*** store page stack info ***/
-    const { navigation } = this.props;  
+    dbX = Math.floor((181 + this.state.longitude) * 320 / 360);  
     
     var co2val = Math.round(this.state.co2data[this.state.index].co2_val);
     
@@ -617,7 +618,7 @@ class AllTogether extends Simulation {
     <div style={containerStyle}>
     		<div style={controlDivStyle}>
     		<div style={controlContainerStyle}>
-			<div style={controlBlockStyle} onPointerDown={() => navigation.navigate('Home')}>
+			<div style={controlBlockStyle} onPointerUp={() => this.callHome()}>
 				<img style={controlBlockStyle} alt="home button" src={homeButton} />
 			</div>
 			
