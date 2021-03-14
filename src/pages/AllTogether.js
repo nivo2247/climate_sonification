@@ -356,6 +356,7 @@ class AllTogether extends Simulation {
     				useArray: 0
     			});	
     			this.setupGraph();
+    			this.triggerNotes(parsedval, 0);
     		}
     	}
     }
@@ -371,6 +372,7 @@ class AllTogether extends Simulation {
     				useArray: 0
     			});	
     			this.setupGraph();
+    			this.triggerNotes(0, parsedval);
     		}
     	}
     }
@@ -383,10 +385,34 @@ class AllTogether extends Simulation {
     	this.doCoordHits(lat, lon);
     	this.setState({
     		latitude: lat,
-    		longitude: lon
+    		longitude: lon,
+    		useArray: 0
     	});
     	this.setupGraph();
+    	this.triggerNotes(lat, lon);
+     }
+     
+     triggerNotes = (lat, lon) => {
+    	var precip_val, temp_val, ice_val;
+    	var dbX = 1;
+   	var dbY = 1;
+   	dbY = Math.floor((91 - lat) * (240 / 180));
+   	dbX = Math.floor((181 + lon) * 320 / 360);
+    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    	if(this.state.precipAvgAllCoords.length > coord_index){
+    		precip_val = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
+    	}
+    	if(this.state.tempAvgAllCoords.length > coord_index){
+    		temp_val = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
+    	}
+    	if(this.state.iceAvgAllCoords.length > coord_index){
+    		ice_val = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
+    	}
+    	this.triggerNoteByVal(0, precip_val, this.state.index, this.state.precipAvg);
+    	this.triggerNoteByVal(1, temp_val, this.state.index, this.state.tempAvg);
+    	this.triggerNoteByVal(2, ice_val, this.state.index, this.state.iceAvg);
     }
+
     
     /*** query db for all years of a specific coord ***/
     doCoordHits(lat, lon){

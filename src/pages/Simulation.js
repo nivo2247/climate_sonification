@@ -220,6 +220,23 @@ export class Simulation extends Page {
 		return 'C5';
 	}
 	
+	triggerNoteByVal = (type, val, index, data) => {
+		Tone.Transport.start();
+		const synth = this.getSynth(type);
+		//synth.sync();
+		const note = this.getNoteByVal(type, val, index, data);
+		this.setState({notePlaying:1});
+		Tone.Transport.scheduleOnce((time) => {
+			synth.triggerAttackRelease(note, '8n');
+		}, '+0');
+		Tone.Transport.scheduleOnce((time) => {
+			synth.dispose();
+			Tone.Transport.cancel();
+			Tone.Transport.stop();
+			this.setState({notePlaying:0});
+		}, '+4n');
+	}
+	
 	playNoteByVal = (type, val, index, data) => {
 		const synth = this.getSynth(type);
 		//synth.sync();

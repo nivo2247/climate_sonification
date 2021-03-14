@@ -323,6 +323,7 @@ class EachAlone extends Simulation {
     				useArray: 0
     			});	
     			this.setupGraph();
+    			this.triggerNotes(parsedval, 0);
     		}
     	}
     }
@@ -338,6 +339,7 @@ class EachAlone extends Simulation {
     				useArray: 0
     			});	
     			this.setupGraph();
+    			this.triggerNotes(0, parsedval);
     		}
     	}
     }
@@ -510,8 +512,23 @@ class EachAlone extends Simulation {
     	this.doCoordHits(this.state.state, lat, lon);
     	this.setState({
     		latitude: lat,
-    		longitude: lon
+    		longitude: lon,
+    		useArray: 0
     	});
+    	this.triggerNotes(lat, lon);
+    }
+    
+    triggerNotes = (lat, lon) => {
+    	var coord_val;
+    	var dbX = 1;
+   	var dbY = 1;
+   	dbY = Math.floor((91 - lat) * (240 / 180));
+   	dbX = Math.floor((181 + lon) * 320 / 360);
+    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    	if(this.state.yearData.length < coord_index){
+    		coord_val = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
+    	}
+    	this.triggerNoteByVal(this.state.state, coord_val, this.state.index, this.state.coordData);
     	this.setupGraph();
     }
     
