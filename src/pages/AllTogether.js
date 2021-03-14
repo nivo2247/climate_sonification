@@ -6,6 +6,7 @@ import PubSub from 'pubsub-js';
 import { isBrowser } from 'react-device-detect';
 import { Simulation } from './Simulation.js';
 import * as Tone from 'tone';
+import { getClosestCity, getInfo } from './../const/cities.js';
 
 import { combinedImgs, dbUrl, urlPre, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImg, bottomSkinnyImg, timelineImg, togetherArtifactImgs, pauseUrl, playUrl } from './../const/url.js';
 
@@ -188,6 +189,7 @@ class AllTogether extends Simulation {
     
     /*** runs on initial render ***/
     componentDidMount = () => {
+    	this.updateDimensions();
     	this.setState({ co2data: [...this.props.route.params.co2data]});
 	
 	togetherArtifactImgs.forEach((picture) => {
@@ -204,7 +206,7 @@ class AllTogether extends Simulation {
 	window.addEventListener('orientationchange', this.rotateDimensions);
 	this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
-	this.updateDimensions();
+	
     }   
     
     updateGraph() {
@@ -373,15 +375,30 @@ class AllTogether extends Simulation {
     	}
     }
     
+    changeToCity = (event) => {
+    	var city = event.target.value;
+    	var cityinfo = getInfo(city);
+    	var lat = cityinfo.latitude;
+    	var lon = cityinfo.longitude;
+    	this.doCoordHits(lat, lon);
+    	this.setState({
+    		latitude: lat,
+    		longitude: lon
+    	});
+    	this.setupGraph();
+    }
+    
     /*** query db for all years of a specific coord ***/
     doCoordHits(lat, lon){
+    	var closestcity = getClosestCity(lat, lon)
     	var dbX = 1;
     	var dbY = 1;
     	dbY = Math.floor((91 - lat) * (240 / 180));
 	dbX = Math.floor((181 + lon) * 320 / 360);
 	this.setState({
 		latitude: Math.floor(lat),
-		longitude: Math.floor(lon)
+		longitude: Math.floor(lon),
+		closestCity: closestcity
 	});
 	var request;
 	/* Filter and do db hit here */
@@ -606,7 +623,7 @@ class AllTogether extends Simulation {
     	}
     }
     
-    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, inputControlStyle, labelControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
     const { largeControlBlockStyle, dataThirdStyle, graphHeight, graphWidth } = this.getTogetherStyles(modelWidth, controlHeight, controlWidth );
     
@@ -656,18 +673,37 @@ class AllTogether extends Simulation {
 					<label htmlFor='lon' style={labelControlStyle}> Lon:</label>
 					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
 				</div>
-			</form>
 			
-			<div style={dataBlockStyle}>
-				<p style={smallLabelTextStyle}> Year: {this.state.index + 1920}</p>
-			</div>
+				<div style={dataBlockStyle}>
+					<label htmlFor='city' style={bigLabelControlStyle}> Close To:</label>
+					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
+						<option value='San Francisco'>San Francisco</option>
+						<option value='Denver'>Denver</option>
+						<option value='Hong Kong'>Hong Kong</option>
+						<option value='Tokyo'>Tokyo</option>
+						<option value='Bengaluru'>Bengaluru</option>
+						<option value='Sydney'>Syney</option>
+						<option value='Sao Paulo'>Sao Paulo</option>
+						<option value='Cape Town'>Cape Town</option>
+						<option value='London'>London</option>
+						<option value='Berlin'>Berlin</option>
+						<option value='Paris'>Paris</option>
+						<option value='Rome'>Rome</option>
+					</select>
+				</div>
+			</form>
 			
 		</div>
 			
 		<div style={controlContainerStyle}>
 		
 			<div style={dataBlockStyle}>
-				<p style={smallLabelTextStyle}>Co2: {co2val}</p>
+				<div style={halfControlStyle}>
+					<p style={smallLabelTextStyle}>Year: {this.state.index + 1920}</p>
+				</div>
+				<div style={halfControlStyle}>
+					<p style={smallLabelTextStyle}>Co2: {co2val}</p>
+				</div>
 			</div>
 			
 			<div style={keyContainer}>

@@ -40,6 +40,7 @@ export class Simulation extends Page {
 		this.state.precipNotes = [];
 		this.state.tempNotes = [];
 		this.state.iceNotes = [];
+		this.state.closestCity = '';
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
 	}  
@@ -545,12 +546,37 @@ export class Simulation extends Page {
     		'textAlign': 'center'
     	};
     	
+    	const halfControlStyle = {
+    		height: Math.floor(controlHeight / (20)),
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 2),
+    		float: 'left',
+    		'textAlign': 'center'
+    	};
+    	
     	const inputControlStyle = {
     		height: Math.floor(controlHeight / (20)) - 1,
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 5),
     		float: 'left',
     		'fontFamily': 'Verdana, sans-serif',
     		"fontSize": smallFontSize
+    	};
+    	
+    	const dropdownControlStyle = {
+    		height: Math.floor(controlHeight / (20)),
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT * 3 / 4),
+    		float: 'left',
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": smallFontSize
+    	};
+    	
+    	const bigLabelControlStyle = {
+    		height: Math.floor(controlHeight / (20)),
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 4) - 1,
+    		float: 'left',
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": smallFontSize,
+    		'textAlign': 'right',
+    		'paddingTop': 5
     	};
     	
     	const labelControlStyle = {
@@ -641,7 +667,7 @@ export class Simulation extends Page {
     		'fontFamily': 'Verdana, sans-serif',
     	};
     
-    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, inputControlStyle, labelControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
+    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
     }
     
     /*** These should never run because each class has separate functions,

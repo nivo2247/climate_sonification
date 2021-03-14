@@ -6,6 +6,7 @@ import PubSub from 'pubsub-js';
 import { isBrowser } from 'react-device-detect';
 import { Simulation } from './Simulation.js';
 import * as Tone from 'tone';
+import { getClosestCity, getInfo } from './../const/cities.js';
 
 import { precipImgs, tempImgs, iceImgs, dbUrl, urlPre, precipActive, precipInactive, tempActive, tempInactive, iceActive, iceInactive, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImgAlone, bottomSkinnyImgAlone, timelineImg, aloneArtifactImgs, pauseUrl, playUrl } from './../const/url.js';
 
@@ -343,13 +344,15 @@ class EachAlone extends Simulation {
     
     /*** Get the value of every year of a coords lifespan ***/
     doCoordHits(state, lat, lon){
+    	var closestcity = getClosestCity(lat, lon);
     	var dbX = 1;
     	var dbY = 1;
     	dbY = Math.floor((91 - lat) * (240 / 180));
 	dbX = Math.floor((181 + lon) * 320 / 360);
 	this.setState({
 		latitude: Math.floor(lat),
-		longitude: Math.floor(lon)
+		longitude: Math.floor(lon),
+		closestCity: closestcity
 	});
 	/* Filter and do db hit here */
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
@@ -499,6 +502,19 @@ class EachAlone extends Simulation {
 	this.updateDimensions();
     } 
     
+    changeToCity = (event) => {
+    	var city = event.target.value;
+    	var cityinfo = getInfo(city);
+    	var lat = cityinfo.latitude;
+    	var lon = cityinfo.longitude;
+    	this.doCoordHits(this.state.state, lat, lon);
+    	this.setState({
+    		latitude: lat,
+    		longitude: lon
+    	});
+    	this.setupGraph();
+    }
+    
     /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
@@ -540,7 +556,7 @@ class EachAlone extends Simulation {
     }
     
     /* contains almost all the styling for the page */
-    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, inputControlStyle, labelControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
     var newh = controlHeight * 5 / 20;
     if(this.state.CONTROLVERTDIV !== 1){
@@ -615,14 +631,33 @@ class EachAlone extends Simulation {
 					<label for='lon' style={labelControlStyle}> Lon:</label>
 					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
 				</div>
+				
+				<div style={dataBlockStyle}>
+					<label htmlFor='city' style={bigLabelControlStyle}> Close To:</label>
+					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
+						<option value='San Francisco'>San Francisco</option>
+						<option value='Denver'>Denver</option>
+						<option value='Hong Kong'>Hong Kong</option>
+						<option value='Tokyo'>Tokyo</option>
+						<option value='Bengaluru'>Bengaluru</option>
+						<option value='Sydney'>Syney</option>
+						<option value='Sao Paulo'>Sao Paulo</option>
+						<option value='Cape Town'>Cape Town</option>
+						<option value='London'>London</option>
+						<option value='Berlin'>Berlin</option>
+						<option value='Paris'>Paris</option>
+						<option value='Rome'>Rome</option>
+					</select>
+				</div>
 			</form>
 			
 			<div style={dataBlockStyle}>
+				<div style={halfControlStyle}>
 					<p style={smallLabelTextStyle}> Year: {this.state.index + 1920}</p>
-			</div>
-			
-			<div style={dataBlockStyle}>
-				<p style={smallLabelTextStyle}>Co2: {co2val}</p>
+				</div>
+				<div style={halfControlStyle}>
+					<p style={smallLabelTextStyle}>Co2: {co2val}</p>
+				</div>
 			</div>
 			
 			<div style={controlBlockStyle} onPointerDown={this.setupTransport} onPointerMove={this.testMusic} onPointerUp={this.killTransport}>
