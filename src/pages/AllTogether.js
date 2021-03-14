@@ -28,7 +28,7 @@ class AllTogether extends Simulation {
     
     /* TODO: cleanup similar code */
     testPrecipMusic = (e) => {
-    	if(e.buttons === 1 && this.state.play === 0){
+    	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
     		var keyLeft = 0;
     		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
     		if(this.state.CONTROLVERTDIV !== 1){
@@ -43,8 +43,8 @@ class AllTogether extends Simulation {
    	}
     }
     
-        testTempMusic = (e) => {
-    	if(e.buttons === 1 && this.state.play === 0){
+    testTempMusic = (e) => {
+    	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
     		var keyLeft = 0;
     		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
     		if(this.state.CONTROLVERTDIV !== 1){
@@ -60,7 +60,7 @@ class AllTogether extends Simulation {
     }
     
     testIceMusic = (e) => {
-    	if(e.buttons === 1 && this.state.play === 0){
+    	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
     		var keyLeft = 0;
     		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
     		if(this.state.CONTROLVERTDIV !== 1){
@@ -490,6 +490,21 @@ class AllTogether extends Simulation {
     	}
     	window.removeEventListener('orientationchange', this.rotateDimensions);
     }
+    
+    setupPrecipTransport = (e) => {
+    	Tone.Transport.start('+0');
+    	this.testPrecipMusic(e);
+    }
+    
+    setupTempTransport = (e) => {
+    	Tone.Transport.start('+0');
+    	this.testTempMusic(e);
+    }
+    
+    setupIceTransport = (e) => {
+    	Tone.Transport.start('+0');
+    	this.testIceMusic(e);
+    }
 
     /*** runs on state update ***/   
     render(){
@@ -603,15 +618,15 @@ class AllTogether extends Simulation {
 			
 			
 			<div style={keyContainer} >
-				<div style={dataBlockStyle} onPointerDown={this.testPrecipMusic}>
+				<div style={dataBlockStyle} onPointerEnter={this.setupPrecipTransport} onPointerMove={this.testPrecipMusic} onPointerLeave={this.killTransport}>
 					<img style={dataBlockStyle} alt="precipitation key" src={precipKey} draggable="false"/>
 				</div>
 
-				<div style={dataBlockStyle} onPointerDown={this.testTempMusic}>
+				<div style={dataBlockStyle} onPointerEnter={this.setupTempTransport} onPointerMove={this.testTempMusic} onPointerLeave={this.killTransport}>
 					<img style={dataBlockStyle} alt="temperature key" src={tempKey} draggable="false"/>
 				</div>
 
-				<div style={controlBlockStyle} onPointerDown={this.testIceMusic}>
+				<div style={controlBlockStyle} onPointerEnter={this.setupIceTransport} onPointerMove={this.testIceMusic} onPointerLeave={this.killTransport}>
 					<img style={dataBlockStyle} alt="sea ice key" src={iceKey} draggable="false"/>
 				</div>
 			</div>

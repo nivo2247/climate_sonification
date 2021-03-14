@@ -359,12 +359,17 @@ class EachAlone extends Simulation {
     		});
 	}
     };
+    
+    setupTransport = (e) => {
+    		Tone.Transport.start('+0');
+    		this.testMusic(e);
+    }
 
     /*** This is an onPointerDown for the map keys.
     *** When a user clicks the key, it should figure out
     *** what value they are pressing and pay the corresponding note ***/
     testMusic = (e) => {
-    	if(e.buttons === 1 && this.state.play === 0){
+    	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
     		var keyLeft = 0;
     		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
     		if(this.state.CONTROLVERTDIV !== 1){
@@ -377,15 +382,12 @@ class EachAlone extends Simulation {
 		var playVal;
    		if(this.state.state === 0){
    			playVal = (percX - .175) * 500 + 100;
-   			console.log("playprecip: ", playVal);
    		}
    		else if(this.state.state === 1){
    			playVal = (percX - .14) * 23;
-   			console.log("playtemp: ", playVal);
    		}
    		else if(this.state.state === 2){
    			playVal = percX;
-   			console.log("playice: ", playVal);
    		}
    		this.playNoteByVal(this.state.state, playVal, this.state.index, this.state.coordData);
    	}
@@ -592,7 +594,7 @@ class EachAlone extends Simulation {
 				<p style={smallLabelTextStyle}>Co2: {co2val}</p>
 			</div>
 			
-			<div style={controlBlockStyle} onPointerDown={this.testMusic} onPointerMove={this.testMusic}>
+			<div style={controlBlockStyle} onPointerEnter={this.setupTransport} onPointerMove={this.testMusic} onPointerLeave={this.killTransport}>
 				<img style={dataBlockStyle} alt="map key" src={this.state.keySrc} draggable="false"/>
 			</div>
 			

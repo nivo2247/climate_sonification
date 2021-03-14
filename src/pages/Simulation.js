@@ -21,6 +21,7 @@ export class Simulation extends Page {
 		this.state.pageRight = window.clientWidth - PADDING;
 		this.state.index = 0;
 		this.state.play = 0;
+		this.state.notePlaying = 0;
 		this.state.timerLen = 800;
 		this.state.playButton = playUrl;
 		this.state.token = "";
@@ -220,10 +221,21 @@ export class Simulation extends Page {
 	
 	playNoteByVal = (type, val, index, data) => {
 		const synth = this.getSynth(type);
+		//synth.sync();
 		const note = this.getNoteByVal(type, val, index, data);
-		console.log(note);
-		synth.triggerAttackRelease(note, '32n');
+		this.setState({notePlaying:1});
+		Tone.Transport.scheduleOnce((time) => {
+			synth.triggerAttackRelease(note, '8n');
+		}, '+0');
+		Tone.Transport.scheduleOnce((time) => {
+			synth.dispose();
+			this.setState({notePlaying:0});
+		}, '+8n');
 	}
+    
+    	killTransport = (e) => {
+    		Tone.Transport.cancel('+4n');
+    	}
 	
 	getSynth = (type) => {
 		var retsynth;
