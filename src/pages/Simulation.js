@@ -242,13 +242,13 @@ export class Simulation extends Page {
 	
 	killMapTransport = (e) => {
     		Tone.Transport.cancel('+4n');
-    		Tone.Transport.stop();
+    		Tone.Transport.stop('+4n');
     		this.setState({notePlaying: 0});
     	}
     
     	killTransport = (e) => {
     		Tone.Transport.cancel('+4n');
-    		Tone.Transport.stop();
+    		Tone.Transport.stop('+4n');
     		this.setState({notePlaying: 0});
     	}
 	
