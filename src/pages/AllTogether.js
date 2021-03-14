@@ -202,7 +202,7 @@ class AllTogether extends Simulation {
 		window.addEventListener('resize', this.updateDimensions);
 	}
 	window.addEventListener('orientationchange', this.rotateDimensions);
-	//this.doCoordHits(0, 0);
+	this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
 	this.updateDimensions();
     }   
@@ -533,6 +533,12 @@ class AllTogether extends Simulation {
     	return { largeControlBlockStyle, dataThirdStyle, graphHeight, graphWidth };
     }
     
+    updateYearVals = () => {
+    	if(this.state.play === 0){
+    		this.doYearHits(this.state.index + 1920);
+    	}
+    }
+    
     /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
@@ -715,7 +721,7 @@ class AllTogether extends Simulation {
 			
 			<div style={graphBufferStyle}/>
 			
-			<div style={sliderDivStyle}>
+			<div style={sliderDivStyle} onPointerUp={this.updateYearVals}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
 				<img style={sliderStyle} alt="" src={timelineImg}/>
 			</div>

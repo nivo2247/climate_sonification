@@ -341,15 +341,6 @@ class EachAlone extends Simulation {
     	}
     }
     
-    killMapTransport = (e) => {
-    		Tone.Transport.cancel('+4n');
-    		Tone.Transport.stop();
-		if(this.state.play === 0){
-    			this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
-    		}
-    		this.setState({notePlaying: 0});
-    	}
-    
     /*** Get the value of every year of a coords lifespan ***/
     doCoordHits(state, lat, lon){
     	var dbX = 1;
@@ -467,6 +458,12 @@ class EachAlone extends Simulation {
 			}).catch(error => console.error(error));
 		}
 	}
+	
+    updateYearVals = () => {
+    	if(this.state.play === 0){
+    		this.doYearHits(this.state.state, this.state.index + 1920);
+    	}
+    }
     
     /*** runs on initial render ***/
     componentDidMount = () => {
@@ -493,7 +490,7 @@ class EachAlone extends Simulation {
 	window.addEventListener('orientationchange', this.rotateDimensions);
 	
 	/* fetch data and setup window size */
-	//this.doCoordHits(0, 0, 0);
+	this.doCoordHits(0, 0, 0);
 	this.doYearHits(0, this.state.index + 1920);
 	this.updateDimensions();
     } 
@@ -659,7 +656,7 @@ class EachAlone extends Simulation {
 			
 			<div style={graphBufferStyle}/>
 			
-			<div style={sliderDivStyle}>
+			<div style={sliderDivStyle} onPointerUp={this.updateYearVals}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
 				<img style={sliderStyle} alt="" src={timelineImg}/>
 			</div>

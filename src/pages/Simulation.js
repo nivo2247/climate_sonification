@@ -243,9 +243,6 @@ export class Simulation extends Page {
 	killMapTransport = (e) => {
     		Tone.Transport.cancel('+4n');
     		Tone.Transport.stop();
-		if(this.state.play === 0){
-    			this.doCoordHits(this.state.latitude, this.state.longitude);
-    		}
     		this.setState({notePlaying: 0});
     	}
     
