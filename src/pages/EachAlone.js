@@ -650,7 +650,7 @@ class EachAlone extends Simulation {
 				</div>
 				
 				<div style={dataBlockStyle}>
-					<label htmlFor='city' style={bigLabelControlStyle}> Close To:</label>
+					<label htmlFor='city' style={bigLabelControlStyle}> City:</label>
 					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
 						<option value='San Francisco'>San Francisco</option>
 						<option value='Denver'>Denver</option>

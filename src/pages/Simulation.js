@@ -579,7 +579,7 @@ export class Simulation extends Page {
     	};
     	
     	const dropdownControlStyle = {
-    		height: Math.floor(controlHeight / (20)),
+    		height: Math.floor(controlHeight / (20)) - 1,
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT * 3 / 4),
     		float: 'left',
     		'fontFamily': 'Verdana, sans-serif',
