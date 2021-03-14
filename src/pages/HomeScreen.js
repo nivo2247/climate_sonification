@@ -51,27 +51,52 @@ class HomeScreen extends Page {
     		width: this.state.pageRight,
     		overflow: 'hidden'
     	};
-    	const buttonBumperStyle = {
+    	var buttonBumperStyle = {
     		height: Math.floor(this.state.pageBottom * 7 / 20),
     		width: Math.floor(this.state.pageRight / 20),
     		float: 'left'
     	};
-    	const buttonStyle = {
+    	var buttonStyle = {
     		height: Math.floor(this.state.pageBottom * 7 / 20),
     		width: Math.floor(this.state.pageRight * 2 / 5),
     		overflow: 'hidden',
     		float: 'left'
 	};
-	const qrBumperStyle = {
-		height: Math.floor(this.state.pageBottom * 6 / 20),
-		width: Math.floor(this.state.pageRight * 6 / 20),
-		float: 'left'
-	};
-	const qrStyle = {
+	var qrBumperStyle = {
 		height: Math.floor(this.state.pageBottom * 6 / 20),
 		width: Math.floor(this.state.pageRight * 8 / 20),
 		float: 'left'
 	};
+	var qrStyle = {
+		height: Math.floor(this.state.pageBottom * 6 / 20),
+		width: Math.floor(this.state.pageRight * 4 / 20),
+		float: 'left'
+	};
+	
+	if(this.state.pageBottom > this.state.pageRight){
+		buttonBumperStyle = {
+    			height: Math.floor(this.state.pageBottom * 7 / 20),
+    			width: Math.floor(this.state.pageRight / 20),
+    			float: 'left'
+    		};
+    		buttonStyle = {
+    			height: Math.floor(this.state.pageBottom * 4 / 20),
+    			width: Math.floor(this.state.pageRight * 2 / 5),
+    			overflow: 'hidden',
+    			float: 'left'
+		};
+		qrBumperStyle = {
+			height: Math.floor(this.state.pageBottom * 6 / 20),
+			width: Math.floor(this.state.pageRight * 6 / 20),
+			float: 'left'
+		};
+		qrStyle = {
+			height: Math.floor(this.state.pageBottom * 6 / 20),
+			width: Math.floor(this.state.pageRight * 8 / 20),
+			float: 'left'
+		};
+	}
+	
 	const titleTextStyle = {
 		'fontFamily': 'Verdana, sans-serif',
 		'fontSize': titleTextSize,
