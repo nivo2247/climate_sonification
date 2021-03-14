@@ -624,7 +624,7 @@ class EachAlone extends Simulation {
 				<p style={smallLabelTextStyle}>Co2: {co2val}</p>
 			</div>
 			
-			<div style={controlBlockStyle} onPointerEnter={this.setupTransport} onPointerMove={this.testMusic} onPointerLeave={this.killTransport}>
+			<div style={controlBlockStyle} onPointerEnter={this.setupTransport} onPointerDown={this.testMusic} onPointerMove={this.testMusic} onPointerLeave={this.killTransport}>
 				<img style={dataBlockStyle} alt="map key" src={this.state.keySrc} draggable="false"/>
 			</div>
 			
@@ -641,7 +641,7 @@ class EachAlone extends Simulation {
 		
 		<div style={largeDivStyle}>
 			
-			<div style={modelStyle} onPointerEnter={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerLeave={this.killMapTransport} onPointerUp={this.onPointerUp}>
+			<div style={modelStyle} onPointerEnter={this.setupMapTransport} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerLeave={this.killMapTransport} onPointerUp={this.onPointerUp}>
 				<img src={fullUrl} alt="climate model" style={modelStyle} draggable="false"/>
 			</div>
 			

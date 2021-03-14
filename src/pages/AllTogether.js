@@ -675,15 +675,15 @@ class AllTogether extends Simulation {
 			
 			
 			<div style={keyContainer} >
-				<div style={dataBlockStyle} onPointerEnter={this.setupPrecipTransport} onPointerMove={this.testPrecipMusic} onPointerLeave={this.killTransport}>
+				<div style={dataBlockStyle} onPointerEnter={this.setupPrecipTransport} onPointerDown={this.testPrecipMusic} onPointerMove={this.testPrecipMusic} onPointerLeave={this.killTransport}>
 					<img style={dataBlockStyle} alt="precipitation key" src={precipKey} draggable="false"/>
 				</div>
 
-				<div style={dataBlockStyle} onPointerEnter={this.setupTempTransport} onPointerMove={this.testTempMusic} onPointerLeave={this.killTransport}>
+				<div style={dataBlockStyle} onPointerEnter={this.setupTempTransport} onPointerDown={this.testTempMusic} onPointerMove={this.testTempMusic} onPointerLeave={this.killTransport}>
 					<img style={dataBlockStyle} alt="temperature key" src={tempKey} draggable="false"/>
 				</div>
 
-				<div style={controlBlockStyle} onPointerEnter={this.setupIceTransport} onPointerMove={this.testIceMusic} onPointerLeave={this.killTransport}>
+				<div style={controlBlockStyle} onPointerEnter={this.setupIceTransport} onPointerDown={this.testIceMusic} onPointerMove={this.testIceMusic} onPointerLeave={this.killTransport}>
 					<img style={dataBlockStyle} alt="sea ice key" src={iceKey} draggable="false"/>
 				</div>
 			</div>
@@ -699,7 +699,7 @@ class AllTogether extends Simulation {
 
 		<div style={largeDivStyle}>
 			
-			<div style={modelStyle} onPointerEnter={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerLeave={this.killMapTransport} onPointerUp={this.onPointerUp}>
+			<div style={modelStyle} onPointerEnter={this.setupMapTransport} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerLeave={this.killMapTransport} onPointerUp={this.onPointerUp}>
 				<img src={fullUrl} alt="climate model" style={modelStyle} draggable="false"/>
 			</div>
 			
