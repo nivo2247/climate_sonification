@@ -7,7 +7,7 @@ import { isBrowser } from 'react-device-detect';
 import { Simulation } from './Simulation.js';
 import * as Tone from 'tone';
 
-import { combinedImgs, dbUrl, urlPre, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImg, bottomSkinnyImg, timelineImg, togetherArtifactImgs, pauseUrl } from './../const/url.js';
+import { combinedImgs, dbUrl, urlPre, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImg, bottomSkinnyImg, timelineImg, togetherArtifactImgs, pauseUrl, playUrl } from './../const/url.js';
 
 function isNumeric(value) {
 	return /^-?\d+$/.test(value);
@@ -102,7 +102,6 @@ class AllTogether extends Simulation {
     	var centerX = 0;
     	var centerY = 0;
     	var boxType = 0;
-    	console.log('np', this.state.notePlaying);
     	if(this.state.play === 0 && e.buttons === 1) {
 		if (x <= modelDiv && y <= modelSplit) {
 	    		centerX = modelDiv / 2;
@@ -155,7 +154,10 @@ class AllTogether extends Simulation {
 			lonSave = (projx - centerX) * 540 / modelDiv;
 		    	latSave = 90 - projy * 90 / modelSplit;
 		}
-		console.log("setting latlon", latSave);
+		latSave = Math.max(latSave, -89);
+		latSave = Math.min(latSave, 90);
+		lonSave = Math.max(lonSave, -180);
+		lonSave = Math.min(lonSave, 180);
 	    	this.setState({
 	    		latitude: Math.floor(latSave), 
 	    		longitude: Math.floor(lonSave),
@@ -166,7 +168,7 @@ class AllTogether extends Simulation {
     		dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
     		dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
     		var coord_index = (dbY - 1) * 320 + (dbX - 1);
-    		if(this.state.precipAvgAllCoords.length > coord_index && this.state.tempAvgAllCoords.length > coord_index && this.state.iceAvgAllCoords.length > coord_index){
+    		if(this.state.precipAvgAllCoords.length >= coord_index && this.state.tempAvgAllCoords.length >= coord_index && this.state.iceAvgAllCoords.length >= coord_index){
     			var val0 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
     			var val1 = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
     			var val2 = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
@@ -175,6 +177,14 @@ class AllTogether extends Simulation {
 	   }
 	        
         }    
+        
+        /*** Run this when stop is pressed or when index === 180 ***/
+	stopMusic = () => {
+		this.setState({ play: 0, playButton: playUrl });
+		Tone.Transport.stop();
+		Tone.Transport.cancel(0);
+		this.doYearHits(this.state.index + 1920);
+	}
     
     /*** runs on initial render ***/
     componentDidMount = () => {
@@ -192,7 +202,7 @@ class AllTogether extends Simulation {
 		window.addEventListener('resize', this.updateDimensions);
 	}
 	window.addEventListener('orientationchange', this.rotateDimensions);
-	this.doCoordHits(0, 0);
+	//this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
 	this.updateDimensions();
     }   
@@ -683,7 +693,7 @@ class AllTogether extends Simulation {
 
 		<div style={largeDivStyle}>
 			
-			<div style={modelStyle} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.killMapTransport}>
+			<div style={modelStyle} onPointerEnter={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerLeave={this.killMapTransport} onPointerUp={this.onPointerUp}>
 				<img src={fullUrl} alt="climate model" style={modelStyle} draggable="false"/>
 			</div>
 			

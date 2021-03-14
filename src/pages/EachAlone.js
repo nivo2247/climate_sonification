@@ -7,7 +7,7 @@ import { isBrowser } from 'react-device-detect';
 import { Simulation } from './Simulation.js';
 import * as Tone from 'tone';
 
-import { precipImgs, tempImgs, iceImgs, dbUrl, urlPre, precipActive, precipInactive, tempActive, tempInactive, iceActive, iceInactive, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImgAlone, bottomSkinnyImgAlone, timelineImg, aloneArtifactImgs, pauseUrl } from './../const/url.js';
+import { precipImgs, tempImgs, iceImgs, dbUrl, urlPre, precipActive, precipInactive, tempActive, tempInactive, iceActive, iceInactive, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImgAlone, bottomSkinnyImgAlone, timelineImg, aloneArtifactImgs, pauseUrl, playUrl } from './../const/url.js';
 
 function isNumeric(value) {
 	return /^-?\d+$/.test(value);
@@ -47,6 +47,14 @@ class EachAlone extends Simulation {
     	this.doYearHits(0, this.state.index + 1920);
     	this.doCoordHits(0, this.state.latitude, this.state.longitude);
     }
+    
+    /*** Run this when stop is pressed or when index === 180 ***/
+	stopMusic = () => {
+		this.setState({ play: 0, playButton: playUrl });
+		Tone.Transport.stop();
+		Tone.Transport.cancel(0);
+		this.doYearHits(this.state.state, this.state.index + 1920);
+	}
    
     /*** onPress for 'Temperature' Button ***/   
     setTemp = () => {
@@ -165,11 +173,24 @@ class EachAlone extends Simulation {
 		    	latSave = 90 - projy * 90 / modelSplit;
 		    	
 		}
+		latSave = Math.max(latSave, -89);
+		latSave = Math.min(latSave, 90);
+		lonSave = Math.max(lonSave, -180);
+		lonSave = Math.min(lonSave, 180);
 	    	this.setState({
 	    		latitude: Math.floor(latSave), 
 	    		longitude: Math.floor(lonSave),
 	    		useArray: 0
 	    	});
+	    	var dbX = 1;
+    		var dbY = 1;
+    		dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
+    		dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
+    		var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    		if(this.state.yearData.length >= coord_index){
+    			var val0 = this.getValByCoord(this.state.yearData, coord_index);
+    			this.playNoteByVal(this.state.state, val0, this.state.index, this.state.coordData);
+	        }
 	}
     }   
     
@@ -320,6 +341,15 @@ class EachAlone extends Simulation {
     	}
     }
     
+    killMapTransport = (e) => {
+    		Tone.Transport.cancel('+4n');
+    		Tone.Transport.stop();
+		if(this.state.play === 0){
+    			this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
+    		}
+    		this.setState({notePlaying: 0});
+    	}
+    
     /*** Get the value of every year of a coords lifespan ***/
     doCoordHits(state, lat, lon){
     	var dbX = 1;
@@ -463,7 +493,7 @@ class EachAlone extends Simulation {
 	window.addEventListener('orientationchange', this.rotateDimensions);
 	
 	/* fetch data and setup window size */
-	this.doCoordHits(0, 0, 0);
+	//this.doCoordHits(0, 0, 0);
 	this.doYearHits(0, this.state.index + 1920);
 	this.updateDimensions();
     } 
@@ -614,7 +644,7 @@ class EachAlone extends Simulation {
 		
 		<div style={largeDivStyle}>
 			
-			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>
+			<div style={modelStyle} onPointerEnter={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerLeave={this.killMapTransport} onPointerUp={this.onPointerUp}>
 				<img src={fullUrl} alt="climate model" style={modelStyle} draggable="false"/>
 			</div>
 			

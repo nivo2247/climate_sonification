@@ -271,14 +271,6 @@ export class Simulation extends Page {
 		return retsynth;
 	}
 
-	/*** Run this when stop is pressed or when index === 180 ***/
-	stopMusic = () => {
-		this.setState({ play: 0, playButton: playUrl });
-		// Maybe I need to also stop the sequence?
-		Tone.Transport.stop();
-		Tone.Transport.cancel(0);
-	}
-
 	/*** Another increment method to work with tone ***/
 	incrementIndex = () => {
 		this.setupGraph();
