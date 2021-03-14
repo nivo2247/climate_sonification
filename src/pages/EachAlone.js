@@ -417,18 +417,18 @@ class EachAlone extends Simulation {
    	}
     }
     
-    noteHelper = () => {
+    noteHelper = (ind) => {
     	var notes = [];
     	if(this.state.state === 0){
-		notes = this.getPrecipNotes(this.state.index);
+		notes = this.getPrecipNotes(ind);
 	}
 	
 	else if(this.state.state === 1){
-		notes = this.getTempNotes(this.state.index);
+		notes = this.getTempNotes(ind);
 	}
 	
 	else{
-		notes = this.getIceNotes(this.state.index);
+		notes = this.getIceNotes(ind);
 	}
 	return notes;
     }
@@ -440,7 +440,7 @@ class EachAlone extends Simulation {
 	}
 	const synth = this.getSynth(this.state.state);
 	this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
-	const notes = this.noteHelper();
+	const notes = this.noteHelper(newind);
 		
 	const notePattern = new Tone.Sequence((time, note) => {
 		synth.triggerAttackRelease(note, '8n', time);

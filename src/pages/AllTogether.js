@@ -447,15 +447,15 @@ class AllTogether extends Simulation {
 			Tone.Draw.schedule(() => {
 				this.incrementIndex();
 			}, time)
-		}, this.getPrecipNotes(this.state.index));
+		}, this.getPrecipNotes(newind));
 		
 		const tempPattern = new Tone.Sequence((time, note) => {
 			tempsynth.triggerAttackRelease(note, '8n', time);
-		}, this.getTempNotes(this.state.index));
+		}, this.getTempNotes(newind));
 		
 		const icePattern = new Tone.Sequence((time, note) => {
 			icesynth.triggerAttackRelease(note, '8n', time);
-		}, this.getIceNotes(this.state.index));
+		}, this.getIceNotes(newind));
 
 		// catches most errors
 		if(this.state.audioAvailable) {
