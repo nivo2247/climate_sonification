@@ -479,11 +479,13 @@ class AllTogether extends Simulation {
 			synth2.triggerAttackRelease(note2, '8n');
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
+			this.setState({notePlaying:0});
+		}, '+8n');
+		Tone.Transport.scheduleOnce((time) => {
 			synth0.dispose();
 			synth1.dispose();
 			synth2.dispose();
-			this.setState({notePlaying:0});
-		}, '+8n');
+		}, '+4n');
 	}
     
     getTogetherStyles(mw, ch, cw) {

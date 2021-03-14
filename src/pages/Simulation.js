@@ -228,9 +228,11 @@ export class Simulation extends Page {
 			synth.triggerAttackRelease(note, '8n');
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
-			synth.dispose();
 			this.setState({notePlaying:0});
 		}, '+8n');
+		Tone.Transport.scheduleOnce((time) => {
+			synth.dispose();
+		}, '+4n');
 	}
 	
 	setupMapTransport = (e) => {
