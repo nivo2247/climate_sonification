@@ -14,6 +14,11 @@ function isNumeric(value) {
 	return /^-?\d+$/.test(value);
 }
 
+let cancelYear;
+let cancelCoord;
+
+const CancelToken = Axios.CancelToken;
+
 /*** EachAlone Class, returns interactive page
 *** Many items inherited from Simulation Class ***/
 class EachAlone extends Simulation {
@@ -278,6 +283,37 @@ class EachAlone extends Simulation {
     	}
     }
     
+    yearApi = (request) => {
+    	if(cancelYear !== undefined){
+    		cancelYear();
+    	}
+    
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelYear = c;
+    			})
+    		})
+    		
+		.then(res => {
+    			const year_data = res.data.data;
+    			if(this.state.play === 0){
+    				this.setState({ 
+    					yearData: [...year_data],
+    					useArray: 3
+    				});
+    			}
+    			else{
+    				this.setState({ yearData: [...year_data]});
+    			}
+    			console.log(year_data);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('year request cancelled');
+    			}	
+    		});
+    }
+    
     /*** get the value of every coordinate at a specific state and year ***/
     doYearHits(state, year){
 	/* Filter and do db hit here */
@@ -294,20 +330,7 @@ class EachAlone extends Simulation {
 			intermediate = table.concat("seaiceavg/year/");
 		}
 		var request = intermediate.concat(year.toString(10));
-		Axios.get(request)
-			.then(res => {
-    			const year_data = res.data.data;
-    			if(this.state.play === 0){
-    				this.setState({ 
-    					yearData: [...year_data],
-    					useArray: 3
-    				});
-    			}
-    			else{
-    				this.setState({ yearData: [...year_data]});
-    			}
-    			console.log(year_data);
-    		});
+		this.yearApi(request);
 	}
     };
     
@@ -344,6 +367,37 @@ class EachAlone extends Simulation {
     	}
     }
     
+    coordApi = (request) => {
+    	if(cancelCoord !== undefined){
+    		cancelCoord();
+    	}
+    
+    	Axios.get(request, {
+    		cancelToken: new CancelToken(function executor(c){
+    			cancelCoord = c;
+    		})
+    	})
+		.then(res => {
+    			const coord_data = res.data.data;
+    			this.setState({ coordData: [...coord_data]});
+    			this.setupGraph();
+    			this.updateGraph();
+    			console.log(coord_data);
+    			if(this.state.state === 0){
+   	 			this.setPrecipNotes(coord_data);
+    			}else if(this.state.state === 1){
+    				this.setTempNotes(coord_data);
+    			}else if(this.state.state === 2){
+   	 			this.setIceNotes(coord_data);
+    			}
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('coord request cancelled');
+    			}
+    		});
+    }
+    
     /*** Get the value of every year of a coords lifespan ***/
     doCoordHits(state, lat, lon){
     	var closestcity = getClosestCity(lat, lon);
@@ -370,22 +424,7 @@ class EachAlone extends Simulation {
 			intermediate = table.concat("seaiceavg/coord/(");
 		}
 		var request = intermediate.concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
-		
-		Axios.get(request)
-			.then(res => {
-    			const coord_data = res.data.data;
-    			this.setState({ coordData: [...coord_data]});
-    			this.setupGraph();
-    			this.updateGraph();
-    			console.log(coord_data);
-    			if(this.state.state === 0){
-    				this.setPrecipNotes(coord_data);
-    			}else if(this.state.state === 1){
-    				this.setTempNotes(coord_data);
-    			}else if(this.state.state === 2){
-    				this.setIceNotes(coord_data);
-    			}
-    		});
+		this.coordApi(request);
 	}
     };
     

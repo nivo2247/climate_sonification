@@ -14,6 +14,15 @@ function isNumeric(value) {
 	return /^-?\d+$/.test(value);
 }
 
+let cancelYearPrecip;
+let cancelCoordPrecip;
+let cancelYearTemp;
+let cancelCoordTemp;
+let cancelYearIce;
+let cancelCoordIce;
+
+const CancelToken = Axios.CancelToken;
+
 /*** Page class ***/
 class AllTogether extends Simulation {
     constructor(props){
@@ -284,14 +293,16 @@ class AllTogether extends Simulation {
     	}
     }
     
-    /*** query db for all coords at a specific year ***/
-    doYearHits(year){
-	if(year >= 1920 && year <= 2100){
-		var table = dbUrl.concat("/table/")
-		var intermediate0 = table.concat("precipavg/year/");
-		var request0 = intermediate0.concat(year.toString(10));
-		Axios.get(request0)
-			.then(res => {
+    precipYearApi = (request) => {
+    	if(cancelYearPrecip !== undefined){
+    		cancelYearPrecip();
+    	}
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelYearPrecip = c;
+    			})
+    		})
+		.then(res => {
     			const precip_data = res.data.data;
     			if(this.state.play === 0){
     			this.setState({ 
@@ -304,11 +315,24 @@ class AllTogether extends Simulation {
     			});
     			}
     			console.log(precip_data);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('precip year request cancelled');
+    			}	
     		});
-    		var intermediate1 = table.concat("tempavg/year/");
-		var request1 = intermediate1.concat(year.toString(10));
-		Axios.get(request1)
-			.then(res => {
+    }
+    
+    tempYearApi = (request) => {
+    	if(cancelYearTemp !== undefined){
+    		cancelYearIce();
+    	}
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelYearTemp = c;
+    			})
+    		})
+		.then(res => {
     			const temp_data = res.data.data;
     			if(this.state.play === 0){
     			this.setState({ 
@@ -322,11 +346,24 @@ class AllTogether extends Simulation {
     			});
   			}
     			console.log(temp_data);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('temp year request cancelled');
+    			}	
     		});
-    		var intermediate2 = table.concat("seaiceavg/year/");
-		var request2 = intermediate2.concat(year.toString(10));
-		Axios.get(request2)
-			.then(res => {
+    }
+    
+    iceYearApi = (request) => {
+    	if(cancelYearIce !== undefined){
+    		cancelYearIce();
+    	}
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelYearIce = c;
+    			})
+    		})
+		.then(res => {
     			const ice_data = res.data.data;
     			if(this.state.play === 0){
     			this.setState({ 
@@ -340,7 +377,29 @@ class AllTogether extends Simulation {
     			});
     			}
     			console.log(ice_data);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('ice year request cancelled');
+    			}	
     		});
+    }
+    
+    /*** query db for all coords at a specific year ***/
+    doYearHits(year){
+	if(year >= 1920 && year <= 2100){
+		var table = dbUrl.concat("/table/")
+		var intermediate0 = table.concat("precipavg/year/");
+		var request0 = intermediate0.concat(year.toString(10));
+		this.precipYearApi(request0);
+		
+    		var intermediate1 = table.concat("tempavg/year/");
+		var request1 = intermediate1.concat(year.toString(10));
+		this.tempYearApi(request1);
+		
+    		var intermediate2 = table.concat("seaiceavg/year/");
+		var request2 = intermediate2.concat(year.toString(10));
+		this.iceYearApi(request2);
 	}
     };
     
@@ -413,6 +472,78 @@ class AllTogether extends Simulation {
     	this.triggerNoteByVal(2, ice_val, this.state.index, this.state.iceAvg);
     }
 
+
+    precipCoordApi = (request) => {
+    	if(cancelCoordPrecip !== undefined){
+    		cancelCoordPrecip();
+    	}
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelCoordPrecip = c;
+    			})
+    		})
+    		.then(res => {
+    			const precip_coord_data = res.data.data;
+    			this.setState({ precipAvg: [...precip_coord_data]});
+    			this.setupGraph();
+    			this.updateGraph();
+    			console.log(precip_coord_data);
+    			this.setPrecipNotes(precip_coord_data);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('precip coord request cancelled');
+    			}	
+    		});
+    }
+    
+    tempCoordApi = (request) => {
+    	if(cancelCoordTemp !== undefined){
+    		cancelCoordTemp();
+    	}
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelCoordTemp = c;
+    			})
+    		})
+    		.then(res => {
+    			const temp_coord_data = res.data.data;
+    			this.setState({ tempAvg: [...temp_coord_data]});
+    			this.setupGraph();
+    			this.updateGraph();
+    			console.log(temp_coord_data);
+    			this.setTempNotes(temp_coord_data);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('temp coord request cancelled');
+    			}	
+    		});
+    }
+    
+    iceCoordApi = (request) => {
+    	if(cancelCoordIce !== undefined){
+    		cancelCoordIce();
+    	}
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelCoordIce = c;
+    			})
+    		})
+    		.then(res => {
+    			const seaice_coord_data = res.data.data;
+    			this.setState({ iceAvg: [...seaice_coord_data]});
+    			this.setupGraph();
+    			this.updateGraph();
+    			console.log(seaice_coord_data);
+    			this.setIceNotes(seaice_coord_data);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('ice coord request cancelled');
+    			}	
+    		});
+    }
     
     /*** query db for all years of a specific coord ***/
     doCoordHits(lat, lon){
@@ -430,39 +561,15 @@ class AllTogether extends Simulation {
 	/* Filter and do db hit here */
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
 		request = dbUrl.concat("/table/precipavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
-		Axios.get(request)
-    		.then(res => {
-    			const precip_coord_data = res.data.data;
-    			this.setState({ precipAvg: [...precip_coord_data]});
-    			this.setupGraph();
-    			this.updateGraph();
-    			console.log(precip_coord_data);
-    			this.setPrecipNotes(precip_coord_data);
-    		});
+		this.precipCoordApi(request);
 	}
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
 		request = dbUrl.concat("/table/tempavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
-		Axios.get(request)
-    		.then(res => {
-    			const temp_coord_data = res.data.data;
-    			this.setState({ tempAvg: [...temp_coord_data]});
-    			this.setupGraph();
-    			this.updateGraph();
-    			console.log(temp_coord_data);
-    			this.setTempNotes(temp_coord_data);
-    		});
+		this.tempCoordApi(request);
 	}
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
 		request = dbUrl.concat("/table/seaiceavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
-		Axios.get(request)
-    		.then(res => {
-    			const seaice_coord_data = res.data.data;
-    			this.setState({ iceAvg: [...seaice_coord_data]});
-    			this.setupGraph();
-    			this.updateGraph();
-    			console.log(seaice_coord_data);
-    			this.setIceNotes(seaice_coord_data);
-    		});
+		this.iceCoordApi(request);
 	}
     };
     

@@ -11,6 +11,17 @@ function redirect(){
 
 class HomeScreen extends Page { 
     
+    /* create and send DB request for CO2 data */
+    co2Api = () => {
+    	var request = dbUrl.concat("/co2/all");
+    	Axios.get(request)
+    	.then(res => {
+    		const all_co2_data = res.data.data;
+    		this.setState({ co2data: [...all_co2_data]});
+    	});
+    	
+    }
+    
     getStyles(){
     	var titleTextSize = Math.floor(this.state.pageRight / 30 + this.state.pageBottom / 30);
     	var descTextSize = Math.floor(titleTextSize / 2);
@@ -121,14 +132,7 @@ class HomeScreen extends Page {
     
     /*** runs on page open ***/
     componentDidMount = () => {
-    	/* create and send DB request for CO2 data */
-    	var request = dbUrl.concat("/co2/all");
-    	Axios.get(request)
-    	.then(res => {
-    		const all_co2_data = res.data.data;
-    		this.setState({ co2data: [...all_co2_data]});
-    	});
-    	
+    	this.co2Api();
     	if(isBrowser){
     		window.addEventListener('resize', this.updateDimensions);
     	}
