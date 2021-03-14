@@ -85,6 +85,9 @@ class AllTogether extends Simulation {
     
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
+    	if(this.state.notePlaying !== 0){
+    		return;
+    	}
     	var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
     	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
@@ -99,6 +102,7 @@ class AllTogether extends Simulation {
     	var centerX = 0;
     	var centerY = 0;
     	var boxType = 0;
+    	console.log('np', this.state.notePlaying);
     	if(this.state.play === 0 && e.buttons === 1) {
 		if (x <= modelDiv && y <= modelSplit) {
 	    		centerX = modelDiv / 2;
@@ -151,12 +155,25 @@ class AllTogether extends Simulation {
 			lonSave = (projx - centerX) * 540 / modelDiv;
 		    	latSave = 90 - projy * 90 / modelSplit;
 		}
+		console.log("setting latlon", latSave);
 	    	this.setState({
 	    		latitude: Math.floor(latSave), 
 	    		longitude: Math.floor(lonSave),
 	    		useArray: 0
-	    		});	
+	    	});	
+	    	var dbX = 1;
+    		var dbY = 1;
+    		dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
+    		dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
+    		var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    		if(this.state.precipAvgAllCoords.length > coord_index && this.state.tempAvgAllCoords.length > coord_index && this.state.iceAvgAllCoords.length > coord_index){
+    			var val0 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
+    			var val1 = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
+    			var val2 = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
+    			this.playTogetherMapNotes(val0, val1, val2, this.state.index, this.state.precipAvg, this.state.tempAvg, this.state.iceAvg);
 	        }
+	   }
+	        
         }    
     
     /*** runs on initial render ***/
@@ -446,6 +463,28 @@ class AllTogether extends Simulation {
 			}).catch(error => console.error(error));
 		}
 	}
+	
+	playTogetherMapNotes = (val1, val2, val3, index, data1, data2, data3) => {
+		const synth0 = this.getSynth(0);
+		const synth1 = this.getSynth(1);
+		const synth2 = this.getSynth(2);
+		//synth.sync();
+		const note0 = this.getNoteByVal(0, val1, index, data1);
+		const note1 = this.getNoteByVal(0, val2, index, data2);
+		const note2 = this.getNoteByVal(0, val3, index, data3);
+		this.setState({notePlaying:1});
+		Tone.Transport.scheduleOnce((time) => {
+			synth0.triggerAttackRelease(note0, '8n');
+			synth1.triggerAttackRelease(note1, '8n');
+			synth2.triggerAttackRelease(note2, '8n');
+		}, '+0');
+		Tone.Transport.scheduleOnce((time) => {
+			synth0.dispose();
+			synth1.dispose();
+			synth2.dispose();
+			this.setState({notePlaying:0});
+		}, '+8n');
+	}
     
     getTogetherStyles(mw, ch, cw) {
     	var modelWidth = mw;
@@ -642,7 +681,7 @@ class AllTogether extends Simulation {
 
 		<div style={largeDivStyle}>
 			
-			<div style={modelStyle} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>
+			<div style={modelStyle} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.killMapTransport}>
 				<img src={fullUrl} alt="climate model" style={modelStyle} draggable="false"/>
 			</div>
 			

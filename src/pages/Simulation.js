@@ -232,9 +232,25 @@ export class Simulation extends Page {
 			this.setState({notePlaying:0});
 		}, '+8n');
 	}
+	
+	setupMapTransport = (e) => {
+		Tone.Transport.start('+0');
+		this.onMouseDown(e);
+	}
+	
+	killMapTransport = (e) => {
+    		Tone.Transport.cancel('+4n');
+    		Tone.Transport.stop();
+		if(this.state.play === 0){
+    			this.doCoordHits(this.state.latitude, this.state.longitude);
+    		}
+    		this.setState({notePlaying: 0});
+    	}
     
     	killTransport = (e) => {
     		Tone.Transport.cancel('+4n');
+    		Tone.Transport.stop();
+    		this.setState({notePlaying: 0});
     	}
 	
 	getSynth = (type) => {

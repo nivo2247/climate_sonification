@@ -100,6 +100,9 @@ class EachAlone extends Simulation {
     /*** Used to calculate coords pressed on the map
     *** Leave this alone unless messing with DIV sizing ***/
     onMouseDown = (e) => {
+    	if(this.state.notePlaying !== 0){
+    		return;
+    	}
     	/* A bunch of variables used to calculate mouse position */
         var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
     	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
