@@ -133,23 +133,23 @@ export class Simulation extends Page {
 	}
 	
 	getNoteByVal(type, val, index, data){
-		var scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A3', 'B4', 'C3'];
+		var scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3', 'A2', 'B2', 'C2'];
 		if(index > 94 && index < 122){
-			scale = ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4', 'A3'];
+			scale = ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4', 'A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3', 'A2'];
 		}
 		else if(index < 139){
-			scale = ['C4', 'D4', 'Eb4', 'F4', 'G4', 'Ab3', 'Bb4', 'C3'];
+			scale = ['C4', 'D4', 'Eb4', 'F4', 'G4', 'Ab3', 'Bb3', 'C3', 'D3', 'Eb3', 'F3', 'G3', 'Ab2', 'Bb2', 'C2'];
 		}
 		else if(index < 153){
-			scale = ['A4', 'B4', 'Cb4', 'D4', 'E4', 'Fb4', 'Gb4', 'A3'];
+			scale = ['A4', 'B4', 'Cb4', 'D4', 'E4', 'Fb4', 'Gb4', 'A3', 'B3', 'Cb3', 'D3', 'E3', 'Fb3', 'Gb3', 'A2'];
 		}
 		else if(index < 165){
-			scale = ['D4', 'Eb4', 'F4', 'G3', 'G4', 'A4', 'Bb4', 'C4'];
+			scale = ['D4', 'Eb4', 'F4', 'G4', 'A3', 'Bb3', 'C3', 'D3', 'Eb3', 'F3', 'G3', 'A2', 'Bb2', 'C2'];
 		}
 		else if(index < 176){
-			scale = ['Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G3', 'G4', 'A4'];
+			scale = ['Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G4', 'A3', 'Bb3', 'C3', 'D3', 'Eb3', 'F3', 'G3', 'A2', 'Bb2'];
 		}else{
-			scale = ['G4', 'A4', 'Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G3'];
+			scale = ['G4', 'A4', 'Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G4', 'A3', 'Bb3', 'C3', 'D3', 'Eb3', 'F3', 'G3'];
 		}
 		var rand = Math.random();
 		if(type === 0){
@@ -160,24 +160,34 @@ export class Simulation extends Page {
     			}
     			var diff = Math.abs(precip_val - prev_val);
     			if(diff < 10){
-    				if(rand <= 0.33){
-					return scale[7];
-				}else if(rand <= 0.67){
+    				if(rand <= 0.25){
 					return scale[0];
-				}else{
+				}else if(rand <= 0.5){
+					return scale[2];
+				}else if(rand <= 0.75){
 					return scale[4];
+				}else{
+					return scale[7];
 				}
 			}else if(diff < 50){
-				if(rand <= 0.5){
+				if(rand <= 0.25){
 					return scale[6];
-				}else{
+				}else if(rand <= 0.5){
 					return scale[3];
+				}else if(rand <= 0.75){
+					return scale[13];
+				}else{
+					return scale[10];
 				}
 			}else{
-				if(rand <= 0.5){
+				if(rand <= 0.25){
 					return scale[6];
-				}else{
+				}else if(rand <= 0.5){
 					return scale[1];
+				}else if(rand <= 0.75){
+					return scale[13];
+				}else{
+					return scale[8];
 				}
 			}
 		}
