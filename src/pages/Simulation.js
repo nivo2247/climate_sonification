@@ -368,7 +368,7 @@ export class Simulation extends Page {
     	});
 		// Might need to stop the music to
 		// avoid bugs
-		Tone.Transport.bpm.value = 120;
+		Tone.Transport.bpm.value = 160;
     }
     
     /*** onPress for 'moderato' ***/   
@@ -376,7 +376,7 @@ export class Simulation extends Page {
     	this.setState({
     		timerLen: 800
 		});
-		Tone.Transport.bpm.value = 160;
+		Tone.Transport.bpm.value = 200;
     }
     
     /*** onPress for 'allegro' ***/   
@@ -384,7 +384,7 @@ export class Simulation extends Page {
     	this.setState({
     		timerLen: 400
     	});
-		Tone.Transport.bpm.value = 200;
+		Tone.Transport.bpm.value = 240;
     }
     
     /*** onPress for 'presto' ***/   
@@ -392,7 +392,7 @@ export class Simulation extends Page {
     	this.setState({
     		timerLen: 200
 		});
-		Tone.Transport.bpm.value = 256;
+		Tone.Transport.bpm.value = 320;
     } 
     
     /*** handle year changes from the slider ***/
