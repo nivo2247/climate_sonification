@@ -133,9 +133,9 @@ export class Simulation extends Page {
 	}
 	
 	getNoteByVal(type, val, index, data){
-		var scale = ['A5', 'B5', 'C5', 'D5', 'E5', 'F5', 'G5', 'A4'];
+		var scale = ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4', 'A3'];
 		if(index > 100){
-			scale = ['G5', 'A5', 'A#5', 'C5', 'D5', 'D#5', 'F5', 'G4'];
+			scale = ['G4', 'A4', 'Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G3'];
 		}
 		var rand = Math.random();
 		if(type === 0){
@@ -276,8 +276,14 @@ export class Simulation extends Page {
 			 retsynth = new Tone.FMSynth().toDestination();
 		}
 		else if(type === 1){
-			 retsynth = new Tone.FMSynth().toDestination();
-			 retsynth.volume.value = 5;
+			 retsynth = new Tone.Synth().toDestination();
+			 retsynth.oscillator.partials = [1, 0, 0.75, 0, 0.5, 0, 0.14, 0, 0.5, 0, 0.17, 0, 0.12];
+			 retsynth.envelope.attack = 0.1;
+			 retsynth.envelope.decay = 0.2
+			 retsynth.envelope.sustain = 0.9;
+			 retsynth.envelope.release = 0.5;
+			 //console.log(retsynth.oscillator.partials);
+			 retsynth.volume.value = 10;
 		}
 		else if(type === 2){
 			 retsynth = new Tone.AMSynth().toDestination();

@@ -600,7 +600,7 @@ class AllTogether extends Simulation {
 		}, this.getPrecipNotes(newind));
 		
 		const tempPattern = new Tone.Sequence((time, note) => {
-			tempsynth.triggerAttackRelease(note, '8n', time);
+			tempsynth.triggerAttackRelease(note, '16n', time);
 		}, this.getTempNotes(newind));
 		
 		const icePattern = new Tone.Sequence((time, note) => {

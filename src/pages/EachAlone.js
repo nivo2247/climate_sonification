@@ -487,7 +487,7 @@ class EachAlone extends Simulation {
 	const notes = this.noteHelper(newind);
 		
 	const notePattern = new Tone.Sequence((time, note) => {
-		synth.triggerAttackRelease(note, '8n', time);
+		synth.triggerAttackRelease(note, '16n', time);
 		// bind incrementing
 		Tone.Draw.schedule(() => {
 			this.incrementIndex();
