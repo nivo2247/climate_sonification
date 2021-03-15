@@ -486,13 +486,14 @@ class EachAlone extends Simulation {
 	this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
 	const notes = this.noteHelper(newind);
 		
-	const notePattern = new Tone.Sequence((time, note) => {
+	const notePattern = new Tone.Pattern((time, note) => {
 		synth.triggerAttackRelease(note, '16n', time);
 		// bind incrementing
 		Tone.Draw.schedule(() => {
 			this.incrementIndex();
 		}, time)
 	}, notes);
+	notePattern.humanize = true;
 	
 	// catches most errors
 	if(this.state.audioAvailable) {

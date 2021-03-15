@@ -306,7 +306,7 @@ export class Simulation extends Page {
 			 		type: 'sine'
 			 	},
 			 	envelope: {
-			 		attack: 0,
+			 		attack: 0.05,
 			 		decay: 0.2,
 			 		sustain: 0.7,
 			 		release: 1
@@ -323,8 +323,7 @@ export class Simulation extends Page {
 			 		decay: 0.2,
 			 		sustain: 0.9,
 			 		release: 0.5
-			 	},
-			 	volume: -3
+			 	}
 			 }).toDestination();
 		}
 		else if(type === 2){
@@ -341,7 +340,8 @@ export class Simulation extends Page {
 			 		decay: 0.1,
 			 		sustain: 0.8,
 			 		release: 0.1
-			 	}
+			 	},
+			 	volume: -5
 			 }).toDestination();
 			 retsynth.volume.value = 10;
 		}

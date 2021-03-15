@@ -591,21 +591,24 @@ class AllTogether extends Simulation {
 		const icesynth = this.getSynth(2);
 		
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
-		const precipPattern = new Tone.Sequence((time, note) => {
+		const precipPattern = new Tone.Pattern((time, note) => {
 			precipsynth.triggerAttackRelease(note, '16n', time);
 			// bind incrementing
 			Tone.Draw.schedule(() => {
 				this.incrementIndex();
 			}, time)
 		}, this.getPrecipNotes(newind));
+		precipPattern.humanize = true;
 		
-		const tempPattern = new Tone.Sequence((time, note) => {
+		const tempPattern = new Tone.Pattern((time, note) => {
 			tempsynth.triggerAttackRelease(note, '16n', time);
 		}, this.getTempNotes(newind));
+		tempPattern.humanize = true;
 		
-		const icePattern = new Tone.Sequence((time, note) => {
+		const icePattern = new Tone.Pattern((time, note) => {
 			icesynth.triggerAttackRelease(note, '16n', time);
 		}, this.getIceNotes(newind));
+		icePattern.humanize = true;
 
 		// catches most errors
 		if(this.state.audioAvailable) {
