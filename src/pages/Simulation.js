@@ -251,13 +251,15 @@ export class Simulation extends Page {
 		const note = this.getNoteByVal(type, val, index, data);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
-			synth.triggerAttackRelease(note, '8n');
+			synth.triggerAttackRelease(note, '16n');
 		}, '+0');
+		Tone.Transport.scheduleOnce((time) => {
+			this.setState({notePlaying:0});
+		}, '+8n');
 		Tone.Transport.scheduleOnce((time) => {
 			synth.dispose();
 			Tone.Transport.cancel();
 			Tone.Transport.stop();
-			this.setState({notePlaying:0});
 		}, '+4n');
 	}
 	
@@ -267,7 +269,7 @@ export class Simulation extends Page {
 		const note = this.getNoteByVal(type, val, index, data);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
-			synth.triggerAttackRelease(note, '8n');
+			synth.triggerAttackRelease(note, '16n');
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
