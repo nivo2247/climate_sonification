@@ -133,8 +133,22 @@ export class Simulation extends Page {
 	}
 	
 	getNoteByVal(type, val, index, data){
-		var scale = ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4', 'A3'];
-		if(index > 100){
+		var scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A3', 'B4', 'C3'];
+		if(index > 94 && index < 122){
+			scale = ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4', 'A3'];
+		}
+		else if(index < 139){
+			scale = ['C4', 'D4', 'Eb4', 'F4', 'G4', 'Ab3', 'Bb4', 'C3'];
+		}
+		else if(index < 153){
+			scale = ['A4', 'B4', 'Cb4', 'D4', 'E4', 'Fb4', 'Gb4', 'A3'];
+		}
+		else if(index < 165){
+			scale = ['D4', 'Eb4', 'F4', 'G3', 'G4', 'A4', 'Bb4', 'C4'];
+		}
+		else if(index < 176){
+			scale = ['Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G3', 'G4', 'A4'];
+		}else{
 			scale = ['G4', 'A4', 'Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G3'];
 		}
 		var rand = Math.random();
