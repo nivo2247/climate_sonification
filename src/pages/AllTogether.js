@@ -88,6 +88,7 @@ class AllTogether extends Simulation {
     
     /*** When map coord is selected, do db query ***/
     onPointerUp = (e) => {
+    	this.killMapTransport(e);
     	if(this.state.play === 0){
     		this.doCoordHits(this.state.latitude, this.state.longitude);
     	}
@@ -872,7 +873,7 @@ class AllTogether extends Simulation {
 
 		<div style={largeDivStyle}>
 			
-			<div style={modelStyle} onPointerEnter={this.setupMapTransport} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerLeave={this.killMapTransport} onPointerUp={this.onPointerUp}>
+			<div style={modelStyle} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>
 				<img src={fullUrl} alt="climate model" style={modelStyle} draggable="false"/>
 			</div>
 			
