@@ -592,7 +592,7 @@ class AllTogether extends Simulation {
 		
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
 		const precipPattern = new Tone.Sequence((time, note) => {
-			precipsynth.triggerAttackRelease(note, '8n', time);
+			precipsynth.triggerAttackRelease(note, '16n', time);
 			// bind incrementing
 			Tone.Draw.schedule(() => {
 				this.incrementIndex();
@@ -604,7 +604,7 @@ class AllTogether extends Simulation {
 		}, this.getTempNotes(newind));
 		
 		const icePattern = new Tone.Sequence((time, note) => {
-			icesynth.triggerAttackRelease(note, '8n', time);
+			icesynth.triggerAttackRelease(note, '16n', time);
 		}, this.getIceNotes(newind));
 
 		// catches most errors

@@ -273,20 +273,52 @@ export class Simulation extends Page {
 	getSynth = (type) => {
 		var retsynth;
 		if(type === 0){
-			 retsynth = new Tone.FMSynth().toDestination();
+			 retsynth = new Tone.FMSynth({
+			 	modulation: {
+			 		type: 'sine',
+			 		frequency: 220
+			 	},
+			 	oscillator:{
+			 		type: 'sine'
+			 	},
+			 	envelope: {
+			 		attack: 0,
+			 		decay: 0.2,
+			 		sustain: 0.7,
+			 		release: 1
+			 	}
+			 }).toDestination();
 		}
 		else if(type === 1){
-			 retsynth = new Tone.Synth().toDestination();
-			 retsynth.oscillator.partials = [1, 0, 0.75, 0, 0.5, 0, 0.14, 0, 0.5, 0, 0.17, 0, 0.12];
-			 retsynth.envelope.attack = 0.1;
-			 retsynth.envelope.decay = 0.2
-			 retsynth.envelope.sustain = 0.9;
-			 retsynth.envelope.release = 0.5;
-			 //console.log(retsynth.oscillator.partials);
-			 retsynth.volume.value = 10;
+			 retsynth = new Tone.Synth({
+			 	oscillator: {
+			 		partials: [1, 0, 0.75, 0, 0.5, 0, 0.14, 0, 0.5, 0, 0.17, 0, 0.12]
+			 	},
+			 	envelope: {
+			 		attack: 0.1,
+			 		decay: 0.2,
+			 		sustain: 0.9,
+			 		release: 0.5
+			 	},
+			 	volume: -3
+			 }).toDestination();
 		}
 		else if(type === 2){
-			 retsynth = new Tone.AMSynth().toDestination();
+			 retsynth = new Tone.FMSynth({
+			 	modulation: {
+			 		type: 'sawtooth',
+			 		detune: 30
+			 	},
+			 	oscillator:{
+			 		type: 'sawtooth'
+			 	},
+			 	envelope: {
+			 		attack: 0.5,
+			 		decay: 0.1,
+			 		sustain: 0.8,
+			 		release: 0.1
+			 	}
+			 }).toDestination();
 			 retsynth.volume.value = 10;
 		}
 		return retsynth;
