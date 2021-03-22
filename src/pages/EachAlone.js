@@ -686,25 +686,95 @@ class EachAlone extends Simulation {
 				<div style={dataBlockStyle}>
 					<label for='lat' style={labelControlStyle}> Lat:</label>
 					<input type='text' style={inputControlStyle} id='lat' value={this.state.latitude} onChange={this.onChangeLat}/>
-					<label for='lon' style={labelControlStyle}> Lon:</label>
+					<label htmlFor='lon' style={labelControlStyle}> Lon:</label>
 					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
 				</div>
 				
 				<div style={dataBlockStyle}>
-					<label htmlFor='city' style={bigLabelControlStyle}> City:</label>
+					<label htmlFor='city' style={bigLabelControlStyle}> Nearest City:</label>
 					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
-						<option value='San Francisco'>San Francisco</option>
-						<option value='Denver'>Denver</option>
-						<option value='Hong Kong'>Hong Kong</option>
-						<option value='Tokyo'>Tokyo</option>
-						<option value='Bengaluru'>Bengaluru</option>
-						<option value='Sydney'>Syney</option>
-						<option value='Sao Paulo'>Sao Paulo</option>
-						<option value='Cape Town'>Cape Town</option>
-						<option value='London'>London</option>
-						<option value='Berlin'>Berlin</option>
-						<option value='Paris'>Paris</option>
-						<option value='Rome'>Rome</option>
+						<optgroup label='Africa'>
+							<option value='Antananarivo'>Antananarivo</option>
+							<option value='Cairo'>Cairo</option>
+							<option value='Cape Town'>Cape Town</option>
+							<option value='Dakar'>Dakar</option>
+							<option value='Kinshasa'>Kinshasa</option>
+							<option value='Lagos'>Lagos</option>
+							<option value='Marrakesh'>Marrakesh</option>
+							<option value='Nairobi'>Nairobi</option>
+							<option value='Pretoria'>Pretoria</option>
+							<option value='Tunis'>Tunis</option>
+						</optgroup>
+						
+						<optgroup label='Asia'>
+							<option value='Bangkok'>Bangkok</option>
+							<option value='Beijing'>Beijing</option>
+							<option value='Bengaluru'>Bengaluru</option>
+							<option value='Hanoi'>Hanoi</option>
+							<option value='Hong Kong'>Hong Kong</option>
+							<option value='New Delhi'>New Delhi</option>
+							<option value='Nur-Sultan'>Nur-Sultan</option>
+							<option value='Seoul'>Seoul</option>
+							<option value='Singapore'>Singapore</option>
+							<option value='Tokyo'>Tokyo</option>
+						</optgroup>
+						
+						<optgroup label='Europe'>
+							<option value='Amsterdam'>Amsterdam</option>
+							<option value='Berlin'>Berlin</option>
+							<option value='Budapest'>Budapest</option>
+							<option value='Istanbul'>Istanbul</option>
+							<option value='Kyiv'>Kyiv</option>
+							<option value='London'>London</option>
+							<option value='Madrid'>Madrid</option>
+							<option value='Moscow'>Moscow</option>
+							<option value='Paris'>Paris</option>
+							<option value='Reykjavik'>Reykjavik</option>
+							<option value='Riyadh'>Riyadh</option>
+							<option value='Rome'>Rome</option>
+							<option value='Stockholm'>Stockholm</option>
+							<option value='Tehran'>Tehran</option>
+							<option value='Vienna'>Vienna</option>
+							<option value='Warsaw'>Warsaw</option>
+						</optgroup>
+						
+						<optgroup label='North America'>
+							<option value='Anchorage'>Anchorage</option>
+							<option value='Austin'>Austin</option>
+							<option value='Calgary'>Calgary</option>
+							<option value='Denver'>Denver</option>
+							<option value='Havana'>Havana</option>
+							<option value='Los Angeles'>Los Angeles</option>
+							<option value='Mexico City'>Mexico City</option>
+							<option value='New York'>New York</option>
+							<option value='Orlando'>Orlando</option>
+							<option value='Panama City'>Panama City</option>
+							<option value='San Francisco'>San Francisco</option>
+							<option value='Vancouver'>Vancouver</option>
+							<option value='Winnipeg'>Winnipeg</option>
+						</optgroup>
+						
+						<optgroup label='Oceanea'>
+							<option value='Auckland'>Auckland</option>
+							<option value='Jakarta'>Jakarta</option>
+							<option value='Perth'>Perth</option>
+							<option value='Port Moresby'>Port Morseby</option>
+							<option value='Sydney'>Syney</option>
+						</optgroup>
+						
+						<optgroup label='South America'>
+							<option value='Asuncion'>Asuncion</option>
+							<option value='Bogota'>Asuncion</option>
+							<option value='Buenos Aires'>Buenos Aires</option>
+							<option value='Caracas'>Caracas</option>
+							<option value='Lima'>Lima</option>
+							<option value='La Paz'>La Paz</option>
+							<option value='Sao Paulo'>Sao Paulo</option>
+							<option value='Santiago'>Santiago</option>
+							<option value='Punta Arenas'>Punta Arenas</option>
+							<option value='Quito'>Quito</option>
+						</optgroup>
+
 					</select>
 				</div>
 			</form>

@@ -246,12 +246,14 @@ export class Simulation extends Page {
 	
 	triggerNoteByVal = (type, val, index, data) => {
 		Tone.Transport.start();
+		const delay = Math.random() / 100;
+		const plus = '+';
+		const plusDelay = plus.concat(delay);
 		const synth = this.getSynth(type);
-		//synth.sync();
 		const note = this.getNoteByVal(type, val, index, data);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
-			synth.triggerAttackRelease(note, '16n');
+			synth.triggerAttackRelease(note, '16n', plusDelay);
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
@@ -265,11 +267,13 @@ export class Simulation extends Page {
 	
 	playNoteByVal = (type, val, index, data) => {
 		const synth = this.getSynth(type);
-		//synth.sync();
+		const delay = Math.random() / 100;
+		const plus = '+';
+		const plusDelay = plus.concat(delay);
 		const note = this.getNoteByVal(type, val, index, data);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
-			synth.triggerAttackRelease(note, '16n');
+			synth.triggerAttackRelease(note, '16n', plusDelay);
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
@@ -332,7 +336,15 @@ export class Simulation extends Page {
 			 retsynth = new Tone.FMSynth({
 			 	modulation: {
 			 		type: 'sawtooth',
-			 		detune: 30
+			 		detune: 25,
+			 		modulation: {
+			 			type: 'sawtooth',
+			 			detune: 50,
+			 			modulation: {
+			 				type: 'sawtooth',
+			 				detune: 75
+			 			}
+			 		}
 			 	},
 			 	oscillator:{
 			 		type: 'sawtooth'
@@ -341,7 +353,7 @@ export class Simulation extends Page {
 			 		attack: 0.5,
 			 		decay: 0.1,
 			 		sustain: 0.8,
-			 		release: 0.1
+			 		release: 0.5
 			 	},
 			 	volume: -5
 			 }).toDestination();
@@ -644,7 +656,7 @@ export class Simulation extends Page {
     	
     	const dropdownControlStyle = {
     		height: Math.floor(controlHeight / (20)) - 1,
-    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT * 3 / 4),
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT * 2 / 3),
     		float: 'left',
     		'fontFamily': 'Verdana, sans-serif',
     		"fontSize": smallFontSize
@@ -652,7 +664,7 @@ export class Simulation extends Page {
     	
     	const bigLabelControlStyle = {
     		height: Math.floor(controlHeight / (20)),
-    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 4) - 1,
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 1,
     		float: 'left',
     		'fontFamily': 'Verdana, sans-serif',
     		"fontSize": smallFontSize,

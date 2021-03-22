@@ -812,20 +812,20 @@ class AllTogether extends Simulation {
 				</div>
 			
 				<div style={dataBlockStyle}>
-					<label htmlFor='city' style={bigLabelControlStyle}> City:</label>
+					<label htmlFor='city' style={bigLabelControlStyle}> Nearest City:</label>
 					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
-						<option value='San Francisco'>San Francisco</option>
+						<option value='Bengaluru'>Bengaluru</option>
+						<option value='Berlin'>Berlin</option>
+						<option value='Cape Town'>Cape Town</option>
 						<option value='Denver'>Denver</option>
 						<option value='Hong Kong'>Hong Kong</option>
-						<option value='Tokyo'>Tokyo</option>
-						<option value='Bengaluru'>Bengaluru</option>
-						<option value='Sydney'>Syney</option>
-						<option value='Sao Paulo'>Sao Paulo</option>
-						<option value='Cape Town'>Cape Town</option>
 						<option value='London'>London</option>
-						<option value='Berlin'>Berlin</option>
 						<option value='Paris'>Paris</option>
 						<option value='Rome'>Rome</option>
+						<option value='San Francisco'>San Francisco</option>
+						<option value='Sao Paulo'>Sao Paulo</option>
+						<option value='Sydney'>Syney</option>
+						<option value='Tokyo'>Tokyo</option>
 					</select>
 				</div>
 			</form>
