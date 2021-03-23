@@ -233,7 +233,7 @@ class AllTogether extends Simulation {
     		var avg = bottom / 2;
     	
     		var precip_median = 100;
-    		var precip_max = this.getLargestVal(this.state.precipAvg, 0) + 10;
+    		var precip_max = this.getLargestVal(this.state.precipAvg, 0) + 40;
     		var precip_range = precip_max - precip_median;
     		
     		var prev_val = 0;

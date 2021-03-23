@@ -275,7 +275,7 @@ class EachAlone extends Simulation {
     		
     		if(this.state.state === 0){
     			var precip_median = 100;
-    			var precip_max = this.getLargestVal(this.state.coordData, 0) + 10;
+    			var precip_max = this.getLargestVal(this.state.coordData, 0) + 40;
     			var precip_range = precip_max - precip_median;
     		
     			ctx.beginPath();
