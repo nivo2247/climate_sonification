@@ -81,10 +81,12 @@ export class Simulation extends Page {
 		var precipNoteArr = [];
 		var precip_val;
 		var note;
+		var prevnote = 'C4';
 		
 		for(var i = 0; i < 181; i++){
     			precip_val = this.getValByIndex(data, i);
-    			note = this.getNoteByVal(0, precip_val, i, data);
+    			note = this.getArp(0, precip_val, i, data, prevnote);
+    			prevnote = note;
     			precipNoteArr.push(note)
 		}
 		
@@ -97,10 +99,12 @@ export class Simulation extends Page {
 		var tempNoteArr = [];
 		var temp_val;
 		var note;
+		var prevnote = 'C4';
 		
 		for(var i = 0; i < 181; i++){
     			temp_val = this.getValByIndex(data, i);
-    			note = this.getNoteByVal(1, temp_val, i, data);
+    			note = this.getArp(1, temp_val, i, data, prevnote);
+    			prevnote = note;
     			tempNoteArr.push(note);
     			
 		}
@@ -114,10 +118,12 @@ export class Simulation extends Page {
 		var iceNoteArr = [];
 		var ice_val;
 		var note;
+		var prevnote = 'C4';
 		
 		for(var i = 0; i < 181; i++){
     			ice_val = this.getValByIndex(data, i);
-    			note = this.getNoteByVal(2, ice_val, i, data);
+    			note = this.getArp(2, ice_val, i, data, prevnote);
+    			prevnote = note;
     			iceNoteArr.push(note);
 		}
 		
@@ -257,6 +263,75 @@ export class Simulation extends Page {
 				}else{
 					return scale[1];
 				}
+			}
+		}
+		return 'C5';
+	}
+	
+	getArp(type, val, index, data, prevnote){
+		var scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A3', 'B3'];
+		if(index > 94){
+			scale = ['F3', 'G3', 'Ab4', 'Bb4', 'C4', 'Db4', 'E4'];
+		}
+		var prevind = scale.indexOf(prevnote);
+		if(prevind === -1){
+			prevind = 0;
+		}
+		var nextind, prev_val, diff;
+		if(type === 0){
+    			var precip_val = val;
+    			prev_val = 100;
+    			if(index !== 0){
+    				prev_val = this.getValByIndex(data, index - 1)
+    			}
+    			diff = precip_val - prev_val;
+    			if(diff >= 0){
+    				nextind = (prevind + 1) % scale.length;
+    				return scale[nextind];
+			}else{
+				nextind = (prevind - 1);
+				if(nextind < 0){
+					nextind = scale.length - 1;
+				}
+				return scale[nextind];
+			}
+		}
+		else if(type === 1){
+			var temp_val = val;
+    			
+    			prev_val = 0;
+    			if(index !== 0){
+    				prev_val = this.getValByIndex(data, index - 1)
+    			}
+    			diff = temp_val - prev_val;
+    			if(diff >= 0){
+    				nextind = (prevind + 1) % scale.length;
+    				return scale[nextind];
+			}else{
+				nextind = (prevind - 1);
+				if(nextind < 0){
+					nextind = scale.length - 1;
+				}
+				return scale[nextind];
+			}
+		}
+		else if(type === 2){
+			var ice_val = val;
+    			
+    			prev_val = 1;
+    			if(index !== 0){
+    				prev_val = this.getValByIndex(data, index - 1)
+    			}
+    			diff = ice_val - prev_val;
+    			if(diff >= 0){
+    				nextind = (prevind + 1) % scale.length;
+    				return scale[nextind];
+			}else{
+				nextind = (prevind - 1);
+				if(nextind < 0){
+					nextind = scale.length - 1;
+				}
+				return scale[nextind];
 			}
 		}
 		return 'C5';
