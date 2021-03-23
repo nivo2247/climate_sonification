@@ -541,7 +541,7 @@ export class Simulation extends Page {
     	}
     
     	var dataBlockStyle = {
-    	   	height: controlHeight / (20),
+    	   	height: 3 * controlHeight / (40),
     		width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     		overflow: 'hidden',
     		float: 'left',
@@ -559,6 +559,32 @@ export class Simulation extends Page {
     		height: Math.floor(controlHeight / 20),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     		float: 'left'
+    	};
+    	
+    	var dropdownControlStyle = {
+    		height: Math.floor(controlHeight / (20)) - 1,
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT * 2 / 3),
+    		float: 'left',
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": smallFontSize
+    	};
+    	
+    	var inputControlStyle = {
+    		height: Math.floor(controlHeight / (20)),
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 5),
+    		float: 'left',
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": smallFontSize
+    	};
+    	
+    	var labelControlStyle = {
+    		height: Math.floor(controlHeight / (20)),
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 6) - 1,
+    		float: 'left',
+    		'fontFamily': 'Verdana, sans-serif',
+    		"fontSize": smallFontSize,
+    		'textAlign': 'right',
+    		'paddingTop': 5
     	};
     	
     	if(this.state.CONTROLVERTDIV !== 1){
@@ -594,6 +620,32 @@ export class Simulation extends Page {
     			height: Math.floor(3 * controlHeight / 40),
     			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     			float: 'left'
+    		};
+    		
+    		dropdownControlStyle = {
+    			height: Math.floor(3 * controlHeight / (40)),
+    			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT * 2 / 3),
+    			float: 'left',
+    			'fontFamily': 'Verdana, sans-serif',
+    			"fontSize": smallFontSize
+    		};
+    		
+    		inputControlStyle = {
+    			height: Math.floor(3 * controlHeight / (40)),
+    			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 5),
+    			float: 'left',
+    			'fontFamily': 'Verdana, sans-serif',
+    			"fontSize": smallFontSize
+    		};
+    	
+    		labelControlStyle = {
+    			height: Math.floor(3 * controlHeight / (40)),
+    			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 6) - 1,
+    			float: 'left',
+    			'fontFamily': 'Verdana, sans-serif',
+    			"fontSize": smallFontSize,
+    			'textAlign': 'right',
+   	 		'paddingTop': 5
     		};
     	
     	}
@@ -635,35 +687,9 @@ export class Simulation extends Page {
     		'textAlign': 'center'
     	};
     	
-    	const inputControlStyle = {
-    		height: Math.floor(controlHeight / (20)) - 1,
-    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 5),
-    		float: 'left',
-    		'fontFamily': 'Verdana, sans-serif',
-    		"fontSize": smallFontSize
-    	};
-    	
-    	const dropdownControlStyle = {
-    		height: Math.floor(controlHeight / (20)) - 1,
-    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT * 2 / 3),
-    		float: 'left',
-    		'fontFamily': 'Verdana, sans-serif',
-    		"fontSize": smallFontSize
-    	};
-    	
     	const bigLabelControlStyle = {
     		height: Math.floor(controlHeight / (20)),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 1,
-    		float: 'left',
-    		'fontFamily': 'Verdana, sans-serif',
-    		"fontSize": smallFontSize,
-    		'textAlign': 'right',
-    		'paddingTop': 5
-    	};
-    	
-    	const labelControlStyle = {
-    		height: Math.floor(controlHeight / (20)),
-    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 6) - 1,
     		float: 'left',
     		'fontFamily': 'Verdana, sans-serif',
     		"fontSize": smallFontSize,

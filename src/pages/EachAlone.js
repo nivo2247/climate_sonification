@@ -666,7 +666,7 @@ class EachAlone extends Simulation {
     /* contains almost all the styling for the page */
     const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle } = this.getCommonStyles();
     
-    var newh = controlHeight * 5 / 20;
+    var newh = controlHeight * 9 / 40;
     if(this.state.CONTROLVERTDIV !== 1){
     	newh /= (1 - this.state.CONTROLVERTDIV)
     }
