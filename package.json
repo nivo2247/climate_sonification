@@ -12,6 +12,7 @@
     "axios": "^0.21.1",
     "pubsub-js": "^1.9.3",
     "react": "^17.0.1",
+    "react-device-detect": "^1.17.0",
     "react-dom": "^17.0.1",
     "react-native": "^0.63.4",
     "react-native-gesture-handler": "^1.10.3",
