@@ -70,6 +70,20 @@ export class Simulation extends Page {
     		return val;
 	}
 	
+	getLargestVal = (arr, start) => {
+		var avgKeys = Object.keys(arr[0]);
+		var useAvgKey, val;
+		var largestVal = start;
+		for(var i = 0; i <= 180; i++){
+    			useAvgKey = avgKeys[i+2];
+    			val = arr[0][useAvgKey];
+    			if(val > largestVal){
+    				largestVal = val;
+    			}
+    		}
+    		return largestVal;
+	}
+	
 	getValByCoord = (arr, coord) => {
 		var avgKeys0 = Object.keys(arr[coord]);
     		var useAvgKey0 = avgKeys0[0];
@@ -136,23 +150,32 @@ export class Simulation extends Page {
 		if(this.state.precipNotes.length === 0){
 			return ['C5', 'D5', 'F5', 'G5'];
 		}else{
-			return this.state.precipNotes.slice(index);
+			if(index + 1 >= this.state.precipNotes.length){
+				return ['C5', 'D5', 'F5', 'G5'];
+			}
+			return this.state.precipNotes.slice(index + 1);
 		}
 	}
 	
 	getTempNotes = (index) => {
-		if(this.state.precipNotes.length === 0){
+		if(this.state.tempNotes.length === 0){
 			return ['C5', 'D5', 'F5', 'G5'];
 		}else{
-			return this.state.tempNotes.slice(index);
+			if(index + 1 >= this.state.tempNotes.length){
+				return ['C5', 'D5', 'F5', 'G5'];
+			}
+			return this.state.tempNotes.slice(index + 1);
 		}
 	}
 	
 	getIceNotes = (index) => {
-		if(this.state.precipNotes.length === 0){
+		if(this.state.iceNotes.length === 0){
 			return ['C5', 'D5', 'F5', 'G5'];
 		}else{
-			return this.state.iceNotes.slice(index);
+			if(index + 1 >= this.state.iceNotes.length){
+				return ['C5', 'D5', 'F5', 'G5'];
+			}
+			return this.state.iceNotes.slice(index + 1);
 		}
 	}
 	
@@ -269,9 +292,9 @@ export class Simulation extends Page {
 	}
 	
 	getArp(type, val, index, data, prevnote){
-		var scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A3', 'B3'];
+		var scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'];
 		if(index > 94){
-			scale = ['F3', 'G3', 'Ab4', 'Bb4', 'C4', 'Db4', 'E4'];
+			scale = ['F4', 'G4', 'Ab4', 'Bb4', 'C4', 'Db4', 'E4'];
 		}
 		var prevind = scale.indexOf(prevnote);
 		if(prevind === -1){

@@ -275,15 +275,16 @@ class EachAlone extends Simulation {
     		
     		if(this.state.state === 0){
     			var precip_median = 100;
-    			var precip_max = 120;
+    			var precip_max = this.getLargestVal(this.state.coordData, 0) + 10;
+    			var precip_range = precip_max - precip_median;
     		
     			ctx.beginPath();
     			for(var precipInd = 0; precipInd <= this.state.index; precipInd++){
     				prev_val = this.getValByIndex(this.state.coordData, precipInd - 1);
     				coord_val = this.getValByIndex(this.state.coordData, precipInd);
     			
-    				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
-    				ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_max));
+    				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_range));
+    				ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_range));
     				ctx.strokeStyle = GREEN;
     				ctx.lineWidth = 1;
     			}
@@ -292,7 +293,8 @@ class EachAlone extends Simulation {
     		
     		if(this.state.state === 1){
     		var temp_median = 0;
-    		var temp_max = 20;
+    		var temp_max = this.getLargestVal(this.state.coordData, 0) + 3;
+    		var temp_range = temp_max;
     		var temp_avg = Math.floor(avg * 1.5);
     		
     		ctx.beginPath();
@@ -300,8 +302,8 @@ class EachAlone extends Simulation {
     		    	prev_val = this.getValByIndex(this.state.coordData, tempInd - 1);
     			coord_val = this.getValByIndex(this.state.coordData, tempInd);
     			
-    			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
-    			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_max));
+    			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
+    			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
     			ctx.strokeStyle = RED;
     			ctx.lineWidth = 1;
     		}

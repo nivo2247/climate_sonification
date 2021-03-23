@@ -233,7 +233,8 @@ class AllTogether extends Simulation {
     		var avg = bottom / 2;
     	
     		var precip_median = 100;
-    		var precip_max = 120;
+    		var precip_max = this.getLargestVal(this.state.precipAvg, 0) + 10;
+    		var precip_range = precip_max - precip_median;
     		
     		var prev_val = 0;
     		var coord_val = 0;
@@ -243,15 +244,16 @@ class AllTogether extends Simulation {
     		    	prev_val = this.getValByIndex(this.state.precipAvg, precipInd - 1);
     			coord_val = this.getValByIndex(this.state.precipAvg, precipInd);
     			
-    			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
-    			ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_max));
+    			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_range));
+    			ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_range));
     			ctx.strokeStyle = GREEN;
     			ctx.lineWidth = 1;
     		}
     		ctx.stroke();
     		
     		var temp_median = 0;
-    		var temp_max = 20;
+    		var temp_max = this.getLargestVal(this.state.tempAvg, 0) + 3;
+    		var temp_range = temp_max;
     		var temp_avg = Math.floor(avg * 1.5);
     		
     		ctx.beginPath();
@@ -259,8 +261,8 @@ class AllTogether extends Simulation {
     		    	prev_val = this.getValByIndex(this.state.tempAvg, tempInd - 1);
     			coord_val = this.getValByIndex(this.state.tempAvg, tempInd);
     			
-    			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
-    			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_max));
+    			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
+    			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
     			ctx.strokeStyle = RED;
     			ctx.lineWidth = 1;
     		}
