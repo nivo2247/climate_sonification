@@ -5,6 +5,7 @@ import Axios from 'axios';
 import PubSub from 'pubsub-js';
 import { isBrowser } from 'react-device-detect';
 import { Simulation } from './Simulation.js';
+import { PADDING } from './Page.js';
 import * as Tone from 'tone';
 import { getClosestCity } from './../const/cities.js';
 import { RED, YELLOW, GREEN, BLUE } from './../const/color.js';
@@ -112,6 +113,44 @@ class EachAlone extends Simulation {
     		this.doCoordHits(this.state.state, this.state.latitude, this.state.longitude);
     	}
     }
+    
+        /*** called when the window is resized ***/
+    updateDimensions = () => {
+    	var newheight = window.innerHeight;
+    	var newwidth = window.innerWidth;
+    	
+    	if(window.innerHeight < window.innerWidth){
+    		this.setState({
+    			pageBottom: newheight - PADDING,
+    			pageRight: newwidth - PADDING,
+    			CONTROLDIV: 2 / 10,
+			SKINNYDIV: 1 / 20,
+			MAPDIV: 3 / 4,
+			MAPVERTDIV: 7 / 10,
+			DATAVERTDIV: 1 / 20,
+			GRAPHVERTDIV: 3 / 20,
+			SLIDERVERTDIV: 1 / 10,
+			CONTROLVERTDIV: 1,
+			CONTROLSPLIT: 1
+    		});
+    	}
+    	else{
+    		this.setState({
+    			pageBottom: newheight - PADDING,
+    			pageRight: newwidth - PADDING,
+    			CONTROLDIV: 1,
+			SKINNYDIV: 1 / 20,
+			MAPDIV: 19 / 20,
+			MAPVERTDIV: 7 / 20,
+			DATAVERTDIV: 1 / 20,
+			GRAPHVERTDIV: 3 / 20,
+			SLIDERVERTDIV: 1 / 10,
+			CONTROLVERTDIV: 7 / 20,
+			CONTROLSPLIT: 1 / 2
+    		});
+    	}	
+    	this.setupGraph();
+    } 
     
     /*** Used to calculate coords pressed on the map
     *** Leave this alone unless messing with DIV sizing ***/
@@ -444,12 +483,15 @@ class EachAlone extends Simulation {
     *** what value they are pressing and pay the corresponding note ***/
     testMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
-    		var keyLeft = 0;
-    		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
+    		var keyLeft = Math.floor(this.state.pageRight / 2);
+    		var keyRight = Math.floor(this.state.pageRight * 3 / 4);
+    		
+    		//Mobile switch
     		if(this.state.CONTROLVERTDIV !== 1){
-    			keyLeft = this.state.pageRight / 2;
-    			keyRight = this.state.pageRight;
+    			keyLeft = Math.floor(this.state.pageRight / 20 + this.state.pageRight * 19 / 20 / 3);
+    			keyRight = Math.floor(this.state.pageRight / 20 + 2 * this.state.pageRight * 19 / 20 / 3);
     		}
+    		
     		var x = e.pageX - keyLeft;
     		var rangeX = keyRight - keyLeft;
    		var percX = x / rangeX;
@@ -622,7 +664,7 @@ class EachAlone extends Simulation {
     coord_val = Math.round(coord_val * 100) / 100;
     
     /* contains almost all the styling for the page */
-    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle } = this.getCommonStyles();
     
     var newh = controlHeight * 5 / 20;
     if(this.state.CONTROLVERTDIV !== 1){
@@ -796,10 +838,6 @@ class EachAlone extends Simulation {
 				</div>
 			</div>
 			
-			<div style={controlBlockStyle} onPointerDown={this.setupTransport} onPointerMove={this.testMusic} onPointerUp={this.killTransport}>
-				<img style={dataBlockStyle} alt="map key" src={this.state.keySrc} draggable="false"/>
-			</div>
-			
 			<div style={keyContainer}>
 				<img style={keyContainer} alt="graph key" src={graphKey}/>
 			</div>
@@ -818,7 +856,14 @@ class EachAlone extends Simulation {
 			</div>
 			
 			<div style={graphBufferStyle}>
-				<p style={smallLabelTextStyle}>{data_pre}{coord_val}{data_post}</p>
+				<div style={dataThirdStyle}>
+					<p style={smallLabelTextStyle}>{data_pre}{coord_val}{data_post}</p>
+				</div>
+				
+				<div style={dataThirdStyle} onPointerDown={this.setupTransport} onPointerMove={this.testMusic} onPointerUp={this.killTransport}>
+					<img style={dataThirdStyle} alt="map key" src={this.state.keySrc} draggable="false"/>
+				</div>
+				
 			</div>
 			
 			<div style={graphStyle}>

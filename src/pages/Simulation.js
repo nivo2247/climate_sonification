@@ -463,44 +463,6 @@ export class Simulation extends Page {
     	window.focus();
     	this.updateDimensions();
     } 
-    
-    /*** called when the window is resized ***/
-    updateDimensions = () => {
-    	var newheight = window.innerHeight;
-    	var newwidth = window.innerWidth;
-    	
-    	if(window.innerHeight < window.innerWidth){
-    		this.setState({
-    			pageBottom: newheight - PADDING,
-    			pageRight: newwidth - PADDING,
-    			CONTROLDIV: 2 / 10,
-			SKINNYDIV: 1 / 20,
-			MAPDIV: 3 / 4,
-			MAPVERTDIV: 7 / 10,
-			DATAVERTDIV: 1 / 20,
-			GRAPHVERTDIV: 3 / 20,
-			SLIDERVERTDIV: 1 / 10,
-			CONTROLVERTDIV: 1,
-			CONTROLSPLIT: 1
-    		});
-    	}
-    	else{
-    		this.setState({
-    			pageBottom: newheight - PADDING,
-    			pageRight: newwidth - PADDING,
-    			CONTROLDIV: 1,
-			SKINNYDIV: 1 / 20,
-			MAPDIV: 19 / 20,
-			MAPVERTDIV: 7 / 20,
-			DATAVERTDIV: 1 / 20,
-			GRAPHVERTDIV: 3 / 20,
-			SLIDERVERTDIV: 1 / 10,
-			CONTROLVERTDIV: 4 / 10,
-			CONTROLSPLIT: 1 / 2
-    		});
-    	}	
-    	this.setupGraph();
-    } 
  
     
     /*** Huge section of common styling, relies on the page size and what the DIVs are set at ***/
@@ -570,6 +532,13 @@ export class Simulation extends Page {
     		overflow: 'hidden',
     		float: 'left'
     	};
+    	
+    	const dataThirdStyle = {
+    		width: Math.floor(modelWidth / 3),
+    		height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
+    		overflow: 'hidden',
+    		float: 'left'
+    	}
     
     	var dataBlockStyle = {
     	   	height: controlHeight / (20),
@@ -759,7 +728,7 @@ export class Simulation extends Page {
     		'fontFamily': 'Verdana, sans-serif',
     	};
     
-    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
+    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle });
     }
     
     /*** These should never run because each class has separate functions,

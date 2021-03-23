@@ -5,6 +5,7 @@ import Axios from 'axios';
 import PubSub from 'pubsub-js';
 import { isBrowser } from 'react-device-detect';
 import { Simulation } from './Simulation.js';
+import { PADDING } from './Page.js';
 import * as Tone from 'tone';
 import { getClosestCity } from './../const/cities.js';
 import { RED, YELLOW, GREEN, BLUE } from './../const/color.js';
@@ -40,11 +41,11 @@ class AllTogether extends Simulation {
     /* TODO: cleanup similar code */
     testPrecipMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
-    		var keyLeft = 0;
-    		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
+    		var keyLeft = Math.floor(this.state.pageRight / 4);
+    		var keyRight = Math.floor(this.state.pageRight / 2);
     		if(this.state.CONTROLVERTDIV !== 1){
-    			keyLeft = this.state.pageRight / 2;
-    			keyRight = this.state.pageRight;
+    			keyLeft = Math.floor(this.state.pageRight / 20);
+    			keyRight = Math.floor(this.state.pageRight / 20 + this.state.pageRight * 19 / 20 / 3);
     		}
     		var x = e.pageX - keyLeft;
     		var rangeX = keyRight - keyLeft;
@@ -56,33 +57,32 @@ class AllTogether extends Simulation {
     
     testTempMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
-    		var keyLeft = 0;
-    		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
+    		var keyLeft = Math.floor(this.state.pageRight / 2);
+    		var keyRight = Math.floor(this.state.pageRight * 3 / 4);
     		if(this.state.CONTROLVERTDIV !== 1){
-    			keyLeft = this.state.pageRight / 2;
-    			keyRight = this.state.pageRight;
+    			keyLeft = Math.floor(this.state.pageRight / 20 + this.state.pageRight * 19 / 20 / 3);
+    			keyRight = Math.floor(this.state.pageRight / 20 + 2 * this.state.pageRight * 19 / 20 / 3);
     		}
     		var x = e.pageX - keyLeft;
     		var rangeX = keyRight - keyLeft;
    		var percX = x / rangeX;
-		var playVal = (percX - .175) * 500 + 100;
+		var playVal = (percX - .14) * 23;
    		this.playNoteByVal(1, playVal, this.state.index, this.state.tempAvg);
    	}
     }
     
     testIceMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
-    		var keyLeft = 0;
-    		var keyRight = Math.floor(this.state.pageRight * this.state.CONTROLDIV);
+    		var keyLeft = Math.floor(this.state.pageRight * 3 / 4);
+    		var keyRight = Math.floor(this.state.pageRight);
     		if(this.state.CONTROLVERTDIV !== 1){
-    			keyLeft = this.state.pageRight / 2;
-    			keyRight = this.state.pageRight;
+    			keyLeft = Math.floor(this.state.pageRight / 20 + 2 * this.state.pageRight * 19 / 20 / 3);
+    			keyRight = Math.floor(this.state.pageRight);
     		}
     		var x = e.pageX - keyLeft;
     		var rangeX = keyRight - keyLeft;
    		var percX = x / rangeX;
-		var playVal;
-   		playVal = (percX - .175) * 500 + 100;
+		var playVal = percX;
    		this.playNoteByVal(2, playVal, this.state.index, this.state.iceAvg);
    	}
     }
@@ -328,6 +328,44 @@ class AllTogether extends Simulation {
     			}	
     		});
     }
+    
+        /*** called when the window is resized ***/
+    updateDimensions = () => {
+    	var newheight = window.innerHeight;
+    	var newwidth = window.innerWidth;
+    	
+    	if(window.innerHeight < window.innerWidth){
+    		this.setState({
+    			pageBottom: newheight - PADDING,
+    			pageRight: newwidth - PADDING,
+    			CONTROLDIV: 2 / 10,
+			SKINNYDIV: 1 / 20,
+			MAPDIV: 3 / 4,
+			MAPVERTDIV: 6 / 10,
+			DATAVERTDIV: 1 / 20,
+			GRAPHVERTDIV: 3 / 20,
+			SLIDERVERTDIV: 1 / 10,
+			CONTROLVERTDIV: 1,
+			CONTROLSPLIT: 1
+    		});
+    	}
+    	else{
+    		this.setState({
+    			pageBottom: newheight - PADDING,
+    			pageRight: newwidth - PADDING,
+    			CONTROLDIV: 1,
+			SKINNYDIV: 1 / 20,
+			MAPDIV: 19 / 20,
+			MAPVERTDIV: 6 / 20,
+			DATAVERTDIV: 1 / 20,
+			GRAPHVERTDIV: 3 / 20,
+			SLIDERVERTDIV: 1 / 10,
+			CONTROLVERTDIV: 7 / 20,
+			CONTROLSPLIT: 1 / 2
+    		});
+    	}	
+    	this.setupGraph();
+    } 
     
     tempYearApi = (request) => {
     	if(cancelYearTemp !== undefined){
@@ -662,13 +700,6 @@ class AllTogether extends Simulation {
     		float: 'left'
     	}
     
-    	const dataThirdStyle = {
-    		width: Math.floor(modelWidth / 3),
-    		height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
-    		overflow: 'hidden',
-    		float: 'left'
-    	}
-    
     	var graphHeight = this.state.pageBottom * this.state.GRAPHVERTDIV;
     	if(isNaN(graphHeight)){
     		graphHeight = 0;
@@ -678,7 +709,7 @@ class AllTogether extends Simulation {
     	if(isNaN(graphWidth)){
     		graphWidth = 0;
     	}
-    	return { largeControlBlockStyle, dataThirdStyle, graphHeight, graphWidth };
+    	return { largeControlBlockStyle, graphHeight, graphWidth };
     }
     
     updateYearVals = () => {
@@ -760,9 +791,9 @@ class AllTogether extends Simulation {
     temp_val = Math.round(temp_val * 100) / 100;
     precip_val = Math.round(precip_val * 100) / 100;
     
-    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle } = this.getCommonStyles();
     
-    const { largeControlBlockStyle, dataThirdStyle, graphHeight, graphWidth } = this.getTogetherStyles(modelWidth, controlHeight, controlWidth );
+    const { largeControlBlockStyle, graphHeight, graphWidth } = this.getTogetherStyles(modelWidth, controlHeight, controlWidth );
     
     this.updateGraph();
     
@@ -916,21 +947,6 @@ class AllTogether extends Simulation {
 				<img style={keyContainer} alt="graph key" src={graphKey}/>
 			</div>
 			
-			
-			<div style={keyContainer} >
-				<div style={dataBlockStyle} onPointerDown={this.setupPrecipTransport} onPointerMove={this.testPrecipMusic} onPointerUp={this.killTransport}>
-					<img style={dataBlockStyle} alt="precipitation key" src={precipKey} draggable="false"/>
-				</div>
-
-				<div style={dataBlockStyle} onPointerDown={this.setupTempTransport} onPointerMove={this.testTempMusic} onPointerUp={this.killTransport}>
-					<img style={dataBlockStyle} alt="temperature key" src={tempKey} draggable="false"/>
-				</div>
-
-				<div style={controlBlockStyle} onPointerDown={this.setupIceTransport}  onPointerMove={this.testIceMusic} onPointerUp={this.killTransport}>
-					<img style={dataBlockStyle} alt="sea ice key" src={iceKey} draggable="false"/>
-				</div>
-			</div>
-			
 		</div>
 		</div>
 		
@@ -958,10 +974,25 @@ class AllTogether extends Simulation {
 				</div>
 			</div>
 			
+			<div style={graphBufferStyle}>
+				<div style={dataThirdStyle} onPointerDown={this.setupPrecipTransport} onPointerMove={this.testPrecipMusic} onPointerUp={this.killTransport}>
+					<img style={dataThirdStyle} alt="precipitation key" src={precipKey} draggable="false"/>
+				</div>
+
+				<div style={dataThirdStyle} onPointerDown={this.setupTempTransport} onPointerMove={this.testTempMusic} onPointerUp={this.killTransport}>
+					<img style={dataThirdStyle} alt="temperature key" src={tempKey} draggable="false"/>
+				</div>
+
+				<div style={dataThirdStyle} onPointerDown={this.setupIceTransport}  onPointerMove={this.testIceMusic} onPointerUp={this.killTransport}>
+					<img style={dataThirdStyle} alt="sea ice key" src={iceKey} draggable="false"/>
+				</div>
+			</div>
+			
 			<div style={graphStyle}>
 				<canvas ref={this.graphRef} height={graphHeight} width={graphWidth} />
 			</div>
 			
+			<div style={graphBufferStyle}/>
 			<div style={graphBufferStyle}/>
 			
 			<div style={sliderDivStyle} onPointerUp={this.updateYearVals}>
