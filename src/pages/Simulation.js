@@ -293,8 +293,18 @@ export class Simulation extends Page {
 	
 	getArp(type, val, index, data, prevnote){
 		var scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'];
-		if(index > 94){
-			scale = ['F4', 'G4', 'Ab4', 'Bb4', 'C4', 'Db4', 'E4'];
+		if(index > 94 && index< 122){
+			scale = ['F4', 'G4', 'A4', 'Bb4', 'C4', 'D4', 'E4'];
+		}else if(index < 139){
+			scale = ['Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G4', 'A4'];
+		}else if(index < 153){
+			scale = ['Eb4', 'F4', 'G4', 'Ab4', 'Bb4', 'C4', 'D4'];
+		}else if(index < 165){
+			scale = ['Ab4', 'Bb4', 'C4', 'Db4', 'Eb4', 'F4', 'G4'];
+		}else if(index < 176){
+			scale = ['Db4', 'Eb4', 'F4', 'Gb4', 'Ab4', 'Bb4', 'C4'];
+		}else{
+			scale = ['Gb4', 'Ab4', 'Bb4', 'Cb4', 'Db4', 'Eb4', 'F4'];
 		}
 		var prevind = scale.indexOf(prevnote);
 		if(prevind === -1){
@@ -327,9 +337,11 @@ export class Simulation extends Page {
     				prev_val = this.getValByIndex(data, index - 1)
     			}
     			diff = temp_val - prev_val;
-    			if(diff >= 0){
+    			if(diff > 0){
     				nextind = (prevind + 1) % scale.length;
     				return scale[nextind];
+			}else if(diff === 0){
+				return prevnote;
 			}else{
 				nextind = (prevind - 1);
 				if(nextind < 0){
