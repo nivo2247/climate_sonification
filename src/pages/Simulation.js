@@ -354,13 +354,13 @@ export class Simulation extends Page {
 			 retsynth = new Tone.FMSynth({
 			 	modulation: {
 			 		type: 'sawtooth',
-			 		detune: 25,
+			 		detune: 7,
 			 		modulation: {
 			 			type: 'sawtooth',
-			 			detune: 50,
+			 			detune: 13,
 			 			modulation: {
 			 				type: 'sawtooth',
-			 				detune: 75
+			 				detune: 29
 			 			}
 			 		}
 			 	},
@@ -368,10 +368,10 @@ export class Simulation extends Page {
 			 		type: 'sawtooth'
 			 	},
 			 	envelope: {
-			 		attack: 0.5,
+			 		attack: 1,
 			 		decay: 0.1,
 			 		sustain: 0.8,
-			 		release: 0.5
+			 		release: 1
 			 	},
 			 	volume: -5
 			 }).toDestination();
@@ -555,6 +555,12 @@ export class Simulation extends Page {
     		overflow: 'hidden'
     	};
     	
+    	var thirdControlStyle = {
+    		height: Math.floor(controlHeight / 20),
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
+    		float: 'left'
+    	};
+    	
     	if(this.state.CONTROLVERTDIV !== 1){
     	
     		playSplitDivStyle = {
@@ -572,7 +578,7 @@ export class Simulation extends Page {
     		};
     
     		dataBlockStyle = {
-    	   		height: controlHeight / (20 * (1 - this.state.CONTROLVERTDIV)),
+    	   		height: 3 * controlHeight / (40 * (1 - this.state.CONTROLVERTDIV)),
     			width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     			overflow: 'hidden',
     			float: 'left',
@@ -583,6 +589,11 @@ export class Simulation extends Page {
     			height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 1 / (2 * 1 - this.state.CONTROLVERTDIV)),
     			float: 'left',
     			overflow: 'hidden'
+    		};
+    		thirdControlStyle = {
+    			height: Math.floor(3 * controlHeight / 40),
+    			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
+    			float: 'left'
     		};
     	
     	}
@@ -658,12 +669,6 @@ export class Simulation extends Page {
     		"fontSize": smallFontSize,
     		'textAlign': 'right',
     		'paddingTop': 5
-    	};
-    
-    	const thirdControlStyle = {
-    		height: Math.floor(controlHeight / 20),
-    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
-    		float: 'left'
     	};
     	
     	const skinnyDivStyle = {

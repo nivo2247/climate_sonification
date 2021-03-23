@@ -834,20 +834,19 @@ class AllTogether extends Simulation {
 				</div>
 			</div>
 			
-			<form>
-				<div style={controlBlockStyle}>
-					<label htmlFor='lat' style={labelControlStyle}> Lat:</label>
-					<input type='text' style={inputControlStyle} id='lat' value={this.state.latitude} onChange={this.onChangeLat}/>
-					<label htmlFor='lon' style={labelControlStyle}> Lon:</label>
-					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
-				</div>
-			</form>
 		</div>
 			
 		<div style={controlContainerStyle}>
 		
 			<form>
-				<div style={controlBlockStyle}>
+				<div style={dataBlockStyle}>
+					<label htmlFor='lat' style={labelControlStyle}> Lat:</label>
+					<input type='text' style={inputControlStyle} id='lat' value={this.state.latitude} onChange={this.onChangeLat}/>
+					<label htmlFor='lon' style={labelControlStyle}> Lon:</label>
+					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
+				</div>
+			
+				<div style={dataBlockStyle}>
 					<label htmlFor='city' style={bigLabelControlStyle}> Nearest City:</label>
 					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
 						<optgroup label='Africa'>
@@ -935,7 +934,7 @@ class AllTogether extends Simulation {
 				</div>
 			</form>
 		
-			<div style={controlBlockStyle}>
+			<div style={dataBlockStyle}>
 				<div style={halfControlStyle}>
 					<p style={smallLabelTextStyle}>Year: {this.state.index + 1920}</p>
 				</div>
