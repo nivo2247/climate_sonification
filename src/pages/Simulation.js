@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Tone from 'tone';
 import { PADDING, Page } from './Page.js';
 import { playUrl } from './../const/url.js';
+import { getInfo } from './../const/cities.js';
 
 /* used to wait a certain amount of ms */
 const timer = ms => new Promise(res => setTimeout(res, ms));
@@ -44,6 +45,23 @@ export class Simulation extends Page {
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
 	}  
+	
+      changeToCity = (event) => {
+      	if(this.state.play === 0){
+    	var city = event.target.value;
+    	var cityinfo = getInfo(city);
+    	var lat = cityinfo.latitude;
+    	var lon = cityinfo.longitude;
+    	this.doCoordHits(lat, lon);
+    	this.setState({
+    		latitude: lat,
+    		longitude: lon,
+    		useArray: 0
+    	});
+    	this.setupGraph();
+    	this.triggerNotes(lat, lon);
+    	}
+     }
 	
 	getValByIndex = (arr, ind) => {
 		var avgKeys = Object.keys(arr[0]);
@@ -372,16 +390,6 @@ export class Simulation extends Page {
 			this.stopMusic();
 		}
 	}
-
-    /*** onPress for 'adagio' ***/       
-    setAdagio = () => {
-    	this.setState({
-    		timerLen: 1200
-    	});
-		// Might need to stop the music to
-		// avoid bugs
-		Tone.Transport.bpm.value = 160;
-    }
     
     /*** onPress for 'moderato' ***/   
     setModerato = () => {
@@ -443,6 +451,7 @@ export class Simulation extends Page {
     	ctx.lineTo(right, 1);
     	ctx.lineTo(1, 1);
     	ctx.strokeStyle = "black";
+    	ctx.lineWidth = 1;
     	ctx.stroke();
     }
     
@@ -710,40 +719,30 @@ export class Simulation extends Page {
     
     	var active = '#44CC44';
     	var inactive = '#DDDDDD';
-    	var adagio = inactive;
     	var moderato = active;
     	var allegro = inactive;
     	var presto = inactive;
     
     	if(this.state.timerLen === 1200){
-    		adagio = active;
     		moderato = inactive;
     		allegro = inactive;
     		presto = inactive;
     	}
     	else if(this.state.timerLen === 800){
-    		adagio = inactive;
     		moderato = active;
     		allegro = inactive;
     		presto = inactive;
     	}
     	else if(this.state.timerLen === 400){
-    		adagio = inactive;
     		moderato = inactive;
     		allegro = active;
     		presto = inactive;
     	}
     	else if(this.state.timerLen === 200){
-    		adagio = inactive;
     		moderato = inactive;
     		allegro = inactive;
     		presto = active;
     	}
-    	const adagioHighlight = {
-    		'backgroundColor': adagio,
-    		'fontSize': microFontSize,
-    		'fontFamily': 'Verdana, sans-serif'
-    	};
     	const moderatoHighlight = {
     		'backgroundColor': moderato,
     		'fontSize': microFontSize,
@@ -760,7 +759,7 @@ export class Simulation extends Page {
     		'fontFamily': 'Verdana, sans-serif',
     	};
     
-    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
+    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer });
     }
     
     /*** These should never run because each class has separate functions,

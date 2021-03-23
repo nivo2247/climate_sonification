@@ -6,7 +6,8 @@ import PubSub from 'pubsub-js';
 import { isBrowser } from 'react-device-detect';
 import { Simulation } from './Simulation.js';
 import * as Tone from 'tone';
-import { getClosestCity, getInfo } from './../const/cities.js';
+import { getClosestCity } from './../const/cities.js';
+import { RED, YELLOW, GREEN, BLUE } from './../const/color.js';
 
 import { combinedImgs, dbUrl, urlPre, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImg, bottomSkinnyImg, timelineImg, togetherArtifactImgs, pauseUrl, playUrl } from './../const/url.js';
 
@@ -244,7 +245,8 @@ class AllTogether extends Simulation {
     			
     			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_max));
     			ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_max));
-    			ctx.strokeStyle = "green";
+    			ctx.strokeStyle = GREEN;
+    			ctx.lineWidth = 1;
     		}
     		ctx.stroke();
     		
@@ -259,7 +261,8 @@ class AllTogether extends Simulation {
     			
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_max));
     			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_max));
-    			ctx.strokeStyle = "red";
+    			ctx.strokeStyle = RED;
+    			ctx.lineWidth = 1;
     		}
     		ctx.stroke();
     		
@@ -273,7 +276,8 @@ class AllTogether extends Simulation {
     			
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
     			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
-    			ctx.strokeStyle = "blue";
+    			ctx.strokeStyle = BLUE;
+    			ctx.lineWidth = 1;
     		}
     		ctx.stroke(); 
     		
@@ -288,7 +292,8 @@ class AllTogether extends Simulation {
     			
     			ctx.moveTo(1 + step * (co2Ind - 1), co2_avg - co2_avg * (prev_val - co2_median) / co2_range);
     			ctx.lineTo(1 + step * co2Ind, co2_avg - co2_avg * (coord_val - co2_median) / co2_range);
-    			ctx.strokeStyle = "yellow";
+    			ctx.strokeStyle = YELLOW;
+    			ctx.lineWidth = 3;
     		}
     		ctx.stroke();
     	}
@@ -436,21 +441,6 @@ class AllTogether extends Simulation {
     		}
     	}
     }
-    
-    changeToCity = (event) => {
-    	var city = event.target.value;
-    	var cityinfo = getInfo(city);
-    	var lat = cityinfo.latitude;
-    	var lon = cityinfo.longitude;
-    	this.doCoordHits(lat, lon);
-    	this.setState({
-    		latitude: lat,
-    		longitude: lon,
-    		useArray: 0
-    	});
-    	this.setupGraph();
-    	this.triggerNotes(lat, lon);
-     }
      
      triggerNotes = (lat, lon) => {
     	var precip_val, temp_val, ice_val;
@@ -760,7 +750,17 @@ class AllTogether extends Simulation {
     	}
     }
     
-    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, adagioHighlight, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
+    var temp_pre = "Temperature: +";
+    if(temp_val < 0){
+    	temp_pre = "Temperature: ";
+    }
+    
+    ice_val *= 100;
+    ice_val = Math.round(ice_val * 100) / 100;
+    temp_val = Math.round(temp_val * 100) / 100;
+    precip_val = Math.round(precip_val * 100) / 100;
+    
+    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer } = this.getCommonStyles();
     
     const { largeControlBlockStyle, dataThirdStyle, graphHeight, graphWidth } = this.getTogetherStyles(modelWidth, controlHeight, controlWidth );
     
@@ -789,8 +789,8 @@ class AllTogether extends Simulation {
 					<img style={playSplitDivStyle} alt="play button" src={this.state.playButton}/>
 				</div>
 				
-				<div style={quarterControlStyle} onPointerDown={this.setAdagio}>
-					<span style={adagioHighlight}>adagio</span>
+				<div style={quarterControlStyle}>
+					<span style={paragraphTextStyle}>Tempo:</span>
 				</div>
 				<div style={quarterControlStyle} onPointerDown={this.setModerato}>
 					<span style={moderatoHighlight}>moderato</span>
@@ -885,7 +885,7 @@ class AllTogether extends Simulation {
 						
 						<optgroup label='South America'>
 							<option value='Asuncion'>Asuncion</option>
-							<option value='Bogota'>Asuncion</option>
+							<option value='Bogota'>Bogota</option>
 							<option value='Buenos Aires'>Buenos Aires</option>
 							<option value='Caracas'>Caracas</option>
 							<option value='Lima'>Lima</option>
@@ -908,7 +908,7 @@ class AllTogether extends Simulation {
 					<p style={smallLabelTextStyle}>Year: {this.state.index + 1920}</p>
 				</div>
 				<div style={halfControlStyle}>
-					<p style={smallLabelTextStyle}>Co2: {co2val}</p>
+					<p style={smallLabelTextStyle}>CO2: {co2val} ppm</p>
 				</div>
 			</div>
 			
@@ -948,13 +948,13 @@ class AllTogether extends Simulation {
 			
 			<div style={graphBufferStyle}>
 				<div style={dataThirdStyle}>
-					<p style={smallLabelTextStyle}>Precip: {precip_val}</p>
+					<p style={smallLabelTextStyle}>Precipitation: {precip_val} % of Annual Avg</p>
 				</div>
 				<div style={dataThirdStyle}>
-					<p style={smallLabelTextStyle}>Temp: {temp_val}</p>
+					<p style={smallLabelTextStyle}>{temp_pre}{temp_val} Celcius</p>
 				</div>
 				<div style={dataThirdStyle}>
-					<p style={smallLabelTextStyle}>Sea Ice: {ice_val}</p>
+					<p style={smallLabelTextStyle}>Sea Ice: {ice_val} %</p>
 				</div>
 			</div>
 			
