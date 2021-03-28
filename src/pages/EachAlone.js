@@ -244,22 +244,12 @@ class EachAlone extends Simulation {
     /*** Writes data to the graph, will need to be checked after music implementation ***/
     updateGraph() {
 	if (this.state.index > 0 && this.state.index <= 180){
-    	        var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
-    		var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
-	    	const ctx = this.graphRef.current.getContext('2d');
-	    	
-    		var bottom = graphBottom - 1;
-    		var right = modelWidth - 1;
-    		
-    		var step = right / 180;
-    		var avg = bottom / 2;
+		const ctx = this.graphRef.current.getContext('2d');
+    	       
+    	        var { step, avg, co2_median, co2_range, co2_avg } = this.getGraphDims();
     		
     		var prev_val = 0;
     		var coord_val = 0;
-    		
-    		var co2_median = 300;
-    		var co2_range = 700;
-    		var co2_avg = Math.floor(avg * 1.6);
     		
     		ctx.beginPath();
     		for(var co2Ind = 1; co2Ind <= this.state.index; co2Ind++){
@@ -274,9 +264,7 @@ class EachAlone extends Simulation {
     		ctx.stroke();
     		
     		if(this.state.state === 0){
-    			var precip_median = 100;
-    			var precip_max = this.getLargestVal(this.state.coordData, 0) + 40;
-    			var precip_range = precip_max - precip_median;
+    			var { precip_median, precip_range } = this.getPrecipGraphVars(this.state.coordData);
     		
     			ctx.beginPath();
     			for(var precipInd = 0; precipInd <= this.state.index; precipInd++){
@@ -292,10 +280,8 @@ class EachAlone extends Simulation {
     		}
     		
     		if(this.state.state === 1){
-    			var temp_median = 0;
-    			var temp_max = this.getLargestVal(this.state.coordData, 0) + 3;
-    			var temp_range = temp_max;
-    			var temp_avg = Math.floor(avg * 1.5);
+
+    			var { temp_median, temp_range, temp_avg } = this.getTempGraphVars(this.state.coordData, avg);
     		
     			ctx.beginPath();
    	 		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){

@@ -55,6 +55,38 @@ export class Simulation extends Page {
 		return this.state.playButton;
 	}
     }
+    
+    getGraphDims = () => {
+    	var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
+    	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
+	    	
+    	var bottom = graphBottom - 1;
+    	var right = modelWidth - 1;
+    	
+    	var step = right / 180;
+       	var avg = bottom / 2;
+    		
+    	var co2_median = 300;
+    	var co2_range = 700;
+    	var co2_avg = Math.floor(avg * 1.6);
+    	
+    	return({ step, avg, co2_median, co2_range, co2_avg });
+    }
+    
+    getPrecipGraphVars = (data) => {
+    	var precip_median = 100;
+    	var precip_max = this.getLargestVal(data, 0) + 40;
+    	var precip_range = precip_max - precip_median;
+    	return { precip_median, precip_range };
+    }
+    
+    getTempGraphVars = (data, avg) => {
+   	var temp_median = 0;
+    	var temp_max = this.getLargestVal(data, 0) + 3;
+    	var temp_range = temp_max;
+    	var temp_avg = Math.floor(avg * 1.5);
+    	return { temp_median, temp_range, temp_avg };
+    }
 	
       changeToCity = (event) => {
       	if(this.state.play === 0){
