@@ -97,8 +97,14 @@ class AllTogether extends Simulation {
     
     /*** Used to calculate coords for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
+    	if(e.buttons !== 1){
+    		return -1
+    	}
+    	if(this.state.play === 1){
+    		this.stopMusic(0);
+    	}
     	if(this.state.notePlaying !== 0){
-    		return;
+    		return -1;
     	}
     	var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
     	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
@@ -114,89 +120,91 @@ class AllTogether extends Simulation {
     	var centerX = 0;
     	var centerY = 0;
     	var boxType = 0;
-    	if(this.state.play === 0 && e.buttons === 1) {
-		if (x <= modelDiv && y <= modelSplit) {
-	    		centerX = modelDiv / 2;
-	    		centerY = modelSplit / 2;
-	    		boxType = 1;
+    	
+	if (x <= modelDiv && y <= modelSplit) {
+	    	centerX = modelDiv / 2;
+	    	centerY = modelSplit / 2;
+	    	boxType = 1;
+	}
+    	else if (x <= modelDiv * 2 && y <= modelSplit){
+		centerX = modelDiv + modelDiv / 2;
+    		centerY = modelSplit / 2;
+    		boxType = 1;	
+    	}
+    	else if (x <= modelDiv * 3 && y <= modelSplit){
+		centerX = 2 * modelDiv + modelDiv / 2;
+    		centerY = modelSplit / 2;
+    		boxType = 2;
+    	}
+    	else if (x <= modelDiv && y <= modelSplit * 2){
+		centerX = modelDiv / 2;
+    		centerY = modelSplit + modelSplit / 2; 
+    		boxType = 1;  	
+    	}
+    	else if (x <= modelDiv * 2 && y <= modelSplit * 2){
+		centerX = modelDiv + modelDiv / 2;
+    		centerY = modelSplit + modelSplit / 2; 
+    		boxType = 1;  	
+    	}
+    	else if (x <= modelDiv * 3 && y <= modelSplit * 2){
+		centerX = 2 * modelDiv + modelDiv / 2;
+    		centerY = modelSplit + modelSplit / 2; 
+    		boxType = 2;   	
+    	}
+    	
+    	if (boxType === 1) {
+	    	lonSave = (x - centerX) * 360 / modelDiv;
+	    	latSave = (centerY - y) * 180 / modelSplit;
+	}
+	else if (boxType === 2) {
+		var dx = x - centerX;
+		var dy = centerY - y;
+		var r = Math.sqrt(dx ** 2 + dy ** 2);
+		var theta = Math.atan(dy / dx);
+		var projy = r / 2;
+		var projx = centerX;
+		if (dx <= 0) {
+			projx -= r * Math.cos((theta + Math.PI / 2) / 2);
 		}
-    		else if (x <= modelDiv * 2 && y <= modelSplit){
-			centerX = modelDiv + modelDiv / 2;
-    			centerY = modelSplit / 2;
-    			boxType = 1;	
-    		}
-    		else if (x <= modelDiv * 3 && y <= modelSplit){
-			centerX = 2 * modelDiv + modelDiv / 2;
-    			centerY = modelSplit / 2;
-    			boxType = 2;
-    		}
-    		else if (x <= modelDiv && y <= modelSplit * 2){
-			centerX = modelDiv / 2;
-    			centerY = modelSplit + modelSplit / 2; 
-    			boxType = 1;  	
-    		}
-    		else if (x <= modelDiv * 2 && y <= modelSplit * 2){
-			centerX = modelDiv + modelDiv / 2;
-    			centerY = modelSplit + modelSplit / 2; 
-    			boxType = 1;  	
-    		}
-    		else if (x <= modelDiv * 3 && y <= modelSplit * 2){
-			centerX = 2 * modelDiv + modelDiv / 2;
-    			centerY = modelSplit + modelSplit / 2; 
-    			boxType = 2;   	
-    		}
-    		
-    		if (boxType === 1) {
-		    	lonSave = (x - centerX) * 360 / modelDiv;
-		    	latSave = (centerY - y) * 180 / modelSplit;
+		else {
+			projx += r * Math.cos((theta - Math.PI / 2) / 2);
 		}
-		else if (boxType === 2) {
-			var dx = x - centerX;
-			var dy = centerY - y;
-			var r = Math.sqrt(dx ** 2 + dy ** 2);
-			var theta = Math.atan(dy / dx);
-			var projy = r / 2;
-			var projx = centerX;
-			if (dx <= 0) {
-				projx -= r * Math.cos((theta + Math.PI / 2) / 2);
-			}
-			else {
-				projx += r * Math.cos((theta - Math.PI / 2) / 2);
-			}
-			lonSave = (projx - centerX) * 540 / modelDiv;
-		    	latSave = 90 - projy * 90 / modelSplit;
-		}
-		latSave = Math.max(latSave, -89);
-		latSave = Math.min(latSave, 90);
-		lonSave = Math.max(lonSave, -180);
-		lonSave = Math.min(lonSave, 180);
-	    	this.setState({
-	    		latitude: Math.floor(latSave), 
-	    		longitude: Math.floor(lonSave),
-	    		useArray: 0
-	    	});	
-	    	var dbX = 1;
-    		var dbY = 1;
-    		dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
-    		dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
-    		var coord_index = (dbY - 1) * 320 + (dbX - 1);
-    		if(this.state.precipAvgAllCoords.length >= coord_index && this.state.tempAvgAllCoords.length >= coord_index && this.state.iceAvgAllCoords.length >= coord_index){
-    			var val0 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
-    			var val1 = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
-    			var val2 = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
-    			this.playTogetherMapNotes(val0, val1, val2, this.state.index, this.state.precipAvg, this.state.tempAvg, this.state.iceAvg);
-	        }
-	   }
+		lonSave = (projx - centerX) * 540 / modelDiv;
+	    	latSave = 90 - projy * 90 / modelSplit;
+	}
+	latSave = Math.max(latSave, -89);
+	latSave = Math.min(latSave, 90);
+	lonSave = Math.max(lonSave, -180);
+	lonSave = Math.min(lonSave, 180);
+	this.setState({
+		latitude: Math.floor(latSave), 
+	   	longitude: Math.floor(lonSave),
+	   	useArray: 0
+	});	
+   	var dbX = 1;
+   	var dbY = 1;
+    	dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
+    	dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
+    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    	if(this.state.precipAvgAllCoords.length >= coord_index && this.state.tempAvgAllCoords.length >= coord_index && this.state.iceAvgAllCoords.length >= coord_index){
+    		var val0 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
+    		var val1 = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
+    		var val2 = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
+    		this.playTogetherMapNotes(val0, val1, val2, this.state.index, this.state.precipAvg, this.state.tempAvg, this.state.iceAvg);
+	}
+	   
 	        
-        }    
+    }    
         
         /*** Run this when stop is pressed or when index === 180 ***/
-	stopMusic = () => {
-		this.setState({ play: 0, playButton: playUrl });
-		Tone.Transport.stop();
-		Tone.Transport.cancel(0);
+    stopMusic = (terminate) => {
+	this.setState({ play: 0, playButton: playUrl });
+	Tone.Transport.stop();
+	Tone.Transport.cancel(0);
+	if(terminate === 0){
 		this.doYearHits(this.state.index + 1920);
 	}
+    }
     
     /*** runs on initial render ***/
     componentDidMount = () => {
@@ -217,6 +225,7 @@ class AllTogether extends Simulation {
 	window.addEventListener('orientationchange', this.rotateDimensions);
 	this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
+	this.setAllegro();
 	
     }   
     
@@ -427,6 +436,9 @@ class AllTogether extends Simulation {
     			});	
     			this.setupGraph();
     			this.triggerNotes(parsedval, 0);
+    			if(this.state.play === 1){
+    				this.stopMusic();
+    			}
     		}
     	}
     }
@@ -443,6 +455,9 @@ class AllTogether extends Simulation {
     			});	
     			this.setupGraph();
     			this.triggerNotes(0, parsedval);
+    			if(this.state.play === 1){
+    				this.stopMusic();
+    			}
     		}
     	}
     }
@@ -801,7 +816,7 @@ class AllTogether extends Simulation {
 				{/* This originally used this.handleClick().  I may still need to use the game
 				handler here.  But I might be able to just use the inhereted play method.  I think
 				I will need to use some methods in this file too.  I'm just not sure which ones yet */}
-				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic() : () => this.playMusic()}>
+				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic(0) : () => this.playMusic()}>
 					<img style={playSplitDivStyle} alt="play button" src={playButton}/>
 				</div>
 				

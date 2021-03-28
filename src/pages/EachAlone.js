@@ -52,16 +52,22 @@ class EachAlone extends Simulation {
     	});
     	/* setup graph and query db */
     	this.setupGraph();
-    	this.doYearHits(0, this.state.index + 1920);
+    	if(this.state.play === 0){
+    		this.doYearHits(0, this.state.index + 1920);
+    	}else{
+    		this.stopMusic(0);
+    	}
     	this.doCoordHits(0, this.state.latitude, this.state.longitude);
     }
     
     /*** Run this when stop is pressed or when index === 180 ***/
-	stopMusic = () => {
+	stopMusic = (terminate) => {
 		this.setState({ play: 0, playButton: playUrl });
 		Tone.Transport.stop();
 		Tone.Transport.cancel(0);
-		this.doYearHits(this.state.state, this.state.index + 1920);
+		if(terminate === 0){
+			this.doYearHits(this.state.state, this.state.index + 1920);
+		}
 	}
    
     /*** onPress for 'Temperature' Button ***/   
@@ -81,7 +87,11 @@ class EachAlone extends Simulation {
     		});
     	}
     	this.setupGraph();
-    	this.doYearHits(1, this.state.index + 1920);
+    	if(this.state.play === 0){
+    		this.doYearHits(1, this.state.index + 1920);
+    	}else{
+    		this.stopMusic(0);
+    	}
     	this.doCoordHits(1, this.state.latitude, this.state.longitude);
     }
 
@@ -102,7 +112,11 @@ class EachAlone extends Simulation {
     		});
     	}
     	this.setupGraph();
-    	this.doYearHits(2, this.state.index + 1920);
+    	if(this.state.play === 0){
+    		this.doYearHits(2, this.state.index + 1920);
+    	}else{
+    		this.stopMusic(0);
+    	}
     	this.doCoordHits(2, this.state.latitude, this.state.longitude);
     }
 
@@ -155,6 +169,12 @@ class EachAlone extends Simulation {
     /*** Used to calculate coords pressed on the map
     *** Leave this alone unless messing with DIV sizing ***/
     onMouseDown = (e) => {
+    	if(e.buttons !== 1){
+    		return -1;
+    	}
+    	if(this.state.play === 1){
+    		this.stopMusic(0);
+    	}
     	if(this.state.notePlaying !== 0){
     		return;
     	}
@@ -173,71 +193,68 @@ class EachAlone extends Simulation {
     	var lonSave = 0;
     	var centerX = 0;
     	var centerY = 0;
-    	if(this.state.play === 0 && e.buttons === 1) {
-		if (x <= modelDiv && y <= modelSplit) {
-	    		centerX = modelDiv / 2;
-	    		centerY = modelSplit / 2;
+	if (x <= modelDiv && y <= modelSplit) {
+	  	centerX = modelDiv / 2;
+		centerY = modelSplit / 2;
+	}
+    	else if (x <= modelDiv * 2 && y <= modelSplit){
+		centerX = modelDiv + modelDiv / 2;
+    		centerY = modelSplit / 2;	
+    	}
+    	else if (x <= modelDiv * 3 && y <= modelSplit){
+		centerX = 2 * modelDiv + modelDiv / 2;
+    		centerY = modelSplit / 2;
+    	}
+    	else if (x <= modelDiv && y <= modelSplit * 2){
+		centerX = modelDiv / 2;
+    		centerY = modelSplit + modelSplit / 2;   	
+    	}
+    	else if (x <= modelDiv * 2 && y <= modelSplit * 2){
+		centerX = modelDiv + modelDiv / 2;
+    		centerY = modelSplit + modelSplit / 2;   	
+    	}
+    	else if (x <= modelDiv * 3 && y <= modelSplit * 2){
+		centerX = 2 * modelDiv + modelDiv / 2;
+    		centerY = modelSplit + modelSplit / 2;    	
+    	}
+    	
+    	if (this.state.state === 0 || this.state.state === 1) {
+	    	lonSave = (x - centerX) * 360 / modelDiv;
+	    	latSave = (centerY - y) * 180 / modelSplit;
+	}
+	else if (this.state.state === 2) {
+		var dx = x - centerX;
+		var dy = centerY - y;
+		var r = Math.sqrt(dx ** 2 + dy ** 2);
+		var theta = Math.atan(dy / dx);
+		var projy = r / 2;
+		var projx = centerX;
+		if (dx <= 0) {
+			projx -= r * Math.cos((theta + Math.PI / 2) / 2);
 		}
-    		else if (x <= modelDiv * 2 && y <= modelSplit){
-			centerX = modelDiv + modelDiv / 2;
-    			centerY = modelSplit / 2;	
-    		}
-    		else if (x <= modelDiv * 3 && y <= modelSplit){
-			centerX = 2 * modelDiv + modelDiv / 2;
-    			centerY = modelSplit / 2;
-    		}
-    		else if (x <= modelDiv && y <= modelSplit * 2){
-			centerX = modelDiv / 2;
-    			centerY = modelSplit + modelSplit / 2;   	
-    		}
-    		else if (x <= modelDiv * 2 && y <= modelSplit * 2){
-			centerX = modelDiv + modelDiv / 2;
-    			centerY = modelSplit + modelSplit / 2;   	
-    		}
-    		else if (x <= modelDiv * 3 && y <= modelSplit * 2){
-			centerX = 2 * modelDiv + modelDiv / 2;
-    			centerY = modelSplit + modelSplit / 2;    	
-    		}
-    		
-    		if (this.state.state === 0 || this.state.state === 1) {
-		    	lonSave = (x - centerX) * 360 / modelDiv;
-		    	latSave = (centerY - y) * 180 / modelSplit;
+		else {
+			projx += r * Math.cos((theta - Math.PI / 2) / 2);
 		}
-		else if (this.state.state === 2) {
-			var dx = x - centerX;
-			var dy = centerY - y;
-			var r = Math.sqrt(dx ** 2 + dy ** 2);
-			var theta = Math.atan(dy / dx);
-			var projy = r / 2;
-			var projx = centerX;
-			if (dx <= 0) {
-				projx -= r * Math.cos((theta + Math.PI / 2) / 2);
-			}
-			else {
-				projx += r * Math.cos((theta - Math.PI / 2) / 2);
-			}
-			lonSave = (projx - centerX) * 540 / modelDiv;
-		    	latSave = 90 - projy * 90 / modelSplit;
-		    	
-		}
-		latSave = Math.max(latSave, -89);
-		latSave = Math.min(latSave, 90);
-		lonSave = Math.max(lonSave, -180);
-		lonSave = Math.min(lonSave, 180);
-	    	this.setState({
-	    		latitude: Math.floor(latSave), 
-	    		longitude: Math.floor(lonSave),
-	    		useArray: 0
-	    	});
-	    	var dbX = 1;
-    		var dbY = 1;
-    		dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
-    		dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
-    		var coord_index = (dbY - 1) * 320 + (dbX - 1);
-    		if(this.state.yearData.length >= coord_index){
-    			var val0 = this.getValByCoord(this.state.yearData, coord_index);
-    			this.playNoteByVal(this.state.state, val0, this.state.index, this.state.coordData);
-	        }
+		lonSave = (projx - centerX) * 540 / modelDiv;
+		latSave = 90 - projy * 90 / modelSplit;	    	
+	}
+	latSave = Math.max(latSave, -89);
+	latSave = Math.min(latSave, 90);
+	lonSave = Math.max(lonSave, -180);
+	lonSave = Math.min(lonSave, 180);
+    	this.setState({
+    		latitude: Math.floor(latSave), 
+    		longitude: Math.floor(lonSave),
+    		useArray: 0
+    	});
+    	var dbX = 1;
+    	var dbY = 1;
+    	dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
+    	dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
+    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    	if(this.state.yearData.length >= coord_index){
+    		var val0 = this.getValByCoord(this.state.yearData, coord_index);
+    		this.playNoteByVal(this.state.state, val0, this.state.index, this.state.coordData);
 	}
     }   
     
@@ -370,7 +387,7 @@ class EachAlone extends Simulation {
     /*** Templates for functions which would change the text of lat and lon from textbox input ***/
     onChangeLat = (event) => {
     	var newval = event.target.value;
-    	if(this.state.play === 0 && isNumeric(newval)){
+    	if(isNumeric(newval)){
     		var parsedval = parseInt(newval);
     		if(parsedval >= -89 && parsedval <= 89){
     			this.doCoordHits(this.state.state, parsedval, this.state.longitude);
@@ -380,13 +397,16 @@ class EachAlone extends Simulation {
     			});	
     			this.setupGraph();
     			this.triggerNotes(parsedval, 0);
+    			if(this.state.play === 1){
+    				this.stopMusic();
+    			}
     		}
     	}
     }
     
     onChangeLon = (event) => {
     	var newval = event.target.value;
-    	if(this.state.play === 0 && isNumeric(newval)){
+    	if(isNumeric(newval)){
     		var parsedval = parseInt(newval);
     		if(parsedval >= -180 && parsedval <= 180){
     			this.doCoordHits(this.state.state, this.state.latitude, parsedval);
@@ -396,6 +416,9 @@ class EachAlone extends Simulation {
     			});	
     			this.setupGraph();
     			this.triggerNotes(0, parsedval);
+    			if(this.state.play === 1){
+    				this.stopMusic();
+    			}
     		}
     	}
     }
@@ -405,8 +428,7 @@ class EachAlone extends Simulation {
     		cancelCoord();
     	}
     	
-    	var newwait = this.state.waiting;
-	this.setState({'waiting': newwait + 1});
+	this.setState({waiting: 1});
     
     	Axios.get(request, {
     		cancelToken: new CancelToken(function executor(c){
@@ -418,7 +440,7 @@ class EachAlone extends Simulation {
     			var currwait = this.state.waiting;
     			this.setState({ 
     				coordData: [...coord_data],
-    				'waiting': currwait - 1
+    				waiting: currwait - 1
     			});
     			this.setupGraph();
     			this.updateGraph();
@@ -434,6 +456,7 @@ class EachAlone extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				console.log('coord request cancelled');
+    				
     			}
     		});
     }
@@ -589,6 +612,7 @@ class EachAlone extends Simulation {
 	this.doCoordHits(0, 0, 0);
 	this.doYearHits(0, this.state.index + 1920);
 	this.updateDimensions();
+	this.setAllegro();
     } 
     
     triggerNotes = (lat, lon) => {
@@ -712,7 +736,7 @@ class EachAlone extends Simulation {
 			</div>
 			
 			<div style={controlBlockStyle}>
-				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic() : () => this.playMusic()}>
+				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic(0) : () => this.playMusic()}>
 					<img style={playSplitDivStyle} alt="play button" src={playButton}/>
 				</div>
 				

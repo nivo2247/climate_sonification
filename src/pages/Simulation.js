@@ -89,7 +89,6 @@ export class Simulation extends Page {
     }
 	
       changeToCity = (event) => {
-      	if(this.state.play === 0){
     	var city = event.target.value;
     	var cityinfo = getInfo(city);
     	var lat = cityinfo.latitude;
@@ -102,6 +101,8 @@ export class Simulation extends Page {
     	});
     	this.setupGraph();
     	this.triggerNotes(lat, lon);
+    	if(this.state.play === 1){
+    		this.stopMusic();
     	}
      }
 	
@@ -539,7 +540,7 @@ export class Simulation extends Page {
 		if (index < 180) {
 			this.setState({ index: index + 1 });
 		} else {
-			this.stopMusic();
+			this.stopMusic(0);
 		}
 	}
     
@@ -581,7 +582,7 @@ export class Simulation extends Page {
     callHome = () => {
     	const { navigation } = this.props;
     	if(this.state.play === 1){
-    		this.stopMusic();
+    		this.stopMusic(1);
     	}
     	navigation.navigate('Home');
     }
