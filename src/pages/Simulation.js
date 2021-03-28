@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as Tone from 'tone';
 import { PADDING, Page } from './Page.js';
 import { playUrl, loading } from './../const/url.js';
-import { getInfo } from './../const/cities.js';
 
 /* used to wait a certain amount of ms */
 const timer = ms => new Promise(res => setTimeout(res, ms));
@@ -87,24 +86,6 @@ export class Simulation extends Page {
     	var temp_avg = Math.floor(avg * 1.5);
     	return { temp_median, temp_range, temp_avg };
     }
-	
-      changeToCity = (event) => {
-    	var city = event.target.value;
-    	var cityinfo = getInfo(city);
-    	var lat = cityinfo.latitude;
-    	var lon = cityinfo.longitude;
-    	this.doCoordHits(lat, lon);
-    	this.setState({
-    		latitude: lat,
-    		longitude: lon,
-    		useArray: 0
-    	});
-    	this.setupGraph();
-    	this.triggerNotes(lat, lon);
-    	if(this.state.play === 1){
-    		this.stopMusic();
-    	}
-     }
 	
 	getValByIndex = (arr, ind) => {
 		var avgKeys = Object.keys(arr[0]);
@@ -412,7 +393,7 @@ export class Simulation extends Page {
 				return scale[nextind];
 			}
 		}
-		return 'C5';
+		return 'C3';
 	}
 	
 	triggerNoteByVal = (type, val, index, data) => {
@@ -487,7 +468,8 @@ export class Simulation extends Page {
 			 		decay: 0.2,
 			 		sustain: 0.7,
 			 		release: 1
-			 	}
+			 	},
+			 	volume: -2
 			 }).toDestination();
 		}
 		else if(type === 1){
@@ -500,7 +482,8 @@ export class Simulation extends Page {
 			 		decay: 0.2,
 			 		sustain: 0.9,
 			 		release: 0.5
-			 	}
+			 	},
+			 	volume: -2
 			 }).toDestination();
 		}
 		else if(type === 2){
@@ -526,7 +509,7 @@ export class Simulation extends Page {
 			 		sustain: 0.8,
 			 		release: 1
 			 	},
-			 	volume: -5
+			 	volume: -2
 			 }).toDestination();
 			 retsynth.volume.value = 10;
 		}

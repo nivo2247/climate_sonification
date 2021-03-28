@@ -7,7 +7,7 @@ import { isBrowser } from 'react-device-detect';
 import { Simulation } from './Simulation.js';
 import { PADDING } from './Page.js';
 import * as Tone from 'tone';
-import { getClosestCity } from './../const/cities.js';
+import { getClosestCity, getInfo } from './../const/cities.js';
 import { RED, YELLOW, GREEN, BLUE } from './../const/color.js';
 
 import { combinedImgs, dbUrl, urlPre, precipKey, tempKey, iceKey, homeButton, graphKey, topSkinnyImg, bottomSkinnyImg, timelineImg, togetherArtifactImgs, pauseUrl, playUrl } from './../const/url.js';
@@ -715,6 +715,24 @@ class AllTogether extends Simulation {
     		this.doYearHits(this.state.index + 1920);
     	}
     }
+    
+    changeToCity = (event) => {
+    	var city = event.target.value;
+    	var cityinfo = getInfo(city);
+    	var lat = cityinfo.latitude;
+    	var lon = cityinfo.longitude;
+    	this.doCoordHits(lat, lon);
+    	this.setState({
+    		latitude: lat,
+    		longitude: lon,
+    		useArray: 0
+    	});
+    	this.setupGraph();
+    	this.triggerNotes(lat, lon);
+    	if(this.state.play === 1){
+    		this.stopMusic();
+    	}
+     }
     
     /*** runs on page close ***/
     componentWillUnmount = () => {
