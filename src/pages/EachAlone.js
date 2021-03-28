@@ -286,46 +286,46 @@ class EachAlone extends Simulation {
     				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_range));
     				ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_range));
     				ctx.strokeStyle = GREEN;
-    				ctx.lineWidth = 1;
+    				ctx.lineWidth = 2;
     			}
     			ctx.stroke();
     		}
     		
     		if(this.state.state === 1){
-    		var temp_median = 0;
-    		var temp_max = this.getLargestVal(this.state.coordData, 0) + 3;
-    		var temp_range = temp_max;
-    		var temp_avg = Math.floor(avg * 1.5);
+    			var temp_median = 0;
+    			var temp_max = this.getLargestVal(this.state.coordData, 0) + 3;
+    			var temp_range = temp_max;
+    			var temp_avg = Math.floor(avg * 1.5);
     		
-    		ctx.beginPath();
-    		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){
-    		    	prev_val = this.getValByIndex(this.state.coordData, tempInd - 1);
-    			coord_val = this.getValByIndex(this.state.coordData, tempInd);
+    			ctx.beginPath();
+   	 		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){
+   	 		    	prev_val = this.getValByIndex(this.state.coordData, tempInd - 1);
+  	  			coord_val = this.getValByIndex(this.state.coordData, tempInd);
     			
-    			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
-    			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
-    			ctx.strokeStyle = RED;
-    			ctx.lineWidth = 1;
-    		}
-    		ctx.stroke();
+ 	   			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
+ 	   			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
+ 	   			ctx.strokeStyle = RED;
+ 	   			ctx.lineWidth = 2;
+	    		}
+	    		ctx.stroke();
     		}
     		
     		
     		if(this.state.state === 2) {
-    		var ice_max = 1;
-    		var ice_avg = Math.floor(avg * 0.5);
-    		
-    		ctx.beginPath();
-    		for(var iceInd = 0; iceInd <= this.state.index; iceInd++){
-    		    	prev_val = this.getValByIndex(this.state.coordData, iceInd - 1);
-    			coord_val = this.getValByIndex(this.state.coordData, iceInd);
+  	  		var ice_max = 1;
+ 	   		var ice_avg = Math.floor(avg * 0.5);
     			
-    			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
-    			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
-    			ctx.strokeStyle = BLUE;
-    			ctx.lineWidth = 1;
-    		}
-    		ctx.stroke(); 
+    			ctx.beginPath();
+    			for(var iceInd = 0; iceInd <= this.state.index; iceInd++){
+   	 		    	prev_val = this.getValByIndex(this.state.coordData, iceInd - 1);
+   	 			coord_val = this.getValByIndex(this.state.coordData, iceInd);
+    			
+	    			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
+	    			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
+	    			ctx.strokeStyle = BLUE;
+	    			ctx.lineWidth = 2;
+	    		}
+	    		ctx.stroke(); 
     		}
     	}
     }
@@ -420,7 +420,7 @@ class EachAlone extends Simulation {
     	}
     	
     	var newwait = this.state.waiting;
-	this.setState({waiting: newwait + 1});
+	this.setState({'waiting': newwait + 1});
     
     	Axios.get(request, {
     		cancelToken: new CancelToken(function executor(c){
@@ -432,7 +432,7 @@ class EachAlone extends Simulation {
     			var currwait = this.state.waiting;
     			this.setState({ 
     				coordData: [...coord_data],
-    				waiting: currwait - 1
+    				'waiting': currwait - 1
     			});
     			this.setupGraph();
     			this.updateGraph();

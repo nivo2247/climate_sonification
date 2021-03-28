@@ -247,7 +247,7 @@ class AllTogether extends Simulation {
     			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_range));
     			ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_range));
     			ctx.strokeStyle = GREEN;
-    			ctx.lineWidth = 1;
+    			ctx.lineWidth = 2;
     		}
     		ctx.stroke();
     		
@@ -264,7 +264,7 @@ class AllTogether extends Simulation {
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
     			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
     			ctx.strokeStyle = RED;
-    			ctx.lineWidth = 1;
+    			ctx.lineWidth = 2;
     		}
     		ctx.stroke();
     		
@@ -279,7 +279,7 @@ class AllTogether extends Simulation {
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
     			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
     			ctx.strokeStyle = BLUE;
-    			ctx.lineWidth = 1;
+    			ctx.lineWidth = 2;
     		}
     		ctx.stroke(); 
     		
@@ -299,36 +299,6 @@ class AllTogether extends Simulation {
     		}
     		ctx.stroke();
     	}
-    }
-    
-    precipYearApi = (request) => {
-    	if(cancelYearPrecip !== undefined){
-    		cancelYearPrecip();
-    	}
-    	Axios.get(request, {
-    			cancelToken: new CancelToken(function executor(c){
-    				cancelYearPrecip = c;
-    			})
-    		})
-		.then(res => {
-    			const precip_data = res.data.data;
-    			if(this.state.play === 0){
-    			this.setState({ 
-    				precipAvgAllCoords: [...precip_data],
-    				useArray: this.state.useArray + 1
-    			});
-    			}else{
-    			this.setState({ 
-    				precipAvgAllCoords: [...precip_data]
-    			});
-    			}
-    			console.log(precip_data);
-    		})
-    		.catch((error) => {
-    			if(Axios.isCancel(error)){
-    				console.log('precip year request cancelled');
-    			}	
-    		});
     }
     
         /*** called when the window is resized ***/
@@ -369,6 +339,25 @@ class AllTogether extends Simulation {
     	this.setupGraph();
     } 
     
+    precipYearApi = (request) => {
+    	if(cancelYearPrecip !== undefined){
+    		cancelYearPrecip();
+    	}
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelYearPrecip = c;
+    			})
+    		})
+		.then(res => {
+    			this.setAvgAllCoords(res, 0);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('precip year request cancelled');
+    			}	
+    		});
+    }
+    
     tempYearApi = (request) => {
     	if(cancelYearTemp !== undefined){
     		cancelYearIce();
@@ -379,19 +368,7 @@ class AllTogether extends Simulation {
     			})
     		})
 		.then(res => {
-    			const temp_data = res.data.data;
-    			if(this.state.play === 0){
-    			this.setState({ 
-    				tempAvgAllCoords: [...temp_data],
-    				useArray: this.state.useArray + 1
-    			});
-    			}
-  			else{
-  			this.setState({ 
-    				tempAvgAllCoords: [...temp_data]
-    			});
-  			}
-    			console.log(temp_data);
+    			this.setAvgAllCoords(res, 1);
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
@@ -410,25 +387,28 @@ class AllTogether extends Simulation {
     			})
     		})
 		.then(res => {
-    			const ice_data = res.data.data;
-    			if(this.state.play === 0){
-    			this.setState({ 
-    				iceAvgAllCoords: [...ice_data],
-    				useArray: this.state.useArray + 1
-    			});
-    			}
-    			else{
-    			this.setState({ 
-    				iceAvgAllCoords: [...ice_data]
-    			});
-    			}
-    			console.log(ice_data);
+    			this.setAvgAllCoords(res, 2);
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				console.log('ice year request cancelled');
     			}	
     		});
+    }
+    
+    setAvgAllCoords = (res, arrayNum) => {
+   	const data = res.data.data;
+   	if(arrayNum === 0){
+    		this.setState({ precipAvgAllCoords: [...data] });
+    	}else if(arrayNum === 1){
+    		this.setState({ tempAvgAllCoords: [...data] });
+    	}else if(arrayNum === 2){
+    		this.setState({ iceAvgAllCoords: [...data] });
+    	}
+    	if(this.state.play === 0){
+    		this.setState({ useArray: this.state.useArray + 1 });
+    	}
+    	console.log(arrayNum, data);
     }
     
     /*** query db for all coords at a specific year ***/
@@ -515,16 +495,7 @@ class AllTogether extends Simulation {
     			})
     		})
     		.then(res => {
-    			const precip_coord_data = res.data.data;
-    			var curwait = this.state.waiting;
-    			this.setState({ 
-    				precipAvg: [...precip_coord_data],
-    				waiting: curwait - 1
-    			});
-    			this.setupGraph();
-    			this.updateGraph();
-    			console.log(precip_coord_data);
-    			this.setPrecipNotes(precip_coord_data);
+			this.setAvgAllYears(res, 0);
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
@@ -544,16 +515,7 @@ class AllTogether extends Simulation {
     			})
     		})
     		.then(res => {
-    			const temp_coord_data = res.data.data;
-    			var curwait = this.state.waiting;
-    			this.setState({ 
-    				tempAvg: [...temp_coord_data],
-    				waiting: curwait - 1
-    			});
-    			this.setupGraph();
-    			this.updateGraph();
-    			console.log(temp_coord_data);
-    			this.setTempNotes(temp_coord_data);
+    			this.setAvgAllYears(res, 1);
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
@@ -573,22 +535,36 @@ class AllTogether extends Simulation {
     			})
     		})
     		.then(res => {
-    			const seaice_coord_data = res.data.data;
-    			var curwait = this.state.waiting;
-    			this.setState({ 
-    				iceAvg: [...seaice_coord_data],
-    				waiting: curwait - 1
-    			});
-    			this.setupGraph();
-    			this.updateGraph();
-    			console.log(seaice_coord_data);
-    			this.setIceNotes(seaice_coord_data);
+    			this.setAvgAllYears(res, 2);
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				console.log('ice coord request cancelled');
     			}	
     		});
+    }
+    
+        
+    setAvgAllYears = (res, arrayNum) => {
+    	const data = res.data.data;
+    	var curwait = this.state.waiting;
+    	
+    	if(arrayNum === 0){
+    		this.setState({ precipAvg: [...data] });
+    		this.setPrecipNotes(data);
+    	}else if(arrayNum === 1){
+    		this.setState({ tempAvg: [...data] });
+    		this.setTempNotes(data);
+    	}else if(arrayNum === 2){
+    		this.setState({ iceAvg: [...data] });
+    		this.setIceNotes(data);
+    	}
+    	
+    	this.setState({ waiting: curwait - 1 });
+    	
+    	this.setupGraph();
+    	this.updateGraph();
+    	console.log(arrayNum, data);
     }
     
     /*** query db for all years of a specific coord ***/
