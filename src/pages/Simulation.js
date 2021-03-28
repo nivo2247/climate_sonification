@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Tone from 'tone';
 import { PADDING, Page } from './Page.js';
-import { playUrl } from './../const/url.js';
+import { playUrl, loading } from './../const/url.js';
 import { getInfo } from './../const/cities.js';
 
 /* used to wait a certain amount of ms */
@@ -22,6 +22,7 @@ export class Simulation extends Page {
 		this.state.pageRight = window.clientWidth - PADDING;
 		this.state.index = 0;
 		this.state.play = 0;
+		this.state.waiting = 0;
 		this.state.notePlaying = 0;
 		this.state.timerLen = 800;
 		this.state.playButton = playUrl;
@@ -45,6 +46,15 @@ export class Simulation extends Page {
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
 	}  
+	
+    getPlayButton = () => {
+	if(this.state.waiting > 0){
+		return loading;
+	}
+	else{
+		return this.state.playButton;
+	}
+    }
 	
       changeToCity = (event) => {
       	if(this.state.play === 0){

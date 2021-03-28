@@ -418,6 +418,9 @@ class EachAlone extends Simulation {
     	if(cancelCoord !== undefined){
     		cancelCoord();
     	}
+    	
+    	var newwait = this.state.waiting;
+	this.setState({waiting: newwait + 1});
     
     	Axios.get(request, {
     		cancelToken: new CancelToken(function executor(c){
@@ -426,7 +429,11 @@ class EachAlone extends Simulation {
     	})
 		.then(res => {
     			const coord_data = res.data.data;
-    			this.setState({ coordData: [...coord_data]});
+    			var currwait = this.state.waiting;
+    			this.setState({ 
+    				coordData: [...coord_data],
+    				waiting: currwait - 1
+    			});
     			this.setupGraph();
     			this.updateGraph();
     			console.log(coord_data);
@@ -528,6 +535,10 @@ class EachAlone extends Simulation {
     }
     
     playMusic = () => {
+    	if(this.state.waiting > 0){
+    		console.log('waiting');
+    		return;
+    	}
     	var newind = this.state.index;
 	if(newind === 180){
 		newind = 0;
@@ -619,6 +630,8 @@ class EachAlone extends Simulation {
     	
     /*** runs on state update ***/   
     render(){
+    
+    var playButton = this.getPlayButton();
     
     var dbX = 1;
     var dbY = 1;
@@ -714,7 +727,7 @@ class EachAlone extends Simulation {
 			
 			<div style={controlBlockStyle}>
 				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic() : () => this.playMusic()}>
-					<img style={playSplitDivStyle} alt="play button" src={this.state.playButton}/>
+					<img style={playSplitDivStyle} alt="play button" src={playButton}/>
 				</div>
 				
 				<div style={quarterControlStyle}>

@@ -10,6 +10,7 @@ export const graphKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.co
 export const topSkinnyImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png";
 export const bottomSkinnyImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png";
 export const timelineImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/timelinenumbersimage.png";
+export const loading = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/loading.png";
 
 /*** used to preload images in the AllTogether page ***/
 export const togetherArtifactImgs = [
@@ -22,7 +23,8 @@ export const togetherArtifactImgs = [
 	graphKey,
 	topSkinnyImg,
 	bottomSkinnyImg,
-	timelineImg
+	timelineImg,
+	loading
 ];
 
 export const precipActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.png";
@@ -51,7 +53,8 @@ export const aloneArtifactImgs = [
 	graphKey,
 	topSkinnyImgAlone,
 	bottomSkinnyImgAlone,
-	timelineImg
+	timelineImg,
+	loading
 ];
 
 export const eachAloneButton = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/btn_advBkg.png";

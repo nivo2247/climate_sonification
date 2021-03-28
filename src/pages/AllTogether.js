@@ -508,6 +508,7 @@ class AllTogether extends Simulation {
     	if(cancelCoordPrecip !== undefined){
     		cancelCoordPrecip();
     	}
+    	
     	Axios.get(request, {
     			cancelToken: new CancelToken(function executor(c){
     				cancelCoordPrecip = c;
@@ -515,7 +516,11 @@ class AllTogether extends Simulation {
     		})
     		.then(res => {
     			const precip_coord_data = res.data.data;
-    			this.setState({ precipAvg: [...precip_coord_data]});
+    			var curwait = this.state.waiting;
+    			this.setState({ 
+    				precipAvg: [...precip_coord_data],
+    				waiting: curwait - 1
+    			});
     			this.setupGraph();
     			this.updateGraph();
     			console.log(precip_coord_data);
@@ -532,6 +537,7 @@ class AllTogether extends Simulation {
     	if(cancelCoordTemp !== undefined){
     		cancelCoordTemp();
     	}
+	
     	Axios.get(request, {
     			cancelToken: new CancelToken(function executor(c){
     				cancelCoordTemp = c;
@@ -539,7 +545,11 @@ class AllTogether extends Simulation {
     		})
     		.then(res => {
     			const temp_coord_data = res.data.data;
-    			this.setState({ tempAvg: [...temp_coord_data]});
+    			var curwait = this.state.waiting;
+    			this.setState({ 
+    				tempAvg: [...temp_coord_data],
+    				waiting: curwait - 1
+    			});
     			this.setupGraph();
     			this.updateGraph();
     			console.log(temp_coord_data);
@@ -556,6 +566,7 @@ class AllTogether extends Simulation {
     	if(cancelCoordIce !== undefined){
     		cancelCoordIce();
     	}
+	
     	Axios.get(request, {
     			cancelToken: new CancelToken(function executor(c){
     				cancelCoordIce = c;
@@ -563,7 +574,11 @@ class AllTogether extends Simulation {
     		})
     		.then(res => {
     			const seaice_coord_data = res.data.data;
-    			this.setState({ iceAvg: [...seaice_coord_data]});
+    			var curwait = this.state.waiting;
+    			this.setState({ 
+    				iceAvg: [...seaice_coord_data],
+    				waiting: curwait - 1
+    			});
     			this.setupGraph();
     			this.updateGraph();
     			console.log(seaice_coord_data);
@@ -586,7 +601,8 @@ class AllTogether extends Simulation {
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon),
-		closestCity: closestcity
+		closestCity: closestcity,
+		waiting: 3
 	});
 	var request;
 	/* Filter and do db hit here */
@@ -613,6 +629,10 @@ class AllTogether extends Simulation {
 	 * 	than stop.
 	 ****/	
 	playMusic = () => {
+		if(this.state.waiting > 0){
+			console.log('waiting');
+			return;
+		}
 		var newind = this.state.index;
 		if(newind === 180){
 			newind = 0;
@@ -747,6 +767,8 @@ class AllTogether extends Simulation {
     /*** runs on state update ***/   
     render(){
     
+    var playButton = this.getPlayButton();
+    
     var dbX = 1;
     var dbY = 1;
     dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
@@ -819,7 +841,7 @@ class AllTogether extends Simulation {
 				handler here.  But I might be able to just use the inhereted play method.  I think
 				I will need to use some methods in this file too.  I'm just not sure which ones yet */}
 				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic() : () => this.playMusic()}>
-					<img style={playSplitDivStyle} alt="play button" src={this.state.playButton}/>
+					<img style={playSplitDivStyle} alt="play button" src={playButton}/>
 				</div>
 				
 				<div style={quarterControlStyle}>
