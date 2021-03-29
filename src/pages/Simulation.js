@@ -516,30 +516,28 @@ export class Simulation extends Page {
 		}
 		else if(type === 2){
 			 retsynth = new Tone.FMSynth({
-			 	modulation: {
-			 		type: 'sawtooth',
-			 		detune: 7,
-			 		modulation: {
-			 			type: 'sawtooth',
-			 			detune: 13,
-			 			modulation: {
-			 				type: 'sawtooth',
-			 				detune: 29
-			 			}
-			 		}
-			 	},
-			 	oscillator:{
-			 		type: 'sawtooth'
-			 	},
-			 	envelope: {
-			 		attack: 1,
-			 		decay: 0.1,
-			 		sustain: 0.8,
-			 		release: 1
-			 	},
-			 	volume: -2
-			 }).toDestination();
-			 retsynth.volume.value = 10;
+				"harmonicity": 3.01,
+				"modulationIndex": 14,
+				"oscillator": {
+					"type": "triangle"
+				},
+				"envelope": {
+					"attack": 0.2,
+					"decay": 0.5,
+					"sustain": 0.5,
+					"release": 1,
+				},
+				"modulation" : {
+					"type": "square"
+				},
+				"modulationEnvelope" : {
+					"attack": 0.01,
+					"decay": 0.5,
+					"sustain": 0.2,
+					"release": 0.1
+				}
+			}).toDestination();
+			//  retsynth.volume.value = 10;
 		}
 		return retsynth;
 	}
