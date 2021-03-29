@@ -119,12 +119,10 @@ export class Simulation extends Page {
 		var precipNoteArr = [];
 		var precip_val;
 		var note;
-		var prevnote = 'C4';
 		
 		for(var i = 0; i < 181; i++){
     			precip_val = this.getValByIndex(data, i);
-    			note = this.getArp(0, precip_val, i, data, prevnote);
-    			prevnote = note;
+    			note = this.getNote(0, precip_val);
     			precipNoteArr.push(note)
 		}
 		
@@ -137,12 +135,10 @@ export class Simulation extends Page {
 		var tempNoteArr = [];
 		var temp_val;
 		var note;
-		var prevnote = 'C4';
 		
 		for(var i = 0; i < 181; i++){
     			temp_val = this.getValByIndex(data, i);
-    			note = this.getArp(1, temp_val, i, data, prevnote);
-    			prevnote = note;
+    			note = this.getNote(1, temp_val);
     			tempNoteArr.push(note);
     			
 		}
@@ -156,18 +152,243 @@ export class Simulation extends Page {
 		var iceNoteArr = [];
 		var ice_val;
 		var note;
-		var prevnote = 'C4';
 		
 		for(var i = 0; i < 181; i++){
     			ice_val = this.getValByIndex(data, i);
-    			note = this.getArp(2, ice_val, i, data, prevnote);
-    			prevnote = note;
+    			note = this.getNote(2, ice_val);
     			iceNoteArr.push(note);
 		}
 		
 		this.setState({
 			iceNotes: [...iceNoteArr]
 		});
+	}
+	
+	getNote = (type, value) => {
+		var retval = 'A5';
+		if(type === 0){
+			if(value < 50){
+				retval = 'A2';
+			}else if(value < 60){
+				retval = 'B2';
+			}else if(value < 70){
+				retval = 'C3';
+			}else if(value < 75){
+				retval = 'D3';
+			}else if(value < 80){
+				retval = 'E3';
+			}else if(value < 85){
+				retval = 'F3';
+			}else if(value < 90){
+				retval = 'G3';
+			}else if(value < 92.5){
+				retval = 'A3';
+			}else if(value < 95){
+				retval = 'B3';
+			}else if(value < 97.5){
+				retval = 'C4';
+			}else if(value < 100){
+				retval = 'D4';
+			}else if(value < 102.5){
+				retval = 'E4';
+			}else if(value < 105){
+				retval = 'F4';
+			}else if(value < 107.5){
+				retval = 'G4';
+			}else if(value < 110){
+				retval = 'A4';
+			}else if(value < 115){
+				retval = 'B4';
+			}else if(value < 120){
+				retval = 'C5';
+			}else if(value < 125){
+				retval = 'D5';
+			}else if(value < 130){
+				retval = 'E5';
+			}else if(value < 135){
+				retval = 'F5';
+			}else if(value < 140){
+				retval = 'G5';
+			}else if(value < 145){
+				retval = 'A5';
+			}else if(value < 150){
+				retval = 'B5';
+			}else if(value < 155){
+				retval = 'C6';
+			}else if(value < 160){
+				retval = 'D6';
+			}else if(value < 165){
+				retval = 'E6';
+			}else if(value < 170){
+				retval = 'F6';
+			}else if(value < 175){
+				retval = 'G6';
+			}else if(value < 180){
+				retval = 'A6';
+			}else if(value < 190){
+				retval = 'B6';
+			}else if(value < 200){
+				retval = 'C7';
+			}else if(value < 220){
+				retval = 'D7';
+			}else if(value < 240){
+				retval = 'E7';
+			}else if(value < 260){
+				retval = 'F7';
+			}else if(value < 280){
+				retval = 'G7';
+			}else{
+				retval = 'A7';
+			}
+			
+		}
+		else if(type === 1){
+			if(value < -0.5){
+				retval = 'A2';
+			}else if(value < -0.25){
+				retval = 'B2';
+			}else if(value < 0){
+				retval = 'C3';
+			}else if(value < 0.05){
+				retval = 'D3';
+			}else if(value < 0.1){
+				retval = 'E3';
+			}else if(value < 0.15){
+				retval = 'F3';
+			}else if(value < 0.2){
+				retval = 'G3';
+			}else if(value < 0.3){
+				retval = 'A3';
+			}else if(value < 0.4){
+				retval = 'B3';
+			}else if(value < 0.5){
+				retval = 'C4';
+			}else if(value < 0.6){
+				retval = 'D4';
+			}else if(value < 0.75){
+				retval = 'E4';
+			}else if(value < 1){
+				retval = 'F4';
+			}else if(value < 1.25){
+				retval = 'G4';
+			}else if(value < 1.5){
+				retval = 'A4';
+			}else if(value < 1.75){
+				retval = 'B4';
+			}else if(value < 2){
+				retval = 'C5';
+			}else if(value < 2.5){
+				retval = 'D5';
+			}else if(value < 3){
+				retval = 'E5';
+			}else if(value < 3.5){
+				retval = 'F5';
+			}else if(value < 4){
+				retval = 'G5';
+			}else if(value < 4.5){
+				retval = 'A5';
+			}else if(value < 5){
+				retval = 'B5';
+			}else if(value < 6){
+				retval = 'C6';
+			}else if(value < 7){
+				retval = 'D6';
+			}else if(value < 8){
+				retval = 'E6';
+			}else if(value < 9){
+				retval = 'F6';
+			}else if(value < 10){
+				retval = 'G6';
+			}else if(value < 11){
+				retval = 'A6';
+			}else if(value < 12){
+				retval = 'B6';
+			}else if(value < 13){
+				retval = 'C7';
+			}else if(value < 14){
+				retval = 'D7';
+			}else if(value < 15){
+				retval = 'E7';
+			}else if(value < 16){
+				retval = 'F7';
+			}else{
+				retval = 'G7';
+			}
+		}
+		else if(type === 2){
+			if(value > 0.98){
+				retval = 'G6';
+			}else if(value > 0.96){
+				retval = 'F6';
+			}else if(value > 0.955){
+				retval = 'E6';
+			}else if(value > 0.95){
+				retval = 'D6';
+			}else if(value > 0.945){
+				retval = 'C6';
+			}else if(value > 0.94){
+				retval = 'B5';
+			}else if(value > 0.93){
+				retval = 'A5';
+			}else if(value > 0.92){
+				retval = 'G5';
+			}else if(value > 0.91){
+				retval = 'F5';
+			}else if(value > 0.90){
+				retval = 'E5';
+			}else if(value > 0.89){
+				retval = 'D5';
+			}else if(value > 0.875){
+				retval = 'C5';
+			}else if(value > 0.85){
+				retval = 'B4';
+			}else if(value > 0.825){
+				retval = 'A4';
+			}else if(value > 0.8){
+				retval = 'G4';
+			}else if(value > 0.75){
+				retval = 'F4';
+			}else if(value > 0.7){
+				retval = 'E4';
+			}else if(value > 0.65){
+				retval = 'D4';
+			}else if(value > 0.6){
+				retval = 'C4';
+			}else if(value > 0.55){
+				retval = 'B3';
+			}else if(value > 0.5){
+				retval = 'A3';
+			}else if(value > .45){
+				retval = 'G3';
+			}else if(value > 0.4){
+				retval = 'F3';
+			}else if(value > 0.35){
+				retval = 'E3';
+			}else if(value > 0.30){
+				retval = 'D3';
+			}else if(value > 0.25){
+				retval = 'C3';
+			}else if(value > 0.2){
+				retval = 'B2';
+			}else if(value > 0.15){
+				retval = 'A2';
+			}else if(value > 0.10){
+				retval = 'G2';
+			}else if(value > 0.08){
+				retval = 'F2';
+			}else if(value > 0.06){
+				retval = 'E2';
+			}else if(value > 0.04){
+				retval = 'D2';
+			}else if(value > 0.02){
+				retval = 'C2';
+			}else if(value > 0.01){
+				retval = 'B1';
+			}else{
+				retval = 'A1';
+			}
+		}
+		return retval;
 	}
 	
 	getPrecipNotes = (index) => {
@@ -202,207 +423,14 @@ export class Simulation extends Page {
 			return this.state.iceNotes.slice(index + 1);
 		}
 	}
-	
-	getNoteByVal(type, val, index, data){
-		var scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3', 'A2', 'B2', 'C2'];
-		if(index > 94 && index < 122){
-			scale = ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4', 'A3', 'B3', 'C3', 'D3', 'E3', 'F3', 'G3', 'A2'];
-		}
-		else if(index < 139){
-			scale = ['C4', 'D4', 'Eb4', 'F4', 'G4', 'Ab3', 'Bb3', 'C3', 'D3', 'Eb3', 'F3', 'G3', 'Ab2', 'Bb2', 'C2'];
-		}
-		else if(index < 153){
-			scale = ['A4', 'B4', 'Cb4', 'D4', 'E4', 'Fb4', 'Gb4', 'A3', 'B3', 'Cb3', 'D3', 'E3', 'Fb3', 'Gb3', 'A2'];
-		}
-		else if(index < 165){
-			scale = ['D4', 'Eb4', 'F4', 'G4', 'A3', 'Bb3', 'C3', 'D3', 'Eb3', 'F3', 'G3', 'A2', 'Bb2', 'C2'];
-		}
-		else if(index < 176){
-			scale = ['Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G4', 'A3', 'Bb3', 'C3', 'D3', 'Eb3', 'F3', 'G3', 'A2', 'Bb2'];
-		}else{
-			scale = ['G4', 'A4', 'Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G4', 'A3', 'Bb3', 'C3', 'D3', 'Eb3', 'F3', 'G3'];
-		}
-		var rand = Math.random();
-		if(type === 0){
-    			var precip_val = val;
-    			var prev_val = 100;
-    			if(index !== 0){
-    				prev_val = this.getValByIndex(data, index - 1)
-    			}
-    			var diff = Math.abs(precip_val - prev_val);
-    			if(diff < 10){
-    				if(rand <= 0.25){
-					return scale[0];
-				}else if(rand <= 0.5){
-					return scale[2];
-				}else if(rand <= 0.75){
-					return scale[4];
-				}else{
-					return scale[7];
-				}
-			}else if(diff < 50){
-				if(rand <= 0.25){
-					return scale[6];
-				}else if(rand <= 0.5){
-					return scale[3];
-				}else if(rand <= 0.75){
-					return scale[13];
-				}else{
-					return scale[10];
-				}
-			}else{
-				if(rand <= 0.25){
-					return scale[6];
-				}else if(rand <= 0.5){
-					return scale[1];
-				}else if(rand <= 0.75){
-					return scale[13];
-				}else{
-					return scale[8];
-				}
-			}
-		}
-		else if(type === 1){
-			var temp_val = val;
-    			
-    			if(temp_val < 1){
-    				if(rand <= 0.33){
-					return scale[7];
-				}else if(rand <= 0.67){
-					return scale[0];
-				}else{
-					return scale[4];
-				}
-			}else if(temp_val < 2){
-				if(rand <= 0.5){
-					return scale[6];
-				}else{
-					return scale[3];
-				}
-			}else{
-				if(rand <= 0.5){
-					return scale[6];
-				}else{
-					return scale[1];
-				}
-			}
-		}
-		else if(type === 2){
-			var ice_val = val;
-    			
-    			if(ice_val >= .95){
-    				if(rand <= 0.33){
-					return scale[7];
-				}else if(rand <= 0.67){
-					return scale[0];
-				}else{
-					return scale[4];
-				}
-			}else if(ice_val < 0.8){
-				if(rand <= 0.5){
-					return scale[6];
-				}else{
-					return scale[3];
-				}
-			}else{
-				if(rand <= 0.5){
-					return scale[6];
-				}else{
-					return scale[1];
-				}
-			}
-		}
-		return 'C5';
-	}
-	
-	getArp(type, val, index, data, prevnote){
-		var scale = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4'];
-		if(index > 94 && index< 122){
-			scale = ['F4', 'G4', 'A4', 'Bb4', 'C4', 'D4', 'E4'];
-		}else if(index < 139){
-			scale = ['Bb4', 'C4', 'D4', 'Eb4', 'F4', 'G4', 'A4'];
-		}else if(index < 153){
-			scale = ['Eb4', 'F4', 'G4', 'Ab4', 'Bb4', 'C4', 'D4'];
-		}else if(index < 165){
-			scale = ['Ab4', 'Bb4', 'C4', 'Db4', 'Eb4', 'F4', 'G4'];
-		}else if(index < 176){
-			scale = ['Db4', 'Eb4', 'F4', 'Gb4', 'Ab4', 'Bb4', 'C4'];
-		}else{
-			scale = ['Gb4', 'Ab4', 'Bb4', 'Cb4', 'Db4', 'Eb4', 'F4'];
-		}
-		var prevind = scale.indexOf(prevnote);
-		if(prevind === -1){
-			prevind = 0;
-		}
-		var nextind, prev_val, diff;
-		if(type === 0){
-    			var precip_val = val;
-    			prev_val = 100;
-    			if(index !== 0){
-    				prev_val = this.getValByIndex(data, index - 1)
-    			}
-    			diff = precip_val - prev_val;
-    			if(diff >= 0){
-    				nextind = (prevind + 1) % scale.length;
-    				return scale[nextind];
-			}else{
-				nextind = (prevind - 1);
-				if(nextind < 0){
-					nextind = scale.length - 1;
-				}
-				return scale[nextind];
-			}
-		}
-		else if(type === 1){
-			var temp_val = val;
-    			
-    			prev_val = 0;
-    			if(index !== 0){
-    				prev_val = this.getValByIndex(data, index - 1)
-    			}
-    			diff = temp_val - prev_val;
-    			if(diff > 0){
-    				nextind = (prevind + 1) % scale.length;
-    				return scale[nextind];
-			}else if(diff === 0){
-				return prevnote;
-			}else{
-				nextind = (prevind - 1);
-				if(nextind < 0){
-					nextind = scale.length - 1;
-				}
-				return scale[nextind];
-			}
-		}
-		else if(type === 2){
-			var ice_val = val;
-    			
-    			prev_val = 1;
-    			if(index !== 0){
-    				prev_val = this.getValByIndex(data, index - 1)
-    			}
-    			diff = ice_val - prev_val;
-    			if(diff >= 0){
-    				nextind = (prevind + 1) % scale.length;
-    				return scale[nextind];
-			}else{
-				nextind = (prevind - 1);
-				if(nextind < 0){
-					nextind = scale.length - 1;
-				}
-				return scale[nextind];
-			}
-		}
-		return 'C3';
-	}
-	
+			
 	triggerNoteByVal = (type, val, index, data) => {
 		Tone.Transport.start();
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
 		const synth = this.getSynth(type);
-		const note = this.getNoteByVal(type, val, index, data);
+		const note = this.getNote(type, val);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
 			synth.triggerAttackRelease(note, '16n', plusDelay);
@@ -422,7 +450,7 @@ export class Simulation extends Page {
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
-		const note = this.getNoteByVal(type, val, index, data);
+		const note = this.getNote(type, val);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
 			synth.triggerAttackRelease(note, '16n', plusDelay);

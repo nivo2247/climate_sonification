@@ -663,9 +663,9 @@ class AllTogether extends Simulation {
 		const synth1 = this.getSynth(1);
 		const synth2 = this.getSynth(2);
 		//synth.sync();
-		const note0 = this.getNoteByVal(0, val1, index, data1);
-		const note1 = this.getNoteByVal(0, val2, index, data2);
-		const note2 = this.getNoteByVal(0, val3, index, data3);
+		const note0 = this.getNote(0, val1);
+		const note1 = this.getNote(1, val2);
+		const note2 = this.getNote(2, val3);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
 			synth0.triggerAttackRelease(note0, '8n');
