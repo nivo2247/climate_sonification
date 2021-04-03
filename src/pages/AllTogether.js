@@ -18,10 +18,13 @@ function isNumeric(value) {
 
 let cancelYearPrecip;
 let cancelCoordPrecip;
+let cancelCoordPrecip1;
 let cancelYearTemp;
 let cancelCoordTemp;
+let cancelCoordTemp1;
 let cancelYearIce;
 let cancelCoordIce;
+let cancelCoordIce1;
 
 const CancelToken = Axios.CancelToken;
 
@@ -33,6 +36,9 @@ class AllTogether extends Simulation {
     	this.state.precipAvg = [0];
     	this.state.tempAvg = [0];
     	this.state.iceAvg = [0];
+    	this.state.precip1 = [0];
+    	this.state.temp1 = [0];
+    	this.state.ice1 = [0];
     	this.state.precipAvgAllCoords = [0];
     	this.state.tempAvgAllCoords = [0];
     	this.state.iceAvgAllCoords = [0];
@@ -252,6 +258,18 @@ class AllTogether extends Simulation {
     		}
     		ctx.stroke();
     		
+    		ctx.beginPath();
+    		for(precipInd = 0; precipInd <= this.state.index; precipInd++){
+    		    	prev_val = this.getValByIndex(this.state.precip1, precipInd - 1);
+    			coord_val = this.getValByIndex(this.state.precip1, precipInd);
+    			
+    			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_range));
+    			ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_range));
+    			ctx.strokeStyle = GREEN;
+    			ctx.lineWidth = 1;
+    		}
+    		ctx.stroke();
+    		
     		var { temp_median, temp_range, temp_avg } = this.getTempGraphVars(this.state.tempAvg, avg);
     		
     		ctx.beginPath();
@@ -263,6 +281,18 @@ class AllTogether extends Simulation {
     			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
     			ctx.strokeStyle = RED;
     			ctx.lineWidth = 2;
+    		}
+    		ctx.stroke();
+    		
+    		ctx.beginPath();
+    		for(tempInd = 0; tempInd <= this.state.index; tempInd++){
+    		    	prev_val = this.getValByIndex(this.state.temp1, tempInd - 1);
+    			coord_val = this.getValByIndex(this.state.temp1, tempInd);
+    			
+    			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
+    			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
+    			ctx.strokeStyle = RED;
+    			ctx.lineWidth = 1;
     		}
     		ctx.stroke();
     		
@@ -278,6 +308,18 @@ class AllTogether extends Simulation {
     			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
     			ctx.strokeStyle = BLUE;
     			ctx.lineWidth = 2;
+    		}
+    		ctx.stroke(); 
+    		
+    		ctx.beginPath();
+    		for(iceInd = 0; iceInd <= this.state.index; iceInd++){
+    		    	prev_val = this.getValByIndex(this.state.ice1, iceInd - 1);
+    			coord_val = this.getValByIndex(this.state.ice1, iceInd);
+    			
+    			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
+    			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
+    			ctx.strokeStyle = BLUE;
+    			ctx.lineWidth = 1;
     		}
     		ctx.stroke(); 
     		
@@ -504,6 +546,26 @@ class AllTogether extends Simulation {
     		});
     }
     
+    precipCoordApi1 = (request) => {
+    	if(cancelCoordPrecip1 !== undefined){
+    		cancelCoordPrecip1();
+    	}
+    	
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelCoordPrecip1 = c;
+    			})
+    		})
+    		.then(res => {
+			this.setAvgAllYears(res, 3);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('precip1 coord request cancelled');
+    			}	
+    		});
+    }
+    
     tempCoordApi = (request) => {
     	if(cancelCoordTemp !== undefined){
     		cancelCoordTemp();
@@ -520,6 +582,26 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				console.log('temp coord request cancelled');
+    			}	
+    		});
+    }
+    
+    tempCoordApi1 = (request) => {
+    	if(cancelCoordTemp1 !== undefined){
+    		cancelCoordTemp1();
+    	}
+	
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelCoordTemp1 = c;
+    			})
+    		})
+    		.then(res => {
+    			this.setAvgAllYears(res, 4);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('temp1 coord request cancelled');
     			}	
     		});
     }
@@ -544,6 +626,26 @@ class AllTogether extends Simulation {
     		});
     }
     
+    iceCoordApi1 = (request) => {
+    	if(cancelCoordIce1 !== undefined){
+    		cancelCoordIce1();
+    	}
+	
+    	Axios.get(request, {
+    			cancelToken: new CancelToken(function executor(c){
+    				cancelCoordIce1 = c;
+    			})
+    		})
+    		.then(res => {
+    			this.setAvgAllYears(res, 5);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('ice1 coord request cancelled');
+    			}	
+    		});
+    }
+    
         
     setAvgAllYears = (res, arrayNum) => {
     	const data = res.data.data;
@@ -558,6 +660,15 @@ class AllTogether extends Simulation {
     	}else if(arrayNum === 2){
     		this.setState({ iceAvg: [...data] });
     		this.setIceNotes(data);
+    	}else if(arrayNum === 3){
+    		this.setState({ precip1: [...data] });
+    		this.setPrecipNotes1(data);
+    	}else if(arrayNum === 4){
+    		this.setState({ temp1: [...data] });
+    		this.setTempNotes1(data);
+    	}else if(arrayNum === 5){
+    		this.setState({ ice1: [...data] });
+    		this.setIceNotes1(data);
     	}
     	
     	this.setState({ waiting: curwait - 1 });
@@ -578,21 +689,23 @@ class AllTogether extends Simulation {
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon),
 		closestCity: closestcity,
-		waiting: 3
+		waiting: 6
 	});
 	var request;
 	/* Filter and do db hit here */
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
 		request = dbUrl.concat("/table/precipavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
 		this.precipCoordApi(request);
-	}
-	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
 		request = dbUrl.concat("/table/tempavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
 		this.tempCoordApi(request);
-	}
-	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
 		request = dbUrl.concat("/table/seaiceavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
 		this.iceCoordApi(request);
+		request = dbUrl.concat("/table/precip001/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		this.precipCoordApi1(request);
+		request = dbUrl.concat("/table/temp001/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		this.tempCoordApi1(request);
+		request = dbUrl.concat("/table/seaice001/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		this.iceCoordApi1(request);
 	}
     };
     
@@ -616,6 +729,19 @@ class AllTogether extends Simulation {
 		const precipsynth = this.getSynth(0);
 		const tempsynth = this.getSynth(1);
 		const icesynth = this.getSynth(2);
+		const precipsynth1 = this.getSynth(0);
+		precipsynth1.volume.value = -12;
+		const tempsynth1 = this.getSynth(1);
+		tempsynth1.volume.value = -12;
+		const icesynth1 = this.getSynth(2);
+		icesynth1.volume.value = -12;
+		
+		const precipNotes = this.getPrecipNotes(newind);
+		const precipNotes1 = this.getPrecipNotes1(newind);
+		const tempNotes = this.getTempNotes(newind);
+		const tempNotes1 = this.getTempNotes1(newind);
+		const iceNotes = this.getIceNotes(newind);
+		const iceNotes1 = this.getIceNotes1(newind);
 		
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
 		const precipPattern = new Tone.Pattern((time, note) => {
@@ -624,34 +750,55 @@ class AllTogether extends Simulation {
 			Tone.Draw.schedule(() => {
 				this.incrementIndex();
 			}, time)
-		}, this.getPrecipNotes(newind));
+		}, precipNotes);
 		precipPattern.humanize = true;
+		
+		const precipPattern1 = new Tone.Pattern((time, note) => {
+			precipsynth1.triggerAttackRelease(note, '16n', time);
+		}, precipNotes1);
+		precipPattern1.humanize = true;
 		
 		const tempPattern = new Tone.Pattern((time, note) => {
 			tempsynth.triggerAttackRelease(note, '16n', time);
-		}, this.getTempNotes(newind));
+		}, tempNotes);
 		tempPattern.humanize = true;
+		
+		const tempPattern1 = new Tone.Pattern((time, note) => {
+			tempsynth1.triggerAttackRelease(note, '16n', time);
+		}, tempNotes1);
+		tempPattern1.humanize = true;
 		
 		const icePattern = new Tone.Pattern((time, note) => {
 			icesynth.triggerAttackRelease(note, '16n', time);
-		}, this.getIceNotes(newind));
+		}, iceNotes);
 		icePattern.humanize = true;
+		
+		const icePattern1 = new Tone.Pattern((time, note) => {
+			icesynth1.triggerAttackRelease(note, '16n', time);
+		}, iceNotes1);
+		icePattern1.humanize = true;
 
 		// catches most errors
 		if(this.state.audioAvailable) {
 			precipPattern.start(0);
-			tempPattern.start(0.001);
+			precipPattern1.start(0);
+			tempPattern.start(0);
+			tempPattern1.start(0);
 			if(this.getValByIndex(this.state.iceAvg, 0) !== 0){
-				icePattern.start(0.002);
+				icePattern.start(0);
+				icePattern1.start(0);
 			}
 			Tone.Transport.start('+0');
 		} else {
 			Tone.start().then(() => {
 				this.setState({ audioAvailable: true })
 				precipPattern.start(0.001);
-				tempPattern.start(0.002);
+				precipPattern1.start(0.001);
+				tempPattern.start(0.001);
+				tempPattern1.start(0.001);
 				if(this.getValByIndex(this.state.iceAvg, 0) !== 0){
-					icePattern.start(0);
+					icePattern.start(0.001);
+					icePattern1.start(0.001);
 				}
 				Tone.Transport.start('+0');
 			}).catch(error => console.error(error));
