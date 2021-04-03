@@ -573,6 +573,13 @@ class EachAlone extends Simulation {
     			this.setupGraph();
     			this.updateGraph();
     			console.log(coord_data);
+    			if(this.state.state === 0){
+   	 			this.setPrecipNotes1(coord_data);
+    			}else if(this.state.state === 1){
+    				this.setTempNotes1(coord_data);
+    			}else if(this.state.state === 2){
+   	 			this.setIceNotes1(coord_data);
+    			}
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
@@ -704,6 +711,22 @@ class EachAlone extends Simulation {
 	return notes;
     }
     
+    noteHelper1 = (ind) => {
+    	var notes = [];
+    	if(this.state.state === 0){
+		notes = this.getPrecipNotes1(ind);
+	}
+	
+	else if(this.state.state === 1){
+		notes = this.getTempNotes1(ind);
+	}
+	
+	else{
+		notes = this.getIceNotes1(ind);
+	}
+	return notes;
+    }
+    
     playMusic = () => {
     	if(this.state.waiting > 0){
     		console.log('waiting');
@@ -714,8 +737,11 @@ class EachAlone extends Simulation {
 		newind = 0;
 	}
 	const synth = this.getSynth(this.state.state);
+	const synth1 = this.getSynth(this.state.state);
+	synth1.volume.value = -10;
 	this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
 	const notes = this.noteHelper(newind);
+	const notes1 = this.noteHelper1(newind);
 		
 	const notePattern = new Tone.Pattern((time, note) => {
 		synth.triggerAttackRelease(note, '16n', time);
@@ -726,14 +752,21 @@ class EachAlone extends Simulation {
 	}, notes);
 	notePattern.humanize = true;
 	
+	const notePattern1 = new Tone.Pattern((time, note) => {
+		synth1.triggerAttackRelease(note, '16n', time);
+	}, notes1);
+	notePattern1.humanize = true;
+	
 	// catches most errors
 	if(this.state.audioAvailable) {
 		notePattern.start(0);
+		notePattern1.start(0);
 		Tone.Transport.start('+0');
 	} else {
 		Tone.start().then(() => {
 			this.setState({ audioAvailable: true })
 			notePattern.start(0);
+			notePattern1.start(0);
 			Tone.Transport.start('+0');
 		}).catch(error => console.error(error));
 	}

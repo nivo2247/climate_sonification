@@ -41,6 +41,9 @@ export class Simulation extends Page {
 		this.state.precipNotes = [];
 		this.state.tempNotes = [];
 		this.state.iceNotes = [];
+		this.state.precipNotes1 = [];
+		this.state.tempNotes1 = [];
+		this.state.iceNotes1 = [];
 		this.state.closestCity = '';
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
@@ -131,6 +134,22 @@ export class Simulation extends Page {
 		});
 	}
 	
+	setPrecipNotes1 = (data) => {
+		var precipNoteArr = [];
+		var precip_val;
+		var note;
+		
+		for(var i = 0; i < 181; i++){
+    			precip_val = this.getValByIndex(data, i);
+    			note = this.getNote(0, precip_val);
+    			precipNoteArr.push(note)
+		}
+		
+		this.setState({
+			precipNotes1: [...precipNoteArr]
+		});
+	}
+	
 	setTempNotes = (data) => {
 		var tempNoteArr = [];
 		var temp_val;
@@ -148,6 +167,23 @@ export class Simulation extends Page {
 		});
 	}
 	
+	setTempNotes1 = (data) => {
+		var tempNoteArr = [];
+		var temp_val;
+		var note;
+		
+		for(var i = 0; i < 181; i++){
+    			temp_val = this.getValByIndex(data, i);
+    			note = this.getNote(1, temp_val);
+    			tempNoteArr.push(note);
+    			
+		}
+		
+		this.setState({
+			tempNotes1: [...tempNoteArr]
+		});
+	}
+	
 	setIceNotes = (data) => {
 		var iceNoteArr = [];
 		var ice_val;
@@ -161,6 +197,22 @@ export class Simulation extends Page {
 		
 		this.setState({
 			iceNotes: [...iceNoteArr]
+		});
+	}
+	
+	setIceNotes1 = (data) => {
+		var iceNoteArr = [];
+		var ice_val;
+		var note;
+		
+		for(var i = 0; i < 181; i++){
+    			ice_val = this.getValByIndex(data, i);
+    			note = this.getNote(2, ice_val);
+    			iceNoteArr.push(note);
+		}
+		
+		this.setState({
+			iceNotes1: [...iceNoteArr]
 		});
 	}
 	
@@ -402,6 +454,17 @@ export class Simulation extends Page {
 		}
 	}
 	
+	getPrecipNotes1 = (index) => {
+		if(this.state.precipNotes1.length === 0){
+			return ['C5', 'D5', 'F5', 'G5'];
+		}else{
+			if(index >= this.state.precipNotes1.length){
+				return ['C5', 'D5', 'F5', 'G5'];
+			}
+			return this.state.precipNotes1.slice(index);
+		}
+	}
+	
 	getTempNotes = (index) => {
 		if(this.state.tempNotes.length === 0){
 			return ['C5', 'D5', 'F5', 'G5'];
@@ -413,6 +476,17 @@ export class Simulation extends Page {
 		}
 	}
 	
+	getTempNotes1 = (index) => {
+		if(this.state.tempNotes1.length === 0){
+			return ['C5', 'D5', 'F5', 'G5'];
+		}else{
+			if(index >= this.state.tempNotes1.length){
+				return ['C5', 'D5', 'F5', 'G5'];
+			}
+			return this.state.tempNotes1.slice(index);
+		}
+	}
+	
 	getIceNotes = (index) => {
 		if(this.state.iceNotes.length === 0){
 			return ['C5', 'D5', 'F5', 'G5'];
@@ -421,6 +495,17 @@ export class Simulation extends Page {
 				return ['C5', 'D5', 'F5', 'G5'];
 			}
 			return this.state.iceNotes.slice(index);
+		}
+	}
+	
+	getIceNotes1 = (index) => {
+		if(this.state.iceNotes1.length === 0){
+			return ['C5', 'D5', 'F5', 'G5'];
+		}else{
+			if(index >= this.state.iceNotes1.length){
+				return ['C5', 'D5', 'F5', 'G5'];
+			}
+			return this.state.iceNotes1.slice(index);
 		}
 	}
 			
