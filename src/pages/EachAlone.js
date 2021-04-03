@@ -18,6 +18,8 @@ function isNumeric(value) {
 
 let cancelYear;
 let cancelCoord;
+let cancelCoord1;
+let cancelCoord2;
 
 const CancelToken = Axios.CancelToken;
 
@@ -27,7 +29,9 @@ class EachAlone extends Simulation {
     constructor(props){
     super(props)
        	this.state.yearData = [0];
-    	this.state.coordData = [0];        	
+    	this.state.coordData = [0]; 
+    	this.state.coordData1 = [0];
+    	this.state.coordData2 = [0];       	
     	this.state.state = 0;
     	this.state.modelStr = "/precip/precip_ens";
     	this.state.precipSrc = precipActive;
@@ -294,6 +298,30 @@ class EachAlone extends Simulation {
     				ctx.lineWidth = 2;
     			}
     			ctx.stroke();
+    			
+    			ctx.beginPath();
+    			for(precipInd = 0; precipInd <= this.state.index; precipInd++){
+    				prev_val = this.getValByIndex(this.state.coordData1, precipInd - 1);
+    				coord_val = this.getValByIndex(this.state.coordData1, precipInd);
+    			
+    				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_range));
+    				ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_range));
+    				ctx.strokeStyle = GREEN;
+    				ctx.lineWidth = 1;
+    			}
+    			ctx.stroke();
+    			
+    			ctx.beginPath();
+    			for(precipInd = 0; precipInd <= this.state.index; precipInd++){
+    				prev_val = this.getValByIndex(this.state.coordData2, precipInd - 1);
+    				coord_val = this.getValByIndex(this.state.coordData2, precipInd);
+    			
+    				ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_range));
+    				ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_range));
+    				ctx.strokeStyle = GREEN;
+    				ctx.lineWidth = 1;
+    			}
+    			ctx.stroke();
     		}
     		
     		if(this.state.state === 1){
@@ -309,6 +337,30 @@ class EachAlone extends Simulation {
  	   			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
  	   			ctx.strokeStyle = RED;
  	   			ctx.lineWidth = 2;
+	    		}
+	    		ctx.stroke();
+	    		
+	    		ctx.beginPath();
+   	 		for(tempInd = 0; tempInd <= this.state.index; tempInd++){
+   	 		    	prev_val = this.getValByIndex(this.state.coordData1, tempInd - 1);
+  	  			coord_val = this.getValByIndex(this.state.coordData1, tempInd);
+    			
+ 	   			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
+ 	   			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
+ 	   			ctx.strokeStyle = RED;
+ 	   			ctx.lineWidth = 1;
+	    		}
+	    		ctx.stroke();
+	    		
+	    		ctx.beginPath();
+   	 		for(tempInd = 0; tempInd <= this.state.index; tempInd++){
+   	 		    	prev_val = this.getValByIndex(this.state.coordData2, tempInd - 1);
+  	  			coord_val = this.getValByIndex(this.state.coordData2, tempInd);
+    			
+ 	   			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
+ 	   			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
+ 	   			ctx.strokeStyle = RED;
+ 	   			ctx.lineWidth = 1;
 	    		}
 	    		ctx.stroke();
     		}
@@ -327,6 +379,30 @@ class EachAlone extends Simulation {
 	    			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
 	    			ctx.strokeStyle = BLUE;
 	    			ctx.lineWidth = 2;
+	    		}
+	    		ctx.stroke();
+	    		
+	    		ctx.beginPath();
+    			for(iceInd = 0; iceInd <= this.state.index; iceInd++){
+   	 		    	prev_val = this.getValByIndex(this.state.coordData1, iceInd - 1);
+   	 			coord_val = this.getValByIndex(this.state.coordData1, iceInd);
+    			
+	    			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
+	    			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
+	    			ctx.strokeStyle = BLUE;
+	    			ctx.lineWidth = 1;
+	    		}
+	    		ctx.stroke(); 
+	    		
+	    		ctx.beginPath();
+    			for(iceInd = 0; iceInd <= this.state.index; iceInd++){
+   	 		    	prev_val = this.getValByIndex(this.state.coordData2, iceInd - 1);
+   	 			coord_val = this.getValByIndex(this.state.coordData2, iceInd);
+    			
+	    			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
+	    			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
+	    			ctx.strokeStyle = BLUE;
+	    			ctx.lineWidth = 1;
 	    		}
 	    		ctx.stroke(); 
     		}
@@ -445,8 +521,6 @@ class EachAlone extends Simulation {
     	if(cancelCoord !== undefined){
     		cancelCoord();
     	}
-    	
-	this.setState({waiting: 1});
     
     	Axios.get(request, {
     		cancelToken: new CancelToken(function executor(c){
@@ -479,6 +553,64 @@ class EachAlone extends Simulation {
     		});
     }
     
+    coordApi1 = (request) => {
+    	if(cancelCoord1 !== undefined){
+    		cancelCoord1();
+    	}
+    
+    	Axios.get(request, {
+    		cancelToken: new CancelToken(function executor(c){
+    			cancelCoord1 = c;
+    		})
+    	})
+		.then(res => {
+    			const coord_data = res.data.data;
+    			var currwait = this.state.waiting;
+    			this.setState({ 
+    				coordData1: [...coord_data],
+    				waiting: currwait - 1
+    			});
+    			this.setupGraph();
+    			this.updateGraph();
+    			console.log(coord_data);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('coord1 request cancelled');
+    				
+    			}
+    		});
+    }
+    
+    coordApi2 = (request) => {
+    	if(cancelCoord2 !== undefined){
+    		cancelCoord2();
+    	}
+    
+    	Axios.get(request, {
+    		cancelToken: new CancelToken(function executor(c){
+    			cancelCoord1 = c;
+    		})
+    	})
+		.then(res => {
+    			const coord_data = res.data.data;
+    			var currwait = this.state.waiting;
+    			this.setState({ 
+    				coordData2: [...coord_data],
+    				waiting: currwait - 1
+    			});
+    			this.setupGraph();
+    			this.updateGraph();
+    			console.log(coord_data);
+    		})
+    		.catch((error) => {
+    			if(Axios.isCancel(error)){
+    				console.log('coord2 request cancelled');
+    				
+    			}
+    		});
+    }
+    
     /*** Get the value of every year of a coords lifespan ***/
     doCoordHits(state, lat, lon){
     	var closestcity = getClosestCity(lat, lon);
@@ -494,18 +626,29 @@ class EachAlone extends Simulation {
 	/* Filter and do db hit here */
 	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
 		var table = dbUrl.concat("/table/")
-		var intermediate = "";
+		var intermediate, intermediate1, intermediate2;
 		if(state === 0){
 			intermediate = table.concat("precipavg/coord/(");
+			intermediate1 = table.concat("precip001/coord/(");
+			intermediate2 = table.concat("precip002/coord/(");
 		}
 		else if(state === 1){
 			intermediate = table.concat("tempavg/coord/(");
+			intermediate1 = table.concat("temp001/coord/(");
+			intermediate2 = table.concat("temp002/coord/(");
 		}
 		else if(state === 2){
 			intermediate = table.concat("seaiceavg/coord/(");
+			intermediate1 = table.concat("seaice001/coord/(");
+			intermediate2 = table.concat("seaice002/coord/(");
 		}
 		var request = intermediate.concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		this.setState({waiting: 3});
 		this.coordApi(request);
+		request = intermediate1.concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		this.coordApi1(request);
+		request = intermediate2.concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		this.coordApi2(request);
 	}
     };
     
@@ -696,10 +839,10 @@ class EachAlone extends Simulation {
     	if(coord_val < 0){
     		data_pre = "Temperature: ";
     	}
-    	data_post = " Celcius";
+    	data_post = " Celsius (vs 1920-1950)";
     }
     else if(this.state.state === 2){
-    	data_pre = "Sea Ice: ";
+    	data_pre = "Sea Ice Fraction: ";
     	data_post = " %" 
     	coord_val *= 100;
     }
@@ -734,7 +877,7 @@ class EachAlone extends Simulation {
 			
 			<div style={largeControlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
-				<p style={paragraphTextStyle}>1.Select a variable below<br/>2. Touch the map to select a location<br/>3. Touch the timeline to select a starting year.<br/>4. Press the play button.<br/>5. Select a tempo</p>
+				<p style={paragraphTextStyle}>1.Select a variable below<br/>2. Touch the map to select a location<br/>3. Touch the timeline to select a starting year.<br/>4. Select a tempo<br/>5. Press the play button.</p>
 			</div>
 			
 			<div style={dataBlockStyle}>

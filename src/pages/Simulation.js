@@ -120,7 +120,7 @@ export class Simulation extends Page {
 		var precip_val;
 		var note;
 		
-		for(var i = 0; i < 180; i++){
+		for(var i = 0; i < 181; i++){
     			precip_val = this.getValByIndex(data, i);
     			note = this.getNote(0, precip_val);
     			precipNoteArr.push(note)
@@ -136,7 +136,7 @@ export class Simulation extends Page {
 		var temp_val;
 		var note;
 		
-		for(var i = 0; i < 180; i++){
+		for(var i = 0; i < 181; i++){
     			temp_val = this.getValByIndex(data, i);
     			note = this.getNote(1, temp_val);
     			tempNoteArr.push(note);
@@ -153,7 +153,7 @@ export class Simulation extends Page {
 		var ice_val;
 		var note;
 		
-		for(var i = 0; i < 180; i++){
+		for(var i = 0; i < 181; i++){
     			ice_val = this.getValByIndex(data, i);
     			note = this.getNote(2, ice_val);
     			iceNoteArr.push(note);
@@ -395,10 +395,10 @@ export class Simulation extends Page {
 		if(this.state.precipNotes.length === 0){
 			return ['C5', 'D5', 'F5', 'G5'];
 		}else{
-			if(index + 1 >= this.state.precipNotes.length){
+			if(index >= this.state.precipNotes.length){
 				return ['C5', 'D5', 'F5', 'G5'];
 			}
-			return this.state.precipNotes.slice(index + 1);
+			return this.state.precipNotes.slice(index);
 		}
 	}
 	
@@ -406,10 +406,10 @@ export class Simulation extends Page {
 		if(this.state.tempNotes.length === 0){
 			return ['C5', 'D5', 'F5', 'G5'];
 		}else{
-			if(index + 1 >= this.state.tempNotes.length){
+			if(index >= this.state.tempNotes.length){
 				return ['C5', 'D5', 'F5', 'G5'];
 			}
-			return this.state.tempNotes.slice(index + 1);
+			return this.state.tempNotes.slice(index);
 		}
 	}
 	
@@ -417,10 +417,10 @@ export class Simulation extends Page {
 		if(this.state.iceNotes.length === 0){
 			return ['C5', 'D5', 'F5', 'G5'];
 		}else{
-			if(index + 1 >= this.state.iceNotes.length){
+			if(index >= this.state.iceNotes.length){
 				return ['C5', 'D5', 'F5', 'G5'];
 			}
-			return this.state.iceNotes.slice(index + 1);
+			return this.state.iceNotes.slice(index);
 		}
 	}
 			

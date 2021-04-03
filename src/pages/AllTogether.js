@@ -827,7 +827,7 @@ class AllTogether extends Simulation {
 			
 			<div style={largeControlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
-				<p style={paragraphTextStyle}>1. Touch the map to select a location<br/>2. Touch the timeline to select a starting year<br/>3. Press the play button.<br/>4. Select a tempo</p>
+				<p style={paragraphTextStyle}>1. Touch the map to select a location<br/>2. Touch the timeline to select a starting year<br/>3. Select a tempo<br/>4. Press the play button.</p>
 			</div>
 			
 			<div style={controlBlockStyle}>
@@ -985,10 +985,10 @@ class AllTogether extends Simulation {
 					<p style={smallLabelTextStyle}>Precipitation: {precip_val} % of Annual Avg</p>
 				</div>
 				<div style={dataThirdStyle}>
-					<p style={smallLabelTextStyle}>{temp_pre}{temp_val} Celcius</p>
+					<p style={smallLabelTextStyle}>{temp_pre}{temp_val} Celsius (vs 1920-1950)</p>
 				</div>
 				<div style={dataThirdStyle}>
-					<p style={smallLabelTextStyle}>Sea Ice: {ice_val} %</p>
+					<p style={smallLabelTextStyle}>Sea Ice Fraction: {ice_val} %</p>
 				</div>
 			</div>
 			
