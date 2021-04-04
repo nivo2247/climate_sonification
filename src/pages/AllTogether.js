@@ -904,9 +904,121 @@ class AllTogether extends Simulation {
     	Tone.Transport.start('+0');
     	this.testIceMusic(e);
     }
+    
+    getLocations = () => {
+    	var fsize = 12;
+    	/* A bunch of variables used to calculate crosshair position */
+        var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
+    	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
+    	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
+    	var modelTop = 0;
+    	if (this.state.pageBottom > this.state.pageRight){
+    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
+    	}
+    	
+    	var centerX = 0;
+    	var centerY = 0;
+    	
+    	var xAdj = (this.state.longitude * modelDiv / 360) - (fsize / 4);
+    	var yAdj = (this.state.latitude * modelSplit / 180) + (fsize / 2);
+	
+	centerX = modelLeft + modelDiv / 2;
+	centerY = modelTop + modelSplit / 2;
+	var location1 = {
+    		position: 'absolute',
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
+    		color: 'red',
+    		fontSize: fsize,
+    		border: '1px solid red',
+    		backgroundColor: 'white',
+    		lineHeight: 1
+    	}
+	
+	
+    	centerX = modelLeft + modelDiv + modelDiv / 2;
+    	centerY = modelTop + modelSplit / 2;	
+    	var location2 = {
+    		position: 'absolute',
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
+    		color: 'red',
+    		fontSize: fsize,
+    		border: '1px solid red',
+    		backgroundColor: 'white',
+    		lineHeight: 1
+    	}
+	
+	centerX = modelLeft + modelDiv / 2;
+    	centerY = modelTop + modelSplit + modelSplit / 2;   	
+    	var location4 = {
+    		position: 'absolute',
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
+    		color: 'red',
+    		fontSize: fsize,
+    		border: '1px solid red',
+    		backgroundColor: 'white',
+    		lineHeight: 1
+    	}
+    	
+    	centerX = modelLeft + modelDiv + modelDiv / 2;
+    	centerY = modelTop + modelSplit + modelSplit / 2;   	
+    	var location5 = {
+    		position: 'absolute',
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
+    		color: 'red',
+    		fontSize: fsize,
+    		border: '1px solid red',
+    		backgroundColor: 'white',
+    		lineHeight: 1
+    	}
+	
+	xAdj = 0 - fsize / 2;
+    	yAdj = 0 + fsize / 2;
+    		
+    	//var r = 90 - this.state.latitude;
+    	//console.log(r);
+    	
+    	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
+    	centerY = modelTop + modelSplit / 2;
+    	var location3 = {
+    		position: 'absolute',
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
+    		color: 'red',
+    		fontSize: fsize,
+    		border: '1px solid red',
+    		backgroundColor: 'white',
+    		lineHeight: 1
+    	}
+	
+	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
+    	centerY = modelTop + modelSplit + modelSplit / 2;
+    	var location6 = {
+    		position: 'absolute',
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
+    		color: 'red',
+    		fontSize: 12,
+    		border: '1px solid red',
+    		backgroundColor: 'white',
+    		lineHeight: 1
+    	}
+    	
+    	if(this.state.latitude < 65){
+    		location3.display = 'none';
+    		location6.display = 'none';
+    	}
+    	
+    	return { location1, location2, location3, location4, location5, location6 };
+    }
 
     /*** runs on state update ***/   
     render(){
+    
+    var { location1, location2, location3, location4, location5, location6 } = this.getLocations();
     
     var playButton = this.getPlayButton();
     
@@ -1165,8 +1277,13 @@ class AllTogether extends Simulation {
 				<img style={sliderStyle} alt="" src={timelineImg}/>
 			</div>
 			
-		</div>  
-		
+		</div>
+		<div style={location1} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location2} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location3} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location4} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location5} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location6} onPointerUp={this.onPointerUp}>o</div> 
     	</div> 
      );
      }

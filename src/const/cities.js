@@ -105,7 +105,6 @@ export function getClosestCity(lat, lon){
     			closestcity = cities[i].city;
     		}
     	}
-    	console.log(closestcity);
     	return closestcity;
 }
 

@@ -878,13 +878,47 @@ class EachAlone extends Simulation {
     	
     	var centerX = 0;
     	var centerY = 0;
+    	
+    	var xAdj = (this.state.longitude * modelDiv / 360) - (fsize / 4);
+    	var yAdj = (this.state.latitude * modelSplit / 180) + (fsize / 2);
+    	
+    	if(this.state.state === 2){
+    		xAdj = 0 - fsize / 2;
+    		yAdj = 0 + fsize / 2;
+    		
+    		//var r = 90 - this.state.latitude;
+    		//console.log(r);
+    		
+    		/*
+    		var dx = x - centerX;
+		var dy = centerY - y;
+		var r = Math.sqrt(dx ** 2 + dy ** 2);
+		var theta = Math.atan(dy / dx);
+		var projy = r / 2;
+		var projx = centerX;
+		if (dx <= 0) {
+			projx -= r * Math.cos((theta + Math.PI / 2) / 2);
+		}
+		else {
+			projx += r * Math.cos((theta - Math.PI / 2) / 2);
+		}
+		
+		var projX = this.state.longitude * modelDiv / 540 - centerX;
+		var projY = (this.state.latitude - 90) * modelSplit / 90;
+		
+		x = dx + centerX;
+		y = centerY - dy;
+		
+		console.log('px: ', projX, ' py: ', projY);
+		*/
+    	}
 	
 	centerX = modelLeft + modelDiv / 2;
 	centerY = modelTop + modelSplit / 2;
 	var location1 = {
     		position: 'absolute',
-    		left: centerX - (fsize / 2),
-    		top: centerY - (fsize / 2),
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -897,8 +931,8 @@ class EachAlone extends Simulation {
     	centerY = modelTop + modelSplit / 2;	
     	var location2 = {
     		position: 'absolute',
-    		left: centerX - (fsize / 2),
-    		top: centerY - (fsize / 2),
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -910,8 +944,8 @@ class EachAlone extends Simulation {
     	centerY = modelTop + modelSplit / 2;
     	var location3 = {
     		position: 'absolute',
-    		left: centerX - (fsize / 2),
-    		top: centerY - (fsize / 2),
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -923,8 +957,8 @@ class EachAlone extends Simulation {
     	centerY = modelTop + modelSplit + modelSplit / 2;   	
     	var location4 = {
     		position: 'absolute',
-    		left: centerX - (fsize / 2),
-    		top: centerY - (fsize / 2),
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -936,8 +970,8 @@ class EachAlone extends Simulation {
     	centerY = modelTop + modelSplit + modelSplit / 2;   	
     	var location5 = {
     		position: 'absolute',
-    		left: centerX - (fsize / 2),
-    		top: centerY - (fsize / 2),
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -949,13 +983,22 @@ class EachAlone extends Simulation {
     	centerY = modelTop + modelSplit + modelSplit / 2;
     	var location6 = {
     		position: 'absolute',
-    		left: centerX - (fsize / 2),
-    		top: centerY - (fsize / 2),
+    		left: centerX + xAdj,
+    		top: centerY - yAdj,
     		color: 'red',
     		fontSize: 12,
     		border: '1px solid red',
     		backgroundColor: 'white',
     		lineHeight: 1
+    	}
+    	
+    	if(this.state.state === 2 && this.state.latitude < 65){
+    		location1.display = 'none';
+    		location2.display = 'none';
+    		location3.display = 'none';
+    		location4.display = 'none';
+    		location5.display = 'none';
+    		location6.display = 'none';
     	}
     	
     	return { location1, location2, location3, location4, location5, location6 };
@@ -1229,12 +1272,12 @@ class EachAlone extends Simulation {
 			</div>
 			
 		</div> 
-		<div style={location1}>o</div>   
-		<div style={location2}>o</div>   
-		<div style={location3}>o</div>   
-		<div style={location4}>o</div>   
-		<div style={location5}>o</div>   
-		<div style={location6}>o</div>   
+		<div style={location1} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location2} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location3} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location4} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location5} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location6} onPointerUp={this.onPointerUp}>o</div>   
     	</div> 
      );
      }
