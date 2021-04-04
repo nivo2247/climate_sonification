@@ -1272,12 +1272,12 @@ class EachAlone extends Simulation {
 			</div>
 			
 		</div> 
-		<div style={location1} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location2} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location3} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location4} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location5} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location6} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location1} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location2} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location3} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location4} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location5} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location6} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
     	</div> 
      );
      }

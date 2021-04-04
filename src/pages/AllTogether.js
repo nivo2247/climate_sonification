@@ -815,14 +815,12 @@ class AllTogether extends Simulation {
 		const note2 = this.getNote(2, val3);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
-			synth0.triggerAttackRelease(note0, '8n');
-			synth1.triggerAttackRelease(note1, '8n');
-			synth2.triggerAttackRelease(note2, '8n');
+			synth0.triggerAttackRelease(note0, '16n');
+			synth1.triggerAttackRelease(note1, '16n');
+			synth2.triggerAttackRelease(note2, '16n');
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
-		}, '+8n');
-		Tone.Transport.scheduleOnce((time) => {
 			synth0.dispose();
 			synth1.dispose();
 			synth2.dispose();
@@ -1278,12 +1276,12 @@ class AllTogether extends Simulation {
 			</div>
 			
 		</div>
-		<div style={location1} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location2} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location3} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location4} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location5} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location6} onPointerUp={this.onPointerUp}>o</div> 
+		<div style={location1} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location2} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location3} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location4} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location5} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location6} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div> 
     	</div> 
      );
      }

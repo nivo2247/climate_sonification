@@ -627,10 +627,8 @@ export class Simulation extends Page {
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
-		}, '+8n');
-		Tone.Transport.scheduleOnce((time) => {
 			synth.dispose();
-		}, '+4n');
+		}, '+8n');
 	}
 	
 	setupMapTransport = (e) => {
