@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-export const PADDING = 1;
-
 const timer = ms => new Promise(res => setTimeout(res, ms));
 
 /*** Shared class for EachAlone and AllTogether class ***/
@@ -13,7 +11,8 @@ export class Page extends React.Component {
     		pageRight: window.innerWidth,
     		pageBottomMax: window.innerHeight,
     		pageRightMax: window.innerWidth,
-    		co2data: [0]
+    		co2data: [0],
+    		PADDING: 40
     	};
     	this.graphRef = React.createRef();
     }  
@@ -23,8 +22,8 @@ export class Page extends React.Component {
     	var newheight = window.innerHeight;
     	var newwidth = window.innerWidth;
     	this.setState({
-    		pageBottom: newheight - PADDING,
-    		pageRight: newwidth - PADDING
+    		pageBottom: newheight - 1,
+    		pageRight: newwidth - 1
     	});
     } 
     

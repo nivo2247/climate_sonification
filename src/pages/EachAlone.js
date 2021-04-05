@@ -5,7 +5,6 @@ import Axios from 'axios';
 import PubSub from 'pubsub-js';
 import { isBrowser } from 'react-device-detect';
 import { Simulation } from './Simulation.js';
-import { PADDING } from './Page.js';
 import * as Tone from 'tone';
 import { getClosestCity, getInfo } from './../const/cities.js';
 import { RED, YELLOW, GREEN, BLUE } from './../const/color.js';
@@ -139,8 +138,8 @@ class EachAlone extends Simulation {
     	
     	if(window.innerHeight < window.innerWidth){
     		this.setState({
-    			pageBottom: newheight - PADDING,
-    			pageRight: newwidth - PADDING,
+    			pageBottom: newheight - this.state.PADDING - 1,
+    			pageRight: newwidth - this.state.PADDING - 1,
     			CONTROLDIV: 2 / 10,
 			SKINNYDIV: 1 / 20,
 			MAPDIV: 3 / 4,
@@ -149,13 +148,14 @@ class EachAlone extends Simulation {
 			GRAPHVERTDIV: 3 / 20,
 			SLIDERVERTDIV: 1 / 10,
 			CONTROLVERTDIV: 1,
-			CONTROLSPLIT: 1
+			CONTROLSPLIT: 1,
+			PADDING: 40
     		});
     	}
     	else{
     		this.setState({
-    			pageBottom: newheight - PADDING,
-    			pageRight: newwidth - PADDING,
+    			pageBottom: newheight - this.state.PADDING - 1,
+    			pageRight: newwidth - this.state.PADDING - 1,
     			CONTROLDIV: 1,
 			SKINNYDIV: 1 / 20,
 			MAPDIV: 19 / 20,
@@ -164,7 +164,8 @@ class EachAlone extends Simulation {
 			GRAPHVERTDIV: 3 / 20,
 			SLIDERVERTDIV: 1 / 10,
 			CONTROLVERTDIV: 7 / 20,
-			CONTROLSPLIT: 1 / 2
+			CONTROLSPLIT: 1 / 2,
+			PADDING: 20
     		});
     	}	
     	this.setupGraph();
@@ -1057,7 +1058,7 @@ class EachAlone extends Simulation {
     coord_val = Math.round(coord_val * 100) / 100;
     
     /* contains almost all the styling for the page */
-    const { modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle } = this.getCommonStyles();
+    const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle } = this.getCommonStyles();
     
     var newh = controlHeight * 9 / 40;
     if(this.state.CONTROLVERTDIV !== 1){
@@ -1075,6 +1076,7 @@ class EachAlone extends Simulation {
      
     /*** Return the page ***/
     return (
+    	<div style={pageDiv}>
     	<div style={containerStyle}>
     		<div style={controlDivStyle}>
     		<div style={controlContainerStyle}>
@@ -1282,6 +1284,7 @@ class EachAlone extends Simulation {
 		<div style={location4} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
 		<div style={location5} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
 		<div style={location6} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+    	</div>
     	</div> 
      );
      }

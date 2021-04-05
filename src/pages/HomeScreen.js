@@ -143,6 +143,7 @@ class HomeScreen extends Page {
     		pageBottomMax: window.innerHeight,
     		pageRightMax: window.innerWidth
     	});
+    	this.updateDimensions();
     }
     
     /*** runs on page close ***/

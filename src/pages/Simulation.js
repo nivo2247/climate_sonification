@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Tone from 'tone';
-import { PADDING, Page } from './Page.js';
+import { Page } from './Page.js';
 import { playUrl, loading } from './../const/url.js';
 
 /* used to wait a certain amount of ms */
@@ -17,8 +17,8 @@ export class Simulation extends Page {
 
 	constructor(props){
 	    super(props)
-		this.state.pageBottom = window.clientHeight - PADDING;
-		this.state.pageRight = window.clientWidth - PADDING;
+		this.state.pageBottom = window.clientHeight - this.state.PADDING;
+		this.state.pageRight = window.clientWidth - this.state.PADDING;
 		this.state.index = 0;
 		this.state.play = 0;
 		this.state.waiting = 0;
@@ -810,6 +810,12 @@ export class Simulation extends Page {
     	var microFontSize = smallFontSize - 2;
     	var largeFontSize = Math.floor(this.state.pageRight / 160 + this.state.pageBottom / 80);
     	
+    	const pageDiv = {
+    		height: this.state.pageBottom,
+    		width: this.state.pageRight,
+    		padding: this.state.PADDING / 2
+    	}
+    	
     	/*** style for model images and div ***/
     	const modelStyle = {
 		width: modelWidth,
@@ -839,7 +845,7 @@ export class Simulation extends Page {
     	};
     
     	const sliderStyle = {
-    		height: Math.floor(this.state.pageBottom * this.state.SLIDERVERTDIV / 2) - PADDING,
+    		height: Math.floor(this.state.pageBottom * this.state.SLIDERVERTDIV / 2) - this.state.PADDING,
     		width: '99%'
     	};
     
@@ -1131,7 +1137,7 @@ export class Simulation extends Page {
     	};
     
     	
-    	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle });
+    	return ({ pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle });
     }
     
     /*** These should never run because each class has separate functions,
