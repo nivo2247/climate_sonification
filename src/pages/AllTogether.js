@@ -1078,9 +1078,6 @@ class AllTogether extends Simulation {
     <div style={containerStyle}>
     		<div style={controlDivStyle}>
     		<div style={controlContainerStyle}>
-			<div style={controlBlockStyle} onPointerUp={() => this.callHome()}>
-				<img style={controlBlockStyle} alt="home button" src={homeButton} />
-			</div>
 			
 			<div style={largeControlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
@@ -1109,10 +1106,6 @@ class AllTogether extends Simulation {
 				</div>
 			</div>
 			
-		</div>
-			
-		<div style={controlContainerStyle}>
-		
 			<form>
 				<div style={dataBlockStyle}>
 					<label htmlFor='lat' style={labelControlStyle}> Lat:</label>
@@ -1120,7 +1113,7 @@ class AllTogether extends Simulation {
 					<label htmlFor='lon' style={labelControlStyle}> Lon:</label>
 					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
 				</div>
-			
+				
 				<div style={dataBlockStyle}>
 					<label htmlFor='city' style={bigLabelControlStyle}> Nearest City:</label>
 					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
@@ -1208,18 +1201,28 @@ class AllTogether extends Simulation {
 					</select>
 				</div>
 			</form>
+			
+		</div>
+			
+		<div style={controlContainerStyle}>
 		
 			<div style={dataBlockStyle}>
 				<div style={halfControlStyle}>
 					<p style={smallLabelTextStyle}>Year: {this.state.index + 1920}</p>
 				</div>
 				<div style={halfControlStyle}>
-					<p style={smallLabelTextStyle}>CO2: {co2val} ppm</p>
+					<p style={smallLabelTextStyle}>CO<sub>2</sub>: {co2val} ppm</p>
 				</div>
 			</div>
 			
+			<div style={controlBlockStyle}/>
+			
 			<div style={keyContainer}>
 				<img style={keyContainer} alt="graph key" src={graphKey}/>
+			</div>
+			
+			<div style={controlBlockStyle} onPointerUp={() => this.callHome()}>
+				<img style={controlBlockStyle} alt="home button" src={homeButton} />
 			</div>
 			
 		</div>

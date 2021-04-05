@@ -665,7 +665,7 @@ export class Simulation extends Page {
 			 		sustain: 0.7,
 			 		release: 1
 			 	},
-			 	volume: -2
+			 	volume: -4
 			 }).toDestination();
 		}
 		else if(type === 1){
@@ -679,7 +679,7 @@ export class Simulation extends Page {
 			 		sustain: 0.9,
 			 		release: 0.5
 			 	},
-			 	volume: -2
+			 	volume: -4
 			 }).toDestination();
 		}
 		else if(type === 2){
@@ -703,7 +703,8 @@ export class Simulation extends Page {
 					"decay": 0.5,
 					"sustain": 0.2,
 					"release": 0.1
-				}
+				},
+				volume: -4
 			}).toDestination();
 			//  retsynth.volume.value = 10;
 		}
@@ -851,7 +852,7 @@ export class Simulation extends Page {
     	
     	var playSplitDivStyle = {
     		height: Math.floor(controlHeight / (10)),
-    		width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 2),
+    		width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 3),
     		overflow: 'hidden',
     		float: 'left',
     	};
@@ -921,7 +922,7 @@ export class Simulation extends Page {
     	
     		playSplitDivStyle = {
     			height: Math.floor(controlHeight / (10 * (1 - this.state.CONTROLVERTDIV))),
-    			width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 2),
+    			width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 3),
     			overflow: 'hidden',
     			float: 'left',
     		};
@@ -1005,7 +1006,7 @@ export class Simulation extends Page {
     
     	const quarterControlStyle = {
     		height: Math.floor(controlHeight / (20)),
-    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 4),
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     		float: 'left',
     		'textAlign': 'center'
     	};
@@ -1076,17 +1077,20 @@ export class Simulation extends Page {
     	const moderatoHighlight = {
     		'backgroundColor': moderato,
     		'fontSize': microFontSize,
-    		'fontFamily': 'Verdana, sans-serif'
+    		'fontFamily': 'Verdana, sans-serif',
+    		'padding': '2px'
     	};
     	const allegroHighlight = {
     		'backgroundColor': allegro,
     		'fontSize': microFontSize,
-    		'fontFamily': 'Verdana, sans-serif'
+    		'fontFamily': 'Verdana, sans-serif',
+    		'padding': '2px'
     	};
     	const prestoHighlight = {
     		'backgroundColor': presto,
     		'fontSize': microFontSize,
     		'fontFamily': 'Verdana, sans-serif',
+    		'padding': '2px'
     	};
     
     	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle });

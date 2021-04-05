@@ -1078,9 +1078,6 @@ class EachAlone extends Simulation {
     	<div style={containerStyle}>
     		<div style={controlDivStyle}>
     		<div style={controlContainerStyle}>
-    			<div style={controlBlockStyle} onPointerUp={() => this.callHome()}>
-				<img style={controlBlockStyle} alt="home button" src={homeButton} />
-			</div>
 			
 			<div style={largeControlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
@@ -1122,17 +1119,19 @@ class EachAlone extends Simulation {
 				</div>
 			</div>
 			
-		</div>
-			
-		<div style={controlContainerStyle}>
-			<form>	
+			<form>
 				<div style={dataBlockStyle}>
 					<label for='lat' style={labelControlStyle}> Lat:</label>
 					<input type='text' style={inputControlStyle} id='lat' value={this.state.latitude} onChange={this.onChangeLat}/>
 					<label htmlFor='lon' style={labelControlStyle}> Lon:</label>
 					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
 				</div>
-				
+			</form>
+			
+		</div>
+			
+		<div style={controlContainerStyle}>
+			<form>	
 				<div style={dataBlockStyle}>
 					<label htmlFor='city' style={bigLabelControlStyle}> Nearest City:</label>
 					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
@@ -1227,12 +1226,17 @@ class EachAlone extends Simulation {
 					<p style={smallLabelTextStyle}>Year: {this.state.index + 1920}</p>
 				</div>
 				<div style={halfControlStyle}>
-					<p style={smallLabelTextStyle}>CO2: {co2val} ppm</p>
+					<p style={smallLabelTextStyle}>CO<sub>2</sub>: {co2val} ppm</p>
 				</div>
 			</div>
 			
+			<div style={dataBlockStyle}/>
+			
 			<div style={keyContainer}>
 				<img style={keyContainer} alt="graph key" src={graphKey}/>
+			</div>
+			<div style={controlBlockStyle} onPointerUp={() => this.callHome()}>
+				<img style={controlBlockStyle} alt="home button" src={homeButton} />
 			</div>
 		</div>
 		</div>

@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Page } from './Page.js';
-import { isBrowser } from 'react-device-detect';
+import { isBrowser, isMobile } from 'react-device-detect';
 import { eachAloneButton, allTogetherButton, qrImg, dbUrl } from './../const/url.js';
 import Axios from 'axios';
 
 function redirect(){
-	window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
+	if(isMobile){
+		window.location.href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability";
+	}
 };
 
 class HomeScreen extends Page { 
