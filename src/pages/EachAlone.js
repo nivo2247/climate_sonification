@@ -185,9 +185,9 @@ class EachAlone extends Simulation {
     	}
     	/* A bunch of variables used to calculate mouse position */
         var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
-    	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
+    	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV)) + this.state.PADDING / 2;
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
-    	var modelTop = 0;
+    	var modelTop = this.state.PADDING / 2;
     	if (this.state.pageBottom > this.state.pageRight){
     		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
     	}
@@ -870,9 +870,9 @@ class EachAlone extends Simulation {
     	var fsize = 12;
     	/* A bunch of variables used to calculate crosshair position */
         var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
-    	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV));
+    	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV)) + this.state.PADDING / 2;
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
-    	var modelTop = 0;
+    	var modelTop = this.state.PADDING / 2;
     	if (this.state.pageBottom > this.state.pageRight){
     		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
     	}
