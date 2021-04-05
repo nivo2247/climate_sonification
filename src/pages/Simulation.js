@@ -721,6 +721,25 @@ export class Simulation extends Page {
 			this.stopMusic(0);
 		}
 	}
+	
+    getDBCoords = () => {
+	var dbX = 1;
+    	var dbY = 1;
+    	var useLat = this.state.latitude;
+    	var useLon = this.state.longitude;
+    	
+    	if(useLon >= 0){
+    		useLon -= 179;
+    	}else{
+    		useLon += 180;
+    	}
+    	
+    	dbY = Math.floor((91 - useLat) * (240 / 180));
+    	dbX = Math.floor((181 + useLon) * 320 / 360); 
+	
+	return { dbX, dbY };
+	
+    }
     
     /*** onPress for 'moderato' ***/   
     setModerato = () => {

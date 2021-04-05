@@ -186,10 +186,7 @@ class AllTogether extends Simulation {
 	   	longitude: Math.floor(lonSave),
 	   	useArray: 0
 	});	
-   	var dbX = 1;
-   	var dbY = 1;
-    	dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
-    	dbX = Math.floor((181 + this.state.longitude) * 320 / 360);
+   	var {dbX, dbY} = this.getDBCoords(); 
     	var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.precipAvgAllCoords.length >= coord_index && this.state.tempAvgAllCoords.length >= coord_index && this.state.iceAvgAllCoords.length >= coord_index){
     		var val0 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
@@ -507,10 +504,7 @@ class AllTogether extends Simulation {
      
      triggerNotes = (lat, lon) => {
     	var precip_val, temp_val, ice_val;
-    	var dbX = 1;
-   	var dbY = 1;
-   	dbY = Math.floor((91 - lat) * (240 / 180));
-   	dbX = Math.floor((181 + lon) * 320 / 360);
+    	var {dbX, dbY} = this.getDBCoords(); 
     	var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.precipAvgAllCoords.length > coord_index){
     		precip_val = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
@@ -682,10 +676,7 @@ class AllTogether extends Simulation {
     /*** query db for all years of a specific coord ***/
     doCoordHits(lat, lon){
     	var closestcity = getClosestCity(lat, lon)
-    	var dbX = 1;
-    	var dbY = 1;
-    	dbY = Math.floor((91 - lat) * (240 / 180));
-	dbX = Math.floor((181 + lon) * 320 / 360);
+    	var {dbX, dbY} = this.getDBCoords(); 
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon),
@@ -1021,10 +1012,7 @@ class AllTogether extends Simulation {
     
     var playButton = this.getPlayButton();
     
-    var dbX = 1;
-    var dbY = 1;
-    dbY = Math.floor((91 - this.state.latitude) * (240 / 180));
-    dbX = Math.floor((181 + this.state.longitude) * 320 / 360);  
+    var {dbX, dbY} = this.getDBCoords(); 
     
     var co2val = Math.round(this.state.co2data[this.state.index].co2_val);
     
