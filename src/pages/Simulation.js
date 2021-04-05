@@ -269,7 +269,8 @@ export class Simulation extends Page {
 	}
 	
 	getNote = (type, value) => {
-		var retval = 'A5';
+		var retval = 'Ab5';
+		// Ab Major
 		if(type === 0){
 			if(value < 50){
 				retval = 'Ab2';
@@ -284,43 +285,43 @@ export class Simulation extends Page {
 			}else if(value < 85){
 				retval = 'F3';
 			}else if(value < 90){
-				retval = 'Gb3';
+				retval = 'G3';
 			}else if(value < 92.5){
-				retval = 'A3';
+				retval = 'Ab3';
 			}else if(value < 95){
-				retval = 'B3';
+				retval = 'Bb3';
 			}else if(value < 97.5){
 				retval = 'C4';
 			}else if(value < 100){
-				retval = 'D4';
+				retval = 'Db4';
 			}else if(value < 102.5){
-				retval = 'E4';
+				retval = 'Eb4';
 			}else if(value < 105){
 				retval = 'F4';
 			}else if(value < 107.5){
 				retval = 'G4';
 			}else if(value < 110){
-				retval = 'A4';
+				retval = 'Ab4';
 			}else if(value < 115){
-				retval = 'B4';
+				retval = 'Bb4';
 			}else if(value < 120){
 				retval = 'C5';
 			}else if(value < 125){
-				retval = 'D5';
+				retval = 'Db5';
 			}else if(value < 130){
-				retval = 'E5';
+				retval = 'Eb5';
 			}else if(value < 135){
 				retval = 'F5';
 			}else if(value < 140){
 				retval = 'G5';
 			}else if(value < 145){
-				retval = 'A5';
+				retval = 'Ab5';
 			}else if(value < 150){
 				retval = 'Bb5';
 			}else if(value < 155){
 				retval = 'C6';
 			}else if(value < 160){
-				retval = 'D6';
+				retval = 'Db6';
 			}else if(value < 165){
 				retval = 'Eb6';
 			}else if(value < 170){
@@ -340,67 +341,70 @@ export class Simulation extends Page {
 			}else if(value < 260){
 				retval = 'F7';
 			}else if(value < 280){
-				retval = 'Gb7';
+				retval = 'G7';
 			}else{
 				retval = 'Ab7';
 			}
 			
 		}
+		// harmonic minor (ascending).  Note that Phrygian dominant and spanish gypsie are both the 5th mode
+		// of harmonic minor.  Since this isn't a composition, and the data can do what it wants (won't necessarily
+		// revolve around some root note) these are all effectively the same scale.
 		else if(type === 1){
 			if(value < -0.5){
 				retval = 'Ab2';
 			}else if(value < -0.25){
 				retval = 'Bb2';
 			}else if(value < 0){
-				retval = 'C3';
+				retval = 'B2';
 			}else if(value < 0.05){
 				retval = 'Db3';
 			}else if(value < 0.1){
 				retval = 'Eb3';
 			}else if(value < 0.15){
-				retval = 'F3';
+				retval = 'E3';
 			}else if(value < 0.2){
-				retval = 'Gb3';
+				retval = 'G3';
 			}else if(value < 0.3){
-				retval = 'A3';
+				retval = 'Ab3';
 			}else if(value < 0.4){
-				retval = 'B3';
+				retval = 'Bb3';
 			}else if(value < 0.5){
-				retval = 'C4';
+				retval = 'B3';
 			}else if(value < 0.6){
-				retval = 'D4';
+				retval = 'Db4';
 			}else if(value < 0.75){
-				retval = 'E4';
+				retval = 'Eb4';
 			}else if(value < 1){
-				retval = 'F4';
+				retval = 'E4';
 			}else if(value < 1.25){
 				retval = 'G4';
 			}else if(value < 1.5){
-				retval = 'A4';
+				retval = 'Ab4';
 			}else if(value < 1.75){
-				retval = 'B4';
+				retval = 'Bb4';
 			}else if(value < 2){
-				retval = 'C5';
+				retval = 'B4';
 			}else if(value < 2.5){
-				retval = 'D5';
+				retval = 'Db5';
 			}else if(value < 3){
-				retval = 'E5';
+				retval = 'Eb5';
 			}else if(value < 3.5){
-				retval = 'F5';
+				retval = 'E5';
 			}else if(value < 4){
 				retval = 'G5';
 			}else if(value < 4.5){
-				retval = 'A5';
+				retval = 'Ab5';
 			}else if(value < 5){
 				retval = 'Bb5';
 			}else if(value < 6){
-				retval = 'C6';
+				retval = 'B5';
 			}else if(value < 7){
-				retval = 'D6';
+				retval = 'Db6';
 			}else if(value < 8){
 				retval = 'Eb6';
 			}else if(value < 9){
-				retval = 'F6';
+				retval = 'E6';
 			}else if(value < 10){
 				retval = 'G6';
 			}else if(value < 11){
@@ -408,86 +412,87 @@ export class Simulation extends Page {
 			}else if(value < 12){
 				retval = 'Bb6';
 			}else if(value < 13){
-				retval = 'C7';
+				retval = 'B6';
 			}else if(value < 14){
 				retval = 'Db7';
 			}else if(value < 15){
 				retval = 'Eb7';
 			}else if(value < 16){
-				retval = 'F7';
+				retval = 'E7';
 			}else{
-				retval = 'Gb7';
+				retval = 'G7';
 			}
 		}
+		// Double harmonic
 		else if(type === 2){
 			if(value > 0.98){
 				retval = 'G6';
 			}else if(value > 0.96){
-				retval = 'F6';
-			}else if(value > 0.955){
 				retval = 'E6';
+			}else if(value > 0.955){
+				retval = 'Eb6';
 			}else if(value > 0.95){
-				retval = 'D6';
+				retval = 'Db6';
 			}else if(value > 0.945){
 				retval = 'C6';
 			}else if(value > 0.94){
-				retval = 'B5';
-			}else if(value > 0.93){
 				retval = 'A5';
+			}else if(value > 0.93){
+				retval = 'Ab5';
 			}else if(value > 0.92){
 				retval = 'G5';
 			}else if(value > 0.91){
-				retval = 'F5';
-			}else if(value > 0.90){
 				retval = 'E5';
+			}else if(value > 0.90){
+				retval = 'Eb5';
 			}else if(value > 0.89){
-				retval = 'D5';
+				retval = 'Db5';
 			}else if(value > 0.875){
 				retval = 'C5';
 			}else if(value > 0.85){
-				retval = 'B4';
-			}else if(value > 0.825){
 				retval = 'A4';
+			}else if(value > 0.825){
+				retval = 'Ab4';
 			}else if(value > 0.8){
 				retval = 'G4';
 			}else if(value > 0.75){
-				retval = 'F4';
-			}else if(value > 0.7){
 				retval = 'E4';
+			}else if(value > 0.7){
+				retval = 'Eb4';
 			}else if(value > 0.65){
-				retval = 'D4';
+				retval = 'Db4';
 			}else if(value > 0.6){
 				retval = 'C4';
 			}else if(value > 0.55){
-				retval = 'Bb3';
-			}else if(value > 0.5){
 				retval = 'A3';
+			}else if(value > 0.5){
+				retval = 'Ab3';
 			}else if(value > .45){
 				retval = 'G3';
 			}else if(value > 0.4){
-				retval = 'F3';
-			}else if(value > 0.35){
 				retval = 'E3';
+			}else if(value > 0.35){
+				retval = 'Eb3';
 			}else if(value > 0.30){
-				retval = 'D3';
+				retval = 'Db3';
 			}else if(value > 0.25){
 				retval = 'C3';
 			}else if(value > 0.2){
-				retval = 'Bb2';
+				retval = 'A2';
 			}else if(value > 0.15){
 				retval = 'Ab2';
 			}else if(value > 0.10){
 				retval = 'G2';
 			}else if(value > 0.08){
-				retval = 'F2';
+				retval = 'E2';
 			}else if(value > 0.06){
 				retval = 'Eb2';
 			}else if(value > 0.04){
-				retval = 'D2';
+				retval = 'Db2';
 			}else if(value > 0.02){
 				retval = 'C2';
 			}else if(value > 0.01){
-				retval = 'Bb1';
+				retval = 'A1';
 			}else{
 				retval = 'Ab1';
 			}
