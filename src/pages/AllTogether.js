@@ -56,7 +56,7 @@ class AllTogether extends Simulation {
     		var rangeX = keyRight - keyLeft;
    		var percX = x / rangeX;
 		var playVal = (percX - .175) * 500 + 100;
-   		this.playNoteByVal(0, playVal, this.state.index, this.state.precipAvg);
+   		this.playNoteByValKey(0, playVal, this.state.index, this.state.precipAvg);
    	}
     }
     
@@ -72,7 +72,7 @@ class AllTogether extends Simulation {
     		var rangeX = keyRight - keyLeft;
    		var percX = x / rangeX;
 		var playVal = (percX - .14) * 23;
-   		this.playNoteByVal(1, playVal, this.state.index, this.state.tempAvg);
+   		this.playNoteByValKey(1, playVal, this.state.index, this.state.tempAvg);
    	}
     }
     
@@ -88,7 +88,7 @@ class AllTogether extends Simulation {
     		var rangeX = keyRight - keyLeft;
    		var percX = x / rangeX;
 		var playVal = percX;
-   		this.playNoteByVal(2, playVal, this.state.index, this.state.iceAvg);
+   		this.playNoteByValKey(2, playVal, this.state.index, this.state.iceAvg);
    	}
     }
     
@@ -922,7 +922,13 @@ class AllTogether extends Simulation {
     		fontSize: fsize,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
 	
 	
@@ -936,7 +942,13 @@ class AllTogether extends Simulation {
     		fontSize: fsize,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
 	
 	centerX = modelLeft + modelDiv / 2;
@@ -949,7 +961,13 @@ class AllTogether extends Simulation {
     		fontSize: fsize,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
     	
     	centerX = modelLeft + modelDiv + modelDiv / 2;
@@ -962,7 +980,13 @@ class AllTogether extends Simulation {
     		fontSize: fsize,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
 	
 	xAdj = 0 - fsize / 2;
@@ -981,7 +1005,13 @@ class AllTogether extends Simulation {
     		fontSize: fsize,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
 	
 	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
@@ -994,7 +1024,13 @@ class AllTogether extends Simulation {
     		fontSize: 12,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
     	
     	if(this.state.latitude < 65){

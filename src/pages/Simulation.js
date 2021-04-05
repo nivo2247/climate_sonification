@@ -600,6 +600,7 @@ export class Simulation extends Page {
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
 		const synth = this.getSynth(type);
+		synth.volume.value = 0;
 		const note = this.getNote(type, val);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
@@ -617,6 +618,7 @@ export class Simulation extends Page {
 	
 	playNoteByVal = (type, val, index, data) => {
 		const synth = this.getSynth(type);
+		synth.volume.value = 0;
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
@@ -629,6 +631,23 @@ export class Simulation extends Page {
 			this.setState({notePlaying:0});
 			synth.dispose();
 		}, '+8n');
+	}
+	
+	playNoteByValKey = (type, val, index, data) => {
+		const synth = this.getSynth(type);
+		synth.volume.value = 0;
+		const delay = Math.random() / 100;
+		const plus = '+';
+		const plusDelay = plus.concat(delay);
+		const note = this.getNote(type, val);
+		this.setState({notePlaying:1});
+		Tone.Transport.scheduleOnce((time) => {
+			synth.triggerAttackRelease(note, '8n', plusDelay);
+		}, '+0');
+		Tone.Transport.scheduleOnce((time) => {
+			this.setState({notePlaying:0});
+			synth.dispose();
+		}, '+4n');
 	}
 	
 	setupMapTransport = (e) => {

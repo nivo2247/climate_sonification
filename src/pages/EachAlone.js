@@ -693,7 +693,7 @@ class EachAlone extends Simulation {
    		else if(this.state.state === 2){
    			playVal = percX;
    		}
-   		this.playNoteByVal(this.state.state, playVal, this.state.index, this.state.coordData);
+   		this.playNoteByValKey(this.state.state, playVal, this.state.index, this.state.coordData);
    	}
     }
     
@@ -915,7 +915,13 @@ class EachAlone extends Simulation {
     		fontSize: fsize,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
 	
 	
@@ -929,7 +935,13 @@ class EachAlone extends Simulation {
     		fontSize: fsize,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
     	
     	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
@@ -942,7 +954,13 @@ class EachAlone extends Simulation {
     		fontSize: fsize,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
 	
 	centerX = modelLeft + modelDiv / 2;
@@ -968,7 +986,13 @@ class EachAlone extends Simulation {
     		fontSize: fsize,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
 	
 	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
@@ -981,7 +1005,13 @@ class EachAlone extends Simulation {
     		fontSize: 12,
     		border: '1px solid red',
     		backgroundColor: 'white',
-    		lineHeight: 1
+    		lineHeight: 1,
+    		'-webkit-touch-callout': 'none',
+    		'-webkit-user-select': 'none',
+    		'-khtml-user-select': 'none',
+    		'-moz-user-select': 'none',
+    		'-ms-user-select': 'none',
+    		'user-select': 'none'
     	}
     	
     	if(this.state.state === 2 && this.state.latitude < 65){
