@@ -918,6 +918,61 @@ export class Simulation extends Page {
     		'paddingTop': 5
     	};
     	
+    	var active = '#44CC44';
+    	var inactive = '#DDDDDD';
+    	var moderato = active;
+    	var allegro = inactive;
+    	var presto = inactive;
+    
+    	if(this.state.timerLen === 1200){
+    		moderato = inactive;
+    		allegro = inactive;
+    		presto = inactive;
+    	}
+    	else if(this.state.timerLen === 800){
+    		moderato = active;
+    		allegro = inactive;
+    		presto = inactive;
+    	}
+    	else if(this.state.timerLen === 400){
+    		moderato = inactive;
+    		allegro = active;
+    		presto = inactive;
+    	}
+    	else if(this.state.timerLen === 200){
+    		moderato = inactive;
+    		allegro = inactive;
+    		presto = active;
+    	}
+    	var moderatoHighlight = {
+    		'backgroundColor': moderato,
+    		'fontSize': microFontSize,
+    		'fontFamily': 'Verdana, sans-serif',
+    		'padding': '8px',
+    		'borderRadius': '8px',
+    		'display': 'inline-block',
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
+    	};
+    	var allegroHighlight = {
+    		'backgroundColor': allegro,
+    		'fontSize': microFontSize,
+    		'fontFamily': 'Verdana, sans-serif',
+    		'padding': '8px',
+    		'borderRadius': '8px',
+    		'display': 'inline-block',
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
+    	};
+    	var prestoHighlight = {
+    		'backgroundColor': presto,
+    		'fontSize': microFontSize,
+    		'fontFamily': 'Verdana, sans-serif',
+    		'padding': '8px',
+    		'borderRadius': '8px',
+    		'display': 'inline-block',
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
+    	};
+    
+    	
     	if(this.state.CONTROLVERTDIV !== 1){
     	
     		playSplitDivStyle = {
@@ -977,6 +1032,33 @@ export class Simulation extends Page {
     			"fontSize": smallFontSize,
     			'textAlign': 'right',
    	 		'paddingTop': 5
+    		};
+    		moderatoHighlight = {
+    			'backgroundColor': moderato,
+    			'fontSize': microFontSize,
+    			'fontFamily': 'Verdana, sans-serif',
+    			'padding': '1px',
+    			'borderRadius': '1px',
+    			'display': 'inline-block',
+    			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 5
+    		};
+    		allegroHighlight = {
+    			'backgroundColor': allegro,
+    			'fontSize': microFontSize,
+   	 		'fontFamily': 'Verdana, sans-serif',
+    			'padding': '1px',
+    			'borderRadius': '1px',
+    			'display': 'inline-block',
+    			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 5
+    		};
+    		prestoHighlight = {
+    			'backgroundColor': presto,
+    			'fontSize': microFontSize,
+    			'fontFamily': 'Verdana, sans-serif',
+    			'padding': '1px',
+    			'borderRadius': '1px',
+    			'display': 'inline-block',
+    			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 5
     		};
     	
     	}
@@ -1048,51 +1130,7 @@ export class Simulation extends Page {
     		overflow: 'hidden'
     	};
     
-    	var active = '#44CC44';
-    	var inactive = '#DDDDDD';
-    	var moderato = active;
-    	var allegro = inactive;
-    	var presto = inactive;
-    
-    	if(this.state.timerLen === 1200){
-    		moderato = inactive;
-    		allegro = inactive;
-    		presto = inactive;
-    	}
-    	else if(this.state.timerLen === 800){
-    		moderato = active;
-    		allegro = inactive;
-    		presto = inactive;
-    	}
-    	else if(this.state.timerLen === 400){
-    		moderato = inactive;
-    		allegro = active;
-    		presto = inactive;
-    	}
-    	else if(this.state.timerLen === 200){
-    		moderato = inactive;
-    		allegro = inactive;
-    		presto = active;
-    	}
-    	const moderatoHighlight = {
-    		'backgroundColor': moderato,
-    		'fontSize': microFontSize,
-    		'fontFamily': 'Verdana, sans-serif',
-    		'padding': '2px'
-    	};
-    	const allegroHighlight = {
-    		'backgroundColor': allegro,
-    		'fontSize': microFontSize,
-    		'fontFamily': 'Verdana, sans-serif',
-    		'padding': '2px'
-    	};
-    	const prestoHighlight = {
-    		'backgroundColor': presto,
-    		'fontSize': microFontSize,
-    		'fontFamily': 'Verdana, sans-serif',
-    		'padding': '2px'
-    	};
-    
+    	
     	return ({ modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle });
     }
     
