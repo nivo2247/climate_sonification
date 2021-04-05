@@ -1133,7 +1133,6 @@ class AllTogether extends Simulation {
 							<option value='Lagos'>Lagos</option>
 							<option value='Marrakesh'>Marrakesh</option>
 							<option value='Nairobi'>Nairobi</option>
-							<option value='Pretoria'>Pretoria</option>
 							<option value='Tunis'>Tunis</option>
 						</optgroup>
 						
@@ -1175,6 +1174,7 @@ class AllTogether extends Simulation {
 							<option value='Calgary'>Calgary</option>
 							<option value='Denver'>Denver</option>
 							<option value='Havana'>Havana</option>
+							<option value='Honolulu'>Honolulu</option>
 							<option value='Los Angeles'>Los Angeles</option>
 							<option value='Mexico City'>Mexico City</option>
 							<option value='New York'>New York</option>

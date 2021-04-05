@@ -5,6 +5,7 @@ const cities = [
 	{'city': 'Calgary', 'latitude': 51, 'longitude': -114},
 	{'city': 'Denver', 'latitude': 40, 'longitude': -105},
 	{'city': 'Havana', 'latitude': 23, 'longitude': -82},
+	{'city': 'Honolulu', 'latitude': 21, 'longitude': -158},
 	{'city': 'Los Angeles', 'latitude': 34, 'longitude': -118},
 	{'city': 'Mexico City', 'latitude': 19, 'longitude': -99},
 	{'city': 'New York', 'latitude': 41, 'longitude': -74},
@@ -39,7 +40,7 @@ const cities = [
 	{'city': 'Bogota', 'latitude': 5, 'longitude': -74},
 	{'city': 'Buenos Aires', 'latitude': -35, 'longitude': -58},
 	{'city': 'Caracas', 'latitude': 10, 'longitude': -67},
-	{'city': 'La Paz', 'latitude': -16, 'longitude': 68},
+	{'city': 'La Paz', 'latitude': -16, 'longitude': -68},
 	{'city': 'Lima', 'latitude': -12, 'longitude': -77},
 	{'city': 'Sao Paulo', 'latitude': -23, 'longitude': -47},
 	{'city': 'Santiago', 'latitude': -33, 'longitude': -71},
@@ -55,7 +56,6 @@ const cities = [
 	{'city': 'Lagos', 'latitude': 7, 'longitude': 3},
 	{'city': 'Marrakesh', 'latitude': 32, 'longitude': -8},
 	{'city': 'Nairobi', 'latitude': -1, 'longitude': 37},
-	{'city': 'Pretoria', 'latitude': -26, 'longitude': 28},
 	{'city': 'Tunis', 'latitude': 37, 'longitude': 10},
 	
 	//Europe

@@ -272,19 +272,19 @@ export class Simulation extends Page {
 		var retval = 'A5';
 		if(type === 0){
 			if(value < 50){
-				retval = 'A2';
+				retval = 'Ab2';
 			}else if(value < 60){
-				retval = 'B2';
+				retval = 'Bb2';
 			}else if(value < 70){
 				retval = 'C3';
 			}else if(value < 75){
-				retval = 'D3';
+				retval = 'Db3';
 			}else if(value < 80){
-				retval = 'E3';
+				retval = 'Eb3';
 			}else if(value < 85){
 				retval = 'F3';
 			}else if(value < 90){
-				retval = 'G3';
+				retval = 'Gb3';
 			}else if(value < 92.5){
 				retval = 'A3';
 			}else if(value < 95){
@@ -316,51 +316,51 @@ export class Simulation extends Page {
 			}else if(value < 145){
 				retval = 'A5';
 			}else if(value < 150){
-				retval = 'B5';
+				retval = 'Bb5';
 			}else if(value < 155){
 				retval = 'C6';
 			}else if(value < 160){
 				retval = 'D6';
 			}else if(value < 165){
-				retval = 'E6';
+				retval = 'Eb6';
 			}else if(value < 170){
 				retval = 'F6';
 			}else if(value < 175){
 				retval = 'G6';
 			}else if(value < 180){
-				retval = 'A6';
+				retval = 'Ab6';
 			}else if(value < 190){
-				retval = 'B6';
+				retval = 'Bb6';
 			}else if(value < 200){
 				retval = 'C7';
 			}else if(value < 220){
-				retval = 'D7';
+				retval = 'Db7';
 			}else if(value < 240){
-				retval = 'E7';
+				retval = 'Eb7';
 			}else if(value < 260){
 				retval = 'F7';
 			}else if(value < 280){
-				retval = 'G7';
+				retval = 'Gb7';
 			}else{
-				retval = 'A7';
+				retval = 'Ab7';
 			}
 			
 		}
 		else if(type === 1){
 			if(value < -0.5){
-				retval = 'A2';
+				retval = 'Ab2';
 			}else if(value < -0.25){
-				retval = 'B2';
+				retval = 'Bb2';
 			}else if(value < 0){
 				retval = 'C3';
 			}else if(value < 0.05){
-				retval = 'D3';
+				retval = 'Db3';
 			}else if(value < 0.1){
-				retval = 'E3';
+				retval = 'Eb3';
 			}else if(value < 0.15){
 				retval = 'F3';
 			}else if(value < 0.2){
-				retval = 'G3';
+				retval = 'Gb3';
 			}else if(value < 0.3){
 				retval = 'A3';
 			}else if(value < 0.4){
@@ -392,31 +392,31 @@ export class Simulation extends Page {
 			}else if(value < 4.5){
 				retval = 'A5';
 			}else if(value < 5){
-				retval = 'B5';
+				retval = 'Bb5';
 			}else if(value < 6){
 				retval = 'C6';
 			}else if(value < 7){
 				retval = 'D6';
 			}else if(value < 8){
-				retval = 'E6';
+				retval = 'Eb6';
 			}else if(value < 9){
 				retval = 'F6';
 			}else if(value < 10){
 				retval = 'G6';
 			}else if(value < 11){
-				retval = 'A6';
+				retval = 'Ab6';
 			}else if(value < 12){
-				retval = 'B6';
+				retval = 'Bb6';
 			}else if(value < 13){
 				retval = 'C7';
 			}else if(value < 14){
-				retval = 'D7';
+				retval = 'Db7';
 			}else if(value < 15){
-				retval = 'E7';
+				retval = 'Eb7';
 			}else if(value < 16){
 				retval = 'F7';
 			}else{
-				retval = 'G7';
+				retval = 'Gb7';
 			}
 		}
 		else if(type === 2){
@@ -459,7 +459,7 @@ export class Simulation extends Page {
 			}else if(value > 0.6){
 				retval = 'C4';
 			}else if(value > 0.55){
-				retval = 'B3';
+				retval = 'Bb3';
 			}else if(value > 0.5){
 				retval = 'A3';
 			}else if(value > .45){
@@ -473,23 +473,23 @@ export class Simulation extends Page {
 			}else if(value > 0.25){
 				retval = 'C3';
 			}else if(value > 0.2){
-				retval = 'B2';
+				retval = 'Bb2';
 			}else if(value > 0.15){
-				retval = 'A2';
+				retval = 'Ab2';
 			}else if(value > 0.10){
 				retval = 'G2';
 			}else if(value > 0.08){
 				retval = 'F2';
 			}else if(value > 0.06){
-				retval = 'E2';
+				retval = 'Eb2';
 			}else if(value > 0.04){
 				retval = 'D2';
 			}else if(value > 0.02){
 				retval = 'C2';
 			}else if(value > 0.01){
-				retval = 'B1';
+				retval = 'Bb1';
 			}else{
-				retval = 'A1';
+				retval = 'Ab1';
 			}
 		}
 		return retval;
