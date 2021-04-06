@@ -702,6 +702,7 @@ export class Simulation extends Page {
 		const synth = this.getSynth(type);
 		if(type === 3){
 			synth.volume.value = 6;
+			console.log(val, ', ',this.getNote(3, val));
 		}else{
 			synth.volume.value = 0;
 		}
@@ -723,6 +724,7 @@ export class Simulation extends Page {
 		const synth = this.getSynth(type);
 		if(type === 3){
 			synth.volume.value = 6;
+			console.log(val, ', ',this.getNote(3, val));
 		}else{
 			synth.volume.value = 0;
 		}

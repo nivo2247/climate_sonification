@@ -192,7 +192,7 @@ class AllTogether extends Simulation {
     		var val1 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
     		var val2 = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
     		var val3 = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
-    		var val4 = this.state.co2data[this.state.index].co2_data;
+    		var val4 = this.state.co2data[this.state.index].co2_val;
     		this.playTogetherMapNotes(val1, val2, val3, val4, this.state.index, this.state.precipAvg, this.state.tempAvg, this.state.iceAvg);
 	}
 	   
@@ -516,7 +516,7 @@ class AllTogether extends Simulation {
     	if(this.state.iceAvgAllCoords.length > coord_index){
     		ice_val = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
     	}
-    	var co2_val = this.state.co2data[this.state.index].co2_data;
+    	var co2_val = this.state.co2data[this.state.index].co2_val;
     	this.triggerNoteByVal(0, precip_val);
     	this.triggerNoteByVal(1, temp_val);
     	this.triggerNoteByVal(2, ice_val);

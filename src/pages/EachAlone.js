@@ -257,7 +257,7 @@ class EachAlone extends Simulation {
     	if(this.state.yearData.length >= coord_index){
     		var val0 = this.getValByCoord(this.state.yearData, coord_index);
     		this.playNoteByVal(this.state.state, val0, this.state.index, this.state.coordData);
-    		var co2_val = this.state.co2data[this.state.index].co2_data;
+    		var co2_val = this.state.co2data[this.state.index].co2_val;
     		this.playNoteByVal(3, co2_val, this.state.index, this.state.co2data);
 	}
     }   
@@ -855,7 +855,7 @@ class EachAlone extends Simulation {
     	if(this.state.yearData.length >= coord_index){
     		coord_val = this.getValByCoord(this.state.yearData, coord_index);
     	}
-    	var co2_val = this.state.co2data[this.state.index].co2_data;
+    	var co2_val = this.state.co2data[this.state.index].co2_val;
     	this.triggerNoteByVal(this.state.state, coord_val);
     	this.triggerNoteByVal(3, co2_val);
     	this.setupGraph();
@@ -1323,12 +1323,12 @@ class EachAlone extends Simulation {
 			</div>
 			
 		</div> 
-		<div style={location1} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location2} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location3} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location4} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location5} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location6} onPointerDown={this.onMouseDown} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location1} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location2} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location3} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location4} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location5} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
+		<div style={location6} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
     	</div>
     	</div> 
      );
