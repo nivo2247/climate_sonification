@@ -845,6 +845,10 @@ export class Simulation extends Page {
     	var useLat = this.state.latitude;
     	var useLon = this.state.longitude;
     	
+    	if(useLat === -90){
+    		useLat = -89;
+    	}
+    	
     	if(useLon >= 0){
     		useLon -= 179;
     	}else{

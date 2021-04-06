@@ -465,7 +465,7 @@ class EachAlone extends Simulation {
     	var newval = event.target.value;
     	if(isNumeric(newval)){
     		var parsedval = parseInt(newval);
-    		if(parsedval >= -89 && parsedval <= 89){
+    		if(parsedval >= -90 && parsedval <= 90){
     			this.doCoordHits(this.state.state, parsedval, this.state.longitude);
     			this.setState({
     				latitude: parsedval,

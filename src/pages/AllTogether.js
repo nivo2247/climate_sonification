@@ -213,7 +213,6 @@ class AllTogether extends Simulation {
     componentDidMount = () => {
     	this.co2Api();
     	this.updateDimensions();
-    	this.setState({ co2data: [...this.props.route.params.co2data]});
 	
 	togetherArtifactImgs.forEach((picture) => {
     		Image.prefetch(picture);
@@ -470,7 +469,7 @@ class AllTogether extends Simulation {
     	var newval = event.target.value;
     	if(this.state.play === 0 && isNumeric(newval)){
     		var parsedval = parseInt(newval);
-    		if(parsedval >= -89 && parsedval <= 89){
+    		if(parsedval >= -90 && parsedval <= 90){
     			this.doCoordHits(parsedval, this.state.longitude);
     			this.setState({
     				latitude: parsedval,
