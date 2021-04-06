@@ -163,19 +163,21 @@ class AllTogether extends Simulation {
 	}
 	else if (boxType === 2) {
 		var dx = x - centerX;
+		dx *= modelSplit / (modelDiv * 3 / 4);
 		var dy = centerY - y;
 		var r = Math.sqrt(dx ** 2 + dy ** 2);
 		var theta = Math.atan(dy / dx);
-		var projy = r / 2;
-		var projx = centerX;
-		if (dx <= 0) {
-			projx -= r * Math.cos((theta + Math.PI / 2) / 2);
+		theta += Math.PI / 2;
+		if(dx > 0){
+			theta += Math.PI;
 		}
-		else {
-			projx += r * Math.cos((theta - Math.PI / 2) / 2);
-		}
-		lonSave = (projx - centerX) * 540 / modelDiv;
-	    	latSave = 90 - projy * 90 / modelSplit;
+		theta /= Math.PI;
+		theta /= 2;
+		var newlon = Math.floor(theta * 360 - 180);
+		var newlat = r / modelSplit;
+		newlat *= 56;
+		lonSave = newlon;
+	    	latSave = 90 - newlat;
 	}
 	latSave = Math.max(latSave, -89);
 	latSave = Math.min(latSave, 90);
@@ -388,7 +390,7 @@ class AllTogether extends Simulation {
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
-    				console.log('precip year request cancelled');
+    				//console.log('precip year request cancelled');
     			}	
     		});
     }
@@ -407,7 +409,7 @@ class AllTogether extends Simulation {
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
-    				console.log('temp year request cancelled');
+    				//console.log('temp year request cancelled');
     			}	
     		});
     }
@@ -426,7 +428,7 @@ class AllTogether extends Simulation {
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
-    				console.log('ice year request cancelled');
+    				//console.log('ice year request cancelled');
     			}	
     		});
     }
@@ -539,7 +541,7 @@ class AllTogether extends Simulation {
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
-    				console.log('precip coord request cancelled');
+    				//console.log('precip coord request cancelled');
     			}	
     		});
     }
@@ -559,7 +561,7 @@ class AllTogether extends Simulation {
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
-    				console.log('precip1 coord request cancelled');
+    				//console.log('precip1 coord request cancelled');
     			}	
     		});
     }
@@ -579,7 +581,7 @@ class AllTogether extends Simulation {
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
-    				console.log('temp coord request cancelled');
+    				//console.log('temp coord request cancelled');
     			}	
     		});
     }
@@ -599,7 +601,7 @@ class AllTogether extends Simulation {
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
-    				console.log('temp1 coord request cancelled');
+    				//console.log('temp1 coord request cancelled');
     			}	
     		});
     }
@@ -619,7 +621,7 @@ class AllTogether extends Simulation {
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
-    				console.log('ice coord request cancelled');
+    				//console.log('ice coord request cancelled');
     			}	
     		});
     }
@@ -639,7 +641,7 @@ class AllTogether extends Simulation {
     		})
     		.catch((error) => {
     			if(Axios.isCancel(error)){
-    				console.log('ice1 coord request cancelled');
+    				//console.log('ice1 coord request cancelled');
     			}	
     		});
     }
@@ -926,14 +928,14 @@ class AllTogether extends Simulation {
     	var centerY = 0;
     	
     	var xAdj = (this.state.longitude * modelDiv / 360) - (fsize / 4);
-    	var yAdj = (this.state.latitude * modelSplit / 180) + (fsize / 2);
+    	var yAdj = 0 - (this.state.latitude * modelSplit / 180) - (fsize / 2);
 	
 	centerX = modelLeft + modelDiv / 2;
 	centerY = modelTop + modelSplit / 2;
 	var location1 = {
     		position: 'absolute',
     		left: centerX + xAdj,
-    		top: centerY - yAdj,
+    		top: centerY + yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -953,7 +955,7 @@ class AllTogether extends Simulation {
     	var location2 = {
     		position: 'absolute',
     		left: centerX + xAdj,
-    		top: centerY - yAdj,
+    		top: centerY + yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -972,7 +974,7 @@ class AllTogether extends Simulation {
     	var location4 = {
     		position: 'absolute',
     		left: centerX + xAdj,
-    		top: centerY - yAdj,
+    		top: centerY + yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -991,7 +993,7 @@ class AllTogether extends Simulation {
     	var location5 = {
     		position: 'absolute',
     		left: centerX + xAdj,
-    		top: centerY - yAdj,
+    		top: centerY + yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -1004,19 +1006,46 @@ class AllTogether extends Simulation {
     		'-ms-user-select': 'none',
     		'user-select': 'none'
     	}
-	
-	xAdj = 0 - fsize / 2;
-    	yAdj = 0 + fsize / 2;
     		
-    	//var r = 90 - this.state.latitude;
-    	//console.log(r);
+    	var rX = (90 - this.state.latitude) * (modelDiv / 40);
+    	var rY = (90 - this.state.latitude) * (modelSplit / 45);
+    	
+    	var theta = this.state.longitude / 180 * Math.PI / 2;
+    	
+    	var multX = Math.sin(theta);
+    	if(this.state.longitude < -90){
+    		multX = Math.PI * 41 / 128 + multX;
+    		multX = 0 - multX;
+    		multX *= 3.5;
+    	}
+    	multX /= 1.5;
+    
+    	if(this.state.longitude > 90){
+    		multX -= Math.PI * 20 / 128;
+    		multX = 0 - multX;
+    		multX *= 1;
+    		multX += Math.PI / 8;
+    	}
+    	
+    	var multY = 0.5 - Math.cos(theta);
+    	multY *= 2;
+    	
+    	var ybase = 0;
+    	if(this.state.latitude < 75 && this.state.longitude > -150 && this.state.longitude < 150){
+    		ybase = 0 - modelSplit / 5;	
+    	}else if(this.state.longitude < -90){
+    		ybase = 0 - modelSplit / 10;
+    	}
+    	
+    	xAdj = 0 + (multX * rX) - fsize / 2;
+    	yAdj = ybase - (multY * rY) - fsize / 2;
     	
     	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
     	centerY = modelTop + modelSplit / 2;
     	var location3 = {
     		position: 'absolute',
     		left: centerX + xAdj,
-    		top: centerY - yAdj,
+    		top: centerY + yAdj,
     		color: 'red',
     		fontSize: fsize,
     		border: '1px solid red',
@@ -1035,7 +1064,7 @@ class AllTogether extends Simulation {
     	var location6 = {
     		position: 'absolute',
     		left: centerX + xAdj,
-    		top: centerY - yAdj,
+    		top: centerY + yAdj,
     		color: 'red',
     		fontSize: 12,
     		border: '1px solid red',
@@ -1049,7 +1078,7 @@ class AllTogether extends Simulation {
     		'user-select': 'none'
     	}
     	
-    	if(this.state.latitude < 65){
+    	if(this.state.latitude < 62){
     		location3.display = 'none';
     		location6.display = 'none';
     	}
