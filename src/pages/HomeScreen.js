@@ -2,8 +2,7 @@ import * as React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { Page } from './Page.js';
 import { isBrowser, isMobile } from 'react-device-detect';
-import { eachAloneButton, allTogetherButton, qrImg, dbUrl } from './../const/url.js';
-import Axios from 'axios';
+import { eachAloneButton, allTogetherButton, qrImg } from './../const/url.js';
 
 function redirect(){
 	if(isMobile){
@@ -12,17 +11,6 @@ function redirect(){
 };
 
 class HomeScreen extends Page { 
-    
-    /* create and send DB request for CO2 data */
-    co2Api = () => {
-    	var request = dbUrl.concat("/co2/all");
-    	Axios.get(request)
-    	.then(res => {
-    		const all_co2_data = res.data.data;
-    		this.setState({ co2data: [...all_co2_data]});
-    	});
-    	
-    }
     
     getStyles(){
     	var titleTextSize = Math.floor(this.state.pageRight / 30 + this.state.pageBottom / 30);
@@ -77,12 +65,12 @@ class HomeScreen extends Page {
 	};
 	var qrBumperStyle = {
 		height: Math.floor(this.state.pageBottom * 6 / 20),
-		width: Math.floor(this.state.pageRight * 8 / 20),
+		width: Math.floor(this.state.pageRight * 17 / 40),
 		float: 'left'
 	};
 	var qrStyle = {
-		height: Math.floor(this.state.pageBottom * 6 / 20),
-		width: Math.floor(this.state.pageRight * 4 / 20),
+		height: Math.floor(this.state.pageBottom * 5 / 20),
+		width: Math.floor(this.state.pageRight * 3 / 20),
 		float: 'left'
 	};
 	
@@ -134,7 +122,6 @@ class HomeScreen extends Page {
     
     /*** runs on page open ***/
     componentDidMount = () => {
-    	this.co2Api();
     	if(isBrowser){
     		window.addEventListener('resize', this.updateDimensions);
     	}

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import * as Tone from 'tone';
 import { Page } from './Page.js';
-import { playUrl, loading } from './../const/url.js';
+import { playUrl, loading, dbUrl } from './../const/url.js';
+import Axios from 'axios';
 
 /* used to wait a certain amount of ms */
 const timer = ms => new Promise(res => setTimeout(res, ms));
@@ -47,6 +48,7 @@ export class Simulation extends Page {
 		this.state.precipNotes2 = [];
 		this.state.tempNotes2 = [];
 		this.state.iceNotes2 = [];
+		this.state.pianoNotes = [];
 		this.state.closestCity = '';
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
@@ -119,6 +121,39 @@ export class Simulation extends Page {
     		var useAvgKey0 = avgKeys0[0];
     		var val = arr[coord][useAvgKey0];
     		return val;
+	}
+	
+	/* create and send DB request for CO2 data */
+    co2Api = () => {
+    	var request = dbUrl.concat("/co2/all");
+    	Axios.get(request)
+    	.then(res => {
+    		const all_co2_data = res.data.data;
+    		this.setState({ co2data: [...all_co2_data]});
+    		this.setPianoNotes(all_co2_data);
+    	});
+    	
+    }
+	
+	setPianoNotes = (data) => {
+		if(data.length === 0){
+			console.log("co2 data failed to load");
+			return -1;
+		}
+		var pianoNoteArr = [];
+		var co2_val;
+		var note;
+		
+		for(var i = 0; i < 181; i++){
+    			co2_val = data[i].co2_val;
+    			note = this.getNote(3, co2_val);
+    			pianoNoteArr.push(note)
+		}
+		
+		this.setState({
+			pianoNotes: [...pianoNoteArr]
+		});
+		
 	}
 	
 	setPrecipNotes = (data) => {
@@ -491,8 +526,51 @@ export class Simulation extends Page {
 			}else{
 				retval = 'Ab1';
 			}
+		}else if(type === 3){
+			if(value < 310){
+				retval = 'C4';
+			}else if(value < 325){
+				retval = 'E4';
+			}else if(value < 350){
+				retval = 'G4';
+			}else if(value < 400){
+				retval = 'C5';
+			}else if(value < 450){
+				retval = 'E5';
+			}else if(value < 500){
+				retval = 'G5';
+			}else if(value < 550){
+				retval = 'C6';
+			}else if(value < 600){
+				retval = 'E6';
+			}else if(value < 650){
+				retval = 'G6';
+			}else if(value < 700){
+				retval = 'C7';
+			}else if(value < 750){
+				retval = 'E7';
+			}else if(value < 800){
+				retval = 'G7';
+			}else if(value < 850){
+				retval = 'C8';
+			}else if(value < 900){
+				retval = 'E8';
+			}else{
+				retval = 'G8';
+			}
 		}
 		return retval;
+	}
+	
+	getPianoNotes = (index) => {
+		if(this.state.pianoNotes.length === 0){
+			return ['C5', 'D5', 'F5', 'G5'];
+		}else{
+			if(index >= this.state.pianoNotes.length){
+				return ['C5', 'D5', 'F5', 'G5'];
+			}
+			return this.state.pianoNotes.slice(index);
+		}
 	}
 	
 	getPrecipNotes = (index) => {
@@ -594,48 +672,60 @@ export class Simulation extends Page {
 		}
 	}
 			
-	triggerNoteByVal = (type, val, index, data) => {
+	triggerNoteByVal = (type, val) => {
 		Tone.Transport.start();
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
 		const synth = this.getSynth(type);
-		synth.volume.value = 0;
+		if(type === 3){
+			synth.volume.value = 6;
+		}else{
+			synth.volume.value = 0;
+		}
 		const note = this.getNote(type, val);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
-			synth.triggerAttackRelease(note, '16n', plusDelay);
+			synth.triggerAttackRelease(note, '8n', plusDelay);
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
-		}, '+8n');
+		}, '+4n');
 		Tone.Transport.scheduleOnce((time) => {
 			synth.dispose();
 			Tone.Transport.cancel();
 			Tone.Transport.stop();
-		}, '+4n');
+		}, '+2n');
 	}
 	
 	playNoteByVal = (type, val, index, data) => {
 		const synth = this.getSynth(type);
-		synth.volume.value = 0;
+		if(type === 3){
+			synth.volume.value = 6;
+		}else{
+			synth.volume.value = 0;
+		}
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
 		const note = this.getNote(type, val);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
-			synth.triggerAttackRelease(note, '16n', plusDelay);
+			synth.triggerAttackRelease(note, '8n', plusDelay);
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
 			synth.dispose();
-		}, '+8n');
+		}, '+4n');
 	}
 	
 	playNoteByValKey = (type, val, index, data) => {
 		const synth = this.getSynth(type);
-		synth.volume.value = 0;
+		if(type === 3){
+			synth.volume.value = 6;
+		}else{
+			synth.volume.value = 0;
+		}
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
@@ -726,6 +816,14 @@ export class Simulation extends Page {
 				volume: -4
 			}).toDestination();
 			//  retsynth.volume.value = 10;
+		}
+		else if(type === 3){
+			 retsynth = new Tone.Synth({
+			 	oscillator:{
+			 		type: 'sine'
+			 	},
+			 	volume: -10
+			 }).toDestination();
 		}
 		return retsynth;
 	}

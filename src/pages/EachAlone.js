@@ -257,6 +257,8 @@ class EachAlone extends Simulation {
     	if(this.state.yearData.length >= coord_index){
     		var val0 = this.getValByCoord(this.state.yearData, coord_index);
     		this.playNoteByVal(this.state.state, val0, this.state.index, this.state.coordData);
+    		var co2_val = this.state.co2data[this.state.index].co2_data;
+    		this.playNoteByVal(3, co2_val, this.state.index, this.state.co2data);
 	}
     }   
     
@@ -470,7 +472,7 @@ class EachAlone extends Simulation {
     				useArray: 0
     			});	
     			this.setupGraph();
-    			this.triggerNotes(parsedval, 0);
+    			this.triggerNotes(parsedval, this.state.longitude);
     			if(this.state.play === 1){
     				this.stopMusic();
     			}
@@ -489,7 +491,7 @@ class EachAlone extends Simulation {
     				useArray: 0
     			});	
     			this.setupGraph();
-    			this.triggerNotes(0, parsedval);
+    			this.triggerNotes(this.state.latitude, parsedval);
     			if(this.state.play === 1){
     				this.stopMusic();
     			}
@@ -759,10 +761,12 @@ class EachAlone extends Simulation {
 	synth1.volume.value = -12;
 	const synth2 = this.getSynth(this.state.state);
 	synth2.volume.value = -12;
+	const piano = this.getSynth(3);
 	this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
 	const notes = this.noteHelper(newind);
 	const notes1 = this.noteHelper1(newind);
 	const notes2 = this.noteHelper2(newind);
+	const pianoNotes = this.getPianoNotes();
 		
 	const notePattern = new Tone.Pattern((time, note) => {
 		synth.triggerAttackRelease(note, '16n', time);
@@ -783,11 +787,17 @@ class EachAlone extends Simulation {
 	}, notes2);
 	notePattern2.humanize = true;
 	
+	const pianoPattern = new Tone.Pattern((time, note) => {
+		piano.triggerAttackRelease(note, '16n', time);
+	}, pianoNotes);
+	pianoPattern.humanize = true;
+	
 	// catches most errors
 	if(this.state.audioAvailable) {
 		notePattern.start(0);
 		notePattern1.start(0);
 		notePattern2.start(0);
+		pianoPattern.start(0);
 		Tone.Transport.start('+0');
 	} else {
 		Tone.start().then(() => {
@@ -795,6 +805,7 @@ class EachAlone extends Simulation {
 			notePattern.start(0);
 			notePattern1.start(0);
 			notePattern2.start(0);
+			pianoPattern.start(0);
 			Tone.Transport.start('+0');
 		}).catch(error => console.error(error));
 	}
@@ -808,7 +819,7 @@ class EachAlone extends Simulation {
     
     /*** runs on initial render ***/
     componentDidMount = () => {
-    	this.setState({ co2data: [...this.props.route.params.co2data]});
+    	this.co2Api();
     	
 	this.setState({
 		pageBottomMax: window.innerHeight,
@@ -841,10 +852,12 @@ class EachAlone extends Simulation {
     	var coord_val;
     	var {dbX, dbY} = this.getDBCoords(); 
     	var coord_index = (dbY - 1) * 320 + (dbX - 1);
-    	if(this.state.yearData.length < coord_index){
-    		coord_val = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
+    	if(this.state.yearData.length >= coord_index){
+    		coord_val = this.getValByCoord(this.state.yearData, coord_index);
     	}
-    	this.triggerNoteByVal(this.state.state, coord_val, this.state.index, this.state.coordData);
+    	var co2_val = this.state.co2data[this.state.index].co2_data;
+    	this.triggerNoteByVal(this.state.state, coord_val);
+    	this.triggerNoteByVal(3, co2_val);
     	this.setupGraph();
     }
     

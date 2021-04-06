@@ -189,10 +189,11 @@ class AllTogether extends Simulation {
    	var {dbX, dbY} = this.getDBCoords(); 
     	var coord_index = (dbY - 1) * 320 + (dbX - 1);
     	if(this.state.precipAvgAllCoords.length >= coord_index && this.state.tempAvgAllCoords.length >= coord_index && this.state.iceAvgAllCoords.length >= coord_index){
-    		var val0 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
-    		var val1 = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
-    		var val2 = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
-    		this.playTogetherMapNotes(val0, val1, val2, this.state.index, this.state.precipAvg, this.state.tempAvg, this.state.iceAvg);
+    		var val1 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
+    		var val2 = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
+    		var val3 = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
+    		var val4 = this.state.co2data[this.state.index].co2_data;
+    		this.playTogetherMapNotes(val1, val2, val3, val4, this.state.index, this.state.precipAvg, this.state.tempAvg, this.state.iceAvg);
 	}
 	   
 	        
@@ -210,6 +211,7 @@ class AllTogether extends Simulation {
     
     /*** runs on initial render ***/
     componentDidMount = () => {
+    	this.co2Api();
     	this.updateDimensions();
     	this.setState({ co2data: [...this.props.route.params.co2data]});
 	
@@ -515,9 +517,11 @@ class AllTogether extends Simulation {
     	if(this.state.iceAvgAllCoords.length > coord_index){
     		ice_val = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
     	}
-    	this.triggerNoteByVal(0, precip_val, this.state.index, this.state.precipAvg);
-    	this.triggerNoteByVal(1, temp_val, this.state.index, this.state.tempAvg);
-    	this.triggerNoteByVal(2, ice_val, this.state.index, this.state.iceAvg);
+    	var co2_val = this.state.co2data[this.state.index].co2_data;
+    	this.triggerNoteByVal(0, precip_val);
+    	this.triggerNoteByVal(1, temp_val);
+    	this.triggerNoteByVal(2, ice_val);
+    	this.triggerNoteByVal(3, co2_val);
     }
 
 
@@ -727,6 +731,7 @@ class AllTogether extends Simulation {
 		tempsynth1.volume.value = -12;
 		const icesynth1 = this.getSynth(2);
 		icesynth1.volume.value = -12;
+		const piano = this.getSynth(3);
 		
 		const precipNotes = this.getPrecipNotes(newind);
 		const precipNotes1 = this.getPrecipNotes1(newind);
@@ -734,6 +739,7 @@ class AllTogether extends Simulation {
 		const tempNotes1 = this.getTempNotes1(newind);
 		const iceNotes = this.getIceNotes(newind);
 		const iceNotes1 = this.getIceNotes1(newind);
+		const pianoNotes = this.getPianoNotes(newind);
 		
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
 		const precipPattern = new Tone.Pattern((time, note) => {
@@ -769,6 +775,11 @@ class AllTogether extends Simulation {
 			icesynth1.triggerAttackRelease(note, '16n', time);
 		}, iceNotes1);
 		icePattern1.humanize = true;
+		
+		const pianoPattern = new Tone.Pattern((time, note) => {
+			piano.triggerAttackRelease(note, '16n', time);
+		}, pianoNotes);
+		pianoPattern.humanize = true;
 
 		// catches most errors
 		if(this.state.audioAvailable) {
@@ -776,6 +787,7 @@ class AllTogether extends Simulation {
 			precipPattern1.start(0);
 			tempPattern.start(0);
 			tempPattern1.start(0);
+			pianoPattern.start(0);
 			if(this.getValByIndex(this.state.iceAvg, 0) !== 0){
 				icePattern.start(0);
 				icePattern1.start(0);
@@ -788,6 +800,7 @@ class AllTogether extends Simulation {
 				precipPattern1.start(0.001);
 				tempPattern.start(0.001);
 				tempPattern1.start(0.001);
+				pianoPattern.start(0.001);
 				if(this.getValByIndex(this.state.iceAvg, 0) !== 0){
 					icePattern.start(0.001);
 					icePattern1.start(0.001);
@@ -797,25 +810,29 @@ class AllTogether extends Simulation {
 		}
 	}
 	
-	playTogetherMapNotes = (val1, val2, val3, index, data1, data2, data3) => {
+	playTogetherMapNotes = (val1, val2, val3, val4, index, data1, data2, data3) => {
 		const synth0 = this.getSynth(0);
 		const synth1 = this.getSynth(1);
 		const synth2 = this.getSynth(2);
+		const piano = this.getSynth(3);
 		//synth.sync();
 		const note0 = this.getNote(0, val1);
 		const note1 = this.getNote(1, val2);
 		const note2 = this.getNote(2, val3);
+		const pianoNote = this.getNote(3, val4);
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
 			synth0.triggerAttackRelease(note0, '16n');
 			synth1.triggerAttackRelease(note1, '16n');
 			synth2.triggerAttackRelease(note2, '16n');
+			piano.triggerAttackRelease(pianoNote, '16n');
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
 			synth0.dispose();
 			synth1.dispose();
 			synth2.dispose();
+			piano.dispose();
 		}, '+4n');
 	}
     
