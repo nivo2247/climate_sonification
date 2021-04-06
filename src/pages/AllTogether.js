@@ -1056,6 +1056,14 @@ class AllTogether extends Simulation {
     	
     	return { location1, location2, location3, location4, location5, location6 };
     }
+    
+    openAbout = () => {
+    	const { navigation } = this.props;
+    	if(this.state.play === 1){
+    		this.stopMusic(1);
+    	}
+    	navigation.navigate('About', {page: 'AllTogether'});
+    }
 
     /*** runs on state update ***/   
     render(){
@@ -1107,7 +1115,7 @@ class AllTogether extends Simulation {
     temp_val = Math.round(temp_val * 100) / 100;
     precip_val = Math.round(precip_val * 100) / 100;
     
-    const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle } = this.getCommonStyles();
+    const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, aboutButton } = this.getCommonStyles();
     
     const { largeControlBlockStyle, graphHeight, graphWidth } = this.getTogetherStyles(modelWidth, controlHeight, controlWidth );
     
@@ -1257,7 +1265,14 @@ class AllTogether extends Simulation {
 				</div>
 			</div>
 			
-			<div style={controlBlockStyle}/>
+			<div style={dataBlockStyle}/>
+			<div style={dataBlockStyle}>
+				<div style={quarterControlStyle}/>
+				<div style={quarterControlStyle} onPointerUp={() => this.openAbout()}>
+					<span style={aboutButton}>about</span>
+				</div>
+				<div style={quarterControlStyle}/>
+			</div>
 			
 			<div style={keyContainer}>
 				<img style={keyContainer} alt="graph key" src={graphKey}/>

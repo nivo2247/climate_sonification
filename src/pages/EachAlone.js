@@ -1038,6 +1038,14 @@ class EachAlone extends Simulation {
     	
     	return { location1, location2, location3, location4, location5, location6 };
     }
+    
+    openAbout = () => {
+    	const { navigation } = this.props;
+    	if(this.state.play === 1){
+    		this.stopMusic(1);
+    	}
+    	navigation.navigate('About', {page: 'EachAlone'});
+    }
     	
     /*** runs on state update ***/   
     render(){
@@ -1089,7 +1097,7 @@ class EachAlone extends Simulation {
     coord_val = Math.round(coord_val * 100) / 100;
     
     /* contains almost all the styling for the page */
-    const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle } = this.getCommonStyles();
+    const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, aboutButton } = this.getCommonStyles();
     
     var newh = controlHeight * 9 / 40;
     if(this.state.CONTROLVERTDIV !== 1){
@@ -1263,7 +1271,13 @@ class EachAlone extends Simulation {
 				</div>
 			</div>
 			
-			<div style={dataBlockStyle}/>
+			<div style={dataBlockStyle}>
+				<div style={quarterControlStyle}/>
+				<div style={quarterControlStyle} onPointerUp={() => this.openAbout()}>
+					<span style={aboutButton}>about</span>
+				</div>
+				<div style={quarterControlStyle}/>
+			</div>
 			
 			<div style={keyContainer}>
 				<img style={keyContainer} alt="graph key" src={graphKey}/>

@@ -1117,6 +1117,16 @@ export class Simulation extends Page {
     		'display': 'inline-block',
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
     	};
+    	
+    	var aboutButton = {
+    		'backgroundColor': inactive,
+    		'fontSize': microFontSize,
+    		'fontFamily': 'Verdana, sans-serif',
+    		'padding': '8px',
+    		'borderRadius': '8px',
+    		'display': 'inline-block',
+    		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
+    	};
     
     	
     	if(this.state.CONTROLVERTDIV !== 1){
@@ -1206,6 +1216,15 @@ export class Simulation extends Page {
     			'display': 'inline-block',
     			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 5
     		};
+    		aboutButton = {
+    			'backgroundColor': inactive,
+    			'fontSize': microFontSize,
+    			'fontFamily': 'Verdana, sans-serif',
+    			'padding': '1px',
+    			'borderRadius': '1px',
+    			'display': 'inline-block',
+    			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
+    		};
     	
     	}
     	
@@ -1277,7 +1296,7 @@ export class Simulation extends Page {
     	};
     
     	
-    	return ({ pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle });
+    	return ({ pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, aboutButton });
     }
     
     /*** These should never run because each class has separate functions,
