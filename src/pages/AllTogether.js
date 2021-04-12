@@ -1091,7 +1091,7 @@ class AllTogether extends Simulation {
     	if(this.state.play === 1){
     		this.stopMusic(1);
     	}
-    	navigation.navigate('About', {page: 'AllTogether'});
+    	navigation.navigate('About', {page: 1, pageBottom: this.state.pageBottom, pageRight: this.state.pageRight});
     }
 
     /*** runs on state update ***/   

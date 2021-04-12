@@ -1051,7 +1051,7 @@ class EachAlone extends Simulation {
     	if(this.state.play === 1){
     		this.stopMusic(1);
     	}
-    	navigation.navigate('About', {page: 'EachAlone'});
+    	navigation.navigate('About', {page: 0, pageBottom: this.state.pageBottom, pageRight: this.state.pageRight});
     }
     	
     /*** runs on state update ***/   
