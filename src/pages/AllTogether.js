@@ -116,7 +116,7 @@ class AllTogether extends Simulation {
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
     	var modelTop = this.state.PADDING / 2;
     	if (this.state.pageBottom > this.state.pageRight){
-    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
+    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV + this.state.PADDING/2;
     	}
     	var x = Math.floor(e.pageX - modelLeft);
     	var y = Math.floor(e.pageY - modelTop);
@@ -841,7 +841,7 @@ class AllTogether extends Simulation {
     	var modelWidth = mw;
     	var controlHeight = ch;
     	var controlWidth = cw;
-    	var newh = controlHeight * 5 / 20;
+    	var newh = controlHeight * 4 / 20;
     	if(this.state.CONTROLVERTDIV !== 1){
     		newh /= (1 - this.state.CONTROLVERTDIV)
     	}
@@ -921,7 +921,7 @@ class AllTogether extends Simulation {
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
     	var modelTop = this.state.PADDING / 2;
     	if (this.state.pageBottom > this.state.pageRight){
-    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
+    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV + this.state.PADDING/2;
     	}
     	
     	var centerX = 0;
@@ -1281,10 +1281,6 @@ class AllTogether extends Simulation {
 				</div>
 			</form>
 			
-		</div>
-			
-		<div style={controlContainerStyle}>
-		
 			<div style={dataBlockStyle}>
 				<div style={halfControlStyle}>
 					<p style={smallLabelTextStyle}>Year: {this.state.index + 1920}</p>
@@ -1293,6 +1289,10 @@ class AllTogether extends Simulation {
 					<p style={smallLabelTextStyle}>CO<sub>2</sub>: {co2val} ppm</p>
 				</div>
 			</div>
+			
+		</div>
+			
+		<div style={controlContainerStyle}>
 			
 			<div style={dataBlockStyle}/>
 			<div style={dataBlockStyle}>
@@ -1307,8 +1307,8 @@ class AllTogether extends Simulation {
 				<img style={keyContainer} alt="graph key" src={graphKey}/>
 			</div>
 			
-			<div style={controlBlockStyle} onPointerUp={() => this.callHome()}>
-				<img style={controlBlockStyle} alt="home button" src={homeButton} />
+			<div style={dataBlockStyle} onPointerUp={() => this.callHome()}>
+				<img style={dataBlockStyle} alt="home button" src={homeButton} />
 			</div>
 			
 		</div>

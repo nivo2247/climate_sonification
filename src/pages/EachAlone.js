@@ -189,7 +189,7 @@ class EachAlone extends Simulation {
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
     	var modelTop = this.state.PADDING / 2;
     	if (this.state.pageBottom > this.state.pageRight){
-    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
+    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV + this.state.PADDING/2;
     	}
     	var x = Math.floor(e.pageX - modelLeft);
     	var y = Math.floor(e.pageY - modelTop);
@@ -880,7 +880,7 @@ class EachAlone extends Simulation {
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
     	var modelTop = this.state.PADDING / 2;
     	if (this.state.pageBottom > this.state.pageRight){
-    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV;
+    		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV + this.state.PADDING/2;
     	}
     	
     	var centerX = 0;
@@ -1118,6 +1118,14 @@ class EachAlone extends Simulation {
     	float: 'left'
     }
     
+    var smallDataStyle = {
+    	height: Math.floor(dataBlockStyle.height * 9 / 10),
+    	width: dataBlockStyle.width,
+    	overflow: dataBlockStyle.overflow,
+    	text: dataBlockStyle.text,
+    	textAlign: dataBlockStyle.textAlign
+    };
+    
     this.updateGraph();   
      
     /*** Return the page ***/
@@ -1180,7 +1188,7 @@ class EachAlone extends Simulation {
 			
 		<div style={controlContainerStyle}>
 			<form>	
-				<div style={dataBlockStyle}>
+				<div style={smallDataStyle}>
 					<label htmlFor='city' style={bigLabelControlStyle}> Nearest City:</label>
 					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
 						<optgroup label='Africa'>
@@ -1278,7 +1286,7 @@ class EachAlone extends Simulation {
 				</div>
 			</div>
 			
-			<div style={dataBlockStyle}>
+			<div style={smallDataStyle}>
 				<div style={quarterControlStyle}/>
 				<div style={quarterControlStyle} onPointerUp={() => this.openAbout()}>
 					<span style={aboutButton}>about</span>
@@ -1289,8 +1297,8 @@ class EachAlone extends Simulation {
 			<div style={keyContainer}>
 				<img style={keyContainer} alt="graph key" src={graphKey}/>
 			</div>
-			<div style={controlBlockStyle} onPointerUp={() => this.callHome()}>
-				<img style={controlBlockStyle} alt="home button" src={homeButton} />
+			<div style={dataBlockStyle} onPointerUp={() => this.callHome()}>
+				<img style={dataBlockStyle} alt="home button" src={homeButton} />
 			</div>
 		</div>
 		</div>
