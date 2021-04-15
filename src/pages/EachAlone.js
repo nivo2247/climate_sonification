@@ -255,7 +255,7 @@ class EachAlone extends Simulation {
     		useArray: 0
     	});
     	var {dbX, dbY} = this.getDBCoords(); 
-    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    	var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.yearData.length >= coord_index){
     		var val0 = this.getValByCoord(this.state.yearData, coord_index);
     		this.playNoteByVal(this.state.state, val0, this.state.index, this.state.coordData);
@@ -631,13 +631,14 @@ class EachAlone extends Simulation {
     doCoordHits(state, lat, lon){
     	var closestcity = getClosestCity(lat, lon);
     	var {dbX, dbY} = this.getDBCoords(); 
+    	console.log('dbX: ', dbX, 'dbY: ', dbY);
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon),
 		closestCity: closestcity
 	});
 	/* Filter and do db hit here */
-	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
+	if(dbX <= 360 && dbX >= 1 && dbY <= 180 && dbY >= 1){
 		var table = dbUrl.concat("/table/")
 		var intermediate, intermediate1, intermediate2;
 		if(state === 0){
@@ -656,6 +657,7 @@ class EachAlone extends Simulation {
 			intermediate2 = table.concat("seaice002/coord/(");
 		}
 		var request = intermediate.concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		console.log(request);
 		this.setState({waiting: 3});
 		this.coordApi(request);
 		request = intermediate1.concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
@@ -853,7 +855,7 @@ class EachAlone extends Simulation {
     triggerNotes = (lat, lon) => {
     	var coord_val;
     	var {dbX, dbY} = this.getDBCoords(); 
-    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    	var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.yearData.length >= coord_index){
     		coord_val = this.getValByCoord(this.state.yearData, coord_index);
     	}
@@ -1080,7 +1082,7 @@ class EachAlone extends Simulation {
     }
     /* use the dataset that contains all coords at a specific year */
     else {
-        var coord_index = (dbY - 1) * 320 + (dbX - 1);
+        var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.yearData.length > coord_index){
     		coord_val = this.getValByCoord(this.state.yearData, coord_index);
     	}
@@ -1289,7 +1291,7 @@ class EachAlone extends Simulation {
 			<div style={smallDataStyle}>
 				<div style={quarterControlStyle}/>
 				<div style={quarterControlStyle} onPointerUp={() => this.openAbout()}>
-					<span style={aboutButton}>about</span>
+					<span style={aboutButton}>FAQ</span>
 				</div>
 				<div style={quarterControlStyle}/>
 			</div>

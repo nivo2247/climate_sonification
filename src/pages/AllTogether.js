@@ -189,7 +189,7 @@ class AllTogether extends Simulation {
 	   	useArray: 0
 	});	
    	var {dbX, dbY} = this.getDBCoords(); 
-    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+   	var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.precipAvgAllCoords.length >= coord_index && this.state.tempAvgAllCoords.length >= coord_index && this.state.iceAvgAllCoords.length >= coord_index){
     		var val1 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
     		var val2 = this.getValByCoord(this.state.tempAvgAllCoords, coord_index);
@@ -508,7 +508,7 @@ class AllTogether extends Simulation {
      triggerNotes = (lat, lon) => {
     	var precip_val, temp_val, ice_val;
     	var {dbX, dbY} = this.getDBCoords(); 
-    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    	var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.precipAvgAllCoords.length > coord_index){
     		precip_val = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
     	}
@@ -690,7 +690,7 @@ class AllTogether extends Simulation {
 	});
 	var request;
 	/* Filter and do db hit here */
-	if(dbX <= 320 && dbX >= 1 && dbY <= 240 && dbY >= 1){
+	if(dbX <= 360 && dbX >= 1 && dbY <= 180 && dbY >= 1){
 		request = dbUrl.concat("/table/precipavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
 		this.precipCoordApi(request);
 		request = dbUrl.concat("/table/tempavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
@@ -1122,7 +1122,7 @@ class AllTogether extends Simulation {
     	ice_val = this.getValByIndex(this.state.iceAvg, this.state.index);
     }
     else{
-    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    	var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.precipAvgAllCoords.length > coord_index){
     		precip_val = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
     	}
@@ -1298,7 +1298,7 @@ class AllTogether extends Simulation {
 			<div style={dataBlockStyle}>
 				<div style={quarterControlStyle}/>
 				<div style={quarterControlStyle} onPointerUp={() => this.openAbout()}>
-					<span style={aboutButton}>about</span>
+					<span style={aboutButton}>FAQ</span>
 				</div>
 				<div style={quarterControlStyle}/>
 			</div>

@@ -841,6 +841,16 @@ export class Simulation extends Page {
 		}
 	}
 	
+    getDBIndex = (dbX, dbY) => {
+    /*
+    	var coord_index = (dbY - 1) * 320 + (dbX - 1);
+    	*/
+    	
+    	var coord_index = (dbY - 1) * 360 + (dbX - 1);
+    	console.log('coord_ind: ', coord_index);
+    	return coord_index;
+    }
+	
     getDBCoords = () => {
 	var dbX = 1;
     	var dbY = 1;
@@ -857,8 +867,13 @@ export class Simulation extends Page {
     		useLon += 180;
     	}
     	
+    	/* old translate
     	dbY = Math.floor((91 - useLat) * (240 / 180));
     	dbX = Math.floor((181 + useLon) * 320 / 360); 
+	*/
+	
+    	dbY = Math.floor((91 - useLat));
+    	dbX = Math.floor((180 + useLon));
 	
 	return { dbX, dbY };
 	
