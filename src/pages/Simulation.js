@@ -793,6 +793,7 @@ export class Simulation extends Page {
 			 	volume: -4
 			 }).toDestination();
 		}
+		// Violin
 		else if(type === 2){
 			 retsynth = new Tone.FMSynth({
 				"harmonicity": 3.01,
@@ -819,13 +820,25 @@ export class Simulation extends Page {
 			}).toDestination();
 			//  retsynth.volume.value = 10;
 		}
+		// Piano
 		else if(type === 3){
-			 retsynth = new Tone.Synth({
-			 	oscillator:{
-			 		type: 'sine'
-			 	},
-			 	volume: -10
-			 }).toDestination();
+			const reverb = new Tone.Reverb(0.6);
+			const fx = new Tone.EQ3(0.5,1,-5).chain(reverb).toDestination();
+			retsynth = new Tone.Synth({
+				"volume" : -9,
+				"oscillator": {
+					"type": "fatcustom",
+					"partials" : [0.8, 0.4, 0, 0.15, 0.075],
+					"spread" : 12,
+					"count" : 2
+				},
+				"envelope": {
+					"attack": 0.001,
+					"decay": 1.2,
+					"sustain": 0.9,
+					"release": 1.3
+				},
+			}).connect(fx);
 		}
 		return retsynth;
 	}
