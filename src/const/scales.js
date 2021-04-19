@@ -1,8 +1,8 @@
 const CMajor = 'C D E F G A B,';
 const CHarmonic = 'C D Eb F G Ab B,';
-const CPhrygiDorian = 'C Db Eb F G A Bb';
-const CPhrygiDominant = 'C Db E F G Ab Bb';
-const CDoubleHarmonic = 'C Db E F G Ab B';
+const CPhrygiDorian = 'C Db Eb F G A Bb,';
+const CPhrygiDominant = 'C Db E F G Ab Bb,';
+const CDoubleHarmonic = 'C Db E F G Ab B,';
 
 const toFullScale = scaleString => scaleString.repeat(6) // adds octaves
                                                 .split(',') // splits by octave

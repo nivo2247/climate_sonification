@@ -704,7 +704,7 @@ export class Simulation extends Page {
 		}else{
 			synth.volume.value = 0;
 		}
-		const note = this.getNote(type, val);
+		const note = this.getNote(type, val, getScale(this.state.index));
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
 			synth.triggerAttackRelease(note, '8n', plusDelay);
@@ -723,14 +723,14 @@ export class Simulation extends Page {
 		const synth = this.getSynth(type);
 		if(type === 3){
 			synth.volume.value = 6;
-			console.log(val, ', ',this.getNote(3, val));
+			console.log(val, ', ',this.getNote(3, val, getScale(this.state.index)));
 		}else{
 			synth.volume.value = 0;
 		}
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
-		const note = this.getNote(type, val);
+		const note = this.getNote(type, val, getScale(this.state.index));
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
 			synth.triggerAttackRelease(note, '8n', plusDelay);
@@ -745,14 +745,14 @@ export class Simulation extends Page {
 		const synth = this.getSynth(type);
 		if(type === 3){
 			synth.volume.value = 6;
-			console.log(val, ', ',this.getNote(3, val));
+			console.log(val, ', ',this.getNote(3, val, getScale(this.state.index)));
 		}else{
 			synth.volume.value = 0;
 		}
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
-		const note = this.getNote(type, val);
+		const note = this.getNote(type, val, getScale(this.state.index));
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
 			synth.triggerAttackRelease(note, '8n', plusDelay);
