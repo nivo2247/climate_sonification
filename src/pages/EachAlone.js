@@ -1106,7 +1106,7 @@ class EachAlone extends Simulation {
     coord_val = Math.round(coord_val * 100) / 100;
     
     /* contains almost all the styling for the page */
-    const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, aboutButton } = this.getCommonStyles();
+    const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, timelineStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, imageKeyStyle, aboutButton } = this.getCommonStyles();
     
     var newh = controlHeight * 9 / 40;
     if(this.state.CONTROLVERTDIV !== 1){
@@ -1322,7 +1322,7 @@ class EachAlone extends Simulation {
 				</div>
 				
 				<div style={dataThirdStyle} onPointerDown={this.setupTransport} onPointerMove={this.testMusic} onPointerUp={this.killTransport}>
-					<img style={dataThirdStyle} alt="map key" src={this.state.keySrc} draggable="false"/>
+					<img style={imageKeyStyle} alt="map key" src={this.state.keySrc} draggable="false"/>
 				</div>
 				
 			</div>
@@ -1336,7 +1336,7 @@ class EachAlone extends Simulation {
 			
 			<div style={sliderDivStyle} onPointerUp={this.updateYearVals}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
-				<img style={sliderStyle} alt="" src={timelineImg}/>
+				<img style={timelineStyle} alt="timeline" src={timelineImg}/>
 			</div>
 			
 		</div> 

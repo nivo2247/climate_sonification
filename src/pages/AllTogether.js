@@ -1144,7 +1144,7 @@ class AllTogether extends Simulation {
     temp_val = Math.round(temp_val * 100) / 100;
     precip_val = Math.round(precip_val * 100) / 100;
     
-    const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, aboutButton } = this.getCommonStyles();
+    const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, timelineStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, imageKeyStyle, aboutButton } = this.getCommonStyles();
     
     const { largeControlBlockStyle, graphHeight, graphWidth } = this.getTogetherStyles(modelWidth, controlHeight, controlWidth );
     
@@ -1340,15 +1340,15 @@ class AllTogether extends Simulation {
 			
 			<div style={graphBufferStyle}>
 				<div style={dataThirdStyle} onPointerDown={this.setupPrecipTransport} onPointerMove={this.testPrecipMusic} onPointerUp={this.killTransport}>
-					<img style={dataThirdStyle} alt="precipitation key" src={precipKey} draggable="false"/>
+					<img style={imageKeyStyle} alt="precipitation key" src={precipKey} draggable="false"/>
 				</div>
 
 				<div style={dataThirdStyle} onPointerDown={this.setupTempTransport} onPointerMove={this.testTempMusic} onPointerUp={this.killTransport}>
-					<img style={dataThirdStyle} alt="temperature key" src={tempKey} draggable="false"/>
+					<img style={imageKeyStyle} alt="temperature key" src={tempKey} draggable="false"/>
 				</div>
 
 				<div style={dataThirdStyle} onPointerDown={this.setupIceTransport}  onPointerMove={this.testIceMusic} onPointerUp={this.killTransport}>
-					<img style={dataThirdStyle} alt="sea ice key" src={iceKey} draggable="false"/>
+					<img style={imageKeyStyle} alt="sea ice key" src={iceKey} draggable="false"/>
 				</div>
 			</div>
 			
@@ -1361,7 +1361,7 @@ class AllTogether extends Simulation {
 			
 			<div style={sliderDivStyle} onPointerUp={this.updateYearVals}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
-				<img style={sliderStyle} alt="" src={timelineImg}/>
+				<img style={timelineStyle} alt="timeline" src={timelineImg}/>
 			</div>
 			
 		</div>

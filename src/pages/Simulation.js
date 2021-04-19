@@ -1039,6 +1039,12 @@ export class Simulation extends Page {
     		height: Math.floor(this.state.pageBottom * this.state.SLIDERVERTDIV / 2) - this.state.PADDING,
     		width: '99%'
     	};
+    	
+    	const timelineStyle = {
+    		height: Math.floor(this.state.pageBottom * this.state.SLIDERVERTDIV / 2) - this.state.PADDING * 2,
+    		width: modelWidth,
+    		objectFit: 'fill'
+    	};
     
     	const controlDivStyle = {
     		height: controlHeight,
@@ -1066,6 +1072,14 @@ export class Simulation extends Page {
     		height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
     		overflow: 'hidden',
     		float: 'left'
+    	}
+    	
+    	const imageKeyStyle = {
+    		width: Math.floor(modelWidth / 3),
+    		height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
+    		overflow: 'hidden',
+    		float: 'left',
+    		objectFit: 'fill'
     	}
     
     	var dataBlockStyle = {
@@ -1347,7 +1361,7 @@ export class Simulation extends Page {
     	};
     
     	
-    	return ({ pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, aboutButton });
+    	return ({ pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, timelineStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, imageKeyStyle, aboutButton });
     }
     
     /*** These should never run because each class has separate functions,

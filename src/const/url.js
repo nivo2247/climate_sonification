@@ -1,15 +1,15 @@
 /*** Links to AWS S3 media ***/
 export const urlPre = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images";
-export const precipKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/precipLegend1.png";
-export const tempKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tempLegend2.png";
-export const iceKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/seaiceLegend.png";
-export const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.png";
-export const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.png";
-export const homeButton = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.png";
-export const graphKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.png";
-export const topSkinnyImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.png";
-export const bottomSkinnyImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.png";
-export const timelineImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/timelinenumbersimage.png";
+export const precipKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/precipLegend1.svg";
+export const tempKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/tempLegend2.svg";
+export const iceKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/seaiceLegend.svg";
+export const playUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/playbutton.svg";
+export const pauseUrl = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/stop.svg";
+export const homeButton = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_home_active.svg";
+export const graphKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/linegraphkey1.svg";
+export const topSkinnyImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.svg";
+export const bottomSkinnyImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.svg";
+export const timelineImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/timelinenumbersimage.svg";
 export const loading = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/loading.png";
 
 /*** used to preload images in the AllTogether page ***/
@@ -27,14 +27,14 @@ export const togetherArtifactImgs = [
 	loading
 ];
 
-export const precipActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.png";
-export const precipInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_inactive.png";
-export const tempActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_active.png";
-export const tempInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_inactive.png";
-export const iceActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_active.png";
-export const iceInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_inactive.png";
-export const topSkinnyImgAlone = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part2.png";
-export const bottomSkinnyImgAlone = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part1.png";
+export const precipActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_active.svg";
+export const precipInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_precipitation_inactive.svg";
+export const tempActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_active.svg";
+export const tempInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_temperature_inactive.svg";
+export const iceActive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_active.svg";
+export const iceInactive = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_btn_seaice_inactive.svg";
+export const topSkinnyImgAlone = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part2.svg";
+export const bottomSkinnyImgAlone = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/UCAR_sidebar_advanced_part1.svg";
 
 /*** used to preload images in the EachAlone page ***/
 export const aloneArtifactImgs = [
