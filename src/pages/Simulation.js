@@ -126,7 +126,8 @@ export class Simulation extends Page {
 	
 	/* create and send DB request for CO2 data */
     co2Api = () => {
-    	var request = dbUrl.concat("/co2/all");
+    	//var request = dbUrl.concat("/co2/all");
+    	var request = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/co2/all.txt";
     	Axios.get(request)
     	.then(res => {
     		const all_co2_data = res.data.data;
@@ -699,11 +700,6 @@ export class Simulation extends Page {
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
 		const synth = this.getSynth(type);
-		if(type === 3){
-			synth.volume.value = 6;
-		}else{
-			synth.volume.value = 0;
-		}
 		const note = this.getNote(type, val, getScale(this.state.index));
 		this.setState({notePlaying:1});
 		Tone.Transport.scheduleOnce((time) => {
@@ -711,8 +707,6 @@ export class Simulation extends Page {
 		}, '+0');
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
-		}, '+4n');
-		Tone.Transport.scheduleOnce((time) => {
 			synth.dispose();
 			Tone.Transport.cancel();
 			Tone.Transport.stop();
@@ -721,12 +715,6 @@ export class Simulation extends Page {
 	
 	playNoteByVal = (type, val, index, data) => {
 		const synth = this.getSynth(type);
-		if(type === 3){
-			synth.volume.value = 6;
-			console.log(val, ', ',this.getNote(3, val, getScale(this.state.index)));
-		}else{
-			synth.volume.value = 0;
-		}
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
@@ -738,17 +726,11 @@ export class Simulation extends Page {
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
 			synth.dispose();
-		}, '+4n');
+		}, '+2n');
 	}
 	
 	playNoteByValKey = (type, val, index, data) => {
 		const synth = this.getSynth(type);
-		if(type === 3){
-			synth.volume.value = 6;
-			console.log(val, ', ',this.getNote(3, val, getScale(this.state.index)));
-		}else{
-			synth.volume.value = 0;
-		}
 		const delay = Math.random() / 100;
 		const plus = '+';
 		const plusDelay = plus.concat(delay);
@@ -760,24 +742,31 @@ export class Simulation extends Page {
 		Tone.Transport.scheduleOnce((time) => {
 			this.setState({notePlaying:0});
 			synth.dispose();
-		}, '+4n');
+		}, '+2n');
 	}
 	
 	setupMapTransport = (e) => {
+		console.log(Tone.Transport.state);
 		Tone.Transport.start('+0');
 		this.onMouseDown(e);
 	}
 	
 	killMapTransport = (e) => {
-    		Tone.Transport.cancel('+4n');
-    		Tone.Transport.stop('+4n');
-    		this.setState({notePlaying: 0});
+    		Tone.Transport.scheduleOnce((time) => {
+			this.setState({notePlaying:0});
+			Tone.Transport.cancel('+0');
+    			Tone.Transport.stop('+0');
+    			Tone.Transport.cancel();
+		}, '+2n');
     	}
     
     	killTransport = (e) => {
-    		Tone.Transport.cancel('+4n');
-    		Tone.Transport.stop('+4n');
-    		this.setState({notePlaying: 0});
+    		Tone.Transport.scheduleOnce((time) => {
+			this.setState({notePlaying:0});
+			Tone.Transport.cancel('+0');
+    			Tone.Transport.stop('+0');
+    			Tone.Transport.cancel();
+		}, '+2n');
     	}
 	
 	getSynth = (type) => {
@@ -881,7 +870,7 @@ export class Simulation extends Page {
     	*/
     	
     	var coord_index = (dbY - 1) * 360 + (dbX - 1);
-    	console.log('coord_ind: ', coord_index);
+    	//console.log('coord_ind: ', coord_index);
     	return coord_index;
     }
 	
@@ -1000,6 +989,8 @@ export class Simulation extends Page {
     	var smallFontSize = Math.floor(this.state.pageRight / 200 + this.state.pageBottom / 100);
     	var microFontSize = smallFontSize - 2;
     	var largeFontSize = Math.floor(this.state.pageRight / 160 + this.state.pageBottom / 80);
+    	
+    	var buttonPadding = Math.floor(this.state.pageRight / 300 + this.state.pageBottom / 500);
     	
     	const pageDiv = {
     		height: this.state.pageBottom,
@@ -1159,8 +1150,8 @@ export class Simulation extends Page {
     		'backgroundColor': moderato,
     		'fontSize': microFontSize,
     		'fontFamily': 'Verdana, sans-serif',
-    		'padding': '8px',
-    		'borderRadius': '8px',
+    		'padding': buttonPadding,
+    		'borderRadius': buttonPadding,
     		'display': 'inline-block',
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
     	};
@@ -1168,8 +1159,8 @@ export class Simulation extends Page {
     		'backgroundColor': allegro,
     		'fontSize': microFontSize,
     		'fontFamily': 'Verdana, sans-serif',
-    		'padding': '8px',
-    		'borderRadius': '8px',
+    		'padding': buttonPadding,
+    		'borderRadius': buttonPadding,
     		'display': 'inline-block',
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
     	};
@@ -1177,8 +1168,8 @@ export class Simulation extends Page {
     		'backgroundColor': presto,
     		'fontSize': microFontSize,
     		'fontFamily': 'Verdana, sans-serif',
-    		'padding': '8px',
-    		'borderRadius': '8px',
+    		'padding': buttonPadding,
+    		'borderRadius': buttonPadding,
     		'display': 'inline-block',
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
     	};
@@ -1187,8 +1178,8 @@ export class Simulation extends Page {
     		'backgroundColor': inactive,
     		'fontSize': microFontSize,
     		'fontFamily': 'Verdana, sans-serif',
-    		'padding': '8px',
-    		'borderRadius': '8px',
+    		'padding': buttonPadding,
+    		'borderRadius': buttonPadding,
     		'display': 'inline-block',
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
     	};

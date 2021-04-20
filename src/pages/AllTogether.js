@@ -214,6 +214,7 @@ class AllTogether extends Simulation {
     /*** runs on initial render ***/
     componentDidMount = () => {
     	this.co2Api();
+    	
     	this.updateDimensions();
 	
 	togetherArtifactImgs.forEach((picture) => {

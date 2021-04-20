@@ -10,7 +10,7 @@ export const graphKey = "https://soundingclimate-media.s3.us-east-2.amazonaws.co
 export const topSkinnyImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabeltopMixed.svg";
 export const bottomSkinnyImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/sidelabelbottomMixed.svg";
 export const timelineImg = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/timelinenumbersimage.svg";
-export const loading = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/loading.png";
+export const loading = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/images/interface/wait.svg";
 
 /*** used to preload images in the AllTogether page ***/
 export const togetherArtifactImgs = [
