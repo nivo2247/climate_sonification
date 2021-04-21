@@ -452,18 +452,20 @@ class AllTogether extends Simulation {
     /*** query db for all coords at a specific year ***/
     doYearHits(year){
 	if(year >= 1920 && year <= 2100){
-		var table = dbUrl.concat("/table/")
+		//var table = dbUrl.concat("/table/")
+		var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
+		
 		var intermediate0 = table.concat("precipavg/year/");
 		var request0 = intermediate0.concat(year.toString(10));
-		this.precipYearApi(request0);
+		this.precipYearApi(request0.concat(".txt"));
 		
     		var intermediate1 = table.concat("tempavg/year/");
 		var request1 = intermediate1.concat(year.toString(10));
-		this.tempYearApi(request1);
+		this.tempYearApi(request1.concat(".txt"));
 		
     		var intermediate2 = table.concat("seaiceavg/year/");
 		var request2 = intermediate2.concat(year.toString(10));
-		this.iceYearApi(request2);
+		this.iceYearApi(request2.concat(".txt"));
 	}
     };
     
@@ -690,19 +692,20 @@ class AllTogether extends Simulation {
 		waiting: 6
 	});
 	var request;
+	var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
 	/* Filter and do db hit here */
 	if(dbX <= 360 && dbX >= 1 && dbY <= 180 && dbY >= 1){
-		request = dbUrl.concat("/table/precipavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		request = table.concat("precipavg/coord/").concat(dbX.toString(10)).concat(",").concat(dbY.toString(10)).concat(".txt");
 		this.precipCoordApi(request);
-		request = dbUrl.concat("/table/tempavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		request = table.concat("tempavg/coord/").concat(dbX.toString(10)).concat(",").concat(dbY.toString(10)).concat(".txt");
 		this.tempCoordApi(request);
-		request = dbUrl.concat("/table/seaiceavg/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		request = table.concat("seaiceavg/coord/").concat(dbX.toString(10)).concat(",").concat(dbY.toString(10)).concat(".txt");
 		this.iceCoordApi(request);
-		request = dbUrl.concat("/table/precip001/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		request = table.concat("precip001/coord/").concat(dbX.toString(10)).concat(",").concat(dbY.toString(10)).concat(".txt");
 		this.precipCoordApi1(request);
-		request = dbUrl.concat("/table/temp001/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		request = table.concat("temp001/coord/").concat(dbX.toString(10)).concat(",").concat(dbY.toString(10)).concat(".txt");
 		this.tempCoordApi1(request);
-		request = dbUrl.concat("/table/seaice001/coord/(").concat(dbX.toString(10)).concat(", ").concat(dbY.toString(10)).concat(")");
+		request = table.concat("seaice001/coord/").concat(dbX.toString(10)).concat(",").concat(dbY.toString(10)).concat(".txt");
 		this.iceCoordApi1(request);
 	}
     };
