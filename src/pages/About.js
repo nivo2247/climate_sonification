@@ -67,7 +67,7 @@ class About extends Page {
 	}
 	
 	getInfo3_4 = () => {
-	return "Contributors to the project: Adam S. Phillips (NCAR) for providing the model data, Timothy Scheitlin (NCAR) for providing the graphics, Sharon and Becca for …, Marty Quinn for the original sonification development, and Clara Deser for scientific and artistic guidance (?).";
+	return "Contributors to the project: Adam S. Phillips (NCAR) for providing the model data, Timothy Scheitlin (NCAR) for providing the graphics, Sharon Clark for providing ongoing development support, Becca Hatheway for providing user testing and feedback, Marty Quinn for the original sonification development, and Clara Deser for scientific and artistic guidance. This website was developed by Nick Vomund, with the original API written by Garrett Hempy, sonification by Mattias Leino, and support by Priyanka Karki, Fahad Shaik, and Zhaoyi Xie.";
 	}
 	
 	getPageStyle = () => {
