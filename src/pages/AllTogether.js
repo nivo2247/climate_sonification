@@ -452,8 +452,6 @@ class AllTogether extends Simulation {
     /*** query db for all coords at a specific year ***/
     doYearHits(year){
 	if(year >= 1920 && year <= 2100){
-		//var table = dbUrl.concat("/table/")
-		//var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
 		
 		var intermediate0 = dbUrl.concat("precipavg/year/");
 		var request0 = intermediate0.concat(year.toString(10));
@@ -692,7 +690,7 @@ class AllTogether extends Simulation {
 		waiting: 6
 	});
 	var request;
-	//var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
+	
 	/* Filter and do db hit here */
 	if(dbX <= 360 && dbX >= 1 && dbY <= 180 && dbY >= 1){
 		request = dbUrl.concat("precipavg/coord/").concat(dbX.toString(10)).concat(",").concat(dbY.toString(10)).concat(".txt");

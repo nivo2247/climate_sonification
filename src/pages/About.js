@@ -137,7 +137,7 @@ class About extends Page {
 				<p style={answerTextStyle}><br/>{text3_1}</p>
 				<p style={answerTextStyle}><br/>{text3_2}</p>
 				<p style={answerTextStyle}><br/>{text3_3}</p>
-				<p style={answerTextStyle}><br/>{text3_4}</p>
+				<p style={answerTextStyle}><br/>{text3_4}<br/><br/></p>
 				
 			</div>
 		)

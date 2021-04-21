@@ -747,6 +747,7 @@ export class Simulation extends Page {
 	setupMapTransport = (e) => {
 		console.log(Tone.Transport.state);
 		Tone.Transport.start('+0');
+		this.setModerato();
 		this.onMouseDown(e);
 	}
 	

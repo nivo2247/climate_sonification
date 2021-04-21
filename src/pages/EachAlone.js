@@ -446,8 +446,6 @@ class EachAlone extends Simulation {
     doYearHits(state, year){
 	/* Filter and do db hit here */
 	if(year >= 1920 && year <= 2100){
-		//var table = dbUrl.concat("/table/")
-		//var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
 		var intermediate = "";
 		if(state === 0){
 			intermediate = dbUrl.concat("precipavg/year/");
@@ -640,8 +638,6 @@ class EachAlone extends Simulation {
 	});
 	/* Filter and do db hit here */
 	if(dbX <= 360 && dbX >= 1 && dbY <= 180 && dbY >= 1){
-		//var table = dbUrl.concat("/table/")
-		//var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
 		var intermediate, intermediate1, intermediate2;
 		if(state === 0){
 			intermediate = dbUrl.concat("precipavg/coord/");
