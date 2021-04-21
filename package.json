@@ -1,6 +1,7 @@
 {
   "name": "packagetest",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
