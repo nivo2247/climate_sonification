@@ -447,16 +447,16 @@ class EachAlone extends Simulation {
 	/* Filter and do db hit here */
 	if(year >= 1920 && year <= 2100){
 		//var table = dbUrl.concat("/table/")
-		var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
+		//var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
 		var intermediate = "";
 		if(state === 0){
-			intermediate = table.concat("precipavg/year/");
+			intermediate = dbUrl.concat("precipavg/year/");
 		}
 		else if(state === 1){
-			intermediate = table.concat("tempavg/year/");
+			intermediate = dbUrl.concat("tempavg/year/");
 		}
 		else if(state === 2){
-			intermediate = table.concat("seaiceavg/year/");
+			intermediate = dbUrl.concat("seaiceavg/year/");
 		}
 		var request = intermediate.concat(year.toString(10));
 		this.yearApi(request.concat(".txt"));
@@ -641,22 +641,22 @@ class EachAlone extends Simulation {
 	/* Filter and do db hit here */
 	if(dbX <= 360 && dbX >= 1 && dbY <= 180 && dbY >= 1){
 		//var table = dbUrl.concat("/table/")
-		var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
+		//var table = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/";
 		var intermediate, intermediate1, intermediate2;
 		if(state === 0){
-			intermediate = table.concat("precipavg/coord/");
-			intermediate1 = table.concat("precip001/coord/");
-			intermediate2 = table.concat("precip002/coord/");
+			intermediate = dbUrl.concat("precipavg/coord/");
+			intermediate1 = dbUrl.concat("precip001/coord/");
+			intermediate2 = dbUrl.concat("precip002/coord/");
 		}
 		else if(state === 1){
-			intermediate = table.concat("tempavg/coord/");
-			intermediate1 = table.concat("temp001/coord/");
-			intermediate2 = table.concat("temp002/coord/");
+			intermediate = dbUrl.concat("tempavg/coord/");
+			intermediate1 = dbUrl.concat("temp001/coord/");
+			intermediate2 = dbUrl.concat("temp002/coord/");
 		}
 		else if(state === 2){
-			intermediate = table.concat("seaiceavg/coord/");
-			intermediate1 = table.concat("seaice001/coord/");
-			intermediate2 = table.concat("seaice002/coord/");
+			intermediate = dbUrl.concat("seaiceavg/coord/");
+			intermediate1 = dbUrl.concat("seaice001/coord/");
+			intermediate2 = dbUrl.concat("seaice002/coord/");
 		}
 		var request = intermediate.concat(dbX.toString(10)).concat(",").concat(dbY.toString(10)).concat(".txt");
 		console.log(request);

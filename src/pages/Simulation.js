@@ -126,8 +126,7 @@ export class Simulation extends Page {
 	
 	/* create and send DB request for CO2 data */
     co2Api = () => {
-    	//var request = dbUrl.concat("/co2/all");
-    	var request = "https://soundingclimate-media.s3.us-east-2.amazonaws.com/data/co2/all.txt";
+    	var request = dbUrl.concat("co2/all.txt");
     	Axios.get(request)
     	.then(res => {
     		const all_co2_data = res.data.data;
