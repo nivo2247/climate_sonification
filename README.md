@@ -25,74 +25,11 @@ _As packages are installed, you should update this document on how to install th
 15. Execute `npm start` to view app in your browser and test locally
     - You do not have to close and reopen the app to view changes. Just save the file locally and hit refresh or sometimes it updates on its own.
 
-## Local Backend Setup:
-  
-1. Create new API folder (db_api) and copy in routes, index.js and dbconn.js from [GitHub](https://github.com/ghempy/fetchAPI) into API root folder
-2. Run the following commands inside db_api in a terminal
-    - `sudo mysql_secure_installation`
-    - `sudo mysql`
-    - `create user 'username'@'localhost' identified by 'password';` **LEAVE PASSWORD AS PASSWORD!**
-    - `grant all privileges on *.* to ‘username’@’localhost’;`
-    - `flush privileges;`
-    - `create database climate_data;`
-    - `exit;`
-3. Open dbconn.js and modify username, password, and database name to what you just set for all these values
-4. Execute `sudo mysql -u username -p climate_data < climatescript.sql`
-5. Enter the password you set for the SQL user and let it load (this will take a bit)
-6. Execute:
-    - `npm init`
-    - `npm install express --save`
-    - `npm install cors body-parser mysql --save`
-    - `npm install compression --save`
-    - `node index.js`
-7. Server will be running on port 4040, to access API for LOCAL ONLY go to the following link (http://localhost:4040/co2/all this links to the results of the query in a web brower)
-  
+# AWS Instructions (S3)
+1. Execute `npm run build` inside project folder
+2. Create a folder on S3 for the frontend (/frontend/)
+3. Upload build files to /frontend/, make sure organization stays the same
 
-# AWS Instructions
-
-## API First Time Setup
-
-1. Use PuTTY to SSH into the API server
-2. Execute `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash`
-3. Execute `. ~/.nvm/nvm.sh`
-4. Execute `nvm install node`
-5. Execute `sudo yum install mariadb`
-6. Execute `sudo yum install mariadb-server`
-7. Execute `sudo systemctl start mariadb`
-8. Execute `sudo mysql_secure_installation`
-9. Setup root password **only** for final build, click yes for all other options.
-10. Execute `mysql`
-    - Execute `create user ‘ec2-user’@’localhost’ identified by ‘password’;`
-    - Execute `grant all privileges on *.* to ‘ec2-user’@’localhost’;`
-    - Execute `flush privileges;`
-    - Execute `exit;`
-11. `mkdir /home/ec2-user/db_data`
-12. `mkdir /home/ec2-user/db_api`
-13. `cd /home/ec2-user/db_api`
-14. `npm init`
-15. `npm install express --save`
-16. `npm install cors body-parser mysql --save`
-17. SCP data and script into `/home/ec2-user/db_data`
-18. SCP api into `/home/ec2-user/db_api`
-19. fix dbconn.js
-20. `cd /home/ec2-user/db_data`
-21. `unzip climate_data.zip`
-22. `sudo mysql`
-    - `create database climate_data;`
-    - `exit;`
-23. `sudo mysql -u ec2-user -p climate_data < climatescript.sql`
-24. `screen`
-    - `cd /home/ec2-user/db_api`
-    - `node index.js`
-    - `ctrl+a`
-    - `ctrl+d`
-  
-**Backgrounding a process**
-- ssh into your remote box. Type `screen` Then start the process you want.
-- Press `Ctrl-A` then `Ctrl-D`. This will "detach" your screen session but leave your processes running. You can now log out of the remote box.
-- If you want to come back later, log on again and type `screen -r` This will "resume" your screen session, and you can see the output of your process.
-  
-## Optional Setup:
 
 ### Changing Virtual Box Resolution
 Virtual Box has this really weird default viewing settings that bugged that shit out of me. I spent a lot of time figuring out how to fix it so I thought I would share it. If you don't like the small viewing with the awful resolution, follow these steps.  
