@@ -42,6 +42,16 @@ class EachAlone extends Simulation {
     	this.state.iceBool = 0;
     }
     
+    /*** Run this when stop is pressed or when index === 180 ***/
+    stopMusic = (terminate) => {
+	this.setState({ play: 0, playButton: playUrl });
+	Tone.Transport.stop();
+	Tone.Transport.cancel(0);
+	if(terminate === 0){
+		this.doYearHits(this.state.state, this.state.index + 1920);
+	}
+    }
+   
     /*** onPress for 'Precipitation' Button ***/  
     setPrecip = () => {
 	/* change page vars */
@@ -62,16 +72,6 @@ class EachAlone extends Simulation {
     	}
     	this.doCoordHits(0, this.state.latitude, this.state.longitude);
     }
-    
-    /*** Run this when stop is pressed or when index === 180 ***/
-	stopMusic = (terminate) => {
-		this.setState({ play: 0, playButton: playUrl });
-		Tone.Transport.stop();
-		Tone.Transport.cancel(0);
-		if(terminate === 0){
-			this.doYearHits(this.state.state, this.state.index + 1920);
-		}
-	}
    
     /*** onPress for 'Temperature' Button ***/   
     setTemp = () => {
@@ -131,7 +131,7 @@ class EachAlone extends Simulation {
     	}
     }
     
-        /*** called when the window is resized ***/
+    /*** called when the window is resized ***/
     updateDimensions = () => {
     	var newheight = window.innerHeight;
     	var newwidth = window.innerWidth;
@@ -140,15 +140,15 @@ class EachAlone extends Simulation {
     		this.setState({
     			pageBottom: newheight - this.state.PADDING - 1,
     			pageRight: newwidth - this.state.PADDING - 1,
-    			CONTROLDIV: 2 / 10,
-			SKINNYDIV: 1 / 20,
-			MAPDIV: 3 / 4,
-			MAPVERTDIV: 7 / 10,
-			DATAVERTDIV: 1 / 20,
-			GRAPHVERTDIV: 3 / 20,
-			SLIDERVERTDIV: 1 / 10,
-			CONTROLVERTDIV: 1,
-			CONTROLSPLIT: 1,
+    			CONTROLDIV: 2 / 10,	//width of control panel
+			SKINNYDIV: 1 / 20,	//width of model label image
+			MAPDIV: 3 / 4,		//width of models
+			MAPVERTDIV: 7 / 10,	//height of models
+			DATAVERTDIV: 1 / 20,	//height of padding for data
+			GRAPHVERTDIV: 3 / 20,	//height of graph
+			SLIDERVERTDIV: 1 / 10,  //height of padding
+			CONTROLVERTDIV: 1,	//height of control panel
+			CONTROLSPLIT: 1,	//control panel in 1 piece
 			PADDING: 40
     		});
     	}
@@ -164,7 +164,7 @@ class EachAlone extends Simulation {
 			GRAPHVERTDIV: 3 / 20,
 			SLIDERVERTDIV: 1 / 10,
 			CONTROLVERTDIV: 7 / 20,
-			CONTROLSPLIT: 1 / 2,
+			CONTROLSPLIT: 1 / 2,	//control panel split in halves
 			PADDING: 20
     		});
     	}	
@@ -172,8 +172,10 @@ class EachAlone extends Simulation {
     } 
     
     /*** Used to calculate coords pressed on the map
-    *** Leave this alone unless messing with DIV sizing ***/
+    *** Leave this alone unless messing with DIV sizing 
+    name is misnomer, its acutally used for onPointerMove***/
     onMouseDown = (e) => {
+    	//check if mouse is clicked
     	if(e.buttons !== 1){
     		return -1;
     	}
@@ -198,35 +200,45 @@ class EachAlone extends Simulation {
     	var lonSave = 0;
     	var centerX = 0;
     	var centerY = 0;
+    	
+    	//box 1,1
 	if (x <= modelDiv && y <= modelSplit) {
 	  	centerX = modelDiv / 2;
 		centerY = modelSplit / 2;
 	}
+	//box 2,1
     	else if (x <= modelDiv * 2 && y <= modelSplit){
 		centerX = modelDiv + modelDiv / 2;
     		centerY = modelSplit / 2;	
     	}
+    	//box 3,1
     	else if (x <= modelDiv * 3 && y <= modelSplit){
 		centerX = 2 * modelDiv + modelDiv / 2;
     		centerY = modelSplit / 2;
     	}
+    	//box 1,2
     	else if (x <= modelDiv && y <= modelSplit * 2){
 		centerX = modelDiv / 2;
     		centerY = modelSplit + modelSplit / 2;   	
     	}
+    	//box 2,2
     	else if (x <= modelDiv * 2 && y <= modelSplit * 2){
 		centerX = modelDiv + modelDiv / 2;
     		centerY = modelSplit + modelSplit / 2;   	
     	}
+    	//box 3,2
     	else if (x <= modelDiv * 3 && y <= modelSplit * 2){
 		centerX = 2 * modelDiv + modelDiv / 2;
     		centerY = modelSplit + modelSplit / 2;    	
     	}
     	
+    	//temp and precip use rectangular coords
     	if (this.state.state === 0 || this.state.state === 1) {
 	    	lonSave = (x - centerX) * 360 / modelDiv;
 	    	latSave = (centerY - y) * 180 / modelSplit;
 	}
+	
+	//sea ice uses polar coords (this is quite accurate, but could be incorrect on strange display sizes)
 	else if (this.state.state === 2) {
 		var dx = x - centerX;
 		dx *= modelSplit / (modelDiv * 3 / 4);
@@ -245,6 +257,7 @@ class EachAlone extends Simulation {
 		lonSave = newlon;
 	    	latSave = 90 - newlat;	    	
 	}
+	
 	latSave = Math.max(latSave, -89);
 	latSave = Math.min(latSave, 90);
 	lonSave = Math.max(lonSave, -180);
@@ -254,6 +267,8 @@ class EachAlone extends Simulation {
     		longitude: Math.floor(lonSave),
     		useArray: 0
     	});
+    	
+    	//get new data values and play sound
     	var {dbX, dbY} = this.getDBCoords(); 
     	var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.yearData.length >= coord_index){
@@ -264,7 +279,7 @@ class EachAlone extends Simulation {
 	}
     }   
     
-    /*** Writes data to the graph, will need to be checked after music implementation ***/
+    /*** Writes data to the graph ***/
     updateGraph() {
 	if (this.state.index > 0 && this.state.index <= 180){
 		const ctx = this.graphRef.current.getContext('2d');
@@ -274,6 +289,7 @@ class EachAlone extends Simulation {
     		var prev_val = 0;
     		var coord_val = 0;
     		
+    		//draw co2 line
     		ctx.beginPath();
     		for(var co2Ind = 1; co2Ind <= this.state.index; co2Ind++){
     		    	prev_val = this.state.co2data[co2Ind - 1].co2_val;
@@ -286,6 +302,7 @@ class EachAlone extends Simulation {
     		}
     		ctx.stroke();
     		
+    		//draw precip lines
     		if(this.state.state === 0){
     			var { precip_median, precip_range } = this.getPrecipGraphVars(this.state.coordData);
     		
@@ -325,7 +342,8 @@ class EachAlone extends Simulation {
     			}
     			ctx.stroke();
     		}
-    		
+
+		//draw temp lines    		
     		if(this.state.state === 1){
 
     			var { temp_median, temp_range, temp_avg } = this.getTempGraphVars(this.state.coordData, avg);
@@ -367,7 +385,7 @@ class EachAlone extends Simulation {
 	    		ctx.stroke();
     		}
     		
-    		
+    		//draw sea ice lines
     		if(this.state.state === 2) {
   	  		var ice_max = 1;
  	   		var ice_avg = Math.floor(avg * 0.5);
@@ -411,6 +429,7 @@ class EachAlone extends Simulation {
     	}
     }
     
+    //request all data for a certain year
     yearApi = (request) => {
     	if(cancelYear !== undefined){
     		cancelYear();
@@ -461,7 +480,8 @@ class EachAlone extends Simulation {
 	}
     };
     
-    /*** Templates for functions which would change the text of lat and lon from textbox input ***/
+    /*** changes the text of lat textbox from input
+    TODO: Use submit button instead ***/
     onChangeLat = (event) => {
     	var newval = event.target.value;
     	if(isNumeric(newval)){
@@ -481,6 +501,7 @@ class EachAlone extends Simulation {
     	}
     }
     
+    /*** changes the text of lon textbox from input ***/
     onChangeLon = (event) => {
     	var newval = event.target.value;
     	if(isNumeric(newval)){
@@ -500,11 +521,13 @@ class EachAlone extends Simulation {
     	}
     }
     
+    /*** Triggered by closest city dropdown ***/
     changeToCity = (event) => {
     	var city = event.target.value;
     	var cityinfo = getInfo(city);
     	var lat = cityinfo.latitude;
     	var lon = cityinfo.longitude;
+    	
     	this.doCoordHits(this.state.state, lat, lon);
     	this.setState({
     		latitude: lat,
@@ -513,11 +536,14 @@ class EachAlone extends Simulation {
     	});
     	this.setupGraph();
     	this.triggerNotes(lat, lon);
+    	
     	if(this.state.play === 1){
     		this.stopMusic();
     	}
      }
     
+    /*** request all years for a specific coordinate, using avg table 
+    TODO: Add more error handling ***/
     coordApi = (request) => {
     	if(cancelCoord !== undefined){
     		cancelCoord();
@@ -554,6 +580,7 @@ class EachAlone extends Simulation {
     		});
     }
     
+    /*** request all years for a specific coordinate, using 001 table ***/
     coordApi1 = (request) => {
     	if(cancelCoord1 !== undefined){
     		cancelCoord1();
@@ -590,6 +617,7 @@ class EachAlone extends Simulation {
     		});
     }
     
+    /*** request all years for a specific coordinate, using 002 table ***/
     coordApi2 = (request) => {
     	if(cancelCoord2 !== undefined){
     		cancelCoord2();
@@ -630,12 +658,12 @@ class EachAlone extends Simulation {
     doCoordHits(state, lat, lon){
     	var closestcity = getClosestCity(lat, lon);
     	var {dbX, dbY} = this.getDBCoords(); 
-    	console.log('dbX: ', dbX, 'dbY: ', dbY);
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon),
 		closestCity: closestcity
 	});
+	
 	/* Filter and do db hit here */
 	if(dbX <= 360 && dbX >= 1 && dbY <= 180 && dbY >= 1){
 		var intermediate, intermediate1, intermediate2;
@@ -665,20 +693,20 @@ class EachAlone extends Simulation {
 	}
     };
     
+    /*** Start transport when mousedown on model keys ***/
     setupTransport = (e) => {
     		Tone.Transport.start('+0');
     		this.testMusic(e);
     }
 
-    /*** This is an onPointerDown for the map keys.
-    *** When a user clicks the key, it should figure out
-    *** what value they are pressing and pay the corresponding note ***/
+    /*** Determines what value is being pressed on model key and play note
+    could be refined but unnecessary ***/
     testMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
     		var keyLeft = Math.floor(this.state.pageRight / 2);
     		var keyRight = Math.floor(this.state.pageRight * 3 / 4);
     		
-    		//Mobile switch
+    		//portrait view switch
     		if(this.state.CONTROLVERTDIV !== 1){
     			keyLeft = Math.floor(this.state.pageRight / 20 + this.state.pageRight * 19 / 20 / 3);
     			keyRight = Math.floor(this.state.pageRight / 20 + 2 * this.state.pageRight * 19 / 20 / 3);
@@ -701,6 +729,7 @@ class EachAlone extends Simulation {
    	}
     }
     
+    /*** Sets notes for avg data ***/
     noteHelper = (ind) => {
     	var notes = [];
     	if(this.state.state === 0){
@@ -717,6 +746,7 @@ class EachAlone extends Simulation {
 	return notes;
     }
     
+    /*** Sets notes for 001 data ***/
     noteHelper1 = (ind) => {
     	var notes = [];
     	if(this.state.state === 0){
@@ -733,6 +763,7 @@ class EachAlone extends Simulation {
 	return notes;
     }
     
+    /*** Sets notes for 002 data ***/
     noteHelper2 = (ind) => {
     	var notes = [];
     	if(this.state.state === 0){
@@ -749,6 +780,7 @@ class EachAlone extends Simulation {
 	return notes;
     }
     
+    /*** Start music ***/
     playMusic = () => {
     	if(this.state.waiting > 0){
     		console.log('waiting');
@@ -779,6 +811,7 @@ class EachAlone extends Simulation {
 	}, notes);
 	notePattern.humanize = true;
 	
+	/*** backing note patterns ***/
 	const notePattern1 = new Tone.Pattern((time, note) => {
 		synth1.triggerAttackRelease(note, '16n', time);
 	}, notes1);
@@ -812,7 +845,8 @@ class EachAlone extends Simulation {
 		}).catch(error => console.error(error));
 	}
     }
-	
+    
+    /*** runs when year slider changes ***/
     updateYearVals = () => {
     	if(this.state.play === 0){
     		this.doYearHits(this.state.state, this.state.index + 1920);
@@ -837,7 +871,8 @@ class EachAlone extends Simulation {
     		Image.prefetch(picture);
     	});
     	
-    	/* setup event listeners for dynamic page resizing */
+    	/* setup event listeners for dynamic page resizing
+    	don't resize mobile so that mobile users can effectively zoom */
     	if(isBrowser){
 		window.addEventListener('resize', this.updateDimensions);
 	}
@@ -850,6 +885,8 @@ class EachAlone extends Simulation {
 	this.setAllegro();
     } 
     
+    /*** triggers sound for new lat, lon, or city picked 
+    *** does not include model location selection ***/
     triggerNotes = (lat, lon) => {
     	var coord_val;
     	var {dbX, dbY} = this.getDBCoords(); 
@@ -863,7 +900,7 @@ class EachAlone extends Simulation {
     	this.setupGraph();
     }
     
-    /*** runs on page close ***/
+    /*** runs on page destruction ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
     	if(isBrowser){
@@ -872,9 +909,10 @@ class EachAlone extends Simulation {
     	window.removeEventListener('orientationchange', this.rotateDimensions);
     }  
     
+    /*** Picks where to put crosshairs ***/
     getLocations = () => {
-    	var fsize = 12;
     	/* A bunch of variables used to calculate crosshair position */
+    	var fsize = 12;
         var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
     	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV)) + this.state.PADDING / 2;
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
@@ -889,6 +927,7 @@ class EachAlone extends Simulation {
     	var xAdj = (this.state.longitude * modelDiv / 360) - (fsize / 4);
     	var yAdj = 0 - (this.state.latitude * modelSplit / 180) - (fsize / 2);
     	
+    	//polar coords, they work but are not great at all
     	if(this.state.state === 2){
     		var rX = (90 - this.state.latitude) * (modelDiv / 40);
     		var rY = (90 - this.state.latitude) * (modelSplit / 45);
@@ -1046,6 +1085,7 @@ class EachAlone extends Simulation {
     	return { location1, location2, location3, location4, location5, location6 };
     }
     
+    /*** Go to about page ***/
     openAbout = () => {
     	const { navigation } = this.props;
     	if(this.state.play === 1){
@@ -1086,6 +1126,7 @@ class EachAlone extends Simulation {
     	}
     }
     
+    /* how to label model data */
     var data_pre = "Precipitation: ";
     var data_post = " % of Annual Avg";
     if(this.state.state === 1){

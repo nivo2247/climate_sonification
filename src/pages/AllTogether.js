@@ -43,7 +43,7 @@ class AllTogether extends Simulation {
     	this.state.iceAvgAllCoords = [0];
     }
     
-    /* TODO: cleanup similar code */
+    /* Test precip model key */
     testPrecipMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
     		var keyLeft = Math.floor(this.state.pageRight / 4);
@@ -60,6 +60,7 @@ class AllTogether extends Simulation {
    	}
     }
     
+    /* Test temp model key */
     testTempMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
     		var keyLeft = Math.floor(this.state.pageRight / 2);
@@ -76,6 +77,7 @@ class AllTogether extends Simulation {
    	}
     }
     
+    /* Test sea ice model key */
     testIceMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
     		var keyLeft = Math.floor(this.state.pageRight * 3 / 4);
@@ -100,7 +102,7 @@ class AllTogether extends Simulation {
     	}
     }
     
-    /*** Used to calculate coords for onMouseDown and onMouseMove ***/
+    /*** Used to calculate coords on model for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
     	if(e.buttons !== 1){
     		return -1
@@ -157,10 +159,12 @@ class AllTogether extends Simulation {
     		boxType = 2;   	
     	}
     	
+    	//rectangular coords
     	if (boxType === 1) {
 	    	lonSave = (x - centerX) * 360 / modelDiv;
 	    	latSave = (centerY - y) * 180 / modelSplit;
 	}
+	//polar coords
 	else if (boxType === 2) {
 		var dx = x - centerX;
 		dx *= modelSplit / (modelDiv * 3 / 4);
@@ -188,6 +192,8 @@ class AllTogether extends Simulation {
 	   	longitude: Math.floor(lonSave),
 	   	useArray: 0
 	});	
+	
+	//diplay data and play notes
    	var {dbX, dbY} = this.getDBCoords(); 
    	var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.precipAvgAllCoords.length >= coord_index && this.state.tempAvgAllCoords.length >= coord_index && this.state.iceAvgAllCoords.length >= coord_index){
@@ -201,7 +207,7 @@ class AllTogether extends Simulation {
 	        
     }    
         
-        /*** Run this when stop is pressed or when index === 180 ***/
+    /*** stops music ***/
     stopMusic = (terminate) => {
 	this.setState({ play: 0, playButton: playUrl });
 	Tone.Transport.stop();
@@ -235,6 +241,7 @@ class AllTogether extends Simulation {
 	
     }   
     
+    /*** Write to graph ***/
     updateGraph() {
     	if (this.state.index > 0 && this.state.index <= 180){
     		const ctx = this.graphRef.current.getContext('2d');
@@ -246,6 +253,7 @@ class AllTogether extends Simulation {
     		var prev_val = 0;
     		var coord_val = 0;
     		
+    		//precip
     		ctx.beginPath();
     		for(var precipInd = 0; precipInd <= this.state.index; precipInd++){
     		    	prev_val = this.getValByIndex(this.state.precipAvg, precipInd - 1);
@@ -272,6 +280,7 @@ class AllTogether extends Simulation {
     		
     		var { temp_median, temp_range, temp_avg } = this.getTempGraphVars(this.state.tempAvg, avg);
     		
+    		//temp
     		ctx.beginPath();
     		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){
     		    	prev_val = this.getValByIndex(this.state.tempAvg, tempInd - 1);
@@ -299,6 +308,7 @@ class AllTogether extends Simulation {
     		var ice_max = 1;
     		var ice_avg = Math.floor(avg * 0.5);
     		
+    		//sea ice
     		ctx.beginPath();
     		for(var iceInd = 0; iceInd <= this.state.index; iceInd++){
     		    	prev_val = this.getValByIndex(this.state.iceAvg, iceInd - 1);
@@ -323,6 +333,7 @@ class AllTogether extends Simulation {
     		}
     		ctx.stroke(); 
     		
+    		//co2
     		ctx.beginPath();
     		for(var co2Ind = 1; co2Ind <= this.state.index; co2Ind++){
     		    	prev_val = this.state.co2data[co2Ind - 1].co2_val;
@@ -337,11 +348,13 @@ class AllTogether extends Simulation {
     	}
     }
     
-        /*** called when the window is resized ***/
+    /*** called when the window is resized 
+    *** see EachAlone for var descriptions***/
     updateDimensions = () => {
     	var newheight = window.innerHeight;
     	var newwidth = window.innerWidth;
     	
+    	//landscape
     	if(window.innerHeight < window.innerWidth){
     		this.setState({
     			pageBottom: newheight - this.state.PADDING - 1,
@@ -358,6 +371,7 @@ class AllTogether extends Simulation {
 			PADDING: 40
     		});
     	}
+    	//portrait
     	else{
     		this.setState({
     			pageBottom: newheight - this.state.PADDING - 1,
@@ -377,6 +391,7 @@ class AllTogether extends Simulation {
     	this.setupGraph();
     } 
     
+    /*** get all avg precip values for a specific year ***/
     precipYearApi = (request) => {
     	if(cancelYearPrecip !== undefined){
     		cancelYearPrecip();
@@ -396,6 +411,7 @@ class AllTogether extends Simulation {
     		});
     }
     
+    /*** get all avg temp values for a specific year ***/
     tempYearApi = (request) => {
     	if(cancelYearTemp !== undefined){
     		cancelYearIce();
@@ -415,6 +431,7 @@ class AllTogether extends Simulation {
     		});
     }
     
+    /*** get all avg sea ice values for a specific year ***/
     iceYearApi = (request) => {
     	if(cancelYearIce !== undefined){
     		cancelYearIce();
@@ -434,6 +451,7 @@ class AllTogether extends Simulation {
     		});
     }
     
+    /*** save response for specific year ***/
     setAvgAllCoords = (res, arrayNum) => {
    	const data = res.data.data;
    	if(arrayNum === 0){
@@ -467,7 +485,7 @@ class AllTogether extends Simulation {
 	}
     };
     
-    /*** Templates for functions which would change the text of lat and lon from textbox input ***/
+    /*** change lat text from input ***/
     onChangeLat = (event) => {
     	var newval = event.target.value;
     	if(this.state.play === 0 && isNumeric(newval)){
@@ -487,6 +505,7 @@ class AllTogether extends Simulation {
     	}
     }
     
+    /*** change lon text from input ***/
     onChangeLon = (event) => {
     	var newval = event.target.value;
     	if(this.state.play === 0 && isNumeric(newval)){
@@ -505,8 +524,9 @@ class AllTogether extends Simulation {
     		}
     	}
     }
-     
-     triggerNotes = (lat, lon) => {
+    
+    /*** runs when new lat / lon typed or city selected ***/ 
+    triggerNotes = (lat, lon) => {
     	var precip_val, temp_val, ice_val;
     	var {dbX, dbY} = this.getDBCoords(); 
     	var coord_index = this.getDBIndex(dbX, dbY);
@@ -526,7 +546,7 @@ class AllTogether extends Simulation {
     	this.triggerNoteByVal(3, co2_val);
     }
 
-
+   /*** request avg precip data ***/
     precipCoordApi = (request) => {
     	if(cancelCoordPrecip !== undefined){
     		cancelCoordPrecip();
@@ -547,6 +567,7 @@ class AllTogether extends Simulation {
     		});
     }
     
+    /*** request 001 precip data ***/
     precipCoordApi1 = (request) => {
     	if(cancelCoordPrecip1 !== undefined){
     		cancelCoordPrecip1();
@@ -567,6 +588,7 @@ class AllTogether extends Simulation {
     		});
     }
     
+    /*** request avg temp data ***/
     tempCoordApi = (request) => {
     	if(cancelCoordTemp !== undefined){
     		cancelCoordTemp();
@@ -587,6 +609,7 @@ class AllTogether extends Simulation {
     		});
     }
     
+    /*** request 001 temp data ***/
     tempCoordApi1 = (request) => {
     	if(cancelCoordTemp1 !== undefined){
     		cancelCoordTemp1();
@@ -607,6 +630,7 @@ class AllTogether extends Simulation {
     		});
     }
     
+    /*** request avg sea ice data ***/
     iceCoordApi = (request) => {
     	if(cancelCoordIce !== undefined){
     		cancelCoordIce();
@@ -627,6 +651,7 @@ class AllTogether extends Simulation {
     		});
     }
     
+    /*** request 001 sea ice data ***/
     iceCoordApi1 = (request) => {
     	if(cancelCoordIce1 !== undefined){
     		cancelCoordIce1();
@@ -647,7 +672,7 @@ class AllTogether extends Simulation {
     		});
     }
     
-        
+    /*** save data used for music ***/
     setAvgAllYears = (res, arrayNum) => {
     	const data = res.data.data;
     	var curwait = this.state.waiting;
@@ -708,14 +733,7 @@ class AllTogether extends Simulation {
 	}
     };
     
-    /*** Run this when play button is pressed
-	 * A few modifications for the real thing:
-	 * 	- use Sequence instead of Pattern
-	 * 	- determine start based on index, may need to
-	 * 	slice to make this work.  But should first see
-	 * 	if this can be accomplished using pause rather
-	 * 	than stop.
-	 ****/	
+    /*** Run this when play button is pressed ***/
 	playMusic = () => {
 		if(this.state.waiting > 0){
 			console.log('waiting');
@@ -812,33 +830,34 @@ class AllTogether extends Simulation {
 			}).catch(error => console.error(error));
 		}
 	}
-	
-	playTogetherMapNotes = (val1, val2, val3, val4, index, data1, data2, data3) => {
-		const synth0 = this.getSynth(0);
-		const synth1 = this.getSynth(1);
-		const synth2 = this.getSynth(2);
-		const piano = this.getSynth(3);
-		//synth.sync();
-		const note0 = this.getNote(0, val1);
-		const note1 = this.getNote(1, val2);
-		const note2 = this.getNote(2, val3);
-		const pianoNote = this.getNote(3, val4);
-		this.setState({notePlaying:1});
-		Tone.Transport.scheduleOnce((time) => {
-			synth0.triggerAttackRelease(note0, '16n');
-			synth1.triggerAttackRelease(note1, '16n');
-			synth2.triggerAttackRelease(note2, '16n');
-			piano.triggerAttackRelease(pianoNote, '16n');
-		}, '+0');
-		Tone.Transport.scheduleOnce((time) => {
-			this.setState({notePlaying:0});
-			synth0.dispose();
-			synth1.dispose();
-			synth2.dispose();
-			piano.dispose();
-		}, '+4n');
-	}
+
+    /*** play notes ***/	
+    playTogetherMapNotes = (val1, val2, val3, val4, index, data1, data2, data3) => {
+	const synth0 = this.getSynth(0);
+	const synth1 = this.getSynth(1);
+	const synth2 = this.getSynth(2);
+	const piano = this.getSynth(3);
+	const note0 = this.getNote(0, val1);
+	const note1 = this.getNote(1, val2);
+	const note2 = this.getNote(2, val3);
+	const pianoNote = this.getNote(3, val4);
+	this.setState({notePlaying:1});
+	Tone.Transport.scheduleOnce((time) => {
+		synth0.triggerAttackRelease(note0, '16n');
+		synth1.triggerAttackRelease(note1, '16n');
+		synth2.triggerAttackRelease(note2, '16n');
+		piano.triggerAttackRelease(pianoNote, '16n');
+	}, '+0');
+	Tone.Transport.scheduleOnce((time) => {
+		this.setState({notePlaying:0});
+		synth0.dispose();
+		synth1.dispose();
+		synth2.dispose();
+		piano.dispose();
+	}, '+4n');
+    }
     
+    /*** get styles only for this page ***/
     getTogetherStyles(mw, ch, cw) {
     	var modelWidth = mw;
     	var controlHeight = ch;
@@ -867,12 +886,14 @@ class AllTogether extends Simulation {
     	return { largeControlBlockStyle, graphHeight, graphWidth };
     }
     
+    /*** for year slider ***/
     updateYearVals = () => {
     	if(this.state.play === 0){
     		this.doYearHits(this.state.index + 1920);
     	}
     }
-    
+     
+    /*** for chaning city ***/
     changeToCity = (event) => {
     	var city = event.target.value;
     	var cityinfo = getInfo(city);
@@ -900,6 +921,7 @@ class AllTogether extends Simulation {
     	window.removeEventListener('orientationchange', this.rotateDimensions);
     }
     
+    /*** for playing model keys ***/
     setupPrecipTransport = (e) => {
     	Tone.Transport.start('+0');
     	this.testPrecipMusic(e);
@@ -915,9 +937,10 @@ class AllTogether extends Simulation {
     	this.testIceMusic(e);
     }
     
+    /*** get locations for crosshair ***/
     getLocations = () => {
-    	var fsize = 12;
     	/* A bunch of variables used to calculate crosshair position */
+    	var fsize = 12;
         var modelSplit = Math.floor(this.state.pageBottom * this.state.MAPVERTDIV / 2);
     	var modelLeft = Math.floor(this.state.pageRight * (1 - this.state.MAPDIV)) + this.state.PADDING / 2;
     	var modelDiv = Math.floor(this.state.pageRight * this.state.MAPDIV / 3);
@@ -1008,7 +1031,8 @@ class AllTogether extends Simulation {
     		'-ms-user-select': 'none',
     		'user-select': 'none'
     	}
-    		
+    	
+    	/* adjusdments for polar coords, not very accurate */	
     	var rX = (90 - this.state.latitude) * (modelDiv / 40);
     	var rY = (90 - this.state.latitude) * (modelSplit / 45);
     	
@@ -1087,7 +1111,8 @@ class AllTogether extends Simulation {
     	
     	return { location1, location2, location3, location4, location5, location6 };
     }
-    
+   
+    /*** navigate to about page ***/
     openAbout = () => {
     	const { navigation } = this.props;
     	if(this.state.play === 1){
