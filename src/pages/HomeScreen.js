@@ -12,6 +12,7 @@ function redirect(){
 
 class HomeScreen extends Page { 
     
+    /*** Return page styles */
     getStyles(){
     	var titleTextSize = Math.floor(this.state.pageRight / 30 + this.state.pageBottom / 30);
     	var descTextSize = Math.floor(titleTextSize / 2);

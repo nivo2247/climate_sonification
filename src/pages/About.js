@@ -30,6 +30,14 @@ class About extends Page {
 		}
 	}
 	
+	getQ0 = () => {
+		return "Sound issues or waiting for data?"
+	}
+	
+	getInfo0 = () => {
+		return "If there are any issues, refresh the page and start over. This generally happens when points are selected too quickly."
+	}
+	
 	getQ1 = () => {
 		return "How do I use the lat/lon textboxes?"
 	}
@@ -55,11 +63,11 @@ class About extends Page {
 	}
 	
 	getInfo3_1 = () => {
-	return "Sounding Climate is the result of a collaboration between climate scientist, Dr. Clara Deser from the National Center for Atmospheric Research (NCAR), and sound designer and data artist, Marty Quinn (founder of the Design Rhythmics Sonification Research Laboratory).  The sonification and visualizations in Sounding Climate are based on data from one of the world’s most comprehensive numerical models of the earth’s climate system, NCAR Community Earth System Model version 1 (CESM1). This model simulates past and future climate from 1920-2100, assuming a “business-as-usual” scenario for rising concentrations of carbon dioxide and other greenhouse gases due to the burning of fossil fuels. In addition to human influences on climate, the model also includes natural sources of climate variability in the oceans, atmosphere, land and sea ice, such as those that produce El Nino events or multi-decadal changes in the Atlantic Ocean’s overturning circulation. By repeating the model experiments many times, changing only the initial atmospheric temperature state by a miniscule amount (about 10 -14 K), scientists are able to untangle human and natural influences on climate. Each experiment contains its own unique sequence of natural variability, which cannot be predicted more than a few years in advance, superimposed upon a common signal of human-caused climate change. The human influence at any given time and location is isolated by averaging all of the 40 experiments together. A non-technical description of the model experiments is available here. The data from these experiments have been used in the Assessment Reports of the United Nations Intergovernmental Panel on Climate Change.";
+	return "Sounding Climate is the result of a collaboration between climate scientist, Dr. Clara Deser from the National Center for Atmospheric Research (NCAR), and sound designer and data artist, Marty Quinn (founder of the Design Rhythmics Sonification Research Laboratory).  The sonification and visualizations in Sounding Climate are based on data from one of the world’s most comprehensive numerical models of the earth’s climate system, NCAR Community Earth System Model version 1 (CESM1). This model simulates past and future climate from 1920-2100, assuming a “business-as-usual” scenario for rising concentrations of carbon dioxide and other greenhouse gases due to the burning of fossil fuels. In addition to human influences on climate, the model also includes natural sources of climate variability in the oceans, atmosphere, land and sea ice, such as those that produce El Nino events or multi-decadal changes in the Atlantic Ocean’s overturning circulation. By repeating the model experiments many times, changing only the initial atmospheric temperature state by a miniscule amount (about 10 -14 K), scientists are able to untangle human and natural influences on climate. Each experiment contains its own unique sequence of natural variability, which cannot be predicted more than a few years in advance, superimposed upon a common signal of human-caused climate change. The human influence at any given time and location is isolated by averaging all of the 40 experiments together. A non-technical description of the model experiments is available via the QR code on the homepage. The data from these experiments have been used in the Assessment Reports of the United Nations Intergovernmental Panel on Climate Change.";
 	}
 	
 	getInfo3_2 = () => {
-	return "Sounding Climate visitors explore how precipitation, temperature, and sea ice change over time through interactive visual graphs and sound “maps” (called sonifications). Just like colors on a map, each data value is assigned particular pitch, and each variable is played by a different instrument (marimba for precipitation, clarinet for temperature, and violins for sea ice). Carbon dioxide levels are played by a piano, and also control the musical scale of the pitches assigned to the data values. By selecting a location on the map, visitors experience through sight and sound how climate varies over time. Each map shows a different rendition of natural climate variability, superimposed upon a common human influence. By sliding their cursor over the color bar located beneath each world map, visitors can simultaneously see and hear how the data values are mapped to color and pitch. Visitors can also hear geographical patterns in the data by sliding their cursor directly over the maps. The temperature values are based on annual means and expressed in degrees Celsius change relative to a 1920- 1950 baseline; the precipitation values are also based on annual means and expressed as a percentage change relative to a 1920-1950 baseline; and the sea ice fraction values are for the month of September and expressed as the percentage of sea ice present in each grid cell.";
+	return "Sounding Climate visitors explore how precipitation, temperature, and sea ice change over time through interactive visual graphs and sound “maps” (called sonifications). Just like colors on a map, each data value is assigned particular pitch, and each variable is played by a different instrument (marimba for precipitation, woodwind instruments for temperature, and violins for sea ice). Carbon dioxide levels are played by a piano, and also control the musical scale of the pitches assigned to the data values. By selecting a location on the map, visitors experience through sight and sound how climate varies over time. Each map shows a different rendition of natural climate variability, superimposed upon a common human influence. By sliding their cursor over the color bar located beneath each world map, visitors can simultaneously see and hear how the data values are mapped to color and pitch. Visitors can also hear geographical patterns in the data by sliding their cursor directly over the maps. The temperature values are based on annual means and expressed in degrees Celsius change relative to a 1920- 1950 baseline; the precipitation values are also based on annual means and expressed as a percentage change relative to a 1920-1950 baseline; and the sea ice fraction values are for the month of September and expressed as the percentage of sea ice present in each grid cell.";
 	}
 	
 	getInfo3_3 = () => {
@@ -114,6 +122,8 @@ class About extends Page {
 		const pageStyle = this.getPageStyle();
 		
 		const titleText = this.getTitleText();
+		const q0 = this.getQ0();
+		const text0 = this.getInfo0();
 		const q1 = this.getQ1();
 		const text1_1 = this.getInfo1_1();
 		const text1_2 = this.getInfo1_2();
@@ -129,6 +139,8 @@ class About extends Page {
 			<div style={pageStyle} onPointerUp={() => navigation.goBack()}>
 				
 				<p style={titleTextStyle}>{titleText}</p> 
+				<p style={questionTextStyle}><br/><br/>{q0}</p>
+				<p style={answerTextStyle}><br/>{text0} </p>
 				<p style={questionTextStyle}><br/><br/>{q1}</p>
 				<p style={answerTextStyle}><br/>{text1_1} <br/><br/>{text1_2} </p>
 				<p style={questionTextStyle}><br/><br/>{q2}</p>
