@@ -47,7 +47,7 @@ export class Simulation extends Page {
 		this.state.closestCity = '';
 		// I'm pretty sure I need to bind the index incrementer
 		this.incrementIndex = this.incrementIndex.bind(this);
-	}  
+	}
 
     /*** check if waiting ***/
     getPlayButton = () => {
@@ -58,25 +58,25 @@ export class Simulation extends Page {
 		return this.state.playButton;
 	}
     }
-    
+
     /*** return calculations based on page size for graph ***/
     getGraphDims = () => {
     	var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
     	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
-	    	
+
     	var bottom = graphBottom - 1;
     	var right = modelWidth - 1;
-    	
+
     	var step = right / 180;
        	var avg = bottom / 2;
-    		
+
     	var co2_median = 300;
     	var co2_range = 700;
     	var co2_avg = Math.floor(avg * 1.6);
-    	
+
     	return({ step, avg, co2_median, co2_range, co2_avg });
     }
-    
+
     /*** variables te determine graph drawing ***/
     getPrecipGraphVars = (data) => {
     	var precip_median = 100;
@@ -84,7 +84,7 @@ export class Simulation extends Page {
     	var precip_range = precip_max - precip_median;
     	return { precip_median, precip_range };
     }
-    
+
     getTempGraphVars = (data, avg) => {
    	var temp_median = 0;
     	var temp_max = this.getLargestVal(data, 0) + 3;
@@ -93,7 +93,7 @@ export class Simulation extends Page {
     	return { temp_median, temp_range, temp_avg };
     }
 
-    /*** read data value for a certain index (year-1920) ***/	
+    /*** read data value for a certain index (year-1920) ***/
     getValByIndex = (arr, ind) => {
 	var avgKeys = Object.keys(arr[0]);
     	var useAvgKey = avgKeys[ind+2];
@@ -115,7 +115,7 @@ export class Simulation extends Page {
     	}
     	return largestVal;
     }
-	
+
     /*** read data value for coordinate ***/
     getValByCoord = (arr, coord) => {
 	var avgKeys0 = Object.keys(arr[coord]);
@@ -123,7 +123,7 @@ export class Simulation extends Page {
     	var val = arr[coord][useAvgKey0];
     	return val;
     }
-	
+
     /* create and send DB request for CO2 data */
     co2Api = () => {
     	var request = dbUrl.concat("co2/all.txt");
@@ -133,7 +133,7 @@ export class Simulation extends Page {
     		this.setState({ co2data: [...all_co2_data]});
     		this.setPianoNotes(all_co2_data);
     	});
-    	
+
     }
 
     /*** set co2 notes ***/
@@ -145,7 +145,7 @@ export class Simulation extends Page {
 	var pianoNoteArr = [];
 	var co2_val;
 	var note;
-	
+
 	for(var i = 0; i < 181; i++){
     	co2_val = data[i].co2_val;
     	note = this.getNote(3, co2_val, getScale(i));
@@ -155,21 +155,21 @@ export class Simulation extends Page {
 	this.setState({
 		pianoNotes: [...pianoNoteArr]
 	});
-	
+
     }
-	
+
     /*** set precip notes ***/
     setPrecipNotes = (data) => {
 	var precipNoteArr = [];
 	var precip_val;
 	var note;
-	
+
 	for(var i = 0; i < 181; i++){
     		precip_val = this.getValByIndex(data, i);
     		note = this.getNote(0, precip_val, getScale(i));
     		precipNoteArr.push(note)
 	}
-	
+
 	this.setState({
 		precipNotes: [...precipNoteArr]
 	});
@@ -180,130 +180,130 @@ export class Simulation extends Page {
 	var precipNoteArr = [];
 	var precip_val;
 	var note;
-	
+
 	for(var i = 0; i < 181; i++){
     		precip_val = this.getValByIndex(data, i);
     		note = this.getNote(0, precip_val, getScale(i));
     		precipNoteArr.push(note)
 	}
-	
+
 	this.setState({
 		precipNotes1: [...precipNoteArr]
 	});
     }
-	
+
     setPrecipNotes2 = (data) => {
 	var precipNoteArr = [];
 	var precip_val;
 	var note;
-	
+
 	for(var i = 0; i < 181; i++){
     		precip_val = this.getValByIndex(data, i);
     		note = this.getNote(0, precip_val, getScale(i));
     		precipNoteArr.push(note)
 	}
-	
+
 	this.setState({
 		precipNotes2: [...precipNoteArr]
 	});
     }
-	
+
     setTempNotes = (data) => {
 	var tempNoteArr = [];
 	var temp_val;
 	var note;
-		
+
 	for(var i = 0; i < 181; i++){
    		temp_val = this.getValByIndex(data, i);
     		note = this.getNote(1, temp_val, getScale(i));
-    		tempNoteArr.push(note);		
+    		tempNoteArr.push(note);
 	}
-	
+
 	this.setState({
 		tempNotes: [...tempNoteArr]
 	});
     }
-	
+
     setTempNotes1 = (data) => {
 	var tempNoteArr = [];
 	var temp_val;
 	var note;
-	
+
 	for(var i = 0; i < 181; i++){
    		temp_val = this.getValByIndex(data, i);
     		note = this.getNote(1, temp_val, getScale(i));
-    		tempNoteArr.push(note);	
+    		tempNoteArr.push(note);
 	}
-	
+
 	this.setState({
 		tempNotes1: [...tempNoteArr]
 	});
     }
-	
+
     setTempNotes2 = (data) => {
 	var tempNoteArr = [];
 	var temp_val;
 	var note;
-	
+
 	for(var i = 0; i < 181; i++){
     		temp_val = this.getValByIndex(data, i);
     		note = this.getNote(1, temp_val, getScale(i));
-    		tempNoteArr.push(note);	
+    		tempNoteArr.push(note);
 	}
-	
+
 	this.setState({
 		tempNotes2: [...tempNoteArr]
 	});
     }
-	
+
     setIceNotes = (data) => {
 	var iceNoteArr = [];
 	var ice_val;
 	var note;
-	
+
 	for(var i = 0; i < 181; i++){
     		ice_val = this.getValByIndex(data, i);
     		note = this.getNote(2, ice_val, getScale(i));
     		iceNoteArr.push(note);
 	}
-		
+
 	this.setState({
 		iceNotes: [...iceNoteArr]
 	});
     }
-	
+
     setIceNotes1 = (data) => {
 	var iceNoteArr = [];
 	var ice_val;
 	var note;
-	
+
 	for(var i = 0; i < 181; i++){
     		ice_val = this.getValByIndex(data, i);
     		note = this.getNote(2, ice_val, getScale(i));
     		iceNoteArr.push(note);
 	}
-	
+
 	this.setState({
 		iceNotes1: [...iceNoteArr]
 	});
     }
-	
+
     setIceNotes2 = (data) => {
 	var iceNoteArr = [];
 	var ice_val;
 	var note;
-		
+
 	for(var i = 0; i < 181; i++){
     		ice_val = this.getValByIndex(data, i);
     		note = this.getNote(2, ice_val, getScale(i));
     		iceNoteArr.push(note);
 	}
-	
+
 	this.setState({
 		iceNotes2: [...iceNoteArr]
 	});
     }
-	
+
     // return the note to be played
     getNote = (type, value, scale='maj') => {
 	var retval = 0;
@@ -381,7 +381,7 @@ export class Simulation extends Page {
 			retval = 34;
 		}else{
 			retval = 35;
-		}	
+		}
 	}
 	//temp
 	else if(type === 1){
@@ -597,7 +597,7 @@ export class Simulation extends Page {
 		return this.state.pianoNotes.slice(index);
 	}
     }
-	
+
     getPrecipNotes = (index) => {
 	if(this.state.precipNotes.length === 0){
 		return ['C5', 'D5', 'F5', 'G5'];
@@ -608,7 +608,7 @@ export class Simulation extends Page {
 		return this.state.precipNotes.slice(index);
 	}
     }
-	
+
     getPrecipNotes1 = (index) => {
 	if(this.state.precipNotes1.length === 0){
 		return ['C5', 'D5', 'F5', 'G5'];
@@ -619,7 +619,7 @@ export class Simulation extends Page {
 		return this.state.precipNotes1.slice(index);
 	}
     }
-	
+
     getPrecipNotes2 = (index) => {
 	if(this.state.precipNotes2.length === 0){
 		return ['C5', 'D5', 'F5', 'G5'];
@@ -630,7 +630,7 @@ export class Simulation extends Page {
 		return this.state.precipNotes2.slice(index);
 	}
     }
-	
+
     getTempNotes = (index) => {
 	if(this.state.tempNotes.length === 0){
 		return ['C5', 'D5', 'F5', 'G5'];
@@ -641,7 +641,7 @@ export class Simulation extends Page {
 		return this.state.tempNotes.slice(index);
 	}
     }
-	
+
     getTempNotes1 = (index) => {
 	if(this.state.tempNotes1.length === 0){
 		return ['C5', 'D5', 'F5', 'G5'];
@@ -652,7 +652,7 @@ export class Simulation extends Page {
 		return this.state.tempNotes1.slice(index);
 	}
     }
-	
+
     getTempNotes2 = (index) => {
 	if(this.state.tempNotes2.length === 0){
 		return ['C5', 'D5', 'F5', 'G5'];
@@ -663,7 +663,7 @@ export class Simulation extends Page {
 		return this.state.tempNotes2.slice(index);
 	}
     }
-	
+
     getIceNotes = (index) => {
 	if(this.state.iceNotes.length === 0){
 		return ['C5', 'D5', 'F5', 'G5'];
@@ -674,7 +674,7 @@ export class Simulation extends Page {
 		return this.state.iceNotes.slice(index);
 	}
     }
-	
+
     getIceNotes1 = (index) => {
 	if(this.state.iceNotes1.length === 0){
 		return ['C5', 'D5', 'F5', 'G5'];
@@ -685,7 +685,7 @@ export class Simulation extends Page {
 		return this.state.iceNotes1.slice(index);
 	}
     }
-	
+
     getIceNotes2 = (index) => {
 	if(this.state.iceNotes2.length === 0){
 		return ['C5', 'D5', 'F5', 'G5'];
@@ -696,8 +696,8 @@ export class Simulation extends Page {
 		return this.state.iceNotes2.slice(index);
 	}
     }
-	
-    /*** different variations to trigger note, used for model coord change, textbox / city ***/		
+
+    /*** different variations to trigger note, used for model coord change, textbox / city ***/
     triggerNoteByVal = (type, val) => {
 	Tone.Transport.start();
 	const delay = Math.random() / 100;
@@ -716,7 +716,7 @@ export class Simulation extends Page {
 		Tone.Transport.stop();
 	}, '+2n');
     }
-	
+
     playNoteByVal = (type, val, index, data) => {
 	const synth = this.getSynth(type);
 	const delay = Math.random() / 100;
@@ -732,7 +732,7 @@ export class Simulation extends Page {
 		synth.dispose();
 	}, '+2n');
     }
-	
+
     playNoteByValKey = (type, val, index, data) => {
 	const synth = this.getSynth(type);
 	const delay = Math.random() / 100;
@@ -748,7 +748,7 @@ export class Simulation extends Page {
 		synth.dispose();
 	}, '+2n');
     }
-	
+
     /*** start tranport to play the map ***/
     setupMapTransport = (e) => {
 	console.log(Tone.Transport.state);
@@ -756,7 +756,7 @@ export class Simulation extends Page {
 	this.setModerato();
 	this.onMouseDown(e);
     }
-	
+
     /*** stop tranport to play the map ***/
     killMapTransport = (e) => {
    	Tone.Transport.scheduleOnce((time) => {
@@ -766,7 +766,7 @@ export class Simulation extends Page {
     		Tone.Transport.cancel();
 	}, '+2n');
     }
-    
+
     killTransport = (e) => {
     	Tone.Transport.scheduleOnce((time) => {
 		this.setState({notePlaying:0});
@@ -775,7 +775,7 @@ export class Simulation extends Page {
    		Tone.Transport.cancel();
 	}, '+2n');
     }
-	
+
     /*** returns synth to be played
     TODO: set synths 1 time on componentDidMount, then return them with this function
     this wil fix playing the map sound issue, which is caused by spawining and disposing synths ***/
@@ -875,61 +875,61 @@ export class Simulation extends Page {
 		this.stopMusic(0);
 	}
     }
-	
+
     /*** convert db coords from 2d to 1d ***/
     getDBIndex = (dbX, dbY) => {
     	var coord_index = (dbY - 1) * 360 + (dbX - 1);
     	return coord_index;
     }
-	
+
     /*** return db coords from lat and lon in states ***/
     getDBCoords = () => {
 	var dbX = 1;
     	var dbY = 1;
     	var useLat = this.state.latitude;
     	var useLon = this.state.longitude;
-    	
+
     	if(useLat === -90){
     		useLat = -89;
     	}
-    	
+
     	if(useLon >= 0){
     		useLon -= 179;
     	}else{
     		useLon += 180;
     	}
-	
+
     	dbY = Math.floor((91 - useLat));
     	dbX = Math.floor((180 + useLon));
-	
+
 	return { dbX, dbY };
-	
+
     }
-    
-    /*** onPress for 'moderato' ***/   
+
+    /*** onPress for 'moderato' ***/
     setModerato = () => {
     	this.setState({
     		timerLen: 800
 		});
 		Tone.Transport.bpm.value = 200;
     }
-    
-    /*** onPress for 'allegro' ***/   
+
+    /*** onPress for 'allegro' ***/
     setAllegro = () => {
     	this.setState({
     		timerLen: 400
     	});
 		Tone.Transport.bpm.value = 240;
     }
-    
-    /*** onPress for 'presto' ***/   
+
+    /*** onPress for 'presto' ***/
     setPresto = () => {
     	this.setState({
     		timerLen: 200
 		});
 		Tone.Transport.bpm.value = 320;
-    } 
-    
+    }
+
     /*** handle year changes from the slider ***/
     handleYear = (event) => {
     	if(this.state.play === 0){
@@ -939,8 +939,8 @@ export class Simulation extends Page {
     		});
     		this.setupGraph();
     	}
-    }   
-    
+    }
+
     /*** navigate home ***/
     callHome = () => {
     	const { navigation } = this.props;
@@ -949,17 +949,17 @@ export class Simulation extends Page {
     	}
     	navigation.navigate('Home');
     }
-      
-    /*** clears and redraws rectangle around the graph area ***/ 
+
+    /*** clears and redraws rectangle around the graph area ***/
     setupGraph() {
     	const ctx = this.graphRef.current.getContext('2d');
         var graphBottom = Math.floor(this.state.pageBottom * this.state.GRAPHVERTDIV);
     	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
     	var bottom = graphBottom - 1;
     	var right = modelWidth - 1;
-    	
+
     	ctx.clearRect(0, 0, right, bottom);
-    	
+
     	ctx.beginPath();
     	ctx.moveTo(1, 1);
     	ctx.lineTo(1, bottom);
@@ -970,7 +970,7 @@ export class Simulation extends Page {
     	ctx.lineWidth = 1;
     	ctx.stroke();
     }
-    
+
     /*** Called when the window is rotated on mobile ***/
     rotateDimensions = async () => {
     	await timer(1000);
@@ -978,9 +978,9 @@ export class Simulation extends Page {
     	window.resizeTo(this.state.pageBottom, this.state.pageRight);
     	window.focus();
     	this.updateDimensions();
-    } 
- 
-    
+    }
+
+
     /*** Huge section of common styling, relies on the page size and what the DIVs are set at ***/
     getCommonStyles() {
     	var modelWidth = Math.floor(this.state.pageRight * this.state.MAPDIV);
@@ -988,88 +988,88 @@ export class Simulation extends Page {
 
     	var controlWidth = this.state.pageRight * this.state.CONTROLDIV;
     	var controlHeight = this.state.pageBottom * this.state.CONTROLVERTDIV;
-    	
+
     	var skinnyWidth = Math.floor(this.state.pageRight * this.state.SKINNYDIV);
-    	
-    	var smallFontSize = Math.floor(this.state.pageRight / 200 + this.state.pageBottom / 100);
+
+    	var smallFontSize = Math.floor(this.state.pageRight / 200 + this.state.pageBottom / 120);
     	var microFontSize = smallFontSize - 2;
     	var largeFontSize = Math.floor(this.state.pageRight / 160 + this.state.pageBottom / 80);
-    	
+
     	var buttonPadding = Math.floor(this.state.pageRight / 300 + this.state.pageBottom / 500);
-    	
+
     	const pageDiv = {
     		height: this.state.pageBottom,
     		width: this.state.pageRight,
     		padding: this.state.PADDING / 2
     	}
-    	
+
     	/*** style for model images and div ***/
     	const modelStyle = {
 		width: modelWidth,
 		height: modelHeight
     	};
-    
+
     	const containerStyle = {
     		height: this.state.pageBottom,
     		width: this.state.pageRight,
     		overflow: 'hidden'
     	};
-    
+
     	const controlContainerStyle = {
     		height: Math.floor(controlHeight / 2),
     		width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
     		float: 'left'
     	}
-    	
+
     	const graphStyle = {
     		height: this.state.pageBottom * this.state.GRAPHVERTDIV,
     		width: modelWidth
     	};
-    	
+
     	const sliderDivStyle = {
     		height: Math.floor(this.state.pageBottom * this.state.SLIDERVERTDIV),
     		width: modelWidth
     	};
-    
+
     	const sliderStyle = {
     		height: Math.floor(this.state.pageBottom * this.state.SLIDERVERTDIV / 2) - this.state.PADDING,
     		width: '99%'
     	};
-    	
+
     	const timelineStyle = {
     		height: Math.floor(this.state.pageBottom * this.state.SLIDERVERTDIV / 2) - this.state.PADDING * 2,
     		width: modelWidth,
     		objectFit: 'fill'
     	};
-    
+
     	const controlDivStyle = {
     		height: controlHeight,
     		width: controlWidth,
     		overflow: 'hidden',
     		float: 'left',
     	};
-    	
+
     	var playSplitDivStyle = {
     		height: Math.floor(controlHeight / (10)),
     		width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 3),
     		overflow: 'hidden',
     		float: 'left',
     	};
-    
+
     	var controlBlockStyle = {
     		height: Math.floor(controlHeight / (10)),
     		width: controlWidth * this.state.CONTROLSPLIT,
     		overflow: 'hidden',
     		float: 'left'
     	};
-    	
+
     	const dataThirdStyle = {
     		width: Math.floor(modelWidth / 3),
     		height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
     		overflow: 'hidden',
     		float: 'left'
     	}
-    	
+
     	const imageKeyStyle = {
     		width: Math.floor(modelWidth / 3),
     		height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
@@ -1077,7 +1077,7 @@ export class Simulation extends Page {
     		float: 'left',
     		objectFit: 'fill'
     	}
-    
+
     	var dataBlockStyle = {
     	   	height: 3 * controlHeight / (40),
     		width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
@@ -1085,20 +1085,20 @@ export class Simulation extends Page {
     		float: 'left',
     		'textAlign': 'center'
     	}
-    	
+
     	var keyContainer = {
     		width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
     		height: Math.floor(this.state.pageBottom * this.state.CONTROLDVERTDIV * 3 / 20),
     		float: 'left',
     		overflow: 'hidden'
     	};
-    	
+
     	var thirdControlStyle = {
     		height: Math.floor(controlHeight / 20),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     		float: 'left'
     	};
-    	
+
     	var dropdownControlStyle = {
     		height: Math.floor(controlHeight / (20)) - 1,
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT * 2 / 3),
@@ -1106,7 +1106,7 @@ export class Simulation extends Page {
     		'fontFamily': 'Verdana, sans-serif',
     		"fontSize": smallFontSize
     	};
-    	
+
     	var inputControlStyle = {
     		height: Math.floor(controlHeight / (20)),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 5),
@@ -1114,7 +1114,7 @@ export class Simulation extends Page {
     		'fontFamily': 'Verdana, sans-serif',
     		"fontSize": smallFontSize
     	};
-    	
+
     	var labelControlStyle = {
     		height: Math.floor(controlHeight / (20)),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 6) - 1,
@@ -1124,13 +1124,13 @@ export class Simulation extends Page {
     		'textAlign': 'right',
     		'paddingTop': 5
     	};
-    	
+
     	var active = '#44CC44';
     	var inactive = '#DDDDDD';
     	var moderato = active;
     	var allegro = inactive;
     	var presto = inactive;
-    
+
     	if(this.state.timerLen === 1200){
     		moderato = inactive;
     		allegro = inactive;
@@ -1178,7 +1178,7 @@ export class Simulation extends Page {
     		'display': 'inline-block',
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
     	};
-    	
+
     	var aboutButton = {
     		'backgroundColor': inactive,
     		'fontSize': microFontSize,
@@ -1188,24 +1188,24 @@ export class Simulation extends Page {
     		'display': 'inline-block',
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
     	};
-    
-    	
+
+
     	if(this.state.CONTROLVERTDIV !== 1){
-    	
+
     		playSplitDivStyle = {
     			height: Math.floor(controlHeight / (10 * (1 - this.state.CONTROLVERTDIV))),
     			width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 3),
     			overflow: 'hidden',
     			float: 'left',
     		};
-    
+
     		controlBlockStyle = {
     			height: Math.floor(controlHeight / (10 * (1 - this.state.CONTROLVERTDIV))),
     			width: controlWidth * this.state.CONTROLSPLIT,
     			overflow: 'hidden',
     			float: 'left'
     		};
-    
+
     		dataBlockStyle = {
     	   		height: 3 * controlHeight / (40 * (1 - this.state.CONTROLVERTDIV)),
     			width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
@@ -1224,7 +1224,7 @@ export class Simulation extends Page {
     			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     			float: 'left'
     		};
-    		
+
     		dropdownControlStyle = {
     			height: Math.floor(3 * controlHeight / (40)),
     			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT * 2 / 3),
@@ -1232,7 +1232,7 @@ export class Simulation extends Page {
     			'fontFamily': 'Verdana, sans-serif',
     			"fontSize": smallFontSize
     		};
-    		
+
     		inputControlStyle = {
     			height: Math.floor(3 * controlHeight / (40)),
     			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 5),
@@ -1240,7 +1240,7 @@ export class Simulation extends Page {
     			'fontFamily': 'Verdana, sans-serif',
     			"fontSize": smallFontSize
     		};
-    	
+
     		labelControlStyle = {
     			height: Math.floor(3 * controlHeight / (40)),
     			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 6) - 1,
@@ -1286,46 +1286,46 @@ export class Simulation extends Page {
     			'display': 'inline-block',
     			width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 20,
     		};
-    	
+
     	}
-    	
+
     	const graphBufferStyle = {
     		width: Math.floor(modelWidth),
     		height: Math.floor(this.state.pageBottom * this.state.DATAVERTDIV),
     		float: 'left',
     		overflow: 'hidden'
     	}
-    
+
     	const instructionTextStyle = {
     		'fontFamily': 'Verdana, sans-serif',
     		"fontSize": largeFontSize,
     		'display': 'inline'
     	};
-    	
+
     	const paragraphTextStyle = {
     		'fontFamily': 'Verdana, sans-serif',
     		"fontSize": smallFontSize
     	};
-    
+
     	const smallLabelTextStyle = {
     		'fontFamily': 'Verdana, sans-serif',
     		"fontSize": smallFontSize
     	};
-    
+
     	const quarterControlStyle = {
     		height: Math.floor(controlHeight / (20)),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     		float: 'left',
     		'textAlign': 'center'
     	};
-    	
+
     	const halfControlStyle = {
     		height: Math.floor(controlHeight / (20)),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 2),
     		float: 'left',
     		'textAlign': 'center'
     	};
-    	
+
     	const bigLabelControlStyle = {
     		height: Math.floor(controlHeight / (20)),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3) - 1,
@@ -1335,14 +1335,14 @@ export class Simulation extends Page {
     		'textAlign': 'right',
     		'paddingTop': 5
     	};
-    	
+
     	const skinnyDivStyle = {
     		height: this.state.pageBottom * this.state.MAPVERTDIV,
     		width: skinnyWidth,
     		overflow: 'hidden',
     		float:'left'
     	};
-    
+
     	const largeDivStyle = {
     		height: this.state.pageBottom,
     		width: modelWidth,
@@ -1355,17 +1355,17 @@ export class Simulation extends Page {
     		width: skinnyWidth,
     		overflow: 'hidden'
     	};
-    
-    	
+
+
     	return ({ pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, timelineStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, thirdControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, imageKeyStyle, aboutButton });
     }
-    
+
     /*** These should never run because each class has separate functions,
     *** but these are here to keep react from complaining ***/
     componentDidMount = () => {
     	console.log("class fail");
     }
-    
+
     componentWillUnmount = () => {
     	console.log("class fail");
     }
