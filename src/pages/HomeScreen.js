@@ -51,15 +51,20 @@ class HomeScreen extends Page {
 
 		{/* Row for start buttons */}
 		<div className={'hp-btn-container'}>
-			<img className={'hp-btn'} alt="each on its own" src={eachAloneButton} onPointerUp={() => navigation.navigate('EachAlone')}/>
-			<img className={'hp-btn'} alt="all together" src={allTogetherButton} onPointerUp={() => navigation.navigate('AllTogether')}/>
+    <button onClick={() => navigation.navigate('EachAlone')} className={'hpBtn'}>
+			<img className={'hp-btn'} alt="each on its own" src={eachAloneButton} />
+      </button>
+      <button onClick={() => navigation.navigate('AllTogether')} className={'hpBtn'}>
+      <img className={'hp-btn'} alt="all together" src={allTogetherButton}/></button>
 		</div>
 
 		{/* Row for qr */}
 		<div className={'hp-qr-container'}>
-			<img className={'hp-qr'} alt="link to article" src={qrImg} onPointerDown={redirect} />
+			<a href="https://bit.ly/sounding-climate-article"><img className={'hp-qr'} alt="link to article" src={qrImg} onPointerDown={redirect} /></a>
+    </div>
+    <div className={'hp-link-container'}>
+      <a href="https://bit.ly/sounding-climate-article">40 Earths: NCAR'S Large Ensemble Reveals Staggering Climate Variability &raquo;</a>
 		</div>
-
     </div>
 
     );

@@ -8,16 +8,33 @@ background-size: cover;
   display: flex;
   flex-direction: column;
 }
+.hpBtn {
+  border:none;
+  background-color: transparent;
+}
 .hp-title-container,
 .hp-desc-container,
 .hp-btn-container,
-.hp-qr-container {
+.hp-qr-container,
+.hp-link-container {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
   align-content: center;
   border: 1px solid transparent;
+}
+.hp-link-container a {
+  font-weight: bold;
+  color: white;
+  background-color: black;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  border-radius: 20px;
+}
+.hp-link-container a:hover {
+  text-decoration: underline;
 }
 .hp-btn {
   width: 100%;

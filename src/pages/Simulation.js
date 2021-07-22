@@ -751,7 +751,7 @@ export class Simulation extends Page {
 
     /*** start tranport to play the map ***/
     setupMapTransport = (e) => {
-	console.log(Tone.Transport.state);
+	//console.log(Tone.Transport.state);
 	Tone.Transport.start('+0');
 	this.setModerato();
 	this.onMouseDown(e);
@@ -1054,6 +1054,7 @@ export class Simulation extends Page {
     		width: Math.floor(controlWidth * this.state.CONTROLSPLIT / 3),
     		overflow: 'hidden',
     		float: 'left',
+        'border':'none'
     	};
 
     	var controlBlockStyle = {
@@ -1083,7 +1084,8 @@ export class Simulation extends Page {
     		width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     		overflow: 'hidden',
     		float: 'left',
-    		'textAlign': 'center'
+    		'textAlign': 'center',
+        'border':'none'
     	}
 
     	var keyContainer = {
@@ -1096,7 +1098,8 @@ export class Simulation extends Page {
     	var thirdControlStyle = {
     		height: Math.floor(controlHeight / 20),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
-    		float: 'left'
+    		float: 'left',
+        'border':'none'
     	};
 
     	var dropdownControlStyle = {
@@ -1211,7 +1214,8 @@ export class Simulation extends Page {
     			width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     			overflow: 'hidden',
     			float: 'left',
-    			'textAlign': 'center'
+    			'textAlign': 'center',
+          'border':'none'
     		};
     		keyContainer = {
     			width: Math.floor(this.state.pageRight * this.state.CONTROLDIV * this.state.CONTROLSPLIT),
@@ -1316,7 +1320,8 @@ export class Simulation extends Page {
     		height: Math.floor(controlHeight / (20)),
     		width: Math.floor(controlWidth  * this.state.CONTROLSPLIT / 3),
     		float: 'left',
-    		'textAlign': 'center'
+    		'textAlign': 'center',
+        'border': 'none'
     	};
 
     	const halfControlStyle = {

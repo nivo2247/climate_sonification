@@ -42,7 +42,7 @@ class AllTogether extends Simulation {
     	this.state.tempAvgAllCoords = [0];
     	this.state.iceAvgAllCoords = [0];
     }
-    
+
     /* Test precip model key */
     testPrecipMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
@@ -59,7 +59,7 @@ class AllTogether extends Simulation {
    		this.playNoteByValKey(0, playVal, this.state.index, this.state.precipAvg);
    	}
     }
-    
+
     /* Test temp model key */
     testTempMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
@@ -76,7 +76,7 @@ class AllTogether extends Simulation {
    		this.playNoteByValKey(1, playVal, this.state.index, this.state.tempAvg);
    	}
     }
-    
+
     /* Test sea ice model key */
     testIceMusic = (e) => {
     	if(this.state.notePlaying === 0 && e.buttons === 1 && this.state.play === 0){
@@ -93,7 +93,7 @@ class AllTogether extends Simulation {
    		this.playNoteByValKey(2, playVal, this.state.index, this.state.iceAvg);
    	}
     }
-    
+
     /*** When map coord is selected, do db query ***/
     onPointerUp = (e) => {
     	this.killMapTransport(e);
@@ -101,7 +101,7 @@ class AllTogether extends Simulation {
     		this.doCoordHits(this.state.latitude, this.state.longitude);
     	}
     }
-    
+
     /*** Used to calculate coords on model for onMouseDown and onMouseMove ***/
     onMouseDown = (e) => {
     	if(e.buttons !== 1){
@@ -127,7 +127,7 @@ class AllTogether extends Simulation {
     	var centerX = 0;
     	var centerY = 0;
     	var boxType = 0;
-    	
+
 	if (x <= modelDiv && y <= modelSplit) {
 	    	centerX = modelDiv / 2;
 	    	centerY = modelSplit / 2;
@@ -136,7 +136,7 @@ class AllTogether extends Simulation {
     	else if (x <= modelDiv * 2 && y <= modelSplit){
 		centerX = modelDiv + modelDiv / 2;
     		centerY = modelSplit / 2;
-    		boxType = 1;	
+    		boxType = 1;
     	}
     	else if (x <= modelDiv * 3 && y <= modelSplit){
 		centerX = 2 * modelDiv + modelDiv / 2;
@@ -145,20 +145,20 @@ class AllTogether extends Simulation {
     	}
     	else if (x <= modelDiv && y <= modelSplit * 2){
 		centerX = modelDiv / 2;
-    		centerY = modelSplit + modelSplit / 2; 
-    		boxType = 1;  	
+    		centerY = modelSplit + modelSplit / 2;
+    		boxType = 1;
     	}
     	else if (x <= modelDiv * 2 && y <= modelSplit * 2){
 		centerX = modelDiv + modelDiv / 2;
-    		centerY = modelSplit + modelSplit / 2; 
-    		boxType = 1;  	
+    		centerY = modelSplit + modelSplit / 2;
+    		boxType = 1;
     	}
     	else if (x <= modelDiv * 3 && y <= modelSplit * 2){
 		centerX = 2 * modelDiv + modelDiv / 2;
-    		centerY = modelSplit + modelSplit / 2; 
-    		boxType = 2;   	
+    		centerY = modelSplit + modelSplit / 2;
+    		boxType = 2;
     	}
-    	
+
     	//rectangular coords
     	if (boxType === 1) {
 	    	lonSave = (x - centerX) * 360 / modelDiv;
@@ -188,13 +188,13 @@ class AllTogether extends Simulation {
 	lonSave = Math.max(lonSave, -180);
 	lonSave = Math.min(lonSave, 180);
 	this.setState({
-		latitude: Math.floor(latSave), 
+		latitude: Math.floor(latSave),
 	   	longitude: Math.floor(lonSave),
 	   	useArray: 0
-	});	
-	
+	});
+
 	//diplay data and play notes
-   	var {dbX, dbY} = this.getDBCoords(); 
+   	var {dbX, dbY} = this.getDBCoords();
    	var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.precipAvgAllCoords.length >= coord_index && this.state.tempAvgAllCoords.length >= coord_index && this.state.iceAvgAllCoords.length >= coord_index){
     		var val1 = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
@@ -203,10 +203,10 @@ class AllTogether extends Simulation {
     		var val4 = this.state.co2data[this.state.index].co2_val;
     		this.playTogetherMapNotes(val1, val2, val3, val4, this.state.index, this.state.precipAvg, this.state.tempAvg, this.state.iceAvg);
 	}
-	   
-	        
-    }    
-        
+
+
+    }
+
     /*** stops music ***/
     stopMusic = (terminate) => {
 	this.setState({ play: 0, playButton: playUrl });
@@ -216,21 +216,21 @@ class AllTogether extends Simulation {
 		this.doYearHits(this.state.index + 1920);
 	}
     }
-    
+
     /*** runs on initial render ***/
     componentDidMount = () => {
     	this.co2Api();
-    	
+
     	this.updateDimensions();
-	
+
 	togetherArtifactImgs.forEach((picture) => {
     		Image.prefetch(picture);
     	});
-    	
+
     	combinedImgs.forEach((picture) => {
     			Image.prefetch(picture);
     	});
-    	
+
     	if(isBrowser){
 		window.addEventListener('resize', this.updateDimensions);
 	}
@@ -238,107 +238,107 @@ class AllTogether extends Simulation {
 	this.doCoordHits(0, 0);
 	this.doYearHits(this.state.index + 1920);
 	this.setAllegro();
-	
-    }   
-    
+
+    }
+
     /*** Write to graph ***/
     updateGraph() {
     	if (this.state.index > 0 && this.state.index <= 180){
     		const ctx = this.graphRef.current.getContext('2d');
-    		
+
     		var { step, avg, co2_median, co2_range, co2_avg } = this.getGraphDims();
-    	
+
     		var { precip_median, precip_range } = this.getPrecipGraphVars(this.state.precipAvg);
-    		
+
     		var prev_val = 0;
     		var coord_val = 0;
-    		
+
     		//precip
     		ctx.beginPath();
     		for(var precipInd = 0; precipInd <= this.state.index; precipInd++){
     		    	prev_val = this.getValByIndex(this.state.precipAvg, precipInd - 1);
     			coord_val = this.getValByIndex(this.state.precipAvg, precipInd);
-    			
+
     			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_range));
     			ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_range));
     			ctx.strokeStyle = GREEN;
     			ctx.lineWidth = 2;
     		}
     		ctx.stroke();
-    		
+
     		ctx.beginPath();
     		for(precipInd = 0; precipInd <= this.state.index; precipInd++){
     		    	prev_val = this.getValByIndex(this.state.precip1, precipInd - 1);
     			coord_val = this.getValByIndex(this.state.precip1, precipInd);
-    			
+
     			ctx.moveTo(1 + step * (precipInd - 1), avg + avg * ((precip_median - prev_val) / precip_range));
     			ctx.lineTo(1 + step * precipInd, avg + avg * ((precip_median - coord_val) / precip_range));
     			ctx.strokeStyle = GREEN;
     			ctx.lineWidth = 1;
     		}
     		ctx.stroke();
-    		
+
     		var { temp_median, temp_range, temp_avg } = this.getTempGraphVars(this.state.tempAvg, avg);
-    		
+
     		//temp
     		ctx.beginPath();
     		for(var tempInd = 0; tempInd <= this.state.index; tempInd++){
     		    	prev_val = this.getValByIndex(this.state.tempAvg, tempInd - 1);
     			coord_val = this.getValByIndex(this.state.tempAvg, tempInd);
-    			
+
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
     			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
     			ctx.strokeStyle = RED;
     			ctx.lineWidth = 2;
     		}
     		ctx.stroke();
-    		
+
     		ctx.beginPath();
     		for(tempInd = 0; tempInd <= this.state.index; tempInd++){
     		    	prev_val = this.getValByIndex(this.state.temp1, tempInd - 1);
     			coord_val = this.getValByIndex(this.state.temp1, tempInd);
-    			
+
     			ctx.moveTo(1 + step * (tempInd - 1), temp_avg + temp_avg * ((temp_median - prev_val) / temp_range));
     			ctx.lineTo(1 + step * tempInd, temp_avg + temp_avg * ((temp_median - coord_val) / temp_range));
     			ctx.strokeStyle = RED;
     			ctx.lineWidth = 1;
     		}
     		ctx.stroke();
-    		
+
     		var ice_max = 1;
     		var ice_avg = Math.floor(avg * 0.5);
-    		
+
     		//sea ice
     		ctx.beginPath();
     		for(var iceInd = 0; iceInd <= this.state.index; iceInd++){
     		    	prev_val = this.getValByIndex(this.state.iceAvg, iceInd - 1);
     			coord_val = this.getValByIndex(this.state.iceAvg, iceInd);
-    			
+
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
     			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
     			ctx.strokeStyle = BLUE;
     			ctx.lineWidth = 2;
     		}
-    		ctx.stroke(); 
-    		
+    		ctx.stroke();
+
     		ctx.beginPath();
     		for(iceInd = 0; iceInd <= this.state.index; iceInd++){
     		    	prev_val = this.getValByIndex(this.state.ice1, iceInd - 1);
     			coord_val = this.getValByIndex(this.state.ice1, iceInd);
-    			
+
     			ctx.moveTo(1 + step * (iceInd - 1), ice_avg + 3 * ice_avg * ((ice_max - prev_val)));
     			ctx.lineTo(1 + step * iceInd, ice_avg + 3 * ice_avg * ((ice_max - coord_val)));
     			ctx.strokeStyle = BLUE;
     			ctx.lineWidth = 1;
     		}
-    		ctx.stroke(); 
-    		
+    		ctx.stroke();
+
     		//co2
     		ctx.beginPath();
     		for(var co2Ind = 1; co2Ind <= this.state.index; co2Ind++){
     		    	prev_val = this.state.co2data[co2Ind - 1].co2_val;
     			coord_val = this.state.co2data[co2Ind].co2_val;
-    			
+
     			ctx.moveTo(1 + step * (co2Ind - 1), co2_avg - co2_avg * (prev_val - co2_median) / co2_range);
     			ctx.lineTo(1 + step * co2Ind, co2_avg - co2_avg * (coord_val - co2_median) / co2_range);
     			ctx.strokeStyle = YELLOW;
@@ -347,13 +347,13 @@ class AllTogether extends Simulation {
     		ctx.stroke();
     	}
     }
-    
-    /*** called when the window is resized 
+
+    /*** called when the window is resized
     *** see EachAlone for var descriptions***/
     updateDimensions = () => {
     	var newheight = window.innerHeight;
     	var newwidth = window.innerWidth;
-    	
+
     	//landscape
     	if(window.innerHeight < window.innerWidth){
     		this.setState({
@@ -387,10 +387,10 @@ class AllTogether extends Simulation {
 			CONTROLSPLIT: 1 / 2,
 			PADDING: 20
     		});
-    	}	
+    	}
     	this.setupGraph();
-    } 
-    
+    }
+
     /*** get all avg precip values for a specific year ***/
     precipYearApi = (request) => {
     	if(cancelYearPrecip !== undefined){
@@ -407,10 +407,10 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				//console.log('precip year request cancelled');
-    			}	
+    			}
     		});
     }
-    
+
     /*** get all avg temp values for a specific year ***/
     tempYearApi = (request) => {
     	if(cancelYearTemp !== undefined){
@@ -427,10 +427,10 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				//console.log('temp year request cancelled');
-    			}	
+    			}
     		});
     }
-    
+
     /*** get all avg sea ice values for a specific year ***/
     iceYearApi = (request) => {
     	if(cancelYearIce !== undefined){
@@ -447,10 +447,10 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				//console.log('ice year request cancelled');
-    			}	
+    			}
     		});
     }
-    
+
     /*** save response for specific year ***/
     setAvgAllCoords = (res, arrayNum) => {
    	const data = res.data.data;
@@ -464,27 +464,27 @@ class AllTogether extends Simulation {
     	if(this.state.play === 0){
     		this.setState({ useArray: this.state.useArray + 1 });
     	}
-    	console.log(arrayNum, data);
+    	//console.log(arrayNum, data);
     }
-    
+
     /*** query db for all coords at a specific year ***/
     doYearHits(year){
 	if(year >= 1920 && year <= 2100){
-		
+
 		var intermediate0 = dbUrl.concat("precipavg/year/");
 		var request0 = intermediate0.concat(year.toString(10));
 		this.precipYearApi(request0.concat(".txt"));
-		
+
     		var intermediate1 = dbUrl.concat("tempavg/year/");
 		var request1 = intermediate1.concat(year.toString(10));
 		this.tempYearApi(request1.concat(".txt"));
-		
+
     		var intermediate2 = dbUrl.concat("seaiceavg/year/");
 		var request2 = intermediate2.concat(year.toString(10));
 		this.iceYearApi(request2.concat(".txt"));
 	}
     };
-    
+
     /*** change lat text from input ***/
     onChangeLat = (event) => {
     	var newval = event.target.value;
@@ -495,7 +495,7 @@ class AllTogether extends Simulation {
     			this.setState({
     				latitude: parsedval,
     				useArray: 0
-    			});	
+    			});
     			this.setupGraph();
     			this.triggerNotes(parsedval, 0);
     			if(this.state.play === 1){
@@ -504,7 +504,7 @@ class AllTogether extends Simulation {
     		}
     	}
     }
-    
+
     /*** change lon text from input ***/
     onChangeLon = (event) => {
     	var newval = event.target.value;
@@ -515,7 +515,7 @@ class AllTogether extends Simulation {
     			this.setState({
     				longitude: parsedval,
     				useArray: 0
-    			});	
+    			});
     			this.setupGraph();
     			this.triggerNotes(0, parsedval);
     			if(this.state.play === 1){
@@ -524,11 +524,11 @@ class AllTogether extends Simulation {
     		}
     	}
     }
-    
-    /*** runs when new lat / lon typed or city selected ***/ 
+
+    /*** runs when new lat / lon typed or city selected ***/
     triggerNotes = (lat, lon) => {
     	var precip_val, temp_val, ice_val;
-    	var {dbX, dbY} = this.getDBCoords(); 
+    	var {dbX, dbY} = this.getDBCoords();
     	var coord_index = this.getDBIndex(dbX, dbY);
     	if(this.state.precipAvgAllCoords.length > coord_index){
     		precip_val = this.getValByCoord(this.state.precipAvgAllCoords, coord_index);
@@ -551,7 +551,7 @@ class AllTogether extends Simulation {
     	if(cancelCoordPrecip !== undefined){
     		cancelCoordPrecip();
     	}
-    	
+
     	Axios.get(request, {
     			cancelToken: new CancelToken(function executor(c){
     				cancelCoordPrecip = c;
@@ -563,16 +563,16 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				//console.log('precip coord request cancelled');
-    			}	
+    			}
     		});
     }
-    
+
     /*** request 001 precip data ***/
     precipCoordApi1 = (request) => {
     	if(cancelCoordPrecip1 !== undefined){
     		cancelCoordPrecip1();
     	}
-    	
+
     	Axios.get(request, {
     			cancelToken: new CancelToken(function executor(c){
     				cancelCoordPrecip1 = c;
@@ -584,16 +584,16 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				//console.log('precip1 coord request cancelled');
-    			}	
+    			}
     		});
     }
-    
+
     /*** request avg temp data ***/
     tempCoordApi = (request) => {
     	if(cancelCoordTemp !== undefined){
     		cancelCoordTemp();
     	}
-	
+
     	Axios.get(request, {
     			cancelToken: new CancelToken(function executor(c){
     				cancelCoordTemp = c;
@@ -605,16 +605,16 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				//console.log('temp coord request cancelled');
-    			}	
+    			}
     		});
     }
-    
+
     /*** request 001 temp data ***/
     tempCoordApi1 = (request) => {
     	if(cancelCoordTemp1 !== undefined){
     		cancelCoordTemp1();
     	}
-	
+
     	Axios.get(request, {
     			cancelToken: new CancelToken(function executor(c){
     				cancelCoordTemp1 = c;
@@ -626,16 +626,16 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				//console.log('temp1 coord request cancelled');
-    			}	
+    			}
     		});
     }
-    
+
     /*** request avg sea ice data ***/
     iceCoordApi = (request) => {
     	if(cancelCoordIce !== undefined){
     		cancelCoordIce();
     	}
-	
+
     	Axios.get(request, {
     			cancelToken: new CancelToken(function executor(c){
     				cancelCoordIce = c;
@@ -647,16 +647,16 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				//console.log('ice coord request cancelled');
-    			}	
+    			}
     		});
     }
-    
+
     /*** request 001 sea ice data ***/
     iceCoordApi1 = (request) => {
     	if(cancelCoordIce1 !== undefined){
     		cancelCoordIce1();
     	}
-	
+
     	Axios.get(request, {
     			cancelToken: new CancelToken(function executor(c){
     				cancelCoordIce1 = c;
@@ -668,15 +668,15 @@ class AllTogether extends Simulation {
     		.catch((error) => {
     			if(Axios.isCancel(error)){
     				//console.log('ice1 coord request cancelled');
-    			}	
+    			}
     		});
     }
-    
+
     /*** save data used for music ***/
     setAvgAllYears = (res, arrayNum) => {
     	const data = res.data.data;
     	var curwait = this.state.waiting;
-    	
+
     	if(arrayNum === 0){
     		this.setState({ precipAvg: [...data] });
     		this.setPrecipNotes(data);
@@ -696,18 +696,18 @@ class AllTogether extends Simulation {
     		this.setState({ ice1: [...data] });
     		this.setIceNotes1(data);
     	}
-    	
+
     	this.setState({ waiting: curwait - 1 });
-    	
+
     	this.setupGraph();
     	this.updateGraph();
-    	console.log(arrayNum, data);
+    	//console.log(arrayNum, data);
     }
-    
+
     /*** query db for all years of a specific coord ***/
     doCoordHits(lat, lon){
     	var closestcity = getClosestCity(lat, lon)
-    	var {dbX, dbY} = this.getDBCoords(); 
+    	var {dbX, dbY} = this.getDBCoords();
 	this.setState({
 		latitude: Math.floor(lat),
 		longitude: Math.floor(lon),
@@ -715,7 +715,7 @@ class AllTogether extends Simulation {
 		waiting: 6
 	});
 	var request;
-	
+
 	/* Filter and do db hit here */
 	if(dbX <= 360 && dbX >= 1 && dbY <= 180 && dbY >= 1){
 		request = dbUrl.concat("precipavg/coord/").concat(dbX.toString(10)).concat(",").concat(dbY.toString(10)).concat(".txt");
@@ -732,7 +732,7 @@ class AllTogether extends Simulation {
 		this.iceCoordApi1(request);
 	}
     };
-    
+
     /*** Run this when play button is pressed ***/
 	playMusic = () => {
 		if(this.state.waiting > 0){
@@ -753,7 +753,7 @@ class AllTogether extends Simulation {
 		const icesynth1 = this.getSynth(2);
 		icesynth1.volume.value = -12;
 		const piano = this.getSynth(3);
-		
+
 		const precipNotes = this.getPrecipNotes(newind);
 		const precipNotes1 = this.getPrecipNotes1(newind);
 		const tempNotes = this.getTempNotes(newind);
@@ -761,7 +761,7 @@ class AllTogether extends Simulation {
 		const iceNotes = this.getIceNotes(newind);
 		const iceNotes1 = this.getIceNotes1(newind);
 		const pianoNotes = this.getPianoNotes(newind);
-		
+
 		this.setState( { play: 1, playButton: pauseUrl, useArray: 3, index: newind });
 		const precipPattern = new Tone.Pattern((time, note) => {
 			precipsynth.triggerAttackRelease(note, '16n', time);
@@ -771,32 +771,32 @@ class AllTogether extends Simulation {
 			}, time)
 		}, precipNotes);
 		precipPattern.humanize = true;
-		
+
 		const precipPattern1 = new Tone.Pattern((time, note) => {
 			precipsynth1.triggerAttackRelease(note, '16n', time);
 		}, precipNotes1);
 		precipPattern1.humanize = true;
-		
+
 		const tempPattern = new Tone.Pattern((time, note) => {
 			tempsynth.triggerAttackRelease(note, '16n', time);
 		}, tempNotes);
 		tempPattern.humanize = true;
-		
+
 		const tempPattern1 = new Tone.Pattern((time, note) => {
 			tempsynth1.triggerAttackRelease(note, '16n', time);
 		}, tempNotes1);
 		tempPattern1.humanize = true;
-		
+
 		const icePattern = new Tone.Pattern((time, note) => {
 			icesynth.triggerAttackRelease(note, '16n', time);
 		}, iceNotes);
 		icePattern.humanize = true;
-		
+
 		const icePattern1 = new Tone.Pattern((time, note) => {
 			icesynth1.triggerAttackRelease(note, '16n', time);
 		}, iceNotes1);
 		icePattern1.humanize = true;
-		
+
 		const pianoPattern = new Tone.Pattern((time, note) => {
 			piano.triggerAttackRelease(note, '16n', time);
 		}, pianoNotes);
@@ -831,7 +831,7 @@ class AllTogether extends Simulation {
 		}
 	}
 
-    /*** play notes ***/	
+    /*** play notes ***/
     playTogetherMapNotes = (val1, val2, val3, val4, index, data1, data2, data3) => {
 	const synth0 = this.getSynth(0);
 	const synth1 = this.getSynth(1);
@@ -856,7 +856,7 @@ class AllTogether extends Simulation {
 		piano.dispose();
 	}, '+4n');
     }
-    
+
     /*** get styles only for this page ***/
     getTogetherStyles(mw, ch, cw) {
     	var modelWidth = mw;
@@ -866,33 +866,33 @@ class AllTogether extends Simulation {
     	if(this.state.CONTROLVERTDIV !== 1){
     		newh /= (1 - this.state.CONTROLVERTDIV)
     	}
-    
+
     	var largeControlBlockStyle = {
     		height: Math.floor(newh),
     		width: Math.floor(controlWidth * this.state.CONTROLSPLIT),
     		overflow: 'hidden',
     		float: 'left'
     	}
-    
+
     	var graphHeight = this.state.pageBottom * this.state.GRAPHVERTDIV;
     	if(isNaN(graphHeight)){
     		graphHeight = 0;
     	}
-    
+
     	var graphWidth = modelWidth;
     	if(isNaN(graphWidth)){
     		graphWidth = 0;
     	}
     	return { largeControlBlockStyle, graphHeight, graphWidth };
     }
-    
+
     /*** for year slider ***/
     updateYearVals = () => {
     	if(this.state.play === 0){
     		this.doYearHits(this.state.index + 1920);
     	}
     }
-     
+
     /*** for chaning city ***/
     changeToCity = (event) => {
     	var city = event.target.value;
@@ -911,7 +911,7 @@ class AllTogether extends Simulation {
     		this.stopMusic();
     	}
      }
-    
+
     /*** runs on page close ***/
     componentWillUnmount = () => {
     	PubSub.unsubscribe(this.state.token);
@@ -920,23 +920,23 @@ class AllTogether extends Simulation {
     	}
     	window.removeEventListener('orientationchange', this.rotateDimensions);
     }
-    
+
     /*** for playing model keys ***/
     setupPrecipTransport = (e) => {
     	Tone.Transport.start('+0');
     	this.testPrecipMusic(e);
     }
-    
+
     setupTempTransport = (e) => {
     	Tone.Transport.start('+0');
     	this.testTempMusic(e);
     }
-    
+
     setupIceTransport = (e) => {
     	Tone.Transport.start('+0');
     	this.testIceMusic(e);
     }
-    
+
     /*** get locations for crosshair ***/
     getLocations = () => {
     	/* A bunch of variables used to calculate crosshair position */
@@ -948,13 +948,13 @@ class AllTogether extends Simulation {
     	if (this.state.pageBottom > this.state.pageRight){
     		modelTop = this.state.pageBottom * this.state.CONTROLVERTDIV + this.state.PADDING/2;
     	}
-    	
+
     	var centerX = 0;
     	var centerY = 0;
-    	
+
     	var xAdj = (this.state.longitude * modelDiv / 360) - (fsize / 4);
     	var yAdj = 0 - (this.state.latitude * modelSplit / 180) - (fsize / 2);
-	
+
 	centerX = modelLeft + modelDiv / 2;
 	centerY = modelTop + modelSplit / 2;
 	var location1 = {
@@ -973,10 +973,10 @@ class AllTogether extends Simulation {
     		'-ms-user-select': 'none',
     		'user-select': 'none'
     	}
-	
-	
+
+
     	centerX = modelLeft + modelDiv + modelDiv / 2;
-    	centerY = modelTop + modelSplit / 2;	
+    	centerY = modelTop + modelSplit / 2;
     	var location2 = {
     		position: 'absolute',
     		left: centerX + xAdj,
@@ -993,9 +993,9 @@ class AllTogether extends Simulation {
     		'-ms-user-select': 'none',
     		'user-select': 'none'
     	}
-	
+
 	centerX = modelLeft + modelDiv / 2;
-    	centerY = modelTop + modelSplit + modelSplit / 2;   	
+    	centerY = modelTop + modelSplit + modelSplit / 2;
     	var location4 = {
     		position: 'absolute',
     		left: centerX + xAdj,
@@ -1012,9 +1012,9 @@ class AllTogether extends Simulation {
     		'-ms-user-select': 'none',
     		'user-select': 'none'
     	}
-    	
+
     	centerX = modelLeft + modelDiv + modelDiv / 2;
-    	centerY = modelTop + modelSplit + modelSplit / 2;   	
+    	centerY = modelTop + modelSplit + modelSplit / 2;
     	var location5 = {
     		position: 'absolute',
     		left: centerX + xAdj,
@@ -1031,13 +1031,13 @@ class AllTogether extends Simulation {
     		'-ms-user-select': 'none',
     		'user-select': 'none'
     	}
-    	
-    	/* adjusdments for polar coords, not very accurate */	
+
+    	/* adjusdments for polar coords, not very accurate */
     	var rX = (90 - this.state.latitude) * (modelDiv / 40);
     	var rY = (90 - this.state.latitude) * (modelSplit / 45);
-    	
+
     	var theta = this.state.longitude / 180 * Math.PI / 2;
-    	
+
     	var multX = Math.sin(theta);
     	if(this.state.longitude < -90){
     		multX = Math.PI * 41 / 128 + multX;
@@ -1045,27 +1045,27 @@ class AllTogether extends Simulation {
     		multX *= 3.5;
     	}
     	multX /= 1.5;
-    
+
     	if(this.state.longitude > 90){
     		multX -= Math.PI * 20 / 128;
     		multX = 0 - multX;
     		multX *= 1;
     		multX += Math.PI / 8;
     	}
-    	
+
     	var multY = 0.5 - Math.cos(theta);
     	multY *= 2;
-    	
+
     	var ybase = 0;
     	if(this.state.latitude < 75 && this.state.longitude > -150 && this.state.longitude < 150){
-    		ybase = 0 - modelSplit / 5;	
+    		ybase = 0 - modelSplit / 5;
     	}else if(this.state.longitude < -90){
     		ybase = 0 - modelSplit / 10;
     	}
-    	
+
     	xAdj = 0 + (multX * rX) - fsize / 2;
     	yAdj = ybase - (multY * rY) - fsize / 2;
-    	
+
     	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
     	centerY = modelTop + modelSplit / 2;
     	var location3 = {
@@ -1084,7 +1084,7 @@ class AllTogether extends Simulation {
     		'-ms-user-select': 'none',
     		'user-select': 'none'
     	}
-	
+
 	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
     	centerY = modelTop + modelSplit + modelSplit / 2;
     	var location6 = {
@@ -1103,15 +1103,15 @@ class AllTogether extends Simulation {
     		'-ms-user-select': 'none',
     		'user-select': 'none'
     	}
-    	
+
     	if(this.state.latitude < 62){
     		location3.display = 'none';
     		location6.display = 'none';
     	}
-    	
+
     	return { location1, location2, location3, location4, location5, location6 };
     }
-   
+
     /*** navigate to about page ***/
     openAbout = () => {
     	const { navigation } = this.props;
@@ -1121,27 +1121,27 @@ class AllTogether extends Simulation {
     	navigation.navigate('About', {page: 1, pageBottom: this.state.pageBottom, pageRight: this.state.pageRight});
     }
 
-    /*** runs on state update ***/   
+    /*** runs on state update ***/
     render(){
-    
+
     var { location1, location2, location3, location4, location5, location6 } = this.getLocations();
-    
+
     var playButton = this.getPlayButton();
-    
-    var {dbX, dbY} = this.getDBCoords(); 
-    
+
+    var {dbX, dbY} = this.getDBCoords();
+
     var co2val = Math.round(this.state.co2data[this.state.index].co2_val);
-    
+
     /*** setup model URL ***/
     var urlAdd = urlPre.concat(this.state.modelStr);
     var ind = this.state.index.toString();
     var suffix = ind.concat(".jpg");
     var fullUrl = urlAdd.concat(suffix);
-    
+
     var precip_val = 0;
     var temp_val = 0;
     var ice_val = 0;
-    
+
     /*** Set avg db values ***/
     if(this.state.useArray === 3){
     	precip_val = this.getValByIndex(this.state.precipAvg, this.state.index);
@@ -1160,58 +1160,58 @@ class AllTogether extends Simulation {
     		ice_val = this.getValByCoord(this.state.iceAvgAllCoords, coord_index);
     	}
     }
-    
+
     var temp_pre = "Temperature: +";
     if(temp_val < 0){
     	temp_pre = "Temperature: ";
     }
-    
+
     ice_val *= 100;
     ice_val = Math.round(ice_val * 100) / 100;
     temp_val = Math.round(temp_val * 100) / 100;
     precip_val = Math.round(precip_val * 100) / 100;
-    
+
     const { pageDiv, modelWidth, modelStyle, controlHeight, controlWidth, containerStyle, controlContainerStyle, graphStyle, sliderDivStyle, sliderStyle, timelineStyle, controlDivStyle, playSplitDivStyle, controlBlockStyle, dataBlockStyle, graphBufferStyle, instructionTextStyle, paragraphTextStyle, smallLabelTextStyle, quarterControlStyle, halfControlStyle, inputControlStyle, bigLabelControlStyle, labelControlStyle, dropdownControlStyle, skinnyDivStyle, largeDivStyle, skinnyImgStyle, moderatoHighlight, allegroHighlight, prestoHighlight, keyContainer, dataThirdStyle, imageKeyStyle, aboutButton } = this.getCommonStyles();
-    
+
     const { largeControlBlockStyle, graphHeight, graphWidth } = this.getTogetherStyles(modelWidth, controlHeight, controlWidth );
-    
+
     this.updateGraph();
-    
+
     /*** Return the page ***/
-    
+
     return (
     <div style={pageDiv}>
     <div style={containerStyle}>
     		<div style={controlDivStyle}>
     		<div style={controlContainerStyle}>
-			
+
 			<div style={largeControlBlockStyle}>
 				<p style={instructionTextStyle}>Instructions</p>
 				<p style={paragraphTextStyle}>1. Touch the map to select a location<br/>2. Touch the timeline to select a starting year<br/>3. Select a tempo<br/>4. Press the play button.</p>
 			</div>
-			
+
 			<div style={controlBlockStyle}>
 				{/* This originally used this.handleClick().  I may still need to use the game
 				handler here.  But I might be able to just use the inhereted play method.  I think
 				I will need to use some methods in this file too.  I'm just not sure which ones yet */}
-				<div style={playSplitDivStyle} onPointerDown={this.state.play ? () => this.stopMusic(0) : () => this.playMusic()}>
+				<button style={playSplitDivStyle} onClick={this.state.play ? () => this.stopMusic(0) : () => this.playMusic()}>
 					<img style={playSplitDivStyle} alt="play button" src={playButton}/>
-				</div>
-				
+				</button>
+
 				<div style={quarterControlStyle}>
 					<span style={paragraphTextStyle}>Tempo:</span>
 				</div>
-				<div style={quarterControlStyle} onPointerDown={this.setModerato}>
+				<button style={quarterControlStyle} onClick={this.setModerato}>
 					<span style={moderatoHighlight}>moderato</span>
-				</div>
-				<div style={quarterControlStyle} onPointerDown={this.setAllegro}>
+				</button>
+				<button style={quarterControlStyle} onClick={this.setAllegro}>
 					<span style={allegroHighlight}>allegro</span>
-				</div>
-				<div style={quarterControlStyle} onPointerDown={this.setPresto}>
+				</button>
+				<button style={quarterControlStyle} onClick={this.setPresto}>
 					<span style={prestoHighlight}>presto</span>
-				</div>
+				</button>
 			</div>
-			
+
 			<form>
 				<div style={dataBlockStyle}>
 					<label htmlFor='lat' style={labelControlStyle}> Lat:</label>
@@ -1219,7 +1219,7 @@ class AllTogether extends Simulation {
 					<label htmlFor='lon' style={labelControlStyle}> Lon:</label>
 					<input type='text' style={inputControlStyle} id='lon' value={this.state.longitude} onChange={this.onChangeLon} />
 				</div>
-				
+
 				<div style={dataBlockStyle}>
 					<label htmlFor='city' style={bigLabelControlStyle}> Nearest City:</label>
 					<select name='city' id='city' style={dropdownControlStyle} value={this.state.closestCity} onChange={this.changeToCity}>
@@ -1234,7 +1234,7 @@ class AllTogether extends Simulation {
 							<option value='Nairobi'>Nairobi</option>
 							<option value='Tunis'>Tunis</option>
 						</optgroup>
-						
+
 						<optgroup label='Asia'>
 							<option value='Bangkok'>Bangkok</option>
 							<option value='Beijing'>Beijing</option>
@@ -1247,7 +1247,7 @@ class AllTogether extends Simulation {
 							<option value='Singapore'>Singapore</option>
 							<option value='Tokyo'>Tokyo</option>
 						</optgroup>
-						
+
 						<optgroup label='Europe'>
 							<option value='Amsterdam'>Amsterdam</option>
 							<option value='Berlin'>Berlin</option>
@@ -1266,7 +1266,7 @@ class AllTogether extends Simulation {
 							<option value='Vienna'>Vienna</option>
 							<option value='Warsaw'>Warsaw</option>
 						</optgroup>
-						
+
 						<optgroup label='North America'>
 							<option value='Anchorage'>Anchorage</option>
 							<option value='Austin'>Austin</option>
@@ -1283,7 +1283,7 @@ class AllTogether extends Simulation {
 							<option value='Vancouver'>Vancouver</option>
 							<option value='Winnipeg'>Winnipeg</option>
 						</optgroup>
-						
+
 						<optgroup label='Oceanea'>
 							<option value='Auckland'>Auckland</option>
 							<option value='Jakarta'>Jakarta</option>
@@ -1291,7 +1291,7 @@ class AllTogether extends Simulation {
 							<option value='Port Moresby'>Port Morseby</option>
 							<option value='Sydney'>Syney</option>
 						</optgroup>
-						
+
 						<optgroup label='South America'>
 							<option value='Asuncion'>Asuncion</option>
 							<option value='Bogota'>Bogota</option>
@@ -1307,7 +1307,7 @@ class AllTogether extends Simulation {
 					</select>
 				</div>
 			</form>
-			
+
 			<div style={dataBlockStyle}>
 				<div style={halfControlStyle}>
 					<p style={smallLabelTextStyle}>Year: {this.state.index + 1920}</p>
@@ -1316,43 +1316,43 @@ class AllTogether extends Simulation {
 					<p style={smallLabelTextStyle}>CO<sub>2</sub>: {co2val} ppm</p>
 				</div>
 			</div>
-			
+
 		</div>
-			
+
 		<div style={controlContainerStyle}>
-			
+
 			<div style={dataBlockStyle}/>
 			<div style={dataBlockStyle}>
 				<div style={quarterControlStyle}/>
-				<div style={quarterControlStyle} onPointerUp={() => this.openAbout()}>
+				<button style={quarterControlStyle} onClick={() => this.openAbout()}>
 					<span style={aboutButton}>FAQ</span>
-				</div>
+				</button>
 				<div style={quarterControlStyle}/>
 			</div>
-			
+
 			<div style={keyContainer}>
 				<img style={keyContainer} alt="graph key" src={graphKey}/>
 			</div>
-			
-			<div style={dataBlockStyle} onPointerUp={() => this.callHome()}>
+
+			<button style={dataBlockStyle} onClick={() => this.callHome()}>
 				<img style={dataBlockStyle} alt="home button" src={homeButton} />
-			</div>
-			
+			</button>
+
 		</div>
 		</div>
-		
+
 		<div style={skinnyDivStyle}>
 			<img style={skinnyImgStyle} alt="human influence on climate" src={topSkinnyImg} draggable="false"/>
 			<img style={skinnyImgStyle} alt="human and natural influence on climate" src={bottomSkinnyImg} draggable="false"/>
 		</div>
-		
+
 
 		<div style={largeDivStyle}>
-			
+
 			<div style={modelStyle} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>
 				<img src={fullUrl} alt="climate model" style={modelStyle} draggable="false"/>
 			</div>
-			
+
 			<div style={graphBufferStyle}>
 				<div style={dataThirdStyle}>
 					<p style={smallLabelTextStyle}>Precipitation: {precip_val} % of Annual Avg</p>
@@ -1364,7 +1364,7 @@ class AllTogether extends Simulation {
 					<p style={smallLabelTextStyle}>Sea Ice Fraction: {ice_val} %</p>
 				</div>
 			</div>
-			
+
 			<div style={graphBufferStyle}>
 				<div style={dataThirdStyle} onPointerDown={this.setupPrecipTransport} onPointerMove={this.testPrecipMusic} onPointerUp={this.killTransport}>
 					<img style={imageKeyStyle} alt="precipitation key" src={precipKey} draggable="false"/>
@@ -1378,27 +1378,27 @@ class AllTogether extends Simulation {
 					<img style={imageKeyStyle} alt="sea ice key" src={iceKey} draggable="false"/>
 				</div>
 			</div>
-			
+
 			<div style={graphStyle}>
 				<canvas ref={this.graphRef} height={graphHeight} width={graphWidth} />
 			</div>
-			
+
 			<div style={graphBufferStyle}/>
 			<div style={graphBufferStyle}/>
-			
+
 			<div style={sliderDivStyle} onPointerUp={this.updateYearVals}>
 				<input style={sliderStyle} type="range" min="0" max="180" value={this.state.index} step="1" onChange={this.handleYear} />
 				<img style={timelineStyle} alt="timeline" src={timelineImg}/>
 			</div>
-			
+
 		</div>
-		<div style={location1} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location2} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location3} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location4} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location5} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>   
-		<div style={location6} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div> 
-    	</div> 
+		<div style={location1} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>
+		<div style={location2} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>
+		<div style={location3} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>
+		<div style={location4} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>
+		<div style={location5} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>
+		<div style={location6} onPointerDown={this.setupMapTransport} onPointerMove={this.onMouseDown} onPointerUp={this.onPointerUp}>o</div>
+    	</div>
     	</div>
      );
      }
