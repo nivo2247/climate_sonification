@@ -14,8 +14,8 @@ const cities = [
 	{'city': 'San Francisco', 'latitude': 38, 'longitude': -122},
 	{'city': 'Vancouver', 'latitude': 49, 'longitude': -123},
 	{'city': 'Winnipeg', 'latitude': 50, 'longitude': -97},
-	
-	
+
+
 	//Asia
 	{'city': 'Bangkok', 'latitude': 14, 'longitude': 101},
 	{'city': 'Beijing', 'latitude': 41, 'longitude': 116},
@@ -28,13 +28,13 @@ const cities = [
 	{'city': 'Seoul', 'latitude': 38, 'longitude': 127},
 	{'city': 'Singapore', 'latitude': 1, 'longitude': 104},
 	{'city': 'Tokyo', 'latitude': 36, 'longitude': 140},
-	
+
 	//Oceania
 	{'city': 'Auckland', 'latitude': -37, 'longitude': 175},
 	{'city': 'Perth', 'latitude': -32, 'longitude': 116},
 	{'city': 'Port Moresby', 'latitude': -10, 'longitude': 147},
 	{'city': 'Sydney', 'latitude': -34, 'longitude': 151},
-	
+
 	//South America
 	{'city': 'Asuncion', 'latitude': -25, 'longitude': -58},
 	{'city': 'Bogota', 'latitude': 5, 'longitude': -74},
@@ -46,7 +46,7 @@ const cities = [
 	{'city': 'Santiago', 'latitude': -33, 'longitude': -71},
 	{'city': 'Punta Arenas', 'latitude': -53, 'longitude': -71},
 	{'city': 'Quito', 'latitude': 0, 'longitude': -78},
-	
+
 	//Africa
 	{'city': 'Antananarivo', 'latitude': -19, 'longitude': 48},
 	{'city': 'Cairo', 'latitude': 30, 'longitude': 31},
@@ -57,7 +57,7 @@ const cities = [
 	{'city': 'Marrakesh', 'latitude': 32, 'longitude': -8},
 	{'city': 'Nairobi', 'latitude': -1, 'longitude': 37},
 	{'city': 'Tunis', 'latitude': 37, 'longitude': 10},
-	
+
 	//Europe
 	{'city': 'Amsterdam', 'latitude': 52, 'longitude': 5},
 	{'city': 'Berlin', 'latitude': 53, 'longitude': 13},
@@ -112,6 +112,6 @@ export function getInfo(city){
     	for(var i = 0; i < cities.length; i++){
     		if(cities[i].city === city){
     			return (cities[i]);
-    		}	
+    		}
     	}
 }

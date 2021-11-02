@@ -23,149 +23,131 @@ class About extends Page {
     	}
 
 	getTitleText = () => {
-		if(this.state.page === 0){
-			return 'Click anywhere to go back to Each Alone';
-		}else{
-			return 'Click anywhere to go back to All Together';
-		}
+			return 'About Sounding Climate';
 	}
 
   getRtnBtnText = () => {
     if(this.state.page === 0){
-      return 'Close FAQ';
+      return 'Close About';
     }else{
-      return 'Close FAQ';
+      return 'Close About';
     }
   }
-	getQ0 = () => {
-		return "Sound issues or waiting for data?"
-	}
-
-	getInfo0 = () => {
-		return "If there are any issues, refresh the page and start over. This generally happens when points are selected too quickly."
-	}
-
-	getQ1 = () => {
-		return "How do I use the lat/lon textboxes?"
-	}
-
-	getInfo1_1 = () => {
-		return "Highlight the entire number before entering value into lat/lon box";
-	}
-
-	getInfo1_2 = () => {
-		return "Type the number, then add the minus sign in lat/lon box";
-	}
-
-	getQ2 = () => {
-		return "Why doesn't the crosshair go where I click?"
-	}
-
-	getInfo2 = () => {
-		return "The crosshair for the sea ice models is slightly inaccurate. see lat/lon boxes or precip/temp models instead.";
-	}
-
-	getQ3 = () => {
-		return "More info:"
-	}
-
-	getInfo3_1 = () => {
-	return "Sounding Climate is the result of a collaboration between climate scientist, Dr. Clara Deser from the National Center for Atmospheric Research (NCAR), and sound designer and data artist, Marty Quinn (founder of the Design Rhythmics Sonification Research Laboratory).  The sonification and visualizations in Sounding Climate are based on data from one of the world’s most comprehensive numerical models of the earth’s climate system, NCAR Community Earth System Model version 1 (CESM1). This model simulates past and future climate from 1920-2100, assuming a “business-as-usual” scenario for rising concentrations of carbon dioxide and other greenhouse gases due to the burning of fossil fuels. In addition to human influences on climate, the model also includes natural sources of climate variability in the oceans, atmosphere, land and sea ice, such as those that produce El Nino events or multi-decadal changes in the Atlantic Ocean’s overturning circulation. By repeating the model experiments many times, changing only the initial atmospheric temperature state by a miniscule amount (about 10 -14 K), scientists are able to untangle human and natural influences on climate. Each experiment contains its own unique sequence of natural variability, which cannot be predicted more than a few years in advance, superimposed upon a common signal of human-caused climate change. The human influence at any given time and location is isolated by averaging all of the 40 experiments together. A non-technical description of the model experiments is available via the QR code on the homepage. The data from these experiments have been used in the Assessment Reports of the United Nations Intergovernmental Panel on Climate Change.";
-	}
-
-	getInfo3_2 = () => {
-	return "Sounding Climate visitors explore how precipitation, temperature, and sea ice change over time through interactive visual graphs and sound “maps” (called sonifications). Just like colors on a map, each data value is assigned particular pitch, and each variable is played by a different instrument (marimba for precipitation, woodwind instruments for temperature, and violins for sea ice). Carbon dioxide levels are played by a piano, and also control the musical scale of the pitches assigned to the data values. By selecting a location on the map, visitors experience through sight and sound how climate varies over time. Each map shows a different rendition of natural climate variability, superimposed upon a common human influence. By sliding their cursor over the color bar located beneath each world map, visitors can simultaneously see and hear how the data values are mapped to color and pitch. Visitors can also hear geographical patterns in the data by sliding their cursor directly over the maps. The temperature values are based on annual means and expressed in degrees Celsius change relative to a 1920- 1950 baseline; the precipitation values are also based on annual means and expressed as a percentage change relative to a 1920-1950 baseline; and the sea ice fraction values are for the month of September and expressed as the percentage of sea ice present in each grid cell.";
-	}
-
-	getInfo3_3 = () => {
-	return "There are two ways to explore the data in Sounding Climate: 1) “Each on Its Own” and 2) “All Together”. If you select the first option, you will see 6 maps (one for each of the first 6 model experiments) for the variable you choose (precipitation, temperature, and sea ice). Each of these maps shows a different combination of natural and human influences on climate as explained above. The graph below the maps will show two thin curves and one thick curve. The thin curves show the data values for the first 2 model experiments, and the thick curve shows the data values for the average of all 40 model experiments (the human influence on climate, as explained above) for the location you chose. The yellow curve shows the global average carbon dioxide levels. The sonifications use the data from all 4 curves. Notice how the blend of musical notes changes as the climate is altered by human activity. If you select the second option, you will see a different set of maps: the top row shows the human influence on climate for each of the 3 variables, and the bottom row shows the combined human and natural influences from the first model experiment. Notice how the maps in the two rows may look very different at the beginning but become more similar as the human influence starts to dominate. The graphs below the maps show the data values at the location you chose. The thick curve shows the human influence and the thin curve shows the combined human and natural influence in the first model experiment, corresponding to the maps above it. Precipitation is in green, temperature in red, and sea ice in light blue; the The yellow curve shows the global average carbon dioxide levels. The sonifications use the data from all 4 curves.";
-	}
-
-	getInfo3_4 = () => {
-	return "Contributors to the project: Adam S. Phillips (NCAR) for providing the model data, Timothy Scheitlin (NCAR) for providing the graphics, Sharon Clark for providing ongoing development support, Becca Hatheway for providing user testing and feedback, Marty Quinn for the original sonification development, and Clara Deser for scientific and artistic guidance. This website was developed by Nick Vomund, with the original API written by Garrett Hempy, sonification by Mattias Leino, and support by Priyanka Karki, Fahad Shaik, and Zhaoyi Xie.";
-	}
-
-	getPageStyle = () => {
-		const pageStyle = {
-			height: '100%',
-			width: this.state.pageRight,
-			padding: this.state.PADDING / 2,
-      backgroundColor: 'white'
-		}
-		return pageStyle;
-	}
-
-	getTextStyle = () => {
-		var smallFontSize = Math.floor(this.state.pageRight / 200 + this.state.pageBottom / 100);
-    		var microFontSize = smallFontSize - 2;
-    		var largeFontSize = smallFontSize + 4;
 
 
+getAboutText = () => {
+  return  (
+    <div className="about">
+    <p><strong><em>Sounding Climate</em></strong> lets you explore how precipitation, temperature, and sea ice change over time through  data represented in graphs, maps, and sonifications.  Select a location on the map, and experience, through sight and sound, how climate varies over time.</p>
+    <ul>
+    <li>
+    <strong>Sonification:</strong> Each data value is assigned a particular pitch, and each variable is played by a different instrument (synthesized tones representing marimba for precipitation, clarinet for temperature, and violins for sea ice). Carbon dioxide levels control the musical scale of the pitches assigned to the data values. </li><li>
+    <strong>Maps:</strong> Each map shows a different rendition of natural climate variability, superimposed upon a common human influence. By sliding their cursor over the color bar beneath each map, you can  see and hear how the data values are mapped to color and pitch. You can also hear geographical patterns in the data by sliding the cursor directly over the maps. </li><li>
+    <strong>About the data:</strong> The temperature values are based on annual means and expressed in degrees Celsius change relative to a 1920-1950 baseline; the precipitation values are also based on annual means and expressed as a percentage change relative to a 1920-1950 baseline; and the sea ice fraction values are for the month of September and expressed as the percentage of sea ice present in each grid cell.
+    </li></ul>
+    </div>
+  );
 
-    		const titleTextStyle = {
-			fontSize: largeFontSize,
-    			fontFamily: 'Verdana, sans-serif',
-    			fontWeight: 'bold',
-    			'backgroundColor': '#DDDDDD',
-    			'padding': smallFontSize,
-    			'borderRadius': smallFontSize
-		}
-		const questionTextStyle = {
-			fontSize: smallFontSize,
-    			fontFamily: 'Verdana, sans-serif',
-    			fontWeight: 'bold'
-		}
-		const answerTextStyle = {
-			fontSize: microFontSize,
-    			fontFamily: 'Verdana, sans-serif'
-		}
+}
 
-		return { titleTextStyle, questionTextStyle, answerTextStyle };
-	}
+getInfographic = () => {
+  return (
+      <div className="infographic">
+      <img src="/tutorial.png" alt="Infographic describing how to use the Sounding Climate interface" longdesc="/infographic-longdesc.txt" /><br/>
+
+      </div>
+  );
+}
+
+getGuidingQuestions = () => {
+    return (
+        <div className="guidingQuestions">
+        <h2>Questions to Guide Your Exploration</h2>
+        <p className="question">What does the climate in my hometown sound like? </p>
+        <ul className="answer">
+          <li>Enter the latitude and longitude of your hometown and click “go” to hear climate change.</li>
+          <li>Or, choose the nearest location from the dropdown list and click “go” to hear climate change.</li>
+        </ul>
+
+        <p className="question">Where in the world is climate changing the most? </p>
+        <ul className="answer">
+          <li>Click “play” and watch the maps to find where the colors are changing the most. Does the place with the most temperature change also have the most precipitation change? </li>
+        </ul>
+
+        <p className="question">What does natural variation in climate sound like? How does human influence change the sound? </p>
+        <ul className="answer">
+          <li>Click play and listen while watching the graph at the bottom of the screen. How are the thin lines on the graph trending? </li>
+        </ul>
+
+        <p className="question">Do you hear the change in the sound when our human impact on climate change is the main force driving climate change?</p>
+        <ul className="answer">
+          <li>That’s when the greenhouse gases we are adding to the atmosphere get to the point where they are more powerful than all other influences. </li>
+        </ul>
+
+        <p className="question">Close your eyes and listen. How does the sound of climate change make you feel? </p>
+
+        <p className="question">When, on the timeline, does Arctic sea ice dwindle to nothing? Does it change gradually or abruptly?</p>
+        <ul className="answer">
+          <li>The data in Sounding Climate shows the amount of Arctic sea ice at the end of each summer, which is the time of year when sea ice is at its lowest amount. </li>
+        </ul>
+        </div>
+    );
+}
+
+  getBackground = () => {
+    return (
+      <div className="background">
+      <h2> How We Made Sounding Climate</h2>
+      <p>Sounding Climate began as a collaboration between climate scientist, Dr. Clara Deser (at the National Center for Atmospheric Research - NCAR) and sound designer and data artist, Marty Quinn (founder of the Design Rhythmics Sonification Research Laboratory). A version of Sounding Climate was created for the exhibits at the NCAR Mesa Lab in Boulder, Colorado, by the team at the UCAR Center for Science Education. Then, this web-based version of Sounding Climate was developed by engineering students at the University of Colorado, Boulder. </p><p>The sonification and visualizations in Sounding Climate are based on data from one of the world’s most comprehensive numerical models of the Earth’s climate system, NCAR Community Earth System Model version 1 (CESM1). This model simulates past and future climate from 1920-2100, assuming a “business-as-usual” scenario for rising concentrations of carbon dioxide and other greenhouse gases due to the burning of fossil fuels. In addition to human influences on climate, the model also includes natural sources of climate variability in the oceans, atmosphere, land and sea ice, such as those that produce El Niño events or multi-decadal changes in the Atlantic Ocean’s overturning circulation. By repeating the model experiments many times, changing only the initial atmospheric temperature state by a miniscule amount , scientists are able to untangle human and natural influences on climate.  Each experiment contains its own unique sequence of natural variability, which cannot be predicted more than a few years in advance, superimposed upon a common signal of human-caused climate change. The human influence at any given time and location is isolated by averaging all of the 40 experiments together. </p>
+      </div>
+    );
+  }
+
+  getLearnMore = () => {
+    return  (
+      <div className="learnmore">
+      <h2>Learn More</h2>
+      <ul className="linklist">
+        <li><a href="https://scied.ucar.edu/learning-zone/how-climate-works">How Climate Works</a></li>
+        <li><a href="https://scied.ucar.edu/learning-zone/climate-change-impacts">Impacts of Climate Change</a></li>
+        <li><a href="https://scied.ucar.edu/learning-zone/climate-solutions">Solving Climate Change</a></li>
+        <li><a href="https://news.ucar.edu/123108/40-earths-ncars-large-ensemble-reveals-staggering-climate-variability">NCAR article describing the CESM1 model experiments</a></li>
+        <li><a href="https://www.ipcc.ch/">United Nations Intergovernmental Panel on Climate Change</a> uses the data from these experiments in reports.</li>
+      </ul>
+      </div>
+    );
+  }
+
+
+
 
 	render(){
 		const { navigation } = this.props;
-		const { titleTextStyle, questionTextStyle, answerTextStyle } = this.getTextStyle();
 
-		const pageStyle = this.getPageStyle();
 
 		const titleText = this.getTitleText();
     const rtnBtn = this.getRtnBtnText();
-		const q0 = this.getQ0();
-		const text0 = this.getInfo0();
-		const q1 = this.getQ1();
-		const text1_1 = this.getInfo1_1();
-		const text1_2 = this.getInfo1_2();
-		const q2 = this.getQ2();
-		const text2 = this.getInfo2();
-		const q3 = this.getQ3();
-		const text3_1 = this.getInfo3_1();
-		const text3_2 = this.getInfo3_2();
-		const text3_3 = this.getInfo3_3();
-		const text3_4 = this.getInfo3_4();
+    const infographic = this.getInfographic();
+    const aboutText = this.getAboutText();
+    const guidingQuestions = this.getGuidingQuestions();
+    const background = this.getBackground();
+    const learnMore = this.getLearnMore();
 
 		return(
-			<div style={pageStyle}>
-
-				<p style={titleTextStyle}>{titleText}</p>
-				<p style={questionTextStyle}><br/><br/>{q0}</p>
-				<p style={answerTextStyle}><br/>{text0} </p>
-				<p style={questionTextStyle}><br/><br/>{q1}</p>
-				<p style={answerTextStyle}><br/>{text1_1} <br/><br/>{text1_2} </p>
-				<p style={questionTextStyle}><br/><br/>{q2}</p>
-				<p style={answerTextStyle}><br/>{text2}</p>
-				<p style={questionTextStyle}><br/><br/>{q3}</p>
-				<p style={answerTextStyle}><br/>{text3_1}</p>
-				<p style={answerTextStyle}><br/>{text3_2}</p>
-				<p style={answerTextStyle}><br/>{text3_3}</p>
-				<p style={answerTextStyle}><br/>{text3_4}<br/><br/></p>
-        <button onClick={() => navigation.goBack()}>{rtnBtn}</button>
+			<div className="aboutPage">
+				<h1>{titleText}</h1>
+        {aboutText}
+        {infographic}
+        {guidingQuestions}
+        {background}
+        {learnMore}
+        <button className="closeAbout" onClick={() => navigation.goBack()}>{rtnBtn}</button>
 			</div>
 		)
 	}
 }
 
-/*** class wrapper for naviagion functionality ***/
+/*** className wrapper for naviagion functionality ***/
 export default function AboutWrapper(props){
     const navigation = useNavigation();
 

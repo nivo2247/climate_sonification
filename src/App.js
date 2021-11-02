@@ -15,11 +15,11 @@ export default function App() {
   return (
   <NavigationContainer>
   	<Stack.Navigator screenOptions={{headerShown: false}}  initialRouteName="Home">
-  		<Stack.Screen name="Home" component={HomeScreenWrapper} />
-  		<Stack.Screen name="AllTogether" component={AllTogetherWrapper} />
-  		<Stack.Screen name="EachAlone" component={EachAloneWrapper} />
-  		<Stack.Screen name="About" component={AboutWrapper} />
-  	</Stack.Navigator> 
+  		<Stack.Screen name="Home" component={HomeScreenWrapper} options={{ title: 'Home | Sounding Climate' }} />
+  		<Stack.Screen name="AllTogether" component={AllTogetherWrapper}  options={{ title: 'All Together | Sounding Climate' }} />
+  		<Stack.Screen name="EachAlone" component={EachAloneWrapper}  options={{ title: 'Each on its own | Sounding Climate' }} />
+  		<Stack.Screen name="About" component={AboutWrapper}  options={{ title: 'About | Sounding Climate' }} />
+  	</Stack.Navigator>
   </NavigationContainer>
   );
 }

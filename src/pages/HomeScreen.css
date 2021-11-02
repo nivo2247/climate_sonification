@@ -12,6 +12,25 @@ background-size: cover;
   border:none;
   background-color: transparent;
 }
+
+.aboutPage {
+  background-color: #fff;
+  padding: 2%;
+  font-size: 1.5rem;
+}
+.aboutPage img {
+  max-width: 100%;
+}
+.aboutPage .closeAbout {
+  padding:1%;
+  font-size: 1.5rem;
+  margin-top: 20px;
+  background-color: #64AB34;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 25px;
+}
 .hp-title-container,
 .hp-desc-container,
 .hp-btn-container,

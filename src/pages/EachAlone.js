@@ -975,12 +975,12 @@ class EachAlone extends Simulation {
     		border: '1px solid red',
     		backgroundColor: 'white',
     		lineHeight: 1,
-    		'-webkit-touch-callout': 'none',
-    		'-webkit-user-select': 'none',
-    		'-khtml-user-select': 'none',
-    		'-moz-user-select': 'none',
-    		'-ms-user-select': 'none',
-    		'user-select': 'none'
+    		'WebkitTouchCallout': 'none',
+    		'WebkitUserSelect': 'none',
+    		'KhtmlUserSelect': 'none',
+    		'MozUserSelect': 'none',
+    		'MsUserSelect': 'none',
+    		'userSelect': 'none'
     	}
 
 
@@ -995,12 +995,12 @@ class EachAlone extends Simulation {
     		border: '1px solid red',
     		backgroundColor: 'white',
     		lineHeight: 1,
-    		'-webkit-touch-callout': 'none',
-    		'-webkit-user-select': 'none',
-    		'-khtml-user-select': 'none',
-    		'-moz-user-select': 'none',
-    		'-ms-user-select': 'none',
-    		'user-select': 'none'
+    		'WebkitTouchCallout': 'none',
+    		'WebkitUserSelect': 'none',
+    		'KhtmlUserSelect': 'none',
+    		'MozUserSelect': 'none',
+    		'msUserSelect': 'none',
+    		'userSelect': 'none'
     	}
 
     	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
@@ -1014,12 +1014,12 @@ class EachAlone extends Simulation {
     		border: '1px solid red',
     		backgroundColor: 'white',
     		lineHeight: 1,
-    		'-webkit-touch-callout': 'none',
-    		'-webkit-user-select': 'none',
-    		'-khtml-user-select': 'none',
-    		'-moz-user-select': 'none',
-    		'-ms-user-select': 'none',
-    		'user-select': 'none'
+    		'WebkitTouchCallout': 'none',
+    		'WebkitUserSelect': 'none',
+    		'KhtmlUserSelect': 'none',
+    		'MozUserSelect': 'none',
+    		'MsUserSelect': 'none',
+    		'userSelect': 'none'
     	}
 
 	centerX = modelLeft + modelDiv / 2;
@@ -1046,12 +1046,12 @@ class EachAlone extends Simulation {
     		border: '1px solid red',
     		backgroundColor: 'white',
     		lineHeight: 1,
-    		'-webkit-touch-callout': 'none',
-    		'-webkit-user-select': 'none',
-    		'-khtml-user-select': 'none',
-    		'-moz-user-select': 'none',
-    		'-ms-user-select': 'none',
-    		'user-select': 'none'
+    		'WebkitTouchCallout': 'none',
+    		'WebkitUserSelect': 'none',
+    		'KhtmlUserSelect': 'none',
+    		'MozUserSelect': 'none',
+    		'MsUserSelect': 'none',
+    		'userSelect': 'none'
     	}
 
 	centerX = modelLeft + 2 * modelDiv + modelDiv / 2;
@@ -1065,12 +1065,12 @@ class EachAlone extends Simulation {
     		border: '1px solid red',
     		backgroundColor: 'white',
     		lineHeight: 1,
-    		'-webkit-touch-callout': 'none',
-    		'-webkit-user-select': 'none',
-    		'-khtml-user-select': 'none',
-    		'-moz-user-select': 'none',
-    		'-ms-user-select': 'none',
-    		'user-select': 'none'
+    		'WebkitTouchCallout': 'none',
+    		'WebkitUserSelect': 'none',
+    		'KhtmlUserSelect': 'none',
+    		'MozUserSelect': 'none',
+    		'MsUserSelect': 'none',
+    		'userSelect': 'none'
     	}
 
     	if(this.state.state === 2 && this.state.latitude < 62){
@@ -1298,7 +1298,7 @@ class EachAlone extends Simulation {
 							<option value='Jakarta'>Jakarta</option>
 							<option value='Perth'>Perth</option>
 							<option value='Port Moresby'>Port Morseby</option>
-							<option value='Sydney'>Syney</option>
+							<option value='Sydney'>Sydney</option>
 						</optgroup>
 
 						<optgroup label='South America'>
@@ -1330,7 +1330,7 @@ class EachAlone extends Simulation {
 			<div style={smallDataStyle}>
 				<div style={quarterControlStyle}/>
 				<button style={quarterControlStyle} onClick={() => this.openAbout()}>
-					<span style={aboutButton}>FAQ</span>
+					<span style={aboutButton}>About</span>
 				</button>
 				<div style={quarterControlStyle}/>
 			</div>

@@ -1,5 +1,5 @@
 /*** Links to AWS S3 media ***/
-const assets_base_url = '';
+const assets_base_url = 'https://soundingclimate-media.s3.us-east-2.amazonaws.com';
 
 export const urlPre = assets_base_url + "/images";
 export const precipKey = assets_base_url + "/images/interface/precipLegend1.svg";
